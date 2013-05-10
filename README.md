@@ -40,7 +40,7 @@ to help soon.
 ***Know how to fix a problem? Or want to add a new feature??*** Submit a pull
 request! Just fork the repo using the button on the
 [WaterColorBot github homepage](https://github.com/techninja/watercolorbot), and
-this will give you your own version of cncserver. Make your change in a few
+this will give you your own version of WaterColorBot. Make your change in a few
 commits to your branch, then click the pull request button at the top! Talk
 about what changes you made and submit. A maintainer of the project will check
 your work, possibly ask you to fix a few more things, and then if all is well,
@@ -49,4 +49,6 @@ your work will be merged into the project!
 ## ETC.
 
 All code MIT licensed. Created by TechNinja, with support and collaboration from
-[Evil Mad Scientist](http://evilmadscientist.com).
+[Evil Mad Scientist](http://evilmadscientist.com). Don't forget, you can
+discover more crazy more maker fun with
+[Sylvia's Super-Awesome Maker Show](http://sylviashow.com)!
