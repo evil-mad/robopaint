@@ -37,7 +37,7 @@
 
 <fieldset id="control">
   <h2>WaterColorBot Controls</h2>
-  <fieldset class="collapsable open">
+  <fieldset>
     <legend>Automatic</legend>
     <nav>
       <button id="auto-paint" title="Paint the entire drawing automatically. Verifies colors by running auto color first.">Auto Paint</button>
@@ -61,7 +61,7 @@
     </nav>
   </fieldset>
 
-  <fieldset class="collapsable closed">
+  <fieldset>
     <legend>Machine</legend>
     <nav>
       <button id="park" title="Tells the server to move the carriage back to the home position">Park Home</button>
@@ -69,8 +69,6 @@
       <button id="zero" title="Resets server relative position to 0">Zero Position</button>
     </nav>
   </fieldset>
-
-
 </fieldset>
 
 <nav id="tools">
@@ -102,8 +100,6 @@
   </nav>
 </nav>
 
-<nav id="paths"><ul></ul></nav>
-
 <svg id="main" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">
   <g id="cncserversvg"></g>
 
@@ -118,8 +114,6 @@
 	c-2.397-0.357-4.307-2.214-4.732-4.592h3.232v-2h-3.232c0.426-2.376,2.335-4.233,4.732-4.591v3.091h2v-3.042
 	c2.243,0.472,3.991,2.276,4.397,4.542H2.583v2h2.898C5.075,3.433,3.327,5.238,1.083,5.709z"/>
 </svg>
-
-<canvas  height="738" width="1000" id="simulate"></canvas>
 
 </body>
 </html>
