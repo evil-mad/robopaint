@@ -25,7 +25,6 @@
 
 <img class="logo" src ="resources/images/watercolorbot_logo.svg"/>
 <div id="status">
-  <a id="edit" href="edit/index.html">Edit this image</a>
   <div id="log"></div>
   <div class="progress-wrapper">
     <progress title="Current progress" max="100" value="0"></progress>
@@ -98,6 +97,15 @@
       <a id="colornone" title="Only setting path color to solid white/paper color" href="#">Paper</a>
     </div>
   </nav>
+</nav>
+
+<nav id="edit-tools">
+  <a id="edit" class="tab" href="edit/index.html" title="Edit this Image"></a>
+  <a id="save" class="tab" href="#" title="Save the Current Image"></a>
+  <a id="load" class="tab" href="#" title="Quick Load"></a>
+  <ul id="loadlist" style="display:none">
+    <li>No files. Add *.SVG to ./resources/svgs</li>
+  </ul>
 </nav>
 
 <svg id="main" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">
