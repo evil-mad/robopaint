@@ -161,10 +161,23 @@ $(function() {
     });
   }
 
+  function loadSVG(file) {
+    // If we've been given a filename, go load it in then try again
+    if (typeof file == 'string') {
+      $.ajax({
+        url: 'resources/svgs/' + file,
+        dataType: 'text',
+        success: function(data){
+          localStorage["svgedit-default"] = data;
+          loadSVG();
+        }
+      });
+      return;
+    }
 
-  function loadSVG() {
     // Load default content from SVG-edit
     if (localStorage["svgedit-default"]){
+      $('svg#main g#cncserversvg').empty();
       $('svg#main g#cncserversvg').append(localStorage["svgedit-default"]);
 
       // Convert anything not a path into a path for proper tracing
@@ -250,7 +263,6 @@ $(function() {
 
     // Cancel Management
     $('#cancel').click(function(){
-
       if (!cncserver.state.process.cancel && cncserver.state.buffer.length) {
         cncserver.state.process.cancel = true;
 
@@ -271,6 +283,31 @@ $(function() {
       }
     })
 
+    // Bind Quick Load Hover
+    $('#load').hover(function(e) {
+      $('#loadlist').fadeIn('slow');
+    }, function(e){
+      // Hide if we didn't leave to the right
+      if (e.offsetX < 38) {
+        $('#loadlist').fadeOut('slow');
+      }
+    }).click(function(e){
+      return false;
+    });
+
+    $('#loadlist').hover(function(e) {}, function(e){
+      // Hide if we didn't leave to the left
+      if (e.offsetX >= 0) {
+        $('#loadlist').fadeOut('slow');
+      }
+    });
+
+    // Bind loadlist item click load
+    $('#loadlist a').click(function(e) {
+      $('#loadlist').fadeOut('slow');
+      loadSVG($(this).data('file'));
+      return false;
+    });
 
     // Bind color action config set and set initial
     $('#coloraction').change(function(e){
@@ -396,8 +433,8 @@ $(function() {
   function responsiveResize(){
     // These value should be static, set originally from central canvas config
     var svgOffset = {
-      top: 147,
-      left: 235
+      top: 140,
+      left: 250
     };
 
     var w = $(window).width();
@@ -441,6 +478,9 @@ $(function() {
       'transform': 'scale(' + cncserver.canvas.scale + ')',
       '-webkit-transform': 'scale(' + cncserver.canvas.scale + ')'
     });
+
+    // Set position of edit tools based on SVG left side
+    $('#edit-tools').css('left', cncserver.canvas.offset.left - 38);
 
     // Fix body background height (html tag backgrounds are weird!)
     $('body').height(h);
