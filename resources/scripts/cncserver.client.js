@@ -281,7 +281,13 @@ $(function() {
           }
         })
       }
-    })
+    });
+
+    // Bind Save Button
+    $('#save').click(function(e) {
+      // TODO: make this work :P
+      return false;
+    });
 
     // Bind Quick Load Hover
     $('#load').hover(function(e) {
