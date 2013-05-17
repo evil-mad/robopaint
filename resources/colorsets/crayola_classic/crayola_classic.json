@@ -5,13 +5,13 @@
     "baseClass": "crayola-classic"
   },
   "colors": [
-    "Brown",
-    "Violet",
-    "Blue",
-    "Green",
-    "Yellow",
-    "Orange",
+    "Black",
     "Red",
-    "Black"
+    "Orange",
+    "Yellow",
+    "Green",
+    "Blue",
+    "Violet",
+    "Brown"
   ]
 }
