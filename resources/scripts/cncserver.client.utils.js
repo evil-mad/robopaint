@@ -102,6 +102,11 @@ cncserver.utils = {
       source = cncserver.utils.colorStringToArray(source);
     }
 
+    // Assume false (white) if null
+    if (source == null || isNaN(source[0])){
+      source = cncserver.utils.colorStringToArray('#FFFFFF');
+    }
+
     // Value where Luminosity at or above will lock to White
     if (!whiteLimit) {
       whiteLimit = 0.72
