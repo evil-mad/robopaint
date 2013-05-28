@@ -1,13 +1,12 @@
-WaterColorBot
+RoboPaint!
 =============
 
-The software for your [friendly painting robot kit](http://watercolorbot.com)!
+The software for your [friendly painting robot kit, the WaterColorBot](http://watercolorbot.com)!
 
-This open source project is the reboot for the original
-[CNC server project](http://github.com/techninja/cncserver) to focus solely on
-clean implementation and ease of install. Anything WaterColorBot specific aside
-from bot configuration now lives here, and the CNC Server is now the only module
-dependency of this project, running as the API server behind the scenes.
+This open source project is based on the 
+[CNC server project](http://github.com/techninja/cncserver) which provides
+a speedy framework of API calls to interact with the WaterColorBot, while
+RoboPaint is the clean interface in an easy to install app!
 
 ## Downloads / Install
 Click to download the easy install file for you system below:
@@ -33,14 +32,14 @@ portions of paths aren't drawn.
 
 ## Problems?
 ***Stuck on something?*** Submit an issue! Click the
-[issues tab](https://github.com/techninja/watercolorbot/issues) and see if someone
+[issues tab](https://github.com/techninja/robopaint/issues) and see if someone
 is covering your question or problem, if not, ask away! Someone will be around
 to help soon.
 
 ***Know how to fix a problem? Or want to add a new feature??*** Submit a pull
 request! Just fork the repo using the button on the
-[WaterColorBot github homepage](https://github.com/techninja/watercolorbot), and
-this will give you your own version of WaterColorBot. Make your change in a few
+[RoboPaint github homepage](https://github.com/techninja/robopaint), and
+this will give you your own version of RoboPaint. Make your change in a few
 commits to your branch, then click the pull request button at the top! Talk
 about what changes you made and submit. A maintainer of the project will check
 your work, possibly ask you to fix a few more things, and then if all is well,
@@ -50,5 +49,5 @@ your work will be merged into the project!
 
 All code MIT licensed. Created by TechNinja, with support and collaboration from
 [Evil Mad Scientist](http://evilmadscientist.com). Don't forget, you can
-discover more crazy more maker fun with
+discover more crazy maker fun with
 [Sylvia's Super-Awesome Maker Show](http://sylviashow.com)!
