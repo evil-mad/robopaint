@@ -10,11 +10,12 @@ RoboPaint is the clean interface in an easy to install app!
 
 ## Downloads / Install
 Click to download the easy install file for you system below:
-* Windows: 32bit
-* Linux: 32bit / 64bit
-* Mac: 32bit, 10.7+
+* [Windows 32bit](http://robopaint.tn42.com/robopaint-win.zip)
+* [Linux 32bit](http://robopaint.tn42.com/robopaint-lin.zip)
+* [Mac 32bit, 10.6+](http://robopaint.tn42.com/robopaint-mac.dmg)
 
-***(Downloads not available till we get a build system figured out)***
+*(Linux & Windows user during BETA period: Simply copy folder from zip file to
+Desktop or other folder, then run executable. System installer coming soon!)*
 
 
 ## Features
