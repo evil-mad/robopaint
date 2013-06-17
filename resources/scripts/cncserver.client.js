@@ -87,10 +87,10 @@ $(function() {
   }
 
   function getColorsets() {
-    $.getJSON('resources/colorsets/colorsets.json', function(sets){
+    $.getJSON('colorsets/colorsets.json', function(sets){
       cncserver.config.colorsets['ALL'] = sets;
       $.each(sets, function(i, set){
-        var setDir = 'resources/colorsets/' + set + '/';
+        var setDir = 'colorsets/' + set + '/';
 
         $.getJSON(setDir + set + '.json', function(c){
           cncserver.config.colorsets[set] = {
