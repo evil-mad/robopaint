@@ -1,12 +1,29 @@
 global.$ = $;
 
-var cncserverNode = require('cncserver');
+var cncserver = require('cncserver');
 var fs = require('fs');
 
 var svgs = fs.readdirSync('resources/svgs');
 
+
+/*cncserver.start({
+  success: {
+
+  }
+});
+*/
+
+// Document Ready...
 $(function() {
 
+  $('<iframe>').attr({
+    src: 'resources/print.html',
+    width: '700',
+    height: '600',
+    border: 0
+  }).appendTo('body');
+
+  /*
   // Load in SVG files for quick loading
   if (svgs.length > 0) {
     $('#loadlist').html('');
@@ -18,5 +35,6 @@ $(function() {
       ).appendTo('#loadlist');
     }
   }
+  */
 })
 
