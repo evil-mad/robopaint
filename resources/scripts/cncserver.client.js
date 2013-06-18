@@ -31,7 +31,7 @@ var cncserver = {
   },
   config: {
     precision: 5,
-    maxPaintDistance: 6000,
+    maxPaintDistance: 8000,
     fillPath: {},
     colorAction: 'bot',
     colorsets: {},
