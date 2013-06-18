@@ -2,6 +2,10 @@
  * @file Holds all CNC Server central controller objects and DOM management code
  */
 
+var fs = require('fs');
+var svgs = fs.readdirSync('resources/svgs');
+
+
 var cncserver = {
   canvas: {
     height: 0,
@@ -165,7 +169,7 @@ $(function() {
     // If we've been given a filename, go load it in then try again
     if (typeof file == 'string') {
       $.ajax({
-        url: 'resources/svgs/' + file,
+        url: 'svgs/' + file,
         dataType: 'text',
         success: function(data){
           localStorage["svgedit-default"] = data;
@@ -313,6 +317,17 @@ $(function() {
       }
     });
 
+    // Load in SVG files for quick loading
+    if (svgs.length > 0) {
+      $('#loadlist').html('');
+      for(var i in svgs) {
+        var s = svgs[i];
+        var name = s.split('.')[0].replace(/_/g, ' ');
+        $('<li>').append(
+          $('<a>').text(name).data('file', s).attr('href', '#')
+        ).appendTo('#loadlist');
+      }
+    }
     // Bind loadlist item click load
     $('#loadlist a').click(function(e) {
       $('#loadlist').fadeOut('slow');
