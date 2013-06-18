@@ -69,7 +69,7 @@ $(function() {
   // Initial server connection handler
   function serverConnect() {
     // Get initial pen data from server
-    var $log = cncserver.utils.log('Connecting to the server...');
+    var $log = cncserver.utils.log('Connecting...');
     cncserver.api.pen.stat(function(d){
       $log.logDone(d);
 
