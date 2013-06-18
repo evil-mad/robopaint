@@ -1,5 +1,5 @@
 {
-  "name": "watercolorbot",
+  "name": "robopaint",
   "version": "0.1.0",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "index.html",
@@ -11,7 +11,9 @@
     "min_width": 600,
     "min_height": 420,
     "width": 980,
-    "height": 600
+    "height": 600,
+    "icon": "resources/images/watercolorbot_icon.png",
+    "title": "RoboPaint!"
   },
   "dependencies" : {
     "cncserver": "https://github.com/techninja/cncserver/tarball/master"
