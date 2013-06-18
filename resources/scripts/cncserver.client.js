@@ -283,9 +283,14 @@ $(function() {
       }
     });
 
-    // Bind Save Button
+    // Bind Save/Edit/Load Button
     $('#save').click(function(e) {
       // TODO: make this work :P
+      return false;
+    });
+
+    $('#edit').click(function(e) {
+      window.parent.$('#bar-edit').click();
       return false;
     });
 

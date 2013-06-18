@@ -1,15 +1,21 @@
+@charset "UTF-8";
 /*
   @file
 */
 
-html {
-  background-image:url('images/seamless-wood.jpg');
-  background-color: #E3BC83;
-}
-
 body {
   margin: 0;
   font-family: sans-serif;
+}
+
+body.home {
+  background-color: #ffae1a;
+  overflow: hidden;
+}
+
+body.print {
+  background-image:url('images/seamless-wood.jpg');
+  background-color: #E3BC83;
 }
 
 img.logo {
@@ -419,6 +425,36 @@ nav#color-action input[type="radio"]:checked + label {
   font-style: normal;
 }
 
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+}
+
+.icon-cog:before { content: '\e803'; } /* 'î ƒ' */
+.icon-cog-alt:before { content: '\e804'; } /* 'î „' */
+.icon-edit:before { content: '\270d'; } /* 'âœ' */
+.icon-home:before { content: '\e801'; } /* 'î ' */
+.icon-brush:before { content: '\e802'; } /* 'î ‚' */
+.icon-picture-1:before { content: '\e800'; } /* 'î €' */
+.icon-picture:before { content: 'ðŸŒ„'; } /* '\1f304' */
+.icon-floppy:before { content: 'ðŸ’¾'; } /* '\1f4be' */
+
 #edit-tools {
   left: 205px;
   position: absolute;
@@ -464,4 +500,135 @@ nav#color-action input[type="radio"]:checked + label {
   top: 64px;
   width: 10em;
   z-index: -1;
+}
+
+
+/* Central home screen general styles */
+
+/* Central "tool" bar */
+body.home #bar {
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to bottom, #eff7f9 0%,#eaf4f9 50%,#daeaf2 51%,#e5f1f9 100%);
+  z-index: 10;
+}
+
+body.home #bar a {
+  text-decoration: none;
+  color: #333333;
+  font-size: 30px;
+}
+
+body.home #bar a.selected {
+  color: #00A000;
+  text-shadow: 0 0 11px red;
+}
+
+body.home #bar span.left {
+ padding-left: 1em;
+}
+
+body.home #bar span.right {
+  float: right;
+  padding-left: 0.5em;
+}
+
+/* Semi-modal alert status message */
+body.home h1 {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  min-height: 200px;
+  margin-top: -130px;
+  text-align: center;
+  background-color: #fff;
+  z-index: 10;
+}
+
+body.home nav {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  width: 320px;
+  height: 140px;
+  margin-left: -160px;
+  margin-top: -70px;
+  overflow: hidden;
+}
+
+body.home nav a {
+  display: block;
+  width: 100px;
+  height: 100px;
+  border-radius: 65px;
+  text-align: center;
+  border: 4px solid #aaa;
+  float: left;
+  margin: 25px;
+  color: black;
+  background-color: cornsilk;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.8em;
+  line-height: 100px;
+  overflow: hidden;
+}
+
+body.home nav a:hover,
+body.home nav a:focus {
+  background-color: #000000;
+  color: cornsilk;
+  border-color: #a6e3f4;
+}
+
+body.home iframe {
+  position: absolute;
+  border: none;
+  top: 0;
+  width: 100%;
+  left: 0;
+  z-index: 5;
+}
+
+body.home #logo {
+  position: absolute;
+  top: 38%;
+  display: block;
+  margin-top: -128px;
+  left: 50%;
+  margin-left: -128px;
+  z-index: 0;
+}
+
+/* Settings Modal dialog */
+body.home #modalmask {
+  display: none;
+  background-color: #fff;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2000px;
+  z-index: 11;
+}
+
+body.home #settings {
+  display:none;
+  overflow: auto;
+  margin-top: -15%;
+  height: 50%;
+  margin-left: -30%;
+  box-shadow: 3px 3px 12px;
+  padding: 1em;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60%;
+  background-color: #aaa;
+  border-radius: 8px;
+  z-index: 12;
 }

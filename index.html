@@ -12,9 +12,37 @@
 <body class="home">
 
 
+<div id="bar">
+  <span class="left">
+    <a id="bar-home" class="icon-home selected" href="/" title="Home screen">&nbsp;</a>
+    <a id="bar-print" class="icon-brush" href="resources/print.html" title="Send a drawing to the WaterColorBot">&nbsp;</a>
+    <a id="bar-edit" class="icon-edit" href="resources/edit/index.html" id="edit" title="Create or edit a drawing to be printed">&nbsp;</a>
+  </span>
+
+  <span class="right">
+    <a id="bar-settings" class="icon-cog-alt" href="#" title="Advanced Settings">&nbsp;</a>
+  </span>
+</div>
+
+<div id="modalmask"></div>
+<div id="settings">
+  <fieldset>
+    <legend>Serial connection</legend>
+      <select id="ports" title="Available serial ports">
+        <option value="auto">Auto-port</option>
+      </select>
+      <button id="connect">Connect</button>
+  </fieldset>
+  <button id="settings-apply">Apply</button>
+  <button id="settings-cancel">Cancel</button>
+</div>
+
+<img id="logo" src="resources/images/watercolorbot_icon.png"/>
+
+<h1><b>Starting up...</b></h1>
 <nav>
-  <a href="#" id="print" title="Paint the entire drawing automatically. Verifies colors by running auto color first.">Print</a>
-  <a href="#" id="edit" title="Pick the closest match for existing colors in the drawing. Click again to UNDO.">Create</a>
+  <a href="resources/print.html" id="print" title="Send a drawing to the WaterColorBot">Print</a>
+  <a href="resources/edit/index.html" id="edit" title="Create or edit a drawing">Create</a>
 </nav>
 
 </body>
