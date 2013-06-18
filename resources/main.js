@@ -40,6 +40,7 @@ function initialize() {
       $('<button>').addClass('continue').click(function(e){
         $stat.fadeOut('slow');
         cncserver.continueSimulation();
+        cncserver.serialReadyInit();
         setModal(false);
       }).text('Continue in Simulation mode'),
 
