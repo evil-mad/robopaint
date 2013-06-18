@@ -40,10 +40,12 @@ function initialize() {
       $('<button>').addClass('continue').click(function(e){
         $stat.fadeOut('slow');
         cncserver.continueSimulation();
+        setModal(false);
       }).text('Continue in Simulation mode'),
 
       $('<button>').addClass('reconnect').click(function(e){
         // TODO: Reconnect!
+        setSettingsWindow(true);
       }).text('Try to Reconnect')
     )
   );
@@ -62,9 +64,11 @@ function initialize() {
       $stat.text('Connected!')
         .attr('class', 'success')
         .fadeOut('slow');
+      setModal(false);
       $('body.home nav').fadeIn('slow');
     },
     disconnect: function() {
+      setModal(true);
       $stat.show()
         .attr('class', 'error')
         .text('Bot Disconnected!');
