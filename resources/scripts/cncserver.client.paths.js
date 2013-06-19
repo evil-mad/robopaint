@@ -151,5 +151,136 @@ cncserver.paths = {
         if (callback) callback();
       }
     }
+  },
+
+  // Run a full TSP path fill into the buffer
+  runTSPFill: function($path, callback) {
+    var run = cncserver.cmd.run;
+    var pathRect = $path[0].getBBox();
+    var $fill = cncserver.config.fillPath;
+    var points = []; // Final points to run TSP on
+
+    // Start with brush up
+    run('up');
+
+    cncserver.state.process.waiting = true;
+
+    var center = {
+      x: pathRect.x + (pathRect.width / 2),
+      y: pathRect.y + (pathRect.height / 2)
+    }
+
+    // Center the fill path
+    $fill.attr('transform', 'translate(' + center.x + ',' + center.y + ')');
+
+    $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
+    $fill.getPoint = function(distance){ // Handy helper function for gPAL
+      var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
+      return {x: p.x, y: p.y};
+    };
+
+    var fillCount = 0;
+    var p = {};
+    var precision = 17;
+    var max = $fill[0].getTotalLength();
+    runNextFill();
+
+    // Fill up the slow point path finder points
+    function runNextFill() {
+      fillCount+= precision;
+      p = $fill.getPoint(fillCount);
+
+      // Spiral is outside top left, and therefore can never return
+      if (p.x < pathRect.x && p.y < pathRect.y ) fillCount = max;
+
+      // Spiral is outside bottom right, and therefore can never return
+      if (p.x > pathRect.x + pathRect.width && p.y > pathRect.y + pathRect.height) fillCount = max;
+
+      if (fillCount < max) {
+        // If the path is still visible here
+        if (cncserver.paths.getPointPathCollide(p) == $path[0]){
+          // Save the point!
+          points.push([p.x, p.y]);
+        }
+        setTimeout(runNextFill, 0);
+      } else { // Points are filled! Run the solver
+        runTSPSolver();
+      }
+    }
+
+    function runTSPSolver() {
+      var numPoints = points.length-1;
+      var _distances = null;
+      var allDistances = new Array(numPoints);
+
+      console.info('Finding distances between ' + numPoints + '...');
+
+      // Calculate distances between all points(!!)
+      for(var i=0; i<numPoints; i++){
+        for(var j=0; j<numPoints; j++){
+
+          if (typeof allDistances[i] === 'undefined') allDistances[i] = [];
+          if (typeof allDistances[j] === 'undefined') allDistances[j] = [];
+
+          if (i == j) {
+            allDistances[i][j] = 0;
+            continue;
+          }
+
+          var diff = cncserver.utils.getDistance(points[i], points[j]);
+
+          allDistances[i][j] = diff;
+          allDistances[j][i] = diff;
+        }
+      }
+
+      _distances = new Tsp.Graph(numPoints);
+      _distances.setAllDistances(allDistances);
+      console.info('Distances enumerated...');
+
+      var count = 0;
+
+      var runnerType = 'opt';
+
+      var iterations = 0;
+
+      if (runnerType == 'opt') {
+        // OPT2 RUNNER
+        var _guessRoute = Tsp.createGuessRoute(_distances);
+        iterations = 150;
+
+        var runner = new Tsp.Sequential2OptRunner({
+          startRoute:_guessRoute,
+          distances:_distances,
+          isKnownStart:false
+        });
+      } else {
+        // ACO RUNNER
+        var runner = new Tsp.SequentialACORunner({distances:_distances});
+        iterations = 6;
+      }
+
+      var repeatInterval = setInterval(function(){
+        count++;
+
+        runner.runOnce();
+
+        _guessRoute = runner.route;
+
+        if (count >= iterations) {
+          clearInterval(repeatInterval);
+
+          // Push complex route into real run sequence!
+          for (var i in runner.route) {
+            var p = points[runner.route[i]];
+            run('move', {x: p[0], y: p[1]});
+          }
+          run('up');
+
+          console.info($path[0].id + ' TSP path fill run done!');
+          if (callback) callback();
+        }
+      }, 1);
+    }
   }
 };
