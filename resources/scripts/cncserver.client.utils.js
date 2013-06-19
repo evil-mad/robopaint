@@ -324,5 +324,17 @@ cncserver.utils = {
       return {x: p.x, y: p.y};
     };
     $path.maxLength = $path[0].getTotalLength(); // Shortcut!
+  },
+
+  // Get distance between two points
+  getDistance: function(p1, p2) {
+    if (p1.x) {
+      p1 = [p1.x, p1.y];
+      p2 = [p2.x, p2.y];
+    }
+
+    var xdiff = Math.abs(p1[0]-p2[0]);
+    var ydiff = Math.abs(p1[1]-p2[1]);
+    return Math.sqrt(xdiff*xdiff + ydiff*ydiff);
   }
 };
