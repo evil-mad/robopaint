@@ -63,7 +63,7 @@ $(function() {
   // Set initial values (as page reloads can save form values)
   cncserver.config.precision = Number($('#precision').val());
   cncserver.config.colorAction = $('#coloraction').val();
-  cncserver.config.fillPath = $('#fill-swirl'); // Set Fill Path
+  cncserver.config.fillPath = $('#fill-diagonal'); // Set Fill Path
 
 
   // Initial server connection handler

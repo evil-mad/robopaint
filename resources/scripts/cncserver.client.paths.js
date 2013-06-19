@@ -86,6 +86,9 @@ cncserver.paths = {
     var run = cncserver.cmd.run;
     var pathRect = $path[0].getBBox();
     var $fill = cncserver.config.fillPath;
+    var fillType = $fill.attr('id').split('-')[1];
+    var linesOnly = (fillType == 'horizontal' || fillType == 'vertical' || fillType == 'diagonal');
+    var lastPoint = {};
 
     // Start with brush up
     run('up');
@@ -97,8 +100,14 @@ cncserver.paths = {
       y: pathRect.y + (pathRect.height / 2)
     }
 
-    // Center the fill path
-    $fill.attr('transform', 'translate(' + center.x + ',' + center.y + ')');
+    if (linesOnly) {
+      // Left align line paths
+      $fill.attr('transform', 'translate(' + pathRect.x + ',' + pathRect.y + ')');
+    } else {
+      // Center the fill path
+      $fill.attr('transform', 'translate(' + center.x + ',' + center.y + ')');
+    }
+
 
     $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
     $fill.getPoint = function(distance){ // Handy helper function for gPAL
@@ -120,17 +129,57 @@ cncserver.paths = {
       i+= cncserver.config.precision * 2;
       p = $fill.getPoint(i);
 
-      // Spiral is outside top left, and therefore can never return
-      if (p.x < pathRect.x && p.y < pathRect.y ) i = max;
+      if (fillType == 'spiral') {
+        // Spiral is outside top left, and therefore can never return
+        if (p.x < pathRect.x && p.y < pathRect.y ) i = max;
+      }
 
-      // Spiral is outside bottom right, and therefore can never return
+      // Outside bottom right, and therefore can never return
       if (p.x > pathRect.x + pathRect.width && p.y > pathRect.y + pathRect.height) i = max;
 
       if (i < max) {
         // If the path is still visible here
-        if (cncserver.paths.getPointPathCollide(p) == $path[0]){
-          // Move to point!
-          run('move', p);
+        var isVisible = false;
+
+        // For non-spiral fill, short circuit visiblity based on path rect
+        if (fillType != 'spiral'){
+          if ((p.x >= pathRect.x && p.y > pathRect.y) &&
+              (p.x < pathRect.x + pathRect.width && p.y < pathRect.y + pathRect.height)) {
+              console.log('Should be visible ', p);
+              isVisible = true;
+          }
+        }
+
+        // Only if we've passed previous checks should we run the expensive
+        // getPointPathCollide function
+        if (isVisible){
+          isVisible = cncserver.paths.getPointPathCollide(p) == $path[0]
+        }
+
+        if (isVisible){
+
+          if (linesOnly) {
+            // With lines, only run the move at state change
+            if (cncserver.state.process.waiting) {
+              if (lastPoint.x) {
+                var diff = cncserver.utils.getDistance(lastPoint, p);
+                if (diff > 28) {
+                  run('up');
+                  run('move', p);
+                  run('down');
+                } else {
+                  run('move', p);
+                }
+              }
+              run('move', p);
+              lastPoint = {x:p.x, y:p.y};
+            }
+          } else {
+            // Move to point!
+            run('move', p);
+            lastPoint = {x:p.x, y:p.y};
+          }
+
 
           // If we were waiting, pen goes down
           if (cncserver.state.process.waiting) {
@@ -139,8 +188,13 @@ cncserver.paths = {
           }
         } else { // Path is invisible, lift the brush if we're not already waiting
           if (!cncserver.state.process.waiting) {
-            run('move', $fill.getPoint(i+5));
-            run('up');
+            if (!linesOnly) {
+              run('move', $fill.getPoint(i+5));
+              run('up');
+            } else {
+              lastPoint = {x:p.x, y:p.y};
+              run('move', p);
+            }
             cncserver.state.process.waiting = true;
           }
         }
