@@ -66,7 +66,7 @@ cncserver.paths = {
             cncserver.state.process.waiting = true;
           }
         }
-        setTimeout(runNextPoint, 1);
+        setTimeout(runNextPoint, 0);
       } else { // Done
         // Figure out how much change since last point, move more before lifting
         if (delta.x || delta.y) {
@@ -144,7 +144,7 @@ cncserver.paths = {
             cncserver.state.process.waiting = true;
           }
         }
-        setTimeout(runNextFill, 1);
+        setTimeout(runNextFill, 0);
       } else { // Done
         run('up');
         console.info($path[0].id + ' path fill run done!');
