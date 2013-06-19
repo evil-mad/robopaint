@@ -522,9 +522,15 @@ body.home #bar a {
   font-size: 30px;
 }
 
-body.home #bar a.selected {
+body.home #bar a:hover {
+  text-shadow: 0 0 11px blue;
+}
+
+body.home #bar a.selected,
+body.home #bar a:hover.selected{
   color: #00A000;
   text-shadow: 0 0 11px red;
+  cursor: default;
 }
 
 body.home #bar span.left {
