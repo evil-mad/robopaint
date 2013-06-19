@@ -131,7 +131,7 @@ $(function() {
 
 
   // Bind settings
-  $('#settings-cancel').click(function(e) {
+  $('#settings-done').click(function(e) {
     setSettingsWindow(false);
   });
 })
@@ -141,7 +141,7 @@ $(function() {
 $(window).keydown(function (e){
   if (isModal) {
     if (e.keyCode == 27) {
-      $('#settings-cancel').click();
+      $('#settings-done').click();
     }
   }
 
