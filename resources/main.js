@@ -30,6 +30,10 @@ function initialize() {
 
   $subwindow.appendTo('body');
 
+  $(window).resize(function(){
+    $subwindow.height($(window).height()-barHeight);
+  });
+
   // Prep the connection status overlay
   var $stat = $('body.home h1');
 
@@ -82,10 +86,6 @@ function initialize() {
 function fadeInWindow() {
   if ($subwindow.offset().top != barHeight) {
     $subwindow.hide().css('top', barHeight).fadeIn('slow');
-
-    $(window).resize(function(){
-      $subwindow.height($(window).height()-barHeight);
-    });
   }
 }
 
@@ -118,7 +118,7 @@ $(function() {
 
     switch (id) {
       case 'bar-home':
-        $('iframe').fadeOut('slow');
+        $subwindow.fadeOut('slow');
         break;
       case 'bar-settings':
         setSettingsWindow(true);
