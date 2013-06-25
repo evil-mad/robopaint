@@ -145,7 +145,6 @@ cncserver.paths = {
         if (fillType != 'spiral'){
           if ((p.x >= pathRect.x && p.y > pathRect.y) &&
               (p.x < pathRect.x + pathRect.width && p.y < pathRect.y + pathRect.height)) {
-              console.log('Should be visible ', p);
               isVisible = true;
           }
         }
