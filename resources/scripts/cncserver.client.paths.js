@@ -85,7 +85,7 @@ cncserver.paths = {
   runFill: function($path, callback) {
     var run = cncserver.cmd.run;
     var pathRect = $path[0].getBBox();
-    var $fill = cncserver.config.fillPath;
+    var $fill = cncserver.utils.getFillPath();
     var fillType = $fill.attr('id').split('-')[1];
     var linesOnly = (fillType == 'horizontal' || fillType == 'vertical' || fillType == 'diagonal');
     var lastPoint = {};
@@ -210,7 +210,8 @@ cncserver.paths = {
   runTSPFill: function($path, callback) {
     var run = cncserver.cmd.run;
     var pathRect = $path[0].getBBox();
-    var $fill = cncserver.config.fillPath;
+    var $fill = cncserver.utils.getFillPath();
+
     var points = []; // Final points to run TSP on
 
     // Start with brush up

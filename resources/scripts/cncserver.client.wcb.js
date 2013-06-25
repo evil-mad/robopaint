@@ -214,11 +214,18 @@ cncserver.wcb = {
           })
         } else if (job.t == 'fill') {
           run([['log', 'Drawing path ' + job.p[0].id + ' fill...']]);
-          cncserver.paths.runFill(job.p, function(){
+
+          function fillCallback(){
             jobIndex++;
             run([['logdone', true]]);
             doNextJob();
-          })
+          }
+
+          if (window.parent.settings.filltype == 'tsp') {
+            cncserver.paths.runTSPFill(job.p, fillCallback);
+          } else {
+            cncserver.paths.runFill(job.p, fillCallback);
+          }
         }
       } else {
         if (callback) callback();

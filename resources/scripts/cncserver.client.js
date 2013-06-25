@@ -32,7 +32,7 @@ var cncserver = {
   config: {
     precision: 5,
     maxPaintDistance: 8000,
-    fillPath: {},
+    connectShortcuts: true, // Placeholder...
     colorAction: 'bot',
     colorsets: {},
     colors: [],
@@ -63,7 +63,6 @@ $(function() {
   // Set initial values (as page reloads can save form values)
   cncserver.config.precision = Number($('#precision').val());
   cncserver.config.colorAction = $('#coloraction').val();
-  cncserver.config.fillPath = $('#fill-diagonal'); // Set Fill Path
 
 
   // Initial server connection handler
@@ -394,9 +393,15 @@ $(function() {
     // Bind to fill controls
     $('#fill').click(function(){
       cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' fill...']]);
-      cncserver.paths.runFill($path, function(){
-        cncserver.cmd.run('logdone');
-      });
+      if (window.parent.settings.filltype == 'tsp') {
+        cncserver.paths.runTSPFill($path, function(){
+          cncserver.cmd.run('logdone');
+        });
+      } else {
+        cncserver.paths.runFill($path, function(){
+          cncserver.cmd.run('logdone');
+        });
+      }
     });
 
     // Move the visible draw position indicator

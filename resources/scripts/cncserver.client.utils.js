@@ -336,5 +336,16 @@ cncserver.utils = {
     var xdiff = Math.abs(p1[0]-p2[0]);
     var ydiff = Math.abs(p1[1]-p2[1]);
     return Math.sqrt(xdiff*xdiff + ydiff*ydiff);
+  },
+
+  // Retrieve a fill path depending
+  getFillPath: function(){
+    var ft = window.parent.settings.filltype;
+    if (ft == 'tsp') {
+      return $('#fill-swirl');
+    } else {
+      return $('#fill-' + ft);
+    }
+
   }
 };
