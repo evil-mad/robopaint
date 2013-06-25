@@ -327,6 +327,7 @@ cncserver.paths = {
           for (var i in runner.route) {
             var p = points[runner.route[i]];
             run('move', {x: p[0], y: p[1]});
+            if (i == 0) run('down');
           }
           run('up');
 
