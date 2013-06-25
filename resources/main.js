@@ -3,6 +3,8 @@ global.$ = $;
 var cncserver = require('cncserver');
 var barHeight = 40;
 var isModal = false;
+var settings = {};
+var initalizing = false;
 $subwindow = {}; // Placeholder for subwindow iframe
 
 // Pull the list of available ports
@@ -21,6 +23,11 @@ cncserver.getPorts(function(ports) {
  * Central home screen initialization function
  */
 function initialize() {
+  initalizing = true;
+
+  // Bind settings controls
+  bindSettingsControls();
+
   // Add the secondary page iFrame to the page
   $subwindow = $('<iframe>').attr({
     height: $(window).height()-barHeight,
@@ -45,6 +52,11 @@ function initialize() {
         $stat.fadeOut('slow');
         cncserver.continueSimulation();
         cncserver.serialReadyInit();
+
+        // Initialize settings...
+        loadSettings();
+        saveSettings();
+        initalizing = false;
         setModal(false);
       }).text('Continue in Simulation mode'),
 
@@ -71,6 +83,11 @@ function initialize() {
         .fadeOut('slow');
       setModal(false);
       $('body.home nav').fadeIn('slow');
+
+      // Initialize settings...
+      loadSettings();
+      saveSettings();
+      initalizing = false;
     },
     disconnect: function() {
       setModal(true);
@@ -128,24 +145,215 @@ $(function() {
     }
     return false;
   });
+})
+
+/*========================== Settings Management =============================*/
+
+// Load settings from storage and push to elements (only happens at startup)
+function loadSettings() {
+
+  // Are there existing settings from a previous run?
+  if (!localStorage["cncserver-settings"]) {
+    var g = cncserver.conf.global;
+    var b = cncserver.conf.bot;
+
+    // First run! Pull settings over from CNC server / RoboPaint defaults
+    settings = {
+      // CNC Server specific settings
+      invertx: g.get('invertAxis:x'),
+      inverty: g.get('invertAxis:y'),
+      swapmotors: g.get('swapMotors'),
+      serialpath: g.get('serialPath'),
+      httpport: g.get('httpPort'),
+      servodrop: b.get('servo:min'),
+      servolift: b.get('servo:max'),
+      servotime: b.get('servo:duration'),
+      movespeed: b.get('speed:moving'),
+      paintspeed: b.get('speed:drawing'),
+
+      // Robopaint specific settings
+      filltype: 'horizontal',
+      fillprecision: 7,
+      outlineprecision: 6,
+      gapconnect: 1
+    };
+  } else {
+    settings = JSON.parse(localStorage["cncserver-settings"]);
+  }
+
+  // Actually match the elements to the given settings
+  for (var key in settings) {
+    var $input = $('#' + key);
+    switch (key) {
+      case 'servodrop':
+      case 'servolift':
+        $input.val(convRangeServo(false, settings[key]));
+        break;
+      default:
+        if ($input.attr('type') == 'checkbox') {
+          $input.prop('checked', settings[key]);
+        } else {
+          $input.val(settings[key]);
+        }
+    }
+    $input.change();
+  }
+}
+
+function saveSettings() {
+  localStorage["cncserver-settings"] = JSON.stringify(settings);
+}
+
+/*======== Direct Settings Bindings!  =========*/
+function bindSettingsControls() {
+
+  // Setup settings group tabs
+  $('ul.tabs').each(function(){
+    // For each set of tabs, we want to keep track of
+    // which tab is active and it's associated content
+    var $active, $content, $links = $(this).find('a');
+
+    // If the location.hash matches one of the links, use that as the active tab.
+    // If no match is found, use the first link as the initial active tab.
+    $active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+    $active.addClass('active');
+    $content = $($active.attr('href'));
+
+    // Hide the remaining content
+    $links.not($active).each(function () {
+      $($(this).attr('href')).hide();
+    });
+
+    // Bind the click event handler for tabs
+    $(this).on('click', 'a', function(e){
+      // Make the old tab inactive.
+      $active.removeClass('active');
+      $content.hide();
+
+      // Update the variables with the new link and content
+      $active = $(this);
+      $content = $($(this).attr('href'));
+
+      // Make the tab active.
+      $active.addClass('active');
+      $content.show();
+
+      // Prevent the anchor's default click action
+      e.preventDefault();
+    });
+  });
 
 
-  // Bind settings
+  // Keyboard shortcut for exiting window
+  $(window).keydown(function (e){
+    if (isModal) {
+      if (e.keyCode == 27) {
+        $('#settings-done').click();
+      }
+    }
+  });
+
+  // Catch all settings input changes
+  $('#settings input, #settings select').change(function(){
+    var $input = $(this);
+    var pushKey = [];
+    var pushVal = '';
+
+    switch (this.id) {
+      case 'servolift':
+      case 'servodrop':
+        var v = convRangeServo(true, $input.val());
+        var setID = 4;
+        var penState = 1;
+        if (this.id == 'servodrop') {
+          setID = 5;
+          penState = 0;
+        }
+
+        cncserver.sendSetup(setID, v);
+        if (!initalizing) cncserver.setPen(penState);
+
+        // Save settings
+        settings[this.id] = v;
+        break;
+
+      // TODO: Make the following pull from paster pushkey list
+      case 'invertx':
+        pushKey = ['g', 'invertAxis:x'];
+        pushVal = $input.is(':checked');
+        break;
+      case 'inverty':
+        pushKey = ['g', 'invertAxis:y'];
+        pushVal = $input.is(':checked');
+        break;
+      case 'swapmotors':
+        pushKey = ['g', 'swapMotors'];
+        pushVal = $input.is(':checked');
+        break;
+      case 'httpport':
+        pushKey = ['g', 'httpPort'];
+        pushVal = $input.val();
+        break;
+      case 'servotime':
+        pushKey = ['b', 'servo:duration'];
+        pushVal = $input.val();
+        break;
+      case 'movespeed':
+        pushKey = ['b', 'speed:moving'];
+        pushVal = $input.children(':selected').val();
+        break;
+      case 'paintspeed':
+        pushKey = ['b', 'speed:drawing'];
+        pushVal = $input.children(':selected').val();
+        break;
+      default: // Nothing special to set, just change the settings object value
+        if ($input.attr('type') == 'checkbox') {
+          settings[this.id] = $input.is(':checked');
+        } else {
+          settings[this.id] = $input.val();
+        }
+    }
+
+    // If there's a key to override for CNC server, set it
+    if (pushKey.length) {
+      settings[this.id] = pushVal;
+      if (pushKey[0] == 'b') { // Bot!
+        cncserver.conf.bot.set(pushKey[1], pushVal);
+      } else { // Global conf
+        cncserver.conf.global.set(pushKey[1], pushVal);
+      }
+    }
+
+    if (!initalizing) saveSettings();
+  });
+
+  // Done Button
   $('#settings-done').click(function(e) {
     setSettingsWindow(false);
   });
-})
+}
 
-/* Settings Management */
+// Helper function for converting values back and forth between range inputs
+// and weird EBB servo position values
+function convRangeServo(fromRange, val) {
+  var min = 8500;
+  var max = 18000 - min;
+  var v = 0;
 
-$(window).keydown(function (e){
-  if (isModal) {
-    if (e.keyCode == 27) {
-      $('#settings-done').click();
-    }
+  // We're getting a val from 0 to 100, convert for servo
+  if (fromRange) {
+    v = 100 - val;
+    v = parseInt(v * (max/100)) + min;
+  } else {
+    // We're converting from servo storage, convert it as best we can to 0-100
+    v = parseInt((val - min) / 100);
+    if (v < 0) v = 0;
+    if (v > 100) v = 100;
+    v = 100-v;
   }
 
-});
+  return v;
+}
 
 /**
  * Fade in/out settings modal window

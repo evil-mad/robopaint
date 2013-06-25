@@ -644,9 +644,8 @@ body.home #modalmask:before {
 
 body.home #settings {
   display:none;
-  overflow: auto;
-  margin-top: -15%;
-  height: 50%;
+  margin-top: -20%;
+  height: 60%;
   margin-left: -30%;
   box-shadow: 3px 3px 12px;
   padding: 1em;
@@ -657,4 +656,62 @@ body.home #settings {
   background-color: #aaa;
   border-radius: 8px;
   z-index: 15;
+}
+
+/* Settings Window Tabs */
+#settings h2 {
+  margin: 0;
+  margin-bottom: 7px;
+  margin-top: -6px;
+}
+
+#settings-done {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+
+#settings legend {
+  font-weight: bold;
+}
+
+#settings ul {
+  padding: 0;
+  margin: 0;
+}
+
+#settings fieldset {
+  margin-bottom: 1em;
+}
+
+#settings > div {
+  padding:10px;
+  height: 75%;
+  overflow-y: auto;
+  background:#fff;
+}
+
+#settings aside {
+  text-indent: 1em;
+  color: #555;
+  font-size: smaller;
+  font-style: italic;
+}
+
+#settings .tabs li {
+  list-style:none;
+  display:inline;
+}
+
+#settings .tabs a {
+  padding:5px 10px;
+  display:inline-block;
+  background:#666;
+  color:#fff;
+  text-decoration:none;
+}
+
+#settings .tabs a.active {
+  background:#fff;
+  color:#000;
 }

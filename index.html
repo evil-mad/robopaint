@@ -26,14 +26,143 @@
 
 <div id="modalmask"></div>
 <div id="settings">
-  <fieldset>
-    <legend>Serial connection</legend>
-      <select id="ports" title="Available serial ports">
-        <option value="auto">Auto-port</option>
-      </select>
-      <button id="connect">Connect</button>
-  </fieldset>
   <button id="settings-done">Done</button>
+  <h2>Settings</h2>
+  <ul class="tabs">
+    <li><a href="#settings-common">Common Settings</a></li>
+    <li><a href="#settings-output">Aesthetics</a></li>
+    <li><a href="#settings-advanced">Advanced</a></li>
+  </ul>
+
+  <div id="settings-common">
+    <fieldset>
+      <legend>Serial connection</legend>
+        <select id="ports" title="Available serial ports">
+          <option value="auto">Auto-port</option>
+        </select>
+        <button id="connect">Connect</button>
+        <aside>This currently doesn't work. Here's hoping auto-detect works for ya!</aside>
+    </fieldset>
+
+    <fieldset>
+      <legend>Brush Servo</legend>
+      <div>
+        <label for="servolift">Lift Position:</label>
+        <input type="range" id="servolift" min="0" max="100"/>
+      </div>
+
+      <div>
+        <label for="servodrop">Drop Position:</label>
+        <input type="range" id="servodrop" min="0" max="100"/>
+      </div>
+
+      <div>
+        <label for="servotime">Duration:</label>
+        <input type="range" id="servotime" min="0" value="200" max="1000"/>
+        <aside>Amount of time (in milliseconds) to wait for the lift/drop. Set to 0 to not wait at all.</aside>
+      </div>
+    </fieldset>
+  </div>
+
+  <div id="settings-output">
+    <fieldset>
+      <legend>Fill</legend>
+      <div>
+        <label for="filltype">Type</label>
+        <select id="filltype">
+          <option value="horizontal">Horizontal hatch</option>
+          <option value="vertical">Vertical hatch</option>
+          <option value="diagonal">Diagonal hatch</option>
+          <option value="swirl">Center spiral</option>
+          <option value="tsp">TSP Squiggle</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="fillprecision">Fill Precision</label>
+        <select id="fillprecision">
+          <option value="2">Very Fine</option>
+          <option value="4">Fine</option>
+          <option value="7">Default</option>
+          <option value="10">Coarse</option>
+          <option value="15">Very Coarse</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="gapconnect">Connect small gaps (smoother)</label>
+        <input type="checkbox" id="gapconnect" checked/>
+        <aside>Makes back and forth fills smoother by not lifting brush at edges.</aside>
+      </div>
+
+    </fieldset>
+
+    <fieldset>
+      <legend>General</legend>
+      <div>
+        <label for="move-speed">Moving speed (brush up)</label>
+        <select id="movespeed">
+          <option value="700">Slow</option>
+          <option value="1500">Medium (default)</option>
+          <option value="2500">Fast</option>
+          <option value="3000">Ludicrous!</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="paintspeed">Painting speed (brush down)</label>
+        <select id="paintspeed">
+          <option value="500">Slow</option>
+          <option value="1000">Medium (default)</option>
+          <option value="1500">Fast</option>
+          <option value="2500">Ludicrous!</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="outlineprecision">Outline Precision</label>
+        <select id="outlineprecision">
+          <option value="2">Very Fine (slowest)</option>
+          <option value="4">Fine</option>
+          <option value="6">Default</option>
+          <option value="10">Coarse</option>
+          <option value="15">Very Coarse (fastest)</option>
+        </select>
+      </div>
+    </fieldset>
+  </div>
+
+  <div id="settings-advanced">
+    <fieldset>
+      <legend>Server Connection</legend>
+      <div>
+        <label for="httpport">Server at {your IP}:</label>
+        <input type="text" id="httpport"/>
+        <aside>When running supported apps, this would be the server IP and port to enter into the app.</aside>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>X/Y Steppers</legend>
+
+      <div>
+        <label for="invertx">Invert X axis</label>
+        <input type="checkbox" id="invertx"/>
+      </div>
+
+      <div>
+        <label for="inverty">Invert Y axis</label>
+        <input type="checkbox" id="inverty"/>
+        <aside>Use if your windings are backwards.</aside>
+      </div>
+
+      <div>
+        <label for="swapmotors">Swap X for Y</label>
+        <input type="checkbox" id="swapmotors"/>
+        <aside>Switches the X and Y, as if you'd hooked the stepper motors up backwards.</aside>
+      </div>
+    </fieldset>
+  </div>
 </div>
 
 <img id="logo" src="resources/images/watercolorbot_icon.png"/>
