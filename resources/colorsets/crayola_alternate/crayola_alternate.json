@@ -1,0 +1,17 @@
+{
+  "name": "Crayola Alternate",
+  "styles" : {
+    "src" : "crayola_alternate.css",
+    "baseClass": "crayola-alternate"
+  },
+  "colors": [
+    "Fuschia",
+    "Orangered",
+    "Sunshine",
+    "Grass",
+    "Sea Green",
+    "Turquoise",
+    "Denim",
+    "White"
+  ]
+}

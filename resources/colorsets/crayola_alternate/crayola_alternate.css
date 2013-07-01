@@ -1,0 +1,34 @@
+.crayola-alternate #color0 {
+  background-color: #bb39b9; /* Fuschia */
+}
+
+#colors.crayola-alternate #color1 {
+  background-color: #e14a35; /* Orangered */
+}
+
+#colors.crayola-alternate #color2 {
+  background-color: #f3e730; /* Sunshine */
+  color: black;
+}
+
+#colors.crayola-alternate #color3 {
+  background-color: #b5d02e; /* Grass */
+  color: black;
+}
+
+.crayola-alternate #color4 {
+  background-color: #2ed07e; /* Sea Green */
+}
+
+.crayola-alternate #color5 {
+  background-color: #53bee7; /* Turquoise */
+}
+
+.crayola-alternate #color6 {
+  background-color: #535ee7; /* Denim */
+}
+
+#colors.crayola-alternate #color7 {
+  background-color: #eee; /* White */
+  color: black;
+}
