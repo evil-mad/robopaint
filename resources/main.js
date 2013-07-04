@@ -33,7 +33,7 @@ function initialize() {
     height: $(window).height()-barHeight,
     border: 0,
     id: 'subwindow'
-  }).css('top', $(window).height());
+  }).css('top', $(window).height()).hide();
 
   $subwindow.appendTo('body');
 
