@@ -99,10 +99,12 @@ svg#main * {
 svg#main #cncserversvg path.selected {
   stroke: blue !important;
   stroke-width: 10 !important;
+  stroke-opacity: 1 !important;
 }
 
 svg#main g path:hover {
   stroke: red !important;
+  stroke-opacity: 1 !important;
 }
 
 /* Drawing Simulation Canvas */
