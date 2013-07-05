@@ -8,6 +8,12 @@ body {
   font-family: sans-serif;
 }
 
+/* Prevent selectability of text or other elements */
+div *, nav *, h1 {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
 body.home {
   background-color: #ffae1a;
   overflow: hidden;
