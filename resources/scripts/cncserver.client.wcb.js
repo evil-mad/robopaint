@@ -121,6 +121,13 @@ cncserver.wcb = {
       stroke = (stroke == null) ? false : 'color' + colorMatch(stroke);
       fill = (fill == null) ? false : 'color' + colorMatch(fill);
 
+      // Account for fill/stroke opacity
+      var op = $p.attr('fill-opacity');
+      if (typeof op != 'undefined') fill = (op < 0.5) ? false : fill;
+
+      op = $p.attr('stroke-opacity');
+      if (typeof op != 'undefined') stroke = (op < 0.5) ? false : stroke;
+
       // Don't actually fill or stroke for white... (color8)
       if (fill == 'color8') fill = false;
       if (stroke == 'color8') stroke = false;
