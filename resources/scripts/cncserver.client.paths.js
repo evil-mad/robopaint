@@ -89,6 +89,7 @@ cncserver.paths = {
     var fillType = $fill.attr('id').split('-')[1];
     var linesOnly = (fillType == 'horizontal' || fillType == 'vertical' || fillType == 'diagonal');
     var lastPoint = {};
+    console.info($path[0].id + ' ' + fillType + ' path fill run started...');
 
     // Start with brush up
     run('up');
@@ -200,7 +201,7 @@ cncserver.paths = {
         setTimeout(runNextFill, 0);
       } else { // Done
         run('up');
-        console.info($path[0].id + ' path fill run done!');
+        console.info($path[0].id + ' ' + fillType + ' path fill run done!');
         if (callback) callback();
       }
     }
