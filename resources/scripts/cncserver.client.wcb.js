@@ -228,11 +228,7 @@ cncserver.wcb = {
             doNextJob();
           }
 
-          if (window.parent.settings.filltype == 'tsp') {
-            cncserver.paths.runTSPFill(job.p, fillCallback);
-          } else {
-            cncserver.paths.runFill(job.p, fillCallback);
-          }
+          cncserver.paths.runFill(job.p, fillCallback);
         }
       } else {
         if (callback) callback();

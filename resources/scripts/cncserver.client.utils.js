@@ -342,7 +342,7 @@ cncserver.utils = {
   getFillPath: function(){
     var ft = window.parent.settings.filltype;
     if (ft == 'tsp') {
-      return $('#fill-swirl');
+      return $('#fill-spiral');
     } else {
       return $('#fill-' + ft);
     }

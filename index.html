@@ -70,11 +70,20 @@
       <div>
         <label for="filltype">Type</label>
         <select id="filltype">
-          <option value="horizontal">Horizontal hatch</option>
-          <option value="vertical">Vertical hatch</option>
-          <option value="diagonal">Diagonal hatch</option>
-          <option value="swirl">Center spiral</option>
+          <option value="line-straight">Straight line</option>
+          <option value="line-triangle">Triangle line</option>
+          <option value="line-sine">Sine line</option>
+          <option value="spiral">Center spiral</option>
           <option value="tsp">TSP Squiggle</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="fillangle">Fill Angle (line fills only)</label>
+        <select id="fillangle">
+          <option value="0">Horizontal (0&deg;)</option>
+          <option value="45">Diagonal (45&deg;)</option>
+          <option value="90">Vertical (90&deg;)</option>
         </select>
       </div>
 

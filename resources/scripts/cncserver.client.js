@@ -393,15 +393,9 @@ $(function() {
     // Bind to fill controls
     $('#fill').click(function(){
       cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' fill...']]);
-      if (window.parent.settings.filltype == 'tsp') {
-        cncserver.paths.runTSPFill($path, function(){
-          cncserver.cmd.run('logdone');
-        });
-      } else {
-        cncserver.paths.runFill($path, function(){
-          cncserver.cmd.run('logdone');
-        });
-      }
+      cncserver.paths.runFill($path, function(){
+        cncserver.cmd.run('logdone');
+      });
     });
 
     // Move the visible draw position indicator

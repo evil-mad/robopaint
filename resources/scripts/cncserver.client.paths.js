@@ -82,13 +82,12 @@ cncserver.paths = {
   },
 
   // Run a full path fill into the buffer
-  runFill: function($path, callback) {
+  runPathFill: function($path, callback) {
     var run = cncserver.cmd.run;
     var pathRect = $path[0].getBBox();
     var $fill = cncserver.utils.getFillPath();
     var fillType = $fill.attr('id').split('-')[1];
-    var linesOnly = (fillType == 'horizontal' || fillType == 'vertical' || fillType == 'diagonal');
-    var lastPoint = {};
+
     console.info($path[0].id + ' ' + fillType + ' path fill run started...');
 
     // Start with brush up
@@ -101,13 +100,8 @@ cncserver.paths = {
       y: pathRect.y + (pathRect.height / 2)
     }
 
-    if (linesOnly) {
-      // Left align line paths
-      $fill.attr('transform', 'translate(' + pathRect.x + ',' + pathRect.y + ')');
-    } else {
-      // Center the fill path
-      $fill.attr('transform', 'translate(' + center.x + ',' + center.y + ')');
-    }
+    // Center the fill path
+    $fill.attr('transform', 'translate(' + center.x + ',' + center.y + ')');
 
 
     $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
@@ -116,7 +110,7 @@ cncserver.paths = {
       return {x: p.x, y: p.y};
     };
 
-    var i = 0;
+    var pathPos = 0;
     var p = {};
     var max = $fill[0].getTotalLength();
     runNextFill();
@@ -127,27 +121,26 @@ cncserver.paths = {
         return;
       }
 
-      i+= cncserver.config.precision * 2;
-      p = $fill.getPoint(i);
+      pathPos+= cncserver.config.precision * 2;
+      p = $fill.getPoint(pathPos);
 
+      // Short circuit for full path trace completion
       if (fillType == 'spiral') {
         // Spiral is outside top left, and therefore can never return
-        if (p.x < pathRect.x && p.y < pathRect.y ) i = max;
+        if (p.x < pathRect.x && p.y < pathRect.y ) pathPos = max;
+
+        // Outside bottom right, and therefore can never return
+        if (p.x > pathRect.x + pathRect.width && p.y > pathRect.y + pathRect.height) pathPos = max;
       }
 
-      // Outside bottom right, and therefore can never return
-      if (p.x > pathRect.x + pathRect.width && p.y > pathRect.y + pathRect.height) i = max;
-
-      if (i < max) {
+      if (pathPos < max) {
         // If the path is still visible here
         var isVisible = false;
 
-        // For non-spiral fill, short circuit visiblity based on path rect
-        if (fillType != 'spiral'){
-          if ((p.x >= pathRect.x && p.y > pathRect.y) &&
-              (p.x < pathRect.x + pathRect.width && p.y < pathRect.y + pathRect.height)) {
-              isVisible = true;
-          }
+        // Is the point within the bounding box of the path to be filled?
+        if ((p.x >= pathRect.x && p.y >= pathRect.y) &&
+            (p.x < pathRect.x + pathRect.width && p.y < pathRect.y + pathRect.height)) {
+            isVisible = true;
         }
 
         // Only if we've passed previous checks should we run the expensive
@@ -157,29 +150,9 @@ cncserver.paths = {
         }
 
         if (isVisible){
-
-          if (linesOnly) {
-            // With lines, only run the move at state change
-            if (cncserver.state.process.waiting) {
-              if (lastPoint.x) {
-                var diff = cncserver.utils.getDistance(lastPoint, p);
-                if (diff > 28) {
-                  run('up');
-                  run('move', p);
-                  run('down');
-                } else {
-                  run('move', p);
-                }
-              }
-              run('move', p);
-              lastPoint = {x:p.x, y:p.y};
-            }
-          } else {
-            // Move to point!
-            run('move', p);
-            lastPoint = {x:p.x, y:p.y};
-          }
-
+          // Move to point!
+          run('move', p);
+          lastPoint = {x:p.x, y:p.y};
 
           // If we were waiting, pen goes down
           if (cncserver.state.process.waiting) {
@@ -188,18 +161,210 @@ cncserver.paths = {
           }
         } else { // Path is invisible, lift the brush if we're not already waiting
           if (!cncserver.state.process.waiting) {
-            if (!linesOnly) {
-              run('move', $fill.getPoint(i+5));
-              run('up');
-            } else {
-              lastPoint = {x:p.x, y:p.y};
-              run('move', p);
-            }
+            run('move', $fill.getPoint(pathPos+5));
+            run('up');
             cncserver.state.process.waiting = true;
           }
         }
         setTimeout(runNextFill, 0);
       } else { // Done
+        run('up');
+        console.info($path[0].id + ' ' + fillType + ' path fill run done!');
+        if (callback) callback();
+      }
+    }
+  },
+
+// Run a full path line fill into the buffer
+  runLineFill: function($path, angle, callback) {
+    var run = cncserver.cmd.run;
+    var pathRect = $path[0].getBBox();
+    var $fill = cncserver.utils.getFillPath();
+    var fillType = $fill.attr('id').split('-')[2];
+    var isLinear = (fillType == 'straight');
+
+    console.info($path[0].id + ' ' + fillType + ' path fill run started...');
+
+    // Hide sim window
+    $('#sim').hide();
+
+    // Start with brush up
+    run('up');
+    cncserver.state.process.waiting = true;
+
+    $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
+    $fill.getPoint = function(distance){ // Handy helper function for gPAL
+      var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
+      return {x: p.x, y: p.y};
+    };
+
+    // Sanity check incoming angle to match supported angles
+    if (angle != 0 && angle !=90) {
+      angle = angle == 45 ? -45 : 0;
+    }
+
+    var linePos = 0;
+    var lineIteration = 0;
+    var lastPointChecked = {};
+    var p = {};
+    var max = $fill[0].getTotalLength();
+    var goRight = true;
+    var gapConnectThreshold = cncserver.config.precision * 7;
+    var fillLineSpacing = 10;
+    var done = false;
+    var leftOffset = 0;
+    var topOffset = 0;
+    var bottomLimit = 0;
+    var fillOffsetPadding = cncserver.config.precision * 2;
+
+    // Offset calculation for non-flat angles
+    // TODO: Support angles other than 45
+    if (angle == -45) {
+      var rads = (Math.abs(angle)/2) * Math.PI / 180
+      topOffset = pathRect.height / 2;
+      leftOffset = Math.tan(rads) * (pathRect.height * 1.2);
+
+      bottomLimit = Math.tan(rads) * (pathRect.width * 1.2);
+    }
+
+    // Start fill position at path top left (less fill offset padding)
+    $fill.attr('transform', 'translate(' + (pathRect.x - fillOffsetPadding - leftOffset) +
+      ',' + (pathRect.y - fillOffsetPadding + topOffset) + ') rotate(' + angle + ')');
+
+
+    runNextFill();
+
+    function runNextFill() {
+      // Long process kill
+      if (cncserver.state.process.cancel) {
+        return;
+      }
+
+      linePos+= cncserver.config.precision * 2;
+
+      var shortcut = false;
+
+      // Shortcut ending a given line based on position
+      if (angle == -45 && false) { // Probably will work for all line types..
+        // Line has run away up beyond the path
+        if (goRight && p.y < pathRect.y - fillOffsetPadding) {
+          shortcut = true;
+          console.log('line #' + lineIteration + ' up shortcut!');
+        }
+
+        // Line has run away down below path
+        if (!goRight && p.y > pathRect.y + pathRect.height) {
+          shortcut = true;
+          console.log('line #' + lineIteration + ' down shortcut!');
+        }
+      }
+
+      // If we've used up this line, move on to the next one!
+      if (linePos > max || shortcut) {
+        lineIteration++; // Next line! Move it to the new position
+
+        var lineSpaceAmt = fillLineSpacing * lineIteration;
+
+        // Move down
+        var lineSpace = {
+          x: 0,
+          y: lineSpaceAmt
+        }
+
+        // TODO: Support angles other than 45 & 90
+        if (angle == -45) {
+          // Move down and right
+          lineSpace = {
+            x: (fillLineSpacing/2) * lineIteration,
+            y: (fillLineSpacing/2) * lineIteration
+          }
+        } else if (angle == 90) {
+          // Move right
+          lineSpace = {
+            x: lineSpaceAmt,
+            y: 0
+          }
+        }
+
+        var fillOrigin = {
+          x: pathRect.x + lineSpace.x - fillOffsetPadding - leftOffset,
+          y: pathRect.y + lineSpace.y - fillOffsetPadding + topOffset
+        };
+
+        if (fillOrigin.y > pathRect.y + pathRect.height + bottomLimit ||
+            fillOrigin.x > pathRect.x + pathRect.width + leftOffset ) {
+          done = true;
+        } else {
+          // Set new position of fill line, and reset counter
+          $fill.attr('transform', 'translate(' + fillOrigin.x + ',' + fillOrigin.y + ') rotate(' + angle + ')');
+          $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
+
+          linePos = 0;
+          goRight = !goRight;
+        }
+      }
+
+      // Still work to do? Lets go!
+      if (!done) {
+
+        // Reverse direction? Simply invert the value!
+        var lineGet = goRight ? linePos : max-linePos;
+
+        // Go and get the x,y for the position on the line
+        p = $fill.getPoint(lineGet);
+
+
+        // If the path is still visible here, assume it's not for now'
+        var isVisible = false;
+
+        // Is the point within the bounding box of the path to be filled?
+        if ((p.x >= pathRect.x && p.y >= pathRect.y) &&
+            (p.x < pathRect.x + pathRect.width && p.y < pathRect.y + pathRect.height)) {
+            isVisible = true;
+        }
+
+        // Only if we've passed previous checks should we run the expensive
+        // getPointPathCollide function
+        if (isVisible){
+          isVisible = cncserver.paths.getPointPathCollide(p) == $path[0]
+        }
+
+        if (isVisible){ // Path is visible at this position!
+
+          // If we were waiting...
+          if (cncserver.state.process.waiting) {
+            cncserver.state.process.waiting = false;
+
+            // Find out how far away we are now...
+            var diff = cncserver.utils.getDistance(lastPointChecked, p);
+
+            // If we're too far away, lift the pen, then move to the position, then come down
+            if (diff > gapConnectThreshold || isNaN(diff)) {
+              run('up');
+              run('move', p);
+              run('down');
+            } else { // If we're close enough, just move to the new point
+              run('move', p);
+            }
+
+          } else { // Still visible, just keep moving
+            // Only log the in-between moves if it's non-linear
+            if (!isLinear) {
+              run('move', p);
+            }
+          }
+
+        } else { // Path is invisible, lift the brush if we're not already waiting
+          if (!cncserver.state.process.waiting) {
+            run('move', p);
+            cncserver.state.process.waiting = true;
+
+            // Save the point that we looked at to check later.
+            lastPointChecked = {x:p.x, y:p.y};
+          }
+        }
+        setTimeout(runNextFill, 0);
+      } else { // DONE!
         run('up');
         console.info($path[0].id + ' ' + fillType + ' path fill run done!');
         if (callback) callback();
@@ -337,6 +502,20 @@ cncserver.paths = {
           if (callback) callback();
         }
       }, 1);
+    }
+  },
+
+  // Wrapper to run currently selected fill for a path
+  runFill: function($path, callback) {
+    switch (window.parent.settings.filltype){
+      case 'tsp':
+        cncserver.paths.runTSPFill($path, callback);
+        break;
+      case 'spiral':
+        cncserver.paths.runPathFill($path, callback);
+        break;
+      default: // Line based fill!
+        cncserver.paths.runLineFill($path, window.parent.settings.fillangle, callback);
     }
   }
 };
