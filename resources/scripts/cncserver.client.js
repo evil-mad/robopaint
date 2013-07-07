@@ -226,17 +226,23 @@ $(function() {
     $('#pause').click(function(){
       function _resumeDone() {
         pausePenState = 0;
-        pauseLog.fadeOut('slow');
+        if (pauseLog.length) pauseLog.fadeOut('slow');
         cncserver.state.process.paused = false;
         cncserver.cmd.executeNext();
         $('#pause').removeClass('active').attr('title', pauseText).text('Pause');
       }
 
-      if (!cncserver.state.process.paused && cncserver.state.buffer.length) {
-        pauseLog = cncserver.utils.log('Pausing current process...');
+      if (!cncserver.state.process.paused) {
+        // Only attempt to pauselog if something is going on, but always allow pause
+        if (cncserver.state.buffer.length) {
+          pauseLog = cncserver.utils.log('Pausing current process...');
+        } else {
+          $('#pause').addClass('active').attr('title', resumeText).text('Resume');
+        }
         cncserver.state.process.paused = true;
       } else {
         // If the pen was down before, put it down now.
+        // TODO: This is broken somewhat
         if (pausePenState) {
           cncserver.api.pen.down(_resumeDone);
         } else {
@@ -365,7 +371,6 @@ $(function() {
     $('#zero').click(function(){
       cncserver.api.pen.zero(cncserver.utils.log('Resetting absolute position...').logDone);
     });
-    $('#precision').change(function(){cncserver.config.precision = Number($(this).val());});
 
     $('#auto-paint').click(function(){
       // Momentarily hide selection
