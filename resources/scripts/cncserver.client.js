@@ -348,9 +348,11 @@ $(function() {
     });
     $('#movefirst').click(function(){});
     $('#draw').click(function(){
+      $('#draw').prop('disabled', true);
       cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' outline...']]);
       cncserver.paths.runOutline($path, function(){
-        cncserver.cmd.run('logdone')
+        cncserver.cmd.run('logdone');
+        $('#draw').prop('disabled', false);
       });
     });
 
@@ -376,8 +378,11 @@ $(function() {
       // Momentarily hide selection
       if ($path.length) $path.toggleClass('selected');
 
-      cncserver.wcb.autoPaint($('#cncserversvg'));
-      // TODO: Lock various controls
+      $('#auto-paint, #fill, #draw').prop('disabled', true);
+      cncserver.wcb.autoPaint($('#cncserversvg'), function(){
+        $('#auto-paint, #fill, #draw').prop('disabled', false);
+      });
+
     });
 
     $('#auto-color').click(function(){
@@ -394,8 +399,10 @@ $(function() {
 
     // Bind to fill controls
     $('#fill').click(function(){
+      $('#fill').prop('disabled', true);
       cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' fill...']]);
       cncserver.paths.runFill($path, function(){
+        $('#fill').prop('disabled', false);
         cncserver.cmd.run('logdone');
       });
     });
