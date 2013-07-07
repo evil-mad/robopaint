@@ -5,6 +5,7 @@
 cncserver.paths = {
   // Find out what DOM object is directly below the point given
   // Will NOT work if point is outside visible screen range!
+  // TODO: maybe this can be replaced by polygonal collision detection? :P
   getPointPathCollide: function(point) {
     return document.elementFromPoint(
       (point.x * cncserver.canvas.scale) + cncserver.canvas.offset.left,
@@ -12,11 +13,26 @@ cncserver.paths = {
     );
   },
 
-  // Run a path outline trace into the work queue
-  runOutline: function($path, callback) {
+  /**
+   *  Run a the outline of a given path into the buffer
+   *
+   *  @param {object} $path
+   *    The jQuery object for the path to be filled
+   *  @param {function} callback
+   *    Callback function for when the run completes
+   *  @param {object} options
+   *    The JSON set of options
+   *    * strokeovershoot: amount to move the brush when about to lift
+   *
+   */
+  runOutline: function($path, callback, options) {
     var run = cncserver.cmd.run;
 
-    var steps = Math.round($path.maxLength / cncserver.config.precision) + 1;
+    // Default options object to a copy of the full global settings object
+    if (typeof options == 'undefined') options = jQuery.extend({}, window.parent.settings);
+
+    // Hide sim window
+    $('#sim').hide();
 
     // Start with brush up
     run('up');
@@ -32,10 +48,7 @@ cncserver.paths = {
     runNextPoint();
 
     function runNextPoint() {
-      // Long process kill
-      if (cncserver.state.process.cancel) {
-        return;
-      }
+      if (cncserver.state.process.cancel) return; // Long process kill
 
       if (i <= $path.maxLength) {
         i+= cncserver.config.precision;
@@ -58,7 +71,7 @@ cncserver.paths = {
           if (!cncserver.state.process.waiting) {
             // Figure out how much change since last point, move more before lifting
             if (delta.x || delta.y) {
-              var o = {x: p.x - (delta.x * 5), y: p.y - (delta.y * 5)};
+              var o = {x: p.x - (delta.x * options.strokeovershoot), y: p.y - (delta.y * options.strokeovershoot)};
               run('move', o); // Overshoot to make up for brush flexibility
             }
 
@@ -70,7 +83,7 @@ cncserver.paths = {
       } else { // Done
         // Figure out how much change since last point, move more before lifting
         if (delta.x || delta.y) {
-          var o = {x: p.x - (delta.x * 5), y: p.y - (delta.y * 5)};
+          var o = {x: p.x - (delta.x * options.strokeovershoot), y: p.y - (delta.y * options.strokeovershoot)};
           run('move', o); // Overshoot to make up for brush flexibility
         }
 
@@ -81,19 +94,25 @@ cncserver.paths = {
     }
   },
 
-  // Run a full path fill into the buffer
-  runPathFill: function($path, callback) {
+  /**
+   * "Private" function, run a full path fill for a given path into the buffer
+   *
+   *  @param {object} $path
+   *    The jQuery object for the path to be filled
+   *  @param {object} options
+   *    The JSON set of options:
+   *    * filltype: The type of the fill, must resolve to an existing path ID
+   *    * fillangle: The angle of the line. 0, 45 or 90
+   *    * fillspacing: the amount of space between the lines
+   *  @param {function} callback
+   *    Callback function for when the runFill completes
+   *
+   */
+  _runPathFill: function($path, options, callback) {
     var run = cncserver.cmd.run;
     var pathRect = $path[0].getBBox();
-    var $fill = cncserver.utils.getFillPath();
+    var $fill = cncserver.utils.getFillPath(options);
     var fillType = $fill.attr('id').split('-')[1];
-
-    console.info($path[0].id + ' ' + fillType + ' path fill run started...');
-
-    // Start with brush up
-    run('up');
-
-    cncserver.state.process.waiting = true;
 
     var center = {
       x: pathRect.x + (pathRect.width / 2),
@@ -116,10 +135,7 @@ cncserver.paths = {
     runNextFill();
 
     function runNextFill() {
-      // Long process kill
-      if (cncserver.state.process.cancel) {
-        return;
-      }
+      if (cncserver.state.process.cancel) return; // Long process kill
 
       pathPos+= cncserver.config.precision * 2;
       p = $fill.getPoint(pathPos);
@@ -168,29 +184,31 @@ cncserver.paths = {
         }
         setTimeout(runNextFill, 0);
       } else { // Done
-        run('up');
-        console.info($path[0].id + ' ' + fillType + ' path fill run done!');
         if (callback) callback();
       }
     }
   },
 
-// Run a full path line fill into the buffer
-  runLineFill: function($path, angle, callback) {
+  /**
+   * "Private" function, run a full line fill for a given path into the buffer
+   *
+   *  @param {object} $path
+   *    The jQuery object for the path to be filled
+   *  @param {object} options
+   *    The JSON set of options, required set listed:
+   *    * filltype: The type of the fill, must resolve to an existing path ID
+   *    * fillangle: The angle of the line. 0, 45 or 90
+   *    * fillspacing: the amount of space between the lines
+   *  @param {function} callback
+   *    Callback function for when the runFill completes
+   *
+   */
+  _runLineFill: function($path, options, callback) {
     var run = cncserver.cmd.run;
     var pathRect = $path[0].getBBox();
-    var $fill = cncserver.utils.getFillPath();
+    var $fill = cncserver.utils.getFillPath(options);
     var fillType = $fill.attr('id').split('-')[2];
     var isLinear = (fillType == 'straight');
-
-    console.info($path[0].id + ' ' + fillType + ' path fill run started...');
-
-    // Hide sim window
-    $('#sim').hide();
-
-    // Start with brush up
-    run('up');
-    cncserver.state.process.waiting = true;
 
     $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
     $fill.getPoint = function(distance){ // Handy helper function for gPAL
@@ -199,8 +217,8 @@ cncserver.paths = {
     };
 
     // Sanity check incoming angle to match supported angles
-    if (angle != 0 && angle !=90) {
-      angle = angle == 45 ? -45 : 0;
+    if (options.fillangle != 0 && options.fillangle !=90) {
+      options.fillangle = options.fillangle == 45 ? -45 : 0;
     }
 
     var linePos = 0;
@@ -210,7 +228,6 @@ cncserver.paths = {
     var max = $fill[0].getTotalLength();
     var goRight = true;
     var gapConnectThreshold = cncserver.config.precision * 7;
-    var fillLineSpacing = 10;
     var done = false;
     var leftOffset = 0;
     var topOffset = 0;
@@ -219,8 +236,8 @@ cncserver.paths = {
 
     // Offset calculation for non-flat angles
     // TODO: Support angles other than 45
-    if (angle == -45) {
-      var rads = (Math.abs(angle)/2) * Math.PI / 180
+    if (options.fillangle == -45) {
+      var rads = (Math.abs(options.fillangle)/2) * Math.PI / 180
       topOffset = pathRect.height / 2;
       leftOffset = Math.tan(rads) * (pathRect.height * 1.2);
 
@@ -229,23 +246,19 @@ cncserver.paths = {
 
     // Start fill position at path top left (less fill offset padding)
     $fill.attr('transform', 'translate(' + (pathRect.x - fillOffsetPadding - leftOffset) +
-      ',' + (pathRect.y - fillOffsetPadding + topOffset) + ') rotate(' + angle + ')');
-
+      ',' + (pathRect.y - fillOffsetPadding + topOffset) + ') rotate(' + options.fillangle + ')');
 
     runNextFill();
 
     function runNextFill() {
-      // Long process kill
-      if (cncserver.state.process.cancel) {
-        return;
-      }
+      if (cncserver.state.process.cancel) return; // Long process kill
 
       linePos+= cncserver.config.precision * 2;
 
       var shortcut = false;
 
       // Shortcut ending a given line based on position
-      if (angle == -45 && false) { // Probably will work for all line types..
+      if (options.fillangle == -45 && false) { // Probably will work for all line types..
         // Line has run away up beyond the path
         if (goRight && p.y < pathRect.y - fillOffsetPadding) {
           shortcut = true;
@@ -263,7 +276,7 @@ cncserver.paths = {
       if (linePos > max || shortcut) {
         lineIteration++; // Next line! Move it to the new position
 
-        var lineSpaceAmt = fillLineSpacing * lineIteration;
+        var lineSpaceAmt = options.fillspacing * lineIteration;
 
         // Move down
         var lineSpace = {
@@ -272,13 +285,13 @@ cncserver.paths = {
         }
 
         // TODO: Support angles other than 45 & 90
-        if (angle == -45) {
+        if (options.fillangle == -45) {
           // Move down and right
           lineSpace = {
-            x: (fillLineSpacing/2) * lineIteration,
-            y: (fillLineSpacing/2) * lineIteration
+            x: (options.fillspacing/2) * lineIteration,
+            y: (options.fillspacing/2) * lineIteration
           }
-        } else if (angle == 90) {
+        } else if (options.fillangle == 90) {
           // Move right
           lineSpace = {
             x: lineSpaceAmt,
@@ -296,7 +309,7 @@ cncserver.paths = {
           done = true;
         } else {
           // Set new position of fill line, and reset counter
-          $fill.attr('transform', 'translate(' + fillOrigin.x + ',' + fillOrigin.y + ') rotate(' + angle + ')');
+          $fill.attr('transform', 'translate(' + fillOrigin.x + ',' + fillOrigin.y + ') rotate(' + options.fillangle + ')');
           $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
 
           linePos = 0;
@@ -314,7 +327,7 @@ cncserver.paths = {
         p = $fill.getPoint(lineGet);
 
 
-        // If the path is still visible here, assume it's not for now'
+        // If the path is still visible here, assume it's not for now
         var isVisible = false;
 
         // Is the point within the bounding box of the path to be filled?
@@ -365,25 +378,29 @@ cncserver.paths = {
         }
         setTimeout(runNextFill, 0);
       } else { // DONE!
-        run('up');
-        console.info($path[0].id + ' ' + fillType + ' path fill run done!');
         if (callback) callback();
       }
     }
   },
 
-  // Run a full TSP path fill into the buffer
-  runTSPFill: function($path, callback) {
+  /**
+   * "Private" function, run a full TSP fill for a given path into the buffer
+   *
+   *  @param {object} $path
+   *    The jQuery object for the path to be filled
+   *  @param {object} options
+   *    The JSON set of options
+   *    * tsprunnertype: Type of TSP to run, OPT (fast) or ACO (slow)
+   *  @param {function} callback
+   *    Callback function for when the runFill completes
+   *
+   */
+  _runTSPFill: function($path, options, callback) {
     var run = cncserver.cmd.run;
     var pathRect = $path[0].getBBox();
-    var $fill = cncserver.utils.getFillPath();
+    var $fill = cncserver.utils.getFillPath({filltype: 'tsp'});
 
     var points = []; // Final points to run TSP on
-
-    // Start with brush up
-    run('up');
-
-    cncserver.state.process.waiting = true;
 
     var center = {
       x: pathRect.x + (pathRect.width / 2),
@@ -407,6 +424,8 @@ cncserver.paths = {
 
     // Fill up the slow point path finder points
     function runNextFill() {
+      if (cncserver.state.process.cancel) return; // Long process kill
+
       fillCount+= precision;
       p = $fill.getPoint(fillCount);
 
@@ -459,12 +478,9 @@ cncserver.paths = {
       console.info('Distances enumerated...');
 
       var count = 0;
-
-      var runnerType = 'opt';
-
       var iterations = 0;
 
-      if (runnerType == 'opt') {
+      if (options.tsprunnertype == 'opt') {
         // OPT2 RUNNER
         var _guessRoute = Tsp.createGuessRoute(_distances);
         iterations = 150;
@@ -481,6 +497,7 @@ cncserver.paths = {
       }
 
       var repeatInterval = setInterval(function(){
+        if (cncserver.state.process.cancel) return; // Long process kill
         count++;
 
         runner.runOnce();
@@ -496,26 +513,53 @@ cncserver.paths = {
             run('move', {x: p[0], y: p[1]});
             if (i == 0) run('down');
           }
-          run('up');
 
-          console.info($path[0].id + ' TSP path fill run done!');
           if (callback) callback();
         }
       }, 1);
     }
   },
 
-  // Wrapper to run currently selected fill for a path
-  runFill: function($path, callback) {
-    switch (window.parent.settings.filltype){
+  /**
+   *  Wrapper to run fill for a given path
+   *
+   *  @param {object} $path
+   *    The jQuery object for the path to be filled
+   *  @param {function} callback
+   *    Callback function for when the run completes
+   *  @param {object} options
+   *    The JSON set of options, if unset, defaults to copy of global settings
+   *
+   */
+  runFill: function($path, callback, options) {
+
+    // Default options object to a copy of the full global settings object
+    if (typeof options == 'undefined') options = jQuery.extend({}, window.parent.settings);
+
+    // runFill common stuff for code reuse ==================================
+    $('#sim').hide(); // Hide sim window
+    console.info($path[0].id + ' ' + options.filltype + ' path fill run started...');
+    cncserver.cmd.run('up'); // Start with brush up
+    cncserver.state.process.waiting = true;
+
+
+    switch (options.filltype){
       case 'tsp':
-        cncserver.paths.runTSPFill($path, callback);
+        cncserver.paths._runTSPFill($path, options, runFillCallback);
         break;
       case 'spiral':
-        cncserver.paths.runPathFill($path, callback);
+        cncserver.paths._runPathFill($path, options, runFillCallback);
         break;
       default: // Line based fill!
-        cncserver.paths.runLineFill($path, window.parent.settings.fillangle, callback);
+        cncserver.paths._runLineFill($path, options, runFillCallback);
     }
+
+    // Common callback to handle more code reuse
+    function runFillCallback() {
+      cncserver.cmd.run('up');
+      console.info($path[0].id + ' ' + options.filltype + ' path fill run done!');
+      callback();
+    }
+
   }
 };

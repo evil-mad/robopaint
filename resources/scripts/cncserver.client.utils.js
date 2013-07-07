@@ -339,8 +339,8 @@ cncserver.utils = {
   },
 
   // Retrieve a fill path depending
-  getFillPath: function(){
-    var ft = window.parent.settings.filltype;
+  getFillPath: function(options){
+    var ft = options.filltype;
     if (ft == 'tsp') {
       return $('#fill-spiral');
     } else {
