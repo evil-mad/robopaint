@@ -172,8 +172,12 @@ function loadSettings() {
       paintspeed: b.get('speed:drawing'),
 
       // Robopaint specific settings
-      filltype: 'horizontal',
+      filltype: 'line-straight',
+      fillangle: 0,
+      fillspacing: 10,
       fillprecision: 7,
+      strokeovershoot: 5,
+      tsprunnertype: 'OPT',
       outlineprecision: 6,
       gapconnect: 1
     };

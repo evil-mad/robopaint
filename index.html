@@ -11,7 +11,6 @@
   </head>
 <body class="home">
 
-
 <div id="bar">
   <span class="left">
     <a id="bar-home" class="icon-home selected" href="/" title="Home screen">&nbsp;</a>
@@ -78,14 +77,26 @@
         </select>
       </div>
 
-      <div>
-        <label for="fillangle">Fill Angle (line fills only)</label>
-        <select id="fillangle">
-          <option value="0">Horizontal (0&deg;)</option>
-          <option value="45">Diagonal (45&deg;)</option>
-          <option value="90">Vertical (90&deg;)</option>
-        </select>
-      </div>
+      <fieldset>
+        <legend>Line/Hatch Fills</legend>
+        <div>
+          <label for="fillangle">Line Angle</label>
+          <select id="fillangle">
+            <option value="0">Horizontal (0&deg;)</option>
+            <option value="45">Diagonal (45&deg;)</option>
+            <option value="90">Vertical (90&deg;)</option>
+          </select>
+
+          <label for="fillspacing">Line Spacing</label>
+          <select id="fillspacing">
+            <option value="5">Tiny (5)</option>
+            <option value="10">Small (10)</option>
+            <option value="15">Medium (15)</option>
+            <option value="25">Wide (25)</option>
+            <option value="40">Spacious (40)</option>
+          </select>
+        </div>
+      </fieldset>
 
       <div>
         <label for="fillprecision">Fill Precision</label>
@@ -129,13 +140,24 @@
       </div>
 
       <div>
-        <label for="outlineprecision">Outline Precision</label>
+        <label for="outlineprecision">Stroke Precision</label>
         <select id="outlineprecision">
           <option value="2">Very Fine (slowest)</option>
           <option value="4">Fine</option>
           <option value="6">Default</option>
           <option value="10">Coarse</option>
           <option value="15">Very Coarse (fastest)</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="strokeovershoot">Stroke Overshoot</label>
+        <select id="strokeovershoot">
+          <option value="1">Tiny (1)</option>
+          <option value="5">Medium (5)</option>
+          <option value="8">Longer (8)</option>
+          <option value="13">Yikes (13)</option>
+          <option value="20">Unhelpful (20)</option>
         </select>
       </div>
     </fieldset>
