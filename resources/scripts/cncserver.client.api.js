@@ -173,6 +173,24 @@ cncserver.api = {
     *   Function to callback when done, including data from response body
     */
     change: function(toolName, callback){
+      // Disallow tool changes for different pen modes (no water or paint)
+      // TODO: This is pretty hacky and should probably be fixed elsewhere
+      switch(parseInt(cncserver.settings.penmode)) {
+        case 1: // Dissallow paint
+          if (toolName.indexOf('color') !== -1) {
+            callback(false); return;
+          }
+          break;
+        case 2: // Dissallow water
+          if (toolName.indexOf('water') !== -1) {
+            callback(false); return;
+          }
+          break;
+        case 3: // Dissallow All
+          callback(false); return;
+          break;
+      }
+
       // Store the last changed color state
       if (toolName.indexOf('color') !== -1) {
         cncserver.state.color = toolName;

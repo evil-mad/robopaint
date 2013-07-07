@@ -101,11 +101,11 @@
       <div>
         <label for="fillprecision">Fill Precision</label>
         <select id="fillprecision">
-          <option value="2">Very Fine</option>
-          <option value="4">Fine</option>
-          <option value="7">Default</option>
-          <option value="10">Coarse</option>
-          <option value="15">Very Coarse</option>
+          <option value="3">Very Fine</option>
+          <option value="7">Fine</option>
+          <option value="14">Default</option>
+          <option value="21">Coarse</option>
+          <option value="35">Very Coarse</option>
         </select>
       </div>
 
@@ -140,8 +140,13 @@
       </div>
 
       <div>
-        <label for="outlineprecision">Stroke Precision</label>
-        <select id="outlineprecision">
+        <label for="maxpaintdistance">Paint Refill Draw Distance</label>
+        <input type="range" title="Move left to get paint more often, right to get paint less often" id="maxpaintdistance" min="500" max="15000" />
+      </div>
+
+      <div>
+        <label for="strokeprecision">Stroke Precision</label>
+        <select id="strokeprecision">
           <option value="2">Very Fine (slowest)</option>
           <option value="4">Fine</option>
           <option value="6">Default</option>
@@ -165,11 +170,21 @@
 
   <div id="settings-advanced">
     <fieldset>
-      <legend>Server Connection</legend>
+      <legend>Misc</legend>
       <div>
         <label for="httpport">Server at {your IP}:</label>
         <input type="text" id="httpport"/>
         <aside>When running supported apps, this would be the server IP and port to enter into the app.</aside>
+      </div>
+
+      <div>
+        <label for="penmode">Drawing Layout Mode</label>
+        <select id="penmode">
+          <option value="0">Default (Brush, Water & Paint)</option>
+          <option value="1">Water Only (No Paint: Buddha Board)</option>
+          <option value="2">Paint Only (No Water: Non-watercolors)</option>
+          <option value="3">No Water or Paint (Pen/Pencil mode)</option>
+        </select>
       </div>
     </fieldset>
 

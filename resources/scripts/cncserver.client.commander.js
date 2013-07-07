@@ -30,7 +30,7 @@ cncserver.cmd = {
 
       // Check for paint refill
       if (!cncserver.state.process.paused) {
-        if (cncserver.state.pen.distanceCounter > cncserver.config.maxPaintDistance) {
+        if (cncserver.state.pen.distanceCounter > cncserver.settings.maxpaintdistance) {
           var returnPoint = returnPoints[returnPoints.length-1] ? returnPoints[returnPoints.length-1] : lastPoint;
           cncserver.wcb.getMorePaint(returnPoint, function(){
             cncserver.api.pen.down(cncserver.cmd.executeNext);

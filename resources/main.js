@@ -174,11 +174,13 @@ function loadSettings() {
       // Robopaint specific settings
       filltype: 'line-straight',
       fillangle: 0,
+      penmode: 0,
+      maxpaintdistance: 8000,
       fillspacing: 10,
-      fillprecision: 7,
+      fillprecision: 14,
       strokeovershoot: 5,
       tsprunnertype: 'OPT',
-      outlineprecision: 6,
+      strokeprecision: 6,
       gapconnect: 1
     };
   } else {

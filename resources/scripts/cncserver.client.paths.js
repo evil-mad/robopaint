@@ -29,7 +29,7 @@ cncserver.paths = {
     var run = cncserver.cmd.run;
 
     // Default options object to a copy of the full global settings object
-    if (typeof options == 'undefined') options = jQuery.extend({}, window.parent.settings);
+    if (typeof options == 'undefined') options = jQuery.extend({}, cncserver.settings);
 
     // Hide sim window
     $('#sim').hide();
@@ -51,7 +51,7 @@ cncserver.paths = {
       if (cncserver.state.process.cancel) return; // Long process kill
 
       if (i <= $path.maxLength) {
-        i+= cncserver.config.precision;
+        i+= parseInt(options.strokeprecision);
 
         lastPoint = {x:p.x, y:p.y}; // Store the last run point
         p = $path.getPoint(i); // Get a new point
@@ -103,6 +103,7 @@ cncserver.paths = {
    *    The JSON set of options:
    *    * filltype: The type of the fill, must resolve to an existing path ID
    *    * fillangle: The angle of the line. 0, 45 or 90
+   *    * fillprecision: The number of steps between each path position check
    *    * fillspacing: the amount of space between the lines
    *  @param {function} callback
    *    Callback function for when the runFill completes
@@ -137,7 +138,7 @@ cncserver.paths = {
     function runNextFill() {
       if (cncserver.state.process.cancel) return; // Long process kill
 
-      pathPos+= cncserver.config.precision * 2;
+      pathPos+= parseInt(options.fillprecision);
       p = $fill.getPoint(pathPos);
 
       // Short circuit for full path trace completion
@@ -197,6 +198,7 @@ cncserver.paths = {
    *  @param {object} options
    *    The JSON set of options, required set listed:
    *    * filltype: The type of the fill, must resolve to an existing path ID
+   *    * fillprecision: The amount of space between each path position check
    *    * fillangle: The angle of the line. 0, 45 or 90
    *    * fillspacing: the amount of space between the lines
    *  @param {function} callback
@@ -221,18 +223,20 @@ cncserver.paths = {
       options.fillangle = options.fillangle == 45 ? -45 : 0;
     }
 
+    options.fillprecision = parseInt(options.fillprecision);
+
     var linePos = 0;
     var lineIteration = 0;
     var lastPointChecked = {};
     var p = {};
     var max = $fill[0].getTotalLength();
     var goRight = true;
-    var gapConnectThreshold = cncserver.config.precision * 7;
+    var gapConnectThreshold = options.fillprecision * 5;
     var done = false;
     var leftOffset = 0;
     var topOffset = 0;
     var bottomLimit = 0;
-    var fillOffsetPadding = cncserver.config.precision * 2;
+    var fillOffsetPadding = options.fillprecision;
 
     // Offset calculation for non-flat angles
     // TODO: Support angles other than 45
@@ -253,7 +257,7 @@ cncserver.paths = {
     function runNextFill() {
       if (cncserver.state.process.cancel) return; // Long process kill
 
-      linePos+= cncserver.config.precision * 2;
+      linePos+= options.fillprecision;
 
       var shortcut = false;
 
@@ -391,6 +395,7 @@ cncserver.paths = {
    *  @param {object} options
    *    The JSON set of options
    *    * tsprunnertype: Type of TSP to run, OPT (fast) or ACO (slow)
+   *    * fillprecision: sets the spacing between the dots to connect
    *  @param {function} callback
    *    Callback function for when the runFill completes
    *
@@ -418,7 +423,6 @@ cncserver.paths = {
 
     var fillCount = 0;
     var p = {};
-    var precision = 17;
     var max = $fill[0].getTotalLength();
     runNextFill();
 
@@ -426,7 +430,7 @@ cncserver.paths = {
     function runNextFill() {
       if (cncserver.state.process.cancel) return; // Long process kill
 
-      fillCount+= precision;
+      fillCount+= parseInt(options.fillprecision);
       p = $fill.getPoint(fillCount);
 
       // Spiral is outside top left, and therefore can never return
@@ -534,7 +538,7 @@ cncserver.paths = {
   runFill: function($path, callback, options) {
 
     // Default options object to a copy of the full global settings object
-    if (typeof options == 'undefined') options = jQuery.extend({}, window.parent.settings);
+    if (typeof options == 'undefined') options = jQuery.extend({}, cncserver.settings);
 
     // runFill common stuff for code reuse ==================================
     $('#sim').hide(); // Hide sim window

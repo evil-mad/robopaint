@@ -29,10 +29,8 @@ var cncserver = {
       max: 0
     }
   },
+  settings: window.parent.settings,
   config: {
-    precision: 5,
-    maxPaintDistance: 8000,
-    connectShortcuts: true, // Placeholder...
     colorAction: 'bot',
     colorsets: {},
     colors: [],
@@ -61,7 +59,6 @@ $(function() {
   $(window).resize(responsiveResize);
 
   // Set initial values (as page reloads can save form values)
-  cncserver.config.precision = Number($('#precision').val());
   cncserver.config.colorAction = $('#coloraction').val();
 
 
