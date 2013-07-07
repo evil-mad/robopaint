@@ -191,10 +191,6 @@ function loadSettings() {
   for (var key in settings) {
     var $input = $('#' + key);
     switch (key) {
-      case 'servodrop':
-      case 'servolift':
-        $input.val(convRangeServo(false, settings[key]));
-        break;
       default:
         if ($input.attr('type') == 'checkbox') {
           $input.prop('checked', settings[key]);
@@ -268,7 +264,6 @@ function bindSettingsControls() {
     switch (this.id) {
       case 'servolift':
       case 'servodrop':
-        var v = convRangeServo(true, $input.val());
         var setID = 4;
         var penState = 1;
         if (this.id == 'servodrop') {
@@ -276,11 +271,11 @@ function bindSettingsControls() {
           penState = 0;
         }
 
-        cncserver.sendSetup(setID, v);
+        cncserver.sendSetup(setID, $input.val());
         if (!initalizing) cncserver.setPen(penState);
 
         // Save settings
-        settings[this.id] = v;
+        settings[this.id] = $input.val();
         break;
 
       // TODO: Make the following pull from paster pushkey list
@@ -337,28 +332,6 @@ function bindSettingsControls() {
   $('#settings-done').click(function(e) {
     setSettingsWindow(false);
   });
-}
-
-// Helper function for converting values back and forth between range inputs
-// and weird EBB servo position values
-function convRangeServo(fromRange, val) {
-  var min = 8500;
-  var max = 18000 - min;
-  var v = 0;
-
-  // We're getting a val from 0 to 100, convert for servo
-  if (fromRange) {
-    v = 100 - val;
-    v = parseInt(v * (max/100)) + min;
-  } else {
-    // We're converting from servo storage, convert it as best we can to 0-100
-    v = parseInt((val - min) / 100);
-    if (v < 0) v = 0;
-    if (v > 100) v = 100;
-    v = 100-v;
-  }
-
-  return v;
 }
 
 /**
