@@ -88,7 +88,6 @@ svg#main {
   position: absolute;
   left: 235px;
   top: 147px;
-  transform-origin: 0 0 0;
   -webkit-transform-origin: 0 0 0;
 }
 
@@ -108,10 +107,13 @@ svg#main g path:hover {
 }
 
 /* Drawing Simulation Canvas */
-canvas#simulate {
+canvas#sim {
   position: absolute;
-  z-index: -10;
-  display:none;
+  background-color: rgba(255,255,255,0.8);
+  top: 147px;
+  z-index: 5;
+  display: none;
+  -webkit-transform-origin: 0 0 0;
 }
 
 /* Nav Tools */

@@ -300,6 +300,16 @@ $(function() {
       return false;
     });
 
+    // Bind sim view click
+    $('#showsim, #sim').click(function(e) {
+      if ($('#sim:visible').length) {
+        $('#sim').hide();
+      } else {
+        cncserver.utils.simulateBuffer();
+      }
+
+    });
+
     // Bind Quick Load Hover
     $('#load').hover(function(e) {
       $('#loadlist').fadeIn('slow');
@@ -478,6 +488,7 @@ $(function() {
     var margin = 40; // TODO: Place this somewhere better
     var rightMargin = $(window).width() - $('#control').offset().left;
     var scale = 0;
+    var $sim = $('#sim');
 
     // Tool selection height scale
     var toolMax = 735;
@@ -493,11 +504,12 @@ $(function() {
     var offsetDifference = svgOffset.left - cncserver.canvas.offset.left;
 
     $tools.css({
-      'transform': 'scale(' + scale + ')',
       '-webkit-transform': 'scale(' + scale + ')'
     });
 
     $svg.css('left', cncserver.canvas.offset.left);
+    $sim.css('left', cncserver.canvas.offset.left);
+
 
     // Scale SVG Canvas
     scale = {
@@ -509,7 +521,10 @@ $(function() {
     cncserver.canvas.scale = scale.x < scale.y ? scale.x : scale.y;
 
     $svg.css({
-      'transform': 'scale(' + cncserver.canvas.scale + ')',
+      '-webkit-transform': 'scale(' + cncserver.canvas.scale + ')'
+    });
+
+    $sim.css({
       '-webkit-transform': 'scale(' + cncserver.canvas.scale + ')'
     });
 

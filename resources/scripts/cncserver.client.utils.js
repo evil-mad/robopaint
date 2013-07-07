@@ -347,5 +347,58 @@ cncserver.utils = {
       return $('#fill-' + ft);
     }
 
+  },
+
+  // Simulation draw of current buffer
+  simulateBuffer: function() {
+    var c = $('#sim')[0];
+    var ctx = c.getContext("2d");
+    // Clear sim canvas
+    c.width = c.width;
+
+    // Set stroke color
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+    ctx.lineWidth = 4;
+
+    var doDraw = false;
+    console.log('Start draw, buffer:', cncserver.state.buffer.length);
+
+    // Move through every item in the command buffer
+    for (var i in cncserver.state.buffer) {
+      var next = cncserver.state.buffer[i];
+
+      // Ensure it's an array
+      if (typeof next == "string"){
+        next = [next];
+      }
+
+      // What's the command?
+      switch (next[0]) {
+        case 'down':
+          doDraw = false;
+          //ctx.beginPath();
+          break;
+        case 'up':
+          //ctx.closePath();
+          doDraw = true;
+          break;
+        case 'move':
+          var x = next[1].x; //(next[1].x / cncserver.canvas.width) * c.width;
+          var y = next[1].y; //(next[1].y / cncserver.canvas.height) * c.height;
+
+          if (doDraw) {
+            ctx.lineTo(x, y);
+          } else {
+            ctx.moveTo(x, y);
+          }
+
+          //ctx.lineTo(x, y);
+          break;
+      }
+    }
+    ctx.stroke();
+    $('#sim').show();
+    console.log('Simulation draw done!');
+
   }
 };

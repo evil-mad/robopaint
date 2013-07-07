@@ -97,11 +97,14 @@
 
 <nav id="edit-tools">
   <a id="edit" class="tab" href="#" title="Edit this Image"></a>
+  <a id="showsim" class="tab" href="#" title="View the buffer simulation">P</a>
   <a id="load" class="tab" href="#" title="Quick Load"></a>
   <ul id="loadlist" style="display:none">
     <li>No files. Add *.SVG to ./resources/svgs</li>
   </ul>
 </nav>
+
+<canvas id="sim" height="864" width="1152"></canvas>
 
 <svg id="main" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">
   <g id="cncserversvg"></g>
