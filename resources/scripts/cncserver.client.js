@@ -224,13 +224,6 @@ $(function() {
     var resumeText = 'Click to resume previous operations';
     var pausePenState = 0;
     $('#pause').click(function(){
-      function _resumeDone() {
-        pausePenState = 0;
-        if (pauseLog.length) pauseLog.fadeOut('slow');
-        cncserver.state.process.paused = false;
-        cncserver.cmd.executeNext();
-        $('#pause').removeClass('active').attr('title', pauseText).text('Pause');
-      }
 
       if (!cncserver.state.process.paused) {
         // Only attempt to pauselog if something is going on, but always allow pause
@@ -241,13 +234,19 @@ $(function() {
         }
         cncserver.state.process.paused = true;
       } else {
-        // If the pen was down before, put it down now.
-        // TODO: This is broken somewhat
-        if (pausePenState) {
-          cncserver.api.pen.down(_resumeDone);
-        } else {
-          _resumeDone();
-        }
+        if (pauseLog.length) pauseLog.fadeOut('slow');
+        cncserver.state.process.paused = false;
+
+        // Execute next should put us where we need to be
+        cncserver.cmd.executeNext(function(){
+          // If the pen was down before, put it down now after the resuming command.
+          if (pausePenState) {
+            cncserver.state.buffer.push('down'); // Add to END of queue
+          }
+        });
+
+        $('#pause').removeClass('active').attr('title', pauseText).text('Pause');
+        pausePenState = 0;
       }
     });
 

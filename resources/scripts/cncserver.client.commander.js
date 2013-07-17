@@ -45,7 +45,7 @@ cncserver.cmd = {
     }
   },
 
-  executeNext: function() {
+  executeNext: function(executeCallback) {
     if (!cncserver.state.buffer.length) {
       cncserver.cmd.cb();
       return;
@@ -95,6 +95,7 @@ cncserver.cmd = {
       default:
         console.debug('Queue shortcut not found:' + next[0]);
     }
+    if (executeCallback) executeCallback();
   },
 
   // Add a command to the queue! format is cmd short name, arguments
