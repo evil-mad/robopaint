@@ -120,7 +120,7 @@
     <fieldset>
       <legend>General</legend>
       <div>
-        <label for="move-speed">Moving speed (brush up)</label>
+        <label for="movespeed">Moving speed (brush up)</label>
         <select id="movespeed">
           <option value="700">Slow</option>
           <option value="1500">Medium (default)</option>
@@ -200,6 +200,12 @@
         <label for="inverty">Invert Y axis</label>
         <input type="checkbox" id="inverty"/>
         <aside>Use if your windings are backwards.</aside>
+      </div>
+
+      <div>
+        <label for="latencyoffset">Movement Buffer Latency Offset</label>
+        <input type="range" title="Move right for more offset (smooth), left for negative offset (jerky)" id="latencyoffset" min="-100" max="500" />
+        <aside>Removes time from API duration to callback sooner, buffering and smoothing out subsequent position calls.</aside>
       </div>
 
       <div>

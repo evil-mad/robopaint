@@ -151,43 +151,48 @@ $(function() {
 
 // Load settings from storage and push to elements (only happens at startup)
 function loadSettings() {
+  var g = cncserver.conf.global;
+  var b = cncserver.conf.bot;
 
-  // Are there existing settings from a previous run?
-  if (!localStorage["cncserver-settings"]) {
-    var g = cncserver.conf.global;
-    var b = cncserver.conf.bot;
+  // Pull settings over from CNC server / RoboPaint defaults (defined here)
+  settings = {
+    // CNC Server specific settings
+    invertx: g.get('invertAxis:x'),
+    inverty: g.get('invertAxis:y'),
+    swapmotors: g.get('swapMotors'),
+    serialpath: g.get('serialPath'),
+    httpport: g.get('httpPort'),
+    latencyoffset: g.get('bufferLatencyOffset'),
+    servodrop: b.get('servo:min'),
+    servolift: b.get('servo:max'),
+    servotime: b.get('servo:duration'),
+    movespeed: b.get('speed:moving'),
+    paintspeed: b.get('speed:drawing'),
 
-    // First run! Pull settings over from CNC server / RoboPaint defaults
-    settings = {
-      // CNC Server specific settings
-      invertx: g.get('invertAxis:x'),
-      inverty: g.get('invertAxis:y'),
-      swapmotors: g.get('swapMotors'),
-      serialpath: g.get('serialPath'),
-      httpport: g.get('httpPort'),
-      servodrop: b.get('servo:min'),
-      servolift: b.get('servo:max'),
-      servotime: b.get('servo:duration'),
-      movespeed: b.get('speed:moving'),
-      paintspeed: b.get('speed:drawing'),
+    // Robopaint specific defaults
+    filltype: 'line-straight',
+    fillangle: 0,
+    penmode: 0,
+    maxpaintdistance: 8000,
+    fillspacing: 10,
+    fillprecision: 14,
+    strokeovershoot: 5,
+    tsprunnertype: 'OPT',
+    strokeprecision: 6,
+    gapconnect: 1
+  };
 
-      // Robopaint specific settings
-      filltype: 'line-straight',
-      fillangle: 0,
-      penmode: 0,
-      maxpaintdistance: 8000,
-      fillspacing: 10,
-      fillprecision: 14,
-      strokeovershoot: 5,
-      tsprunnertype: 'OPT',
-      strokeprecision: 6,
-      gapconnect: 1
-    };
-  } else {
-    settings = JSON.parse(localStorage["cncserver-settings"]);
+  // Are there existing settings from a previous run? Mesh them into the defaults
+  if (localStorage["cncserver-settings"]) {
+    var s = JSON.parse(localStorage["cncserver-settings"]);
+    for (var key in settings) {
+      if (typeof s[key] != 'undefined') {
+        settings[key] = s[key];
+      }
+    }
   }
 
-  // Actually match the elements to the given settings
+  // Actually match the form elements to the given settings
   for (var key in settings) {
     var $input = $('#' + key);
     switch (key) {
@@ -293,6 +298,10 @@ function bindSettingsControls() {
         break;
       case 'httpport':
         pushKey = ['g', 'httpPort'];
+        pushVal = $input.val();
+        break;
+      case 'latencyoffset':
+        pushKey = ['g', 'bufferLatencyOffset'];
         pushVal = $input.val();
         break;
       case 'servotime':
