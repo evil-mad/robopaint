@@ -377,6 +377,11 @@ $(function() {
         });
       }
     });
+
+    $('#calibrate').click(function(){
+      cncserver.api.pen.move({x: 0, y:0});
+    });
+
     $('#disable').click(function(){
       cncserver.api.motors.unlock(cncserver.utils.log('Unlocking stepper motors...').logDone);
     });
