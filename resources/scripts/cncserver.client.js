@@ -360,7 +360,7 @@ $(function() {
       $('#draw').prop('disabled', true);
       cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' outline...']]);
       cncserver.paths.runOutline($path, function(){
-        cncserver.cmd.run('park');
+        if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
         cncserver.cmd.run('logdone');
         $('#draw').prop('disabled', false);
       });
@@ -418,7 +418,7 @@ $(function() {
       cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' fill...']]);
       cncserver.paths.runFill($path, function(){
         $('#fill').prop('disabled', false);
-        cncserver.cmd.run('park');
+        if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
         cncserver.cmd.run('logdone');
       });
     });
