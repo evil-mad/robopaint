@@ -8,6 +8,14 @@ This open source project is based on the
 a speedy framework of API calls to interact with the WaterColorBot, while
 RoboPaint is the clean interface in an easy to install app!
 
+
+IMPORTANT NOTE: **** THIS IS PRE-RELEASE SOFTWARE ****
+Features, specifications, and interfaces may change frequently and without
+warning or remorse prior to our first official release.  
+First official release is currently estimated at mid-September, 2013.
+
+
+
 ## Downloads / Install
 Click to download the easy install file for you system below:
 * [Windows 32bit](http://robopaint.tn42.com/robopaint-win.zip)
