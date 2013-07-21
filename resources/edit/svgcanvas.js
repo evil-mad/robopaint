@@ -115,7 +115,7 @@ var svgns = "http://www.w3.org/2000/svg",
 var curConfig = {
 	show_outside_canvas: true,
 	selectNew: true,
-	dimensions: [1152, 864]
+	dimensions: [1056, 768]
 };
 
 // Update config with new one if given
@@ -124,7 +124,7 @@ if(config) {
 }
 
 // Array with width/height of canvas
-var dimensions = [1152, 864];
+var dimensions = [curConfig.dimensions[0], curConfig.dimensions[1]];
 
 var canvas = this;
 
@@ -6456,8 +6456,8 @@ var getResolution = this.getResolution = function() {
 // 		var vb = svgcontent.getAttribute("viewBox").split(' ');
 // 		return {'w':vb[2], 'h':vb[3], 'zoom': current_zoom};
 
-	var width = 1152 / current_zoom;
-	var height = 864 / current_zoom;
+	var width =  curConfig.dimensions[0] / current_zoom;
+	var height = curConfig.dimensions[1] / current_zoom;
 
 	return {
 		'w': width,

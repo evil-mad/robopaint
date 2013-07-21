@@ -42,7 +42,7 @@
 			curConfig = {
 				canvasName: 'default',
 				canvas_expansion: 3,
-				dimensions: [1152,864],
+				dimensions: [1056, 768],
 				initFill: {
 					color: 'FF0000',  // solid red
 					opacity: 1
@@ -2603,12 +2603,11 @@
 			};
 
 			var clickClear = function(){
-				var dims = [1152,864];
 				$.confirm(uiStrings.notification.QwantToClear, function(ok) {
 					if(!ok) return;
 					setSelectMode();
 					svgCanvas.clear();
-					svgCanvas.setResolution(dims[0], dims[1]);
+					svgCanvas.setResolution(curConfig.dimensions[0], curConfig.dimensions[1]);
 					updateCanvas(true);
 					zoomImage();
 					populateLayers();
