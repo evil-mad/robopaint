@@ -321,7 +321,8 @@ cncserver.utils = {
     $path.transformMatrix = $path[0].getTransformToElement($path[0].ownerSVGElement);
     $path.getPoint = function(distance){ // Handy helper function for gPAL
       var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
-      return {x: p.x, y: p.y};
+      // Add 48 to each side for 96dpi 1/2in offset
+      return {x: p.x+48, y: p.y+48};
     };
     $path.maxLength = $path[0].getTotalLength(); // Shortcut!
   },
@@ -383,8 +384,9 @@ cncserver.utils = {
           doDraw = true;
           break;
         case 'move':
-          var x = next[1].x; //(next[1].x / cncserver.canvas.width) * c.width;
-          var y = next[1].y; //(next[1].y / cncserver.canvas.height) * c.height;
+          // Add 48 to each side for 1/2in offset
+          var x = next[1].x + 48; //(next[1].x / cncserver.canvas.width) * c.width;
+          var y = next[1].y + 48; //(next[1].y / cncserver.canvas.height) * c.height;
 
           if (doDraw) {
             ctx.lineTo(x, y);

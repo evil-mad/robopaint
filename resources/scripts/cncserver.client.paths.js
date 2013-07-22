@@ -7,9 +7,9 @@ cncserver.paths = {
   // Will NOT work if point is outside visible screen range!
   // TODO: maybe this can be replaced by polygonal collision detection? :P
   getPointPathCollide: function(point) {
-    return document.elementFromPoint(
-      (point.x * cncserver.canvas.scale) + cncserver.canvas.offset.left,
-      (point.y * cncserver.canvas.scale) + cncserver.canvas.offset.top
+    return document.elementFromPoint( // Add 48 to each side for 96dpi 1/2in offset
+      ((point.x+48) * cncserver.canvas.scale) + cncserver.canvas.offset.left,
+      ((point.y+48) * cncserver.canvas.scale) + cncserver.canvas.offset.top
     );
   },
 
@@ -127,7 +127,8 @@ cncserver.paths = {
     $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
     $fill.getPoint = function(distance){ // Handy helper function for gPAL
       var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
-      return {x: p.x, y: p.y};
+      // Add 48 to each side for 96dpi 1/2in offset
+      return {x: p.x+48, y: p.y+48};
     };
 
     var pathPos = 0;
@@ -215,7 +216,8 @@ cncserver.paths = {
     $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
     $fill.getPoint = function(distance){ // Handy helper function for gPAL
       var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
-      return {x: p.x, y: p.y};
+      // Add 48 to each side for 96dpi 1/2in offset
+      return {x: p.x+48, y: p.y+48};
     };
 
     // Sanity check incoming angle to match supported angles
@@ -418,7 +420,8 @@ cncserver.paths = {
     $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
     $fill.getPoint = function(distance){ // Handy helper function for gPAL
       var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
-      return {x: p.x, y: p.y};
+      // Add 48 to each side for 96dpi 1/2in offset
+      return {x: p.x+48, y: p.y+48};
     };
 
     var fillCount = 0;

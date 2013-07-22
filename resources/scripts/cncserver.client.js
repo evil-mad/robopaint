@@ -426,7 +426,8 @@ $(function() {
     // Move the visible draw position indicator
     cncserver.moveDrawPoint = function(point) {
       // Move visible drawpoint
-      $('#drawpoint').attr('transform', 'translate(' + point.x + ',' + point.y + ')');
+      // Add 48 to each side for 1/2in offset
+      $('#drawpoint').attr('transform', 'translate(' + (point.x + 48) + ',' + (point.y + 48) + ')');
     }
 
     // Bind to Tool Change nav items
