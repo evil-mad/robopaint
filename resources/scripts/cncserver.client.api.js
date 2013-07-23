@@ -121,8 +121,9 @@ cncserver.api = {
       cncserver.moveDrawPoint(point);
 
       var percent = {
-        x: (point.x / cncserver.canvas.width) * 100,
-        y: (point.y / cncserver.canvas.height) * 100
+        // Remove 1/2in (96dpi / 2) from total width for right/bottom offset
+        x: (point.x / (cncserver.canvas.width - 48)) * 100,
+        y: (point.y / (cncserver.canvas.height - 48)) * 100
       }
 
       // Sanity check outputs
