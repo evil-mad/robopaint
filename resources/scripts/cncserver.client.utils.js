@@ -150,6 +150,13 @@ cncserver.utils = {
       var $elem = $(this);
 
       // Pass over attributes to new path element
+
+      if (!elem.ownerSVGElement) {
+        // Delete non-supported SVG elements
+        elem.parentNode.removeChild(elem);
+        return;
+      }
+
       var svgNS = elem.ownerSVGElement.namespaceURI;
       var path = document.createElementNS(svgNS, 'path');
 
