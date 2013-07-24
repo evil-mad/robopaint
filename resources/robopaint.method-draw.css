@@ -1,0 +1,11 @@
+@charset "UTF-8";
+/*
+  @file These are the base override styles for all method-draw specific additions
+*/
+
+button.zoomfit {
+  position: absolute;
+  right: 250px;
+  line-height: 80%;
+  bottom: 6px;
+}
