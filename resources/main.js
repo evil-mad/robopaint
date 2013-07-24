@@ -7,6 +7,10 @@ var settings = {};
 var initalizing = false;
 $subwindow = {}; // Placeholder for subwindow iframe
 
+// Clear last used image
+// TODO: Make this a selectable option?
+delete localStorage["svgedit-default"];
+
 // Pull the list of available ports
 cncserver.getPorts(function(ports) {
   for (var portID in ports){
