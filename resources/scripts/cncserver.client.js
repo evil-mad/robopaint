@@ -26,9 +26,9 @@ var cncserver = {
     }
   },
   settings: window.parent.settings,
+  statedata: window.parent.statedata,
   config: {
     colorAction: 'bot',
-    colorsets: {},
     colors: [],
     colorsYUV: []
   }
@@ -43,7 +43,7 @@ $(function() {
   bindControls(); // Bind all clickable controls
   loadSVG(); // Load the default SVG
 
-  getColorsets(); // Get & Load the colorsets, then cache the default
+  loadColorsets(); // Get & Load the colorsets, then cache the default
 
   // Store the canvas size
   cncserver.canvas.height = $svg.height();
@@ -82,52 +82,28 @@ $(function() {
     });
   }
 
-  function getColorsets() {
-    $.getJSON('colorsets/colorsets.json', function(sets){
-      cncserver.config.colorsets['ALL'] = sets;
-      $.each(sets, function(i, set){
-        var setDir = 'colorsets/' + set + '/';
-
-        $.getJSON(setDir + set + '.json', function(c){
-          cncserver.config.colorsets[set] = {
-            name: c.name,
-            baseClass: c.styles.baseClass,
-            colors: c.colors
-          };
-
-          // Add the stylesheet so it can load
-          $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}).appendTo('head');
-
-          // If we've got all of them, go load them in
-          if (Object.keys(cncserver.config.colorsets).length == sets.length + 1) {
-
-            loadColorsets();
-          }
-        });
-      });
-    });
-  }
-
   function loadColorsets() {
-    for(var i in cncserver.config.colorsets['ALL']) {
-      var id = cncserver.config.colorsets['ALL'][i];
+    for(var i in cncserver.statedata.colorsets['ALL']) {
+      var id = cncserver.statedata.colorsets['ALL'][i];
+      var set = cncserver.statedata.colorsets[id];
       $('<option>')
         .val(id)
-        .text(cncserver.config.colorsets[id].name)
+        .text(set.name)
         .appendTo('#colorsets');
+      $('head').append(set.stylesheet);
     }
 
     // Bind change for colors
     $('#colorsets').change(function(){
       var id = $(this).val();
-      var set = cncserver.config.colorsets[id];
+      cncserver.statedata.colorset = id;
+      var set = cncserver.statedata.colorsets[id];
       $('#colors').attr('class', '').addClass(set.baseClass);
       for (var i in set.colors) {
         $('#color' + i).text(set.colors[i]);
       }
-
-      cacheColors();
-    }).change();
+      setTimeout(cacheColors, 500);
+    }).val(cncserver.statedata.colorset).change();
   }
 
   function cacheColors() {

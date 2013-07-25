@@ -58,6 +58,21 @@ cncserver.utils = {
     return [y,u,v];
   },
 
+  // Convert an RGB string to a hex string
+  rgbToHex: function(rgb) {
+    var c = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    function hex(x) {
+      return ("0" + parseInt(x).toString(16)).slice(-2);
+    }
+
+    if (c) {
+      return "#" + hex(c[1]) + hex(c[2]) + hex(c[3]);
+    } else {
+      return rgb;
+    }
+
+  },
+
   // Converts a jQuery rgb or hex color string to a proper array [r,g,b]
   colorStringToArray: function(string) {
     // Quick sanity check

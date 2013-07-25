@@ -10,3 +10,46 @@ button.zoomfit {
   line-height: 68%;
   bottom: 10px;
 }
+
+#colors {
+  margin-left: 18px;
+  padding-top: 4px;
+  border-radius: 7px;
+  width: 470px;
+  background-color: #EEE;
+  height: 35px;
+  padding-left: 10px;
+}
+
+#colors select {
+  margin-top: 4px;
+}
+
+#colors .color {
+  height: 31px;
+  width: 25px;
+  box-shadow: 0 0 2px 3px #CCCCCC, 0 0 0 3px #777777;
+  margin-right: 12px;
+  border-radius: 14px / 16px;
+}
+
+#colors .static {
+  margin-top: -2px;
+}
+
+#colorx {
+  width: 20px;
+  height: 15px;
+  font-size: 15px;
+  text-align: center;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  color: #FF0000;
+}
+
+#colornone {
+  width: 20px;
+  height: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}

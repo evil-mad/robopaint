@@ -5,7 +5,8 @@ var cncserver = require('cncserver');
 
 var barHeight = 40;
 var isModal = false;
-var settings = {};
+var settings = {}; // Holds the "permanent" app settings data
+var statedata = {}; // Holds per app session volitile settings
 var initalizing = false;
 $subwindow = {}; // Placeholder for subwindow iframe
 
@@ -35,7 +36,7 @@ function initialize() {
   bindSettingsControls();
 
   // Load the quickload list
-  initQuickload()
+  initQuickload();
 
   // Add the secondary page iFrame to the page
   $subwindow = $('<iframe>').attr({
@@ -142,7 +143,7 @@ function initQuickload() {
   // Bind loadlist item click load
   $('a', $loadList).click(function(e) {
     $loadList.fadeOut('slow');
-    var fileContents = fs.readFileSync($(this).data('file'))
+    var fileContents = fs.readFileSync($(this).data('file'));
     var mode = $('#bar .selected').attr('id').split('-')[1];
 
     // Push the files contents into the localstorage object
@@ -173,6 +174,8 @@ function fadeInWindow() {
 // Document Ready...
 $(function() {
   initialize();
+
+  getColorsets(); // Load the colorset configuration data
 
   // Bind links for home screen central links
   $('nav a').click(function(e) {
@@ -209,6 +212,27 @@ $(function() {
     return false;
   });
 })
+
+// Fetches all watercolor sets available from the colorsets dir
+function getColorsets() {
+  var sets = JSON.parse(fs.readFileSync('resources/colorsets/colorsets.json'));
+  statedata.colorsets = {'ALL': sets};
+
+  $.each(sets, function(i, set){
+    var setDir = 'resources/colorsets/' + set + '/';
+    var c = JSON.parse(fs.readFileSync(setDir + set + '.json'));
+
+    // Set initial colorset
+    if (!statedata.colorset) statedata.colorset = set;
+
+    statedata.colorsets[set] = {
+      name: c.name,
+      baseClass: c.styles.baseClass,
+      colors: c.colors,
+      stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src})
+    };
+  });
+}
 
 /*========================== Settings Management =============================*/
 
