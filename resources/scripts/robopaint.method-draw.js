@@ -26,20 +26,27 @@ $(function() {
   // Drawing Canvas Ready ======================================================
   methodDraw.ready(function(){
 
-    // Load last drawing
-    if (localStorage["svgedit-default"]) {
-      methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
-    }
-
+    // Drawing has been opened =================================================
     methodDraw.openCallback = function() {
       // Force the resolution to match what's expected
       methodDraw.canvas.setResolution(1056,768);
 
       // Set zoom to fit canvas at load
       methodDraw.zoomChanged(window, 'canvas');
+
+      // Ungroup the elements that were just forced into a group :/
+      methodDraw.canvas.addToSelection($('#svgcontent>g:nth-child(3)>g'));
+      methodDraw.canvas.ungroupSelectedElement();
+      methodDraw.canvas.clearSelection();
     }
 
-    methodDraw.zoomChanged(window, 'canvas');
+    // Load last drawing
+    if (localStorage["svgedit-default"]) {
+      methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+    } else {
+      // Set zoom to fit empty canvas at init
+      methodDraw.zoomChanged(window, 'canvas');
+    }
 
     // Add and bind Auto Zoom Button
     $('#zoom_panel').before(
