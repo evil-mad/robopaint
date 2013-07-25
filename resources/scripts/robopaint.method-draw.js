@@ -70,7 +70,12 @@ $(function() {
     }
 
     // Convert elements that don't play well with robopaint's handlers
-    $('circle, ellipse','#svgcontent').each(function(){
+    $('circle, ellipse, rect','#svgcontent').each(function(){
+      if (this.tagName == "rect"){
+        // Don't convert non-rounded corner rectangles
+        if (!$(this).attr('rx')) return;
+      }
+
       methodDraw.canvas.convertToPath(this);
     });
 
