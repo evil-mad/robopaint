@@ -462,56 +462,36 @@ nav#color-action input[type="radio"]:checked + label {
 .icon-home:before { content: '\e801'; } /* 'î ' */
 .icon-brush:before { content: '\e802'; } /* 'î ‚' */
 .icon-picture-1:before { content: '\e800'; } /* 'î €' */
-.icon-picture:before { content: 'ðŸŒ„'; } /* '\1f304' */
-.icon-floppy:before { content: 'ðŸ’¾'; } /* '\1f4be' */
+.icon-picture:before { content: '\1f304'; } /* '\1f304' */
+.icon-floppy:before { content: '\1f4be'; } /* '\1f4be' */
 
-#edit-tools {
-  left: 205px;
-  position: absolute;
-  top: 160px;
-  z-index: 1;
-}
-
-#edit-tools a.tab {
-  background-color: #EEEEEE;
-  border-color: #999999 -moz-use-text-color #999999 #999999;
-  border-image: none;
-  border-radius: 8px 0 0 22px;
-  border-style: solid none solid solid;
-  border-width: 1px medium 1px 1px;
-  color: #333333;
-  display: block;
-  font-family: "fontello";
-  font-size: 28px;
-  line-height: 31px;
-  margin-bottom: -1px;
-  padding: 4px;
-  width: 29px;
-  text-align: right;
-  text-decoration: none;
-}
-
-#edit-tools a.tab:hover {
-  color: cornflowerblue;
-  background-color: #fff;
-}
-
-#edit-tools #edit:before { content: " \270D" }
-#edit-tools #save:before { content: " \1F4BE" }
-#edit-tools #load:before { content: " \1F304" }
-
-#edit-tools #loadlist {
+#loadlist {
   background-color: #FFFFFF;
   border: 1px solid #999999;
   border-radius: 0 15px 15px 15px;
-  left: 37px;
-  padding: 7px 15px 7px 23px;
+  left: 215px;
   position: absolute;
-  top: 64px;
-  width: 10em;
+  top: -16px;
   z-index: -1;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
 }
 
+#loadlist li a {
+  display: block;
+  font-size: 17px !important;
+  padding: 4px 7px;
+  font-weight: bold;
+}
+
+#loadlist li a {
+  background-color: #EEF;
+}
+
+#loadlist li:nth-child(even) a {
+  background-color: #FFF;
+}
 
 /* Central home screen general styles */
 
@@ -524,6 +504,12 @@ body.home #bar {
   left: 0;
   background: linear-gradient(to bottom, #eff7f9 0%,#eaf4f9 50%,#daeaf2 51%,#e5f1f9 100%);
   z-index: 10;
+}
+
+body.home #bar span.separator {
+  padding-right: 7px;
+  font-size: 26px;
+  border-left: 1px solid rgb(68, 68, 68);
 }
 
 body.home #bar a {

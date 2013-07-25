@@ -1,6 +1,8 @@
 global.$ = $;
 
+var fs = require('fs');
 var cncserver = require('cncserver');
+
 var barHeight = 40;
 var isModal = false;
 var settings = {};
@@ -31,6 +33,9 @@ function initialize() {
 
   // Bind settings controls
   bindSettingsControls();
+
+  // Load the quickload list
+  initQuickload()
 
   // Add the secondary page iFrame to the page
   $subwindow = $('<iframe>').attr({
@@ -103,6 +108,61 @@ function initialize() {
   });
 }
 
+// Initialize and bind Quickload file list
+function initQuickload() {
+  var $load = $('#bar-load');
+  var $loadList = $('#loadlist');
+  var paths = ['resources/svgs'];
+
+  // TODO: Support user directories off executable
+  var svgs = fs.readdirSync(paths[0]);
+
+  // Bind Quick Load Hover
+  $load.click(function(e) {
+    if ($loadList.is(':visible')) {
+      $loadList.fadeOut('slow');
+    } else {
+      $loadList.fadeIn('fast');
+    }
+    return false;
+  });
+
+  // Load in SVG files for quick loading
+  if (svgs.length > 0) {
+    $loadList.html('');
+    for(var i in svgs) {
+      var s = svgs[i];
+      var name = s.split('.')[0].replace(/_/g, ' ');
+      $('<li>').append(
+        $('<a>').text(name).data('file', paths[0] + '/' + s).attr('href', '#')
+      ).appendTo($loadList);
+    }
+  }
+
+  // Bind loadlist item click load
+  $('a', $loadList).click(function(e) {
+    $loadList.fadeOut('slow');
+    var fileContents = fs.readFileSync($(this).data('file'))
+    var mode = $('#bar .selected').attr('id').split('-')[1];
+
+    // Push the files contents into the localstorage object
+    window.localStorage.setItem('svgedit-default', fileContents);
+
+    var subWin = $subwindow[0].contentWindow;
+
+    if (mode == 'print') {
+      subWin.cncserver.canvas.loadSVG();
+    } else if (mode == 'edit') {
+      subWin.methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+    } else {
+      $('#bar-print').click();
+    }
+
+    return false;
+  });
+}
+
+
 // When the window is done loading, it will call this.
 function fadeInWindow() {
   if ($subwindow.offset().top != barHeight) {
@@ -116,15 +176,14 @@ $(function() {
 
   // Bind links for home screen central links
   $('nav a').click(function(e) {
-    // Start the iframe loading, stuck at the bottom of the window...
      $('#bar-' + e.target.id).click();
     return false;
   });
 
   // Bind links for toolbar
-  $('#bar a').click(function(e) {
+  $('#bar a.mode').click(function(e) {
     var $target = $(e.target);
-    var id = $target[0].id;
+    var mode = $target[0].id.split('-')[1];
 
     // Don't do anything fi already selected
     if ($target.is('.selected')) {
@@ -132,16 +191,16 @@ $(function() {
     }
 
     // Don't select settings (as it's a modal on top window)
-    if (id !== 'bar-settings') {
+    if (mode !== 'settings') {
       $('#bar a.selected').removeClass('selected');
       $target.addClass('selected');
     }
 
-    switch (id) {
-      case 'bar-home':
+    switch (mode) {
+      case 'home':
         $subwindow.fadeOut('slow');
         break;
-      case 'bar-settings':
+      case 'settings':
         setSettingsWindow(true);
         break
       default:

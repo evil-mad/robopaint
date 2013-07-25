@@ -2,10 +2,6 @@
  * @file Holds all CNC Server central controller objects and DOM management code
  */
 
-var fs = require('fs');
-var svgs = fs.readdirSync('resources/svgs');
-
-
 var cncserver = {
   canvas: {
     height: 0,
@@ -161,6 +157,7 @@ $(function() {
     });
   }
 
+  cncserver.canvas.loadSVG = loadSVG; // Externalize this function
   function loadSVG(file) {
     // If we've been given a filename, go load it in then try again
     if (typeof file == 'string') {
@@ -288,17 +285,6 @@ $(function() {
       }
     });
 
-    // Bind Save/Edit/Load Button
-    $('#save').click(function(e) {
-      // TODO: make this work :P
-      return false;
-    });
-
-    $('#edit').click(function(e) {
-      window.parent.$('#bar-edit').click();
-      return false;
-    });
-
     // Bind sim view click
     $('#showsim, #sim').click(function(e) {
       if ($('#sim:visible').length) {
@@ -306,44 +292,6 @@ $(function() {
       } else {
         cncserver.utils.simulateBuffer();
       }
-
-    });
-
-    // Bind Quick Load Hover
-    $('#load').hover(function(e) {
-      $('#loadlist').fadeIn('slow');
-    }, function(e){
-      // Hide if we didn't leave to the right
-      if (e.offsetX < 38) {
-        $('#loadlist').fadeOut('slow');
-      }
-    }).click(function(e){
-      return false;
-    });
-
-    $('#loadlist').hover(function(e) {}, function(e){
-      // Hide if we didn't leave to the left
-      if (e.offsetX >= 0) {
-        $('#loadlist').fadeOut('slow');
-      }
-    });
-
-    // Load in SVG files for quick loading
-    if (svgs.length > 0) {
-      $('#loadlist').html('');
-      for(var i in svgs) {
-        var s = svgs[i];
-        var name = s.split('.')[0].replace(/_/g, ' ');
-        $('<li>').append(
-          $('<a>').text(name).data('file', s).attr('href', '#')
-        ).appendTo('#loadlist');
-      }
-    }
-    // Bind loadlist item click load
-    $('#loadlist a').click(function(e) {
-      $('#loadlist').fadeOut('slow');
-      loadSVG($(this).data('file'));
-      return false;
     });
 
     // Bind color action config set and set initial
