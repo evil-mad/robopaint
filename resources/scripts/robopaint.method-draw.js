@@ -48,12 +48,27 @@ $(function() {
       methodDraw.zoomChanged(window, 'canvas');
     }
 
-    // Add and bind Auto Zoom Button
+    // Add and bind Auto Zoom Button / Menu item
     $('#zoom_panel').before(
-      $('<button>').addClass('zoomfit').click(function(){
-        methodDraw.zoomChanged(window, 'canvas');
-      }).attr('title', 'Zoom to fit canvas').text('Auto')
+      $('<button>').addClass('zoomfit zoomfitcanvas')
+        .data('zoomtype', 'canvas')
+        .attr('title', 'Zoom to fit canvas')
+        .text('Auto')
     );
+
+    $('#view_menu .separator').after(
+      $('<div>').addClass('menu_item zoomfit')
+        .data('zoomtype', 'canvas')
+        .text('Fit Canvas in Window'),
+      $('<div>').addClass('menu_item zoomfit')
+        .data('zoomtype', 'content')
+        .text('Fit Content in Window'),
+      $('<div>').addClass('separator')
+    );
+
+    $('.zoomfit').click(function(){
+      methodDraw.zoomChanged(window, $(this).data('zoomtype'));
+    })
 
     var zoomTimeout = 0;
     $(window).resize(function(){
