@@ -53,7 +53,7 @@ $(function() {
       $('<button>').addClass('zoomfit zoomfitcanvas')
         .data('zoomtype', 'canvas')
         .attr('title', 'Zoom to fit canvas')
-        .text('Auto')
+        .text('Zoom to Fit')
     );
 
     $('#view_menu .separator').after(

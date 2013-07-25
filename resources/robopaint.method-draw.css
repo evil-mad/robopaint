@@ -6,6 +6,7 @@
 button.zoomfit {
   position: absolute;
   right: 250px;
-  line-height: 80%;
-  bottom: 6px;
+  font-size: 0.8em;
+  line-height: 68%;
+  bottom: 10px;
 }
