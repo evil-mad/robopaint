@@ -222,7 +222,7 @@ function _delete(path, options) {
 
 function _request(method, path, options) {
   $.ajax({
-    url: 'http://localhost:4242/' + path,
+    url: 'http://localhost:4242/v1/' + path,
     type: method,
     data: options.data,
     success: options.success,
