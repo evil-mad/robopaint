@@ -8,6 +8,7 @@ var isModal = false;
 var settings = {}; // Holds the "permanent" app settings data
 var statedata = {}; // Holds per app session volitile settings
 var initalizing = false;
+var appMode = 'home';
 $subwindow = {}; // Placeholder for subwindow iframe
 
 // Clear last used image
@@ -144,16 +145,15 @@ function initQuickload() {
   $('a', $loadList).click(function(e) {
     $loadList.fadeOut('slow');
     var fileContents = fs.readFileSync($(this).data('file'));
-    var mode = $('#bar .selected').attr('id').split('-')[1];
 
     // Push the files contents into the localstorage object
     window.localStorage.setItem('svgedit-default', fileContents);
 
     var subWin = $subwindow[0].contentWindow;
 
-    if (mode == 'print') {
+    if (appMode == 'print') {
       subWin.cncserver.canvas.loadSVG();
-    } else if (mode == 'edit') {
+    } else if (appMode == 'edit') {
       subWin.methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
     } else {
       $('#bar-print').click();
@@ -187,6 +187,8 @@ $(function() {
   $('#bar a.mode').click(function(e) {
     var $target = $(e.target);
     var mode = $target[0].id.split('-')[1];
+
+    if (mode != 'settings') appMode = mode;
 
     // Don't do anything fi already selected
     if ($target.is('.selected')) {
@@ -222,8 +224,12 @@ function getColorsets() {
     var setDir = 'resources/colorsets/' + set + '/';
     var c = JSON.parse(fs.readFileSync(setDir + set + '.json'));
 
-    // Set initial colorset
-    if (!statedata.colorset) statedata.colorset = set;
+    $('#colorset').append(
+      $('<option>')
+        .attr('value', set)
+        .text(c.name)
+        .prop('selected', set == settings.colorset)
+    );
 
     statedata.colorsets[set] = {
       name: c.name,
@@ -261,6 +267,7 @@ function loadSettings() {
     fillangle: 0,
     penmode: 0,
     showcolortext: 0,
+    colorset: 'crayola_classic',
     maxpaintdistance: 8000,
     fillspacing: 10,
     fillprecision: 14,
@@ -404,12 +411,21 @@ function bindSettingsControls() {
         pushKey = ['b', 'speed:drawing'];
         pushVal = $input.children(':selected').val();
         break;
+        // Doesn't break on purpose!
       default: // Nothing special to set, just change the settings object value
         if ($input.attr('type') == 'checkbox') {
           settings[this.id] = $input.is(':checked');
         } else {
           settings[this.id] = $input.val();
         }
+    }
+
+    if (this.id == 'colorset' || this.id == 'showcolortext') {
+      if (appMode == 'print') {
+        $subwindow[0].contentWindow.cncserver.updateColorSet();
+      } else if (appMode == 'edit'){
+        $subwindow[0].contentWindow.updateColorSet();
+      }
     }
 
     // If there's a key to override for CNC server, set it

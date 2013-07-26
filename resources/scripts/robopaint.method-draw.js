@@ -8,6 +8,7 @@
 $('<link>').attr({rel: 'stylesheet', href: "../../robopaint.method-draw.css"}).appendTo('head');
 
 var statedata = window.parent.statedata;
+var settings = window.parent.settings;
 var cache = {};
 
 // Only for using the color conversion utilities
@@ -135,11 +136,6 @@ function addElements() {
 function buildPalette(){
   var $main = $('<div>').addClass('palette_robopaint').attr('id', 'colors');
 
-  $main.append(
-    $('<select>').attr('id', 'colorsets')
-  );
-
-
   for(var i = 0; i < 8; i++) {
     $main.append(
       $('<div>').addClass('palette_item color').attr('id', 'color' + i)
@@ -163,26 +159,22 @@ function buildPalette(){
 // Load in the colorset data
 function loadColorsets() {
   for(var i in statedata.colorsets['ALL']) {
-    var id = statedata.colorsets['ALL'][i];
-    var set = statedata.colorsets[id];
-    $('<option>')
-      .val(id)
-      .text(set.name)
-      .appendTo('#colorsets');
+    var set = statedata.colorsets[statedata.colorsets['ALL'][i]];
     $('head').append(set.stylesheet);
   }
 
-  // Bind change for colors
-  $('#colorsets').change(function(){
-    var id = $(this).val();
-    statedata.colorset = id;
-    var set = statedata.colorsets[id];
-    $('#colors').attr('class', '').addClass(set.baseClass);
-    for (var i in set.colors) {
-      $('#color' + i).attr('title', set.colors[i]);
-    }
-    setTimeout(cacheColors, 500);
-  }).val(statedata.colorset).change();
+  updateColorSet();
+}
+
+function updateColorSet(){
+  var set = statedata.colorsets[settings.colorset];
+  $('#colors').attr('class', '').addClass(set.baseClass);
+  for (var i in set.colors) {
+    $('#color' + i)
+      .text(settings.showcolortext ? set.colors[i] : "")
+      .attr('title', settings.showcolortext ? "" : set.colors[i]);
+  }
+  setTimeout(cacheColors, 500);
 }
 
 // Cache the current colorset config for measuring against as HSL

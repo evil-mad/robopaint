@@ -77,30 +77,26 @@ $(function() {
     });
   }
 
+  // Load in the colorset data
   function loadColorsets() {
     for(var i in cncserver.statedata.colorsets['ALL']) {
-      var id = cncserver.statedata.colorsets['ALL'][i];
-      var set = cncserver.statedata.colorsets[id];
-      $('<option>')
-        .val(id)
-        .text(set.name)
-        .appendTo('#colorsets');
+      var set = cncserver.statedata.colorsets[cncserver.statedata.colorsets['ALL'][i]];
       $('head').append(set.stylesheet);
     }
 
-    // Bind change for colors
-    $('#colorsets').change(function(){
-      var id = $(this).val();
-      cncserver.statedata.colorset = id;
-      var set = cncserver.statedata.colorsets[id];
-      $('#colors').attr('class', '').addClass(set.baseClass);
-      for (var i in set.colors) {
-        $('#color' + i)
-          .text(cncserver.settings.showcolortext ? set.colors[i] : "")
-          .attr('title', cncserver.settings.showcolortext ? "" : set.colors[i]);
-      }
-      setTimeout(cacheColors, 500);
-    }).val(cncserver.statedata.colorset).change();
+    updateColorSet();
+  }
+
+  cncserver.updateColorSet = updateColorSet;
+  function updateColorSet(){
+    var set = cncserver.statedata.colorsets[cncserver.settings.colorset];
+    $('#colors').attr('class', '').addClass(set.baseClass);
+    for (var i in set.colors) {
+      $('#color' + i)
+        .text(cncserver.settings.showcolortext ? set.colors[i] : "")
+        .attr('title', cncserver.settings.showcolortext ? "" : set.colors[i]);
+    }
+    setTimeout(cacheColors, 500);
   }
 
   function cacheColors() {

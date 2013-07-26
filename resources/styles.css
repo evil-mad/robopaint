@@ -20,7 +20,7 @@ body {
 }
 
 /* Prevent selectability of text or other elements */
-div *, nav *, h1 {
+div *, nav *, h1, img {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
 }
@@ -171,22 +171,9 @@ nav#control h3 {
 nav#tools {
   left: 0;
   position: absolute;
-  top: 4em;
+  top: 25px;
   transform-origin: top left;
   -webkit-transform-origin: top left;
-}
-
-nav#tools #coloraction {
-  left: 83px;
-  position: absolute;
-  top: -53px;
-  width: 9em;
-}
-
-nav#tools #colorsets {
-  left: 83px;
-  position: absolute;
-  top: -31px;
 }
 
 nav#tools #waters {
