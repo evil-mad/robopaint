@@ -28,7 +28,6 @@ var cncserver = {
   settings: window.parent.settings,
   statedata: window.parent.statedata,
   config: {
-    colorAction: 'bot',
     colors: [],
     colorsYUV: []
   }
@@ -53,10 +52,6 @@ $(function() {
   responsiveResize();
   setTimeout(responsiveResize, 500);
   $(window).resize(responsiveResize);
-
-  // Set initial values (as page reloads can save form values)
-  cncserver.config.colorAction = $('#coloraction').val();
-
 
   // Initial server connection handler
   function serverConnect() {
@@ -272,16 +267,11 @@ $(function() {
       }
     });
 
-    // Bind color action config set and set initial
-    $('#coloraction').change(function(e){
-      cncserver.config.colorAction = $(this).val();
-    })
-
     // Bind to control buttons
     $('#park').click(function(){
       cncserver.api.pen.park(cncserver.utils.log('Parking brush...').logDone);
     });
-    $('#movefirst').click(function(){});
+
     $('#draw').click(function(){
       $('#draw').prop('disabled', true);
       cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' outline...']]);
@@ -359,39 +349,15 @@ $(function() {
     // Bind to Tool Change nav items
     $('nav#tools a').click(function(e){
 
-      // Instead of controlling the bot, change the path!
       if ($(this).is('.color')) {
-        if (cncserver.config.colorAction == 'fill' || cncserver.config.colorAction == 'stroke'){
-          if ($path.length) {
-            $path.attr('style', '');
-            $path.attr(cncserver.config.colorAction, $(this).css('background-color'));
-          }
-          $(this).blur();
-          return false;
-        }
-
         $('nav#tools a.selected').removeClass('selected');
         $(this).addClass('selected');
       }
 
-      // X clicked: Do a full brush wash, or clear the stroke/fill of $path
+      // X clicked: Do a full brush wash
       if ($(this).is('#colorx')) {
-        if (cncserver.config.colorAction == 'fill' || cncserver.config.colorAction == 'stroke'){
-          $path.attr('style', '');
-          $path.attr(cncserver.config.colorAction, 'none');
-        } else {
-          cncserver.wcb.fullWash();
-          $('nav#tools a.selected').removeClass('selected');
-        }
-        return false;
-      }
-
-      // White/Paper clicked: Set the stroke/fill of $path to white
-      if ($(this).is('#colornone')) {
-        if (cncserver.config.colorAction == 'fill' || cncserver.config.colorAction == 'stroke'){
-          $path.attr('style', '');
-          $path.attr(cncserver.config.colorAction, 'rgb(255,255,255)');
-        }
+        cncserver.wcb.fullWash();
+        $('nav#tools a.selected').removeClass('selected');
         return false;
       }
 
@@ -456,17 +422,8 @@ $(function() {
     // Use the shorter of the two
     cncserver.canvas.scale = scale.x < scale.y ? scale.x : scale.y;
 
-    $svg.css({
-      '-webkit-transform': 'scale(' + cncserver.canvas.scale + ')'
-    });
-
-    $sim.css({
-      '-webkit-transform': 'scale(' + cncserver.canvas.scale + ')'
-    });
-
-    $shadow.css({
-      '-webkit-transform': 'scale(' + cncserver.canvas.scale + ')'
-    });
+    $('svg#main, #sim, #shadow')
+      .css('-webkit-transform', 'scale(' + cncserver.canvas.scale + ')');
 
     // Set position of edit tools based on SVG left side
     $('#edit-tools').css('left', cncserver.canvas.offset.left - 38);

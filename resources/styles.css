@@ -277,18 +277,6 @@ nav#tools div.static {
   position: relative;
 }
 
-nav#tools div.static:before {
-  background-color: black;
-  content: "";
-  display: block;
-  height: 65px;
-  left: 50px;
-  position: absolute;
-  top: 0;
-  width: 2px;
-  z-index: 2;
-}
-
 nav#tools div.static a {
   display: block;
   width: 40%;
@@ -302,14 +290,7 @@ nav#tools div.static a#colorx {
   float: left;
   font-size: 3.5em;
   line-height: 0.9em;
-}
-
-nav#tools div.static a#colornone {
-  background-color: white;
-  float: right;
-  color: black;
-  overflow: hidden;
-  text-indent: -7em;
+  width: 99%;
 }
 
 nav#tools a, nav#tools a:link  {
