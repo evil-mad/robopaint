@@ -708,6 +708,7 @@ body.home #settings {
   color: #555;
   font-size: smaller;
   font-style: italic;
+  margin-bottom: 0.5em;
 }
 
 #settings .tabs li {
@@ -726,4 +727,22 @@ body.home #settings {
 #settings .tabs a.active {
   background:#fff;
   color:#000;
+}
+
+#settings hr {
+  margin-top: 1.5em;
+  width: 80%;
+}
+
+#settings input[type=range] {
+  margin-left: 5px;
+}
+
+#settings label.rangeval {
+  padding-left: 8px;
+  font-size: 0.9em;
+  font-weight: bold;
+  padding-bottom: 8px;
+  line-height: 30px;
+  vertical-align: bottom;
 }

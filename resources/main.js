@@ -240,6 +240,19 @@ function getColorsets() {
   });
 }
 
+function addSettingsRangeValues() {
+  $('input:[type=range]').each(function(){
+    var $r = $(this);
+    var $l = $('<label>').addClass('rangeval');
+
+    $r.change(function(){
+      $l.text('<' + $r.val().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '>');
+    }).change();
+
+    $r.after($l);
+  })
+}
+
 /*========================== Settings Management =============================*/
 
 // Load settings from storage and push to elements (only happens at startup)
@@ -300,6 +313,8 @@ function loadSettings() {
     }
     $input.change();
   }
+
+  addSettingsRangeValues();
 }
 
 function saveSettings() {

@@ -73,7 +73,7 @@
     <fieldset>
       <legend>Fill</legend>
       <div>
-        <label for="filltype">Type</label>
+        <label for="filltype">Type:</label>
         <select id="filltype">
           <option value="line-straight">Straight line</option>
           <option value="line-triangle">Triangle line</option>
@@ -86,14 +86,14 @@
       <fieldset>
         <legend>Line/Hatch Fills</legend>
         <div>
-          <label for="fillangle">Line Angle</label>
+          <label for="fillangle">Line Angle:</label>
           <select id="fillangle">
             <option value="0">Horizontal (0&deg;)</option>
             <option value="45">Diagonal (45&deg;)</option>
             <option value="90">Vertical (90&deg;)</option>
           </select>
 
-          <label for="fillspacing">Line Spacing</label>
+          <label for="fillspacing">Line Spacing:</label>
           <select id="fillspacing">
             <option value="5">Tiny (5)</option>
             <option value="10">Small (10)</option>
@@ -105,7 +105,7 @@
       </fieldset>
 
       <div>
-        <label for="fillprecision">Fill Precision</label>
+        <label for="fillprecision">Fill Precision:</label>
         <select id="fillprecision">
           <option value="3">Very Fine</option>
           <option value="7">Fine</option>
@@ -116,7 +116,7 @@
       </div>
 
       <div>
-        <label for="gapconnect">Connect small gaps (smoother)</label>
+        <label for="gapconnect">Connect small gaps:</label>
         <input type="checkbox" id="gapconnect" checked/>
         <aside>Makes back and forth fills smoother by not lifting brush at edges.</aside>
       </div>
@@ -126,18 +126,18 @@
     <fieldset>
       <legend>General</legend>
       <div>
-        <label for="showcolortext">Show color name</label>
+        <label for="showcolortext">Show color name:</label>
         <input type="checkbox" id="showcolortext"/>
-        <aside>When checked, color names will display within the each color location, otherwise they will only be visible on hover.</aside>
+        <aside>When checked, color names will display for print colors, otherwise they will only be visible on hover.</aside>
       </div>
 
       <div>
-        <label for="colorset">Installed Paint Set</label>
+        <label for="colorset">Installed Paint Set:</label>
         <select id="colorset"></select>
       </div>
 
       <div>
-        <label for="movespeed">Moving speed (brush up)</label>
+        <label for="movespeed">Moving speed (brush up):</label>
         <select id="movespeed">
           <option value="700">Slow</option>
           <option value="1500">Medium (default)</option>
@@ -147,7 +147,7 @@
       </div>
 
       <div>
-        <label for="paintspeed">Painting speed (brush down)</label>
+        <label for="paintspeed">Painting speed (brush down):</label>
         <select id="paintspeed">
           <option value="500">Slow</option>
           <option value="1000">Medium (default)</option>
@@ -156,13 +156,16 @@
         </select>
       </div>
 
+      <hr>
+
       <div>
-        <label for="maxpaintdistance">Paint Refill Draw Distance</label>
-        <input type="range" title="Move left to get paint more often, right to get paint less often" id="maxpaintdistance" min="500" max="15000" />
+        <label for="maxpaintdistance">Paint Refill Draw Distance:</label>
+        <input type="range" title="Move left to get paint more often, right to get paint less often" id="maxpaintdistance" min="500" max="20000" />
+        <aside>The distance in steps for the brush to paint on the paper before it should go get more paint on the brush. Default is <b>8,000</b>.</aside>
       </div>
 
       <div>
-        <label for="strokeprecision">Stroke Precision</label>
+        <label for="strokeprecision">Stroke Precision:</label>
         <select id="strokeprecision">
           <option value="2">Very Fine (slowest)</option>
           <option value="4">Fine</option>
@@ -173,7 +176,7 @@
       </div>
 
       <div>
-        <label for="strokeovershoot">Stroke Overshoot</label>
+        <label for="strokeovershoot">Stroke Overshoot:</label>
         <select id="strokeovershoot">
           <option value="1">Tiny (1)</option>
           <option value="5">Medium (5)</option>
@@ -181,6 +184,7 @@
           <option value="13">Yikes (13)</option>
           <option value="20">Unhelpful (20)</option>
         </select>
+        <aside>The distance factor to move the brush beyond when lifting to make up for brush bend. Default is <b>5</b>.</aside>
       </div>
     </fieldset>
   </div>
@@ -195,13 +199,14 @@
       </div>
 
       <div>
-        <label for="penmode">Drawing Layout Mode</label>
+        <label for="penmode">Drawing Layout Mode:</label>
         <select id="penmode">
           <option value="0">Default (Brush, Water & Paint)</option>
           <option value="1">Water Only (No Paint: Buddha Board)</option>
           <option value="2">Paint Only (No Water: Non-watercolors)</option>
           <option value="3">No Water or Paint (Pen/Pencil mode)</option>
         </select>
+        <aside><b><i>ALPHA</i></b> Disables API calls to restricted areas based on which mode is selected.</aside>
       </div>
     </fieldset>
 
@@ -209,24 +214,24 @@
       <legend>X/Y Steppers</legend>
 
       <div>
-        <label for="invertx">Invert X axis</label>
+        <label for="invertx">Invert X axis:</label>
         <input type="checkbox" id="invertx"/>
       </div>
 
       <div>
-        <label for="inverty">Invert Y axis</label>
+        <label for="inverty">Invert Y axis:</label>
         <input type="checkbox" id="inverty"/>
-        <aside>Use if your windings are backwards.</aside>
+        <aside>Use only if your windings are backwards.</aside>
       </div>
 
       <div>
-        <label for="latencyoffset">Movement Buffer Latency Offset</label>
+        <label for="latencyoffset">Movement Buffer Latency Offset:</label>
         <input type="range" title="Move right for more offset (smooth), left for negative offset (jerky)" id="latencyoffset" min="-100" max="500" />
-        <aside>Removes time from API duration to callback sooner, buffering and smoothing out subsequent position calls.</aside>
+        <aside>Removes time (in milliseconds) from API callback duration, buffering and smoothing out subsequent position calls. Default is <b>15ms</b>. Negative values add extra delay. Only increase if painting is jittery.</aside>
       </div>
 
       <div>
-        <label for="swapmotors">Swap X for Y</label>
+        <label for="swapmotors">Swap X for Y:</label>
         <input type="checkbox" id="swapmotors"/>
         <aside>Switches the X and Y, as if you'd hooked the stepper motors up backwards.</aside>
       </div>
