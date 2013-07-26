@@ -100,7 +100,9 @@ $(function() {
       var set = cncserver.statedata.colorsets[id];
       $('#colors').attr('class', '').addClass(set.baseClass);
       for (var i in set.colors) {
-        $('#color' + i).text(set.colors[i]);
+        $('#color' + i)
+          .text(cncserver.settings.showcolortext ? set.colors[i] : "")
+          .attr('title', cncserver.settings.showcolortext ? "" : set.colors[i]);
       }
       setTimeout(cacheColors, 500);
     }).val(cncserver.statedata.colorset).change();

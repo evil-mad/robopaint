@@ -260,6 +260,7 @@ function loadSettings() {
     filltype: 'line-straight',
     fillangle: 0,
     penmode: 0,
+    showcolortext: 0,
     maxpaintdistance: 8000,
     fillspacing: 10,
     fillprecision: 14,
