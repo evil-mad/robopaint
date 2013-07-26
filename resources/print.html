@@ -26,17 +26,6 @@
     $(function() { parent.fadeInWindow(); })
   </script>
 
-<img class="logo" src ="images/watercolorbot_logo.svg"/>
-<div id="status">
-  <div id="log"></div>
-  <div class="progress-wrapper">
-    <progress title="Current progress" max="100" value="0"></progress>
-    <button id="cancel">Cancel</button>
-    <button id="pause">Pause</button>
-  </div>
-</div>
-
-
 <fieldset id="control">
   <h2>WaterColorBot Controls</h2>
   <fieldset>
@@ -70,6 +59,21 @@
       <button id="park" title="Move the carriage back to the home position">Park Home</button>
       <button id="disable" title="Unlocks/Disables stepper motors to allow them to be moved by hand">Unlock Motors</button>
       <button id="zero" title="Resets relative known position to 0">Zero Position</button>
+    </nav>
+  </fieldset>
+
+  <fieldset>
+    <legend>Status</legend>
+    <div id="status">
+      <div id="log"></div>
+      <div class="progress-wrapper">
+        <progress title="Current progress" max="100" value="0"></progress>
+        <button id="cancel">Cancel</button>
+        <button id="pause">Pause</button>
+      </div>
+    </div>
+    <nav>
+      <button id="stopresume" title="Start or stop the print">STOP</button>
     </nav>
   </fieldset>
 </fieldset>
@@ -133,6 +137,8 @@
 	c-2.397-0.357-4.307-2.214-4.732-4.592h3.232v-2h-3.232c0.426-2.376,2.335-4.233,4.732-4.591v3.091h2v-3.042
 	c2.243,0.472,3.991,2.276,4.397,4.542H2.583v2h2.898C5.075,3.433,3.327,5.238,1.083,5.709z"/>
 </svg>
+
+<div id="shadow"></div>
 
 </body>
 </html>

@@ -8,7 +8,7 @@ var cncserver = {
     width: 0,
     scale: 1,
     offset: {
-      top: 147,
+      top: 20,
       left: 235
     }
   },
@@ -408,8 +408,8 @@ $(function() {
   function responsiveResize(){
     // These value should be static, set originally from central canvas config
     var svgOffset = {
-      top: 140,
-      left: 250
+      top: 20,
+      left: 235
     };
 
     var w = $(window).width();
@@ -420,6 +420,8 @@ $(function() {
     var rightMargin = $(window).width() - $('#control').offset().left;
     var scale = 0;
     var $sim = $('#sim');
+    var $shadow = $('#shadow');
+
 
     // Tool selection height scale
     var toolMax = 735;
@@ -440,6 +442,7 @@ $(function() {
 
     $svg.css('left', cncserver.canvas.offset.left);
     $sim.css('left', cncserver.canvas.offset.left);
+    $shadow.css('left', cncserver.canvas.offset.left);
 
 
     // Scale SVG Canvas
@@ -459,22 +462,16 @@ $(function() {
       '-webkit-transform': 'scale(' + cncserver.canvas.scale + ')'
     });
 
+    $shadow.css({
+      '-webkit-transform': 'scale(' + cncserver.canvas.scale + ')'
+    });
+
     // Set position of edit tools based on SVG left side
     $('#edit-tools').css('left', cncserver.canvas.offset.left - 38);
 
     // Fix body background height (html tag backgrounds are weird!)
     $('body').height(h);
 
-    // Log width sizing
-    var statusMax = 723;
-    var statusThreshold = 1211;
-    var $status = $('#status');
-    $status.css('left', cncserver.canvas.offset.left - 10);
-    if (w < statusThreshold) {
-      $status.css('width', statusMax + (w - statusThreshold) + offsetDifference)
-    } else {
-      $status.css('width', statusMax + offsetDifference)
-    }
   }
 
 });
