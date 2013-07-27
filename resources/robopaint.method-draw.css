@@ -11,6 +11,11 @@ button.zoomfit {
   bottom: 10px;
 }
 
+#tools_bottom_3 {
+  position: relative;
+  z-index: 1;
+}
+
 #colors {
   margin-left: 18px;
   padding-top: 4px;
