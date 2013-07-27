@@ -53,3 +53,23 @@ button.zoomfit {
   background-color: #fff;
   border: 1px solid #ddd;
 }
+
+#tool_rotate {
+
+}
+
+#rotate {
+  margin-left: 11px;
+  border: 0;
+  outline: 0;
+  background-image: url('images/object_rotate_left.png');
+  background-color: transparent;
+  background-size: 45px;
+  width: 45px;
+  height: 45px;
+  margin-top: 20px;
+}
+
+#rotate:after {
+  display: none;
+}

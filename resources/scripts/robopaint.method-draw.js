@@ -125,6 +125,26 @@ function addElements() {
     methodDraw.zoomChanged(window, $(this).data('zoomtype'));
   })
 
+  // Add in easy rotate button
+  $('<label>')
+  .attr({id: 'tool_rotate', 'data-title': "Rotate Left"})
+  .addClass('draginput')
+  .append(
+    $('<span>').addClass('icon_label').html("Rotate Left"),
+    $('<div>').addClass('draginput_cell')
+      .attr({id: 'rotate', title: 'Rotate Left'})
+      .click(function(){
+        var a = methodDraw.canvas.getRotationAngle();
+
+        a = a - 90; // Rotate left!
+
+        // Flop angle to positive if past -180
+        if (a < -180) a = a + 360;
+
+         methodDraw.canvas.setRotationAngle(a);
+      })
+  ).prependTo('#selected_panel');
+
   // Add in the Watercolor Palette
   $('#tools_bottom_3').append(buildPalette());
   loadColorsets();
