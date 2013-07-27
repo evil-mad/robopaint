@@ -36,12 +36,20 @@ body.print {
 }
 
 img.logo {
-  margin-left: -4%;
+  margin-left: -100px;
   height: 37px;
   display: block;
   position: absolute;
   left: 50%;
-  top: 0;
+  top: 5px;
+  width: 200px;
+}
+
+@media (max-width: 650px) {
+  img.logo {
+    width: 150px;
+    margin-left: -75px;
+  }
 }
 
 /* Status Area
@@ -520,6 +528,7 @@ body.home #bar {
   left: 0;
   background: linear-gradient(to bottom, #eff7f9 0%,#eaf4f9 50%,#daeaf2 51%,#e5f1f9 100%);
   z-index: 10;
+  padding-top: 5px;
 }
 
 body.home #bar span.separator {
