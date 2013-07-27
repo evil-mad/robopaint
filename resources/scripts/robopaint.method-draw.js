@@ -41,7 +41,7 @@ $(function() {
       methodDraw.zoomChanged(window, 'canvas');
 
       // Ungroup the elements that were just forced into a group :/
-      methodDraw.canvas.addToSelection($('#svgcontent>g:nth-child(3)>g'));
+      methodDraw.canvas.selectAllInCurrentLayer();
       methodDraw.canvas.ungroupSelectedElement();
       methodDraw.canvas.clearSelection();
     }
@@ -92,7 +92,7 @@ $(function() {
 
 // Remove all the Method Draw components we don't want
 function removeElements() {
-  $('#canvas_panel, #tool_blur, #menu_bar>a, #tool_text').remove();
+  $('#canvas_panel>*, #tool_blur, #menu_bar>a, #tool_text').remove();
   $('#tool_snap, #view_grid, #rect_panel label, #path_panel label').remove();
   $('#g_panel label, #ellipse_panel label, #line label').remove();
   $('#text_panel label').remove();
@@ -144,6 +144,22 @@ function addElements() {
          methodDraw.canvas.setRotationAngle(a);
       })
   ).prependTo('#selected_panel');
+
+  // Add auto-sizer button
+  $('#canvas_panel').append(
+    $('<h4>').addClass('clearfix').text('Global'),
+    $('<label>')
+      .attr({id: 'tool_autosize', 'data-title': "Fit Content"})
+      .addClass('draginput')
+      .append(
+        $('<span>').addClass('icon_label').html("Fit Content"),
+        $('<div>').addClass('draginput_cell')
+          .attr({id: 'autosize', title: 'Auto Size content to fit canvas'})
+          .click(function(){
+            autoSizeContent();
+          })
+      )
+  );
 
   // Add in the Watercolor Palette
   $('#tools_bottom_3').append(buildPalette());
@@ -256,4 +272,37 @@ function bindColorSelect() {
       }
     }
   });
+}
+
+// Takes all content and ensures it's centered and sized to fit exactly within
+// the drawing canvas, big or small.
+function autoSizeContent() {
+  methodDraw.canvas.selectAllInCurrentLayer();
+  methodDraw.canvas.groupSelectedElements();
+  var box = methodDraw.canvas.getBBox($('#selectedBox0')[0]);
+  var c = {w: $('#svgcontent').attr('width'), h: $('#svgcontent').attr('height')};
+  var margin = 5;
+  var scale = 1;
+  var z = methodDraw.canvas.getZoom();
+
+  var xscale = (c.w - margin) / box.width;
+  var yscale = (c.h - margin) / box.height;
+
+  scale = xscale > yscale ? yscale : xscale; // Chose the smaller of the two.
+
+  // Center offsets
+  var x = ((c.w/2 - ((box.width*scale)/2)) - box.x) / z;
+  var y = ((c.h/2 - ((box.height*scale)/2)) - box.y) / z;
+
+  // When scaling, SVG moves the top left corner of the path closer and further
+  // away from the root top left corner, this is ot offset for that separately
+  var sx = (box.x*(1-scale)) / z;
+  var sy = (box.y*(1-scale)) / z;
+
+  var $e = $(methodDraw.canvas.getSelectedElems()[0]);
+  $e.attr('transform', 'translate(' + (x+sx) + ',' + (y+sy) + ') scale(' + scale + ')');
+
+  // Ungroup, and clear selection.. as if nothing had happened!
+  methodDraw.canvas.ungroupSelectedElement();
+  methodDraw.canvas.clearSelection();
 }

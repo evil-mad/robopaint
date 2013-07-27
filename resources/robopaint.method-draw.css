@@ -54,22 +54,22 @@ button.zoomfit {
   border: 1px solid #ddd;
 }
 
-#tool_rotate {
-
-}
-
-#rotate {
-  margin-left: 11px;
+#rotate, #autosize {
+  margin-left: 14px;
   border: 0;
   outline: 0;
   background-image: url('images/object_rotate_left.png');
   background-color: transparent;
-  background-size: 45px;
-  width: 45px;
-  height: 45px;
-  margin-top: 20px;
+  background-size: 42px;
+  width: 42px;
+  height: 42px;
+  margin-top: 22px;
 }
 
-#rotate:after {
+#rotate:after, #autosize:after {
   display: none;
+}
+
+#autosize {
+  background-image: url('images/icon_resize.png');
 }
