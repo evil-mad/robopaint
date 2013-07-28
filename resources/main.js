@@ -154,7 +154,10 @@ function initQuickload() {
     if (appMode == 'print') {
       subWin.cncserver.canvas.loadSVG();
     } else if (appMode == 'edit') {
-      subWin.methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+      subWin.methodDraw.openPrep(function(doLoad){
+        if(doLoad) subWin.methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+      });
+
     } else {
       $('#bar-print').click();
     }
