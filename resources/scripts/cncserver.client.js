@@ -59,10 +59,12 @@ $(function() {
     var $log = cncserver.utils.log('Connecting...');
     cncserver.api.pen.stat(function(d){
       $log.logDone(d);
+      cncserver.state.pen.state = 1; // Assume down
+      cncserver.api.pen.up(); // Send to put up
+      cncserver.state.pen.state = 0; // Assume it's up (doesn't return til later)
 
       // Set the Pen state button
-      $('#pen').addClass(!cncserver.state.pen.state ? 'down' : 'up')
-      .text('Brush ' + (!cncserver.state.pen.state ? 'Down' : 'Up'));
+      $('#pen').addClass(!cncserver.state.pen.state ? 'down' : 'up');
 
       // Select tool from last machine tool
       if (cncserver.state.pen.tool) {
@@ -171,7 +173,6 @@ $(function() {
       }
 
       // Enable/disable buttons if selected/not
-      $('#movefirst').prop('disabled', !selected);
       $('#draw').prop('disabled', !selected);
       $('#fill').prop('disabled', !selected);
 
@@ -281,11 +282,11 @@ $(function() {
     $('#pen').click(function(){
       if (cncserver.state.pen.state) {
         cncserver.api.pen.up(function(){
-          $('#pen').removeClass('up').addClass('down').text('Brush Down');
+          $('#pen').removeClass('up').addClass('down').text('Lower Brush');
         });
       } else {
         cncserver.api.pen.down(function(){
-          $('#pen').removeClass('down').addClass('up').text('Brush Up');
+          $('#pen').removeClass('down').addClass('up').text('Raise Brush');
         });
       }
     });
