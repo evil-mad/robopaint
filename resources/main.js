@@ -249,7 +249,37 @@ function addSettingsRangeValues() {
     var $l = $('<label>').addClass('rangeval');
 
     $r.change(function(){
-      $l.text('<' + $r.val().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '>');
+      var num = parseInt($r.val());
+      var post = "";
+      var dosep = true;
+
+      if (['servotime', 'latencyoffset'].indexOf(this.id) != -1) {
+        post = " ms"
+      }
+
+
+      switch (this.id){
+        case "servotime":
+          num = Math.round(num / 10) * 10;
+          break;
+        case "maxpaintdistance":
+          // Display as Centimeters (16.6667 mm per step!)
+          num = Math.round((num / 166.7) * 10) / 10;
+          num = num+ ' cm / ' + (Math.round((num / 2.54) * 10) / 10) + ' in';
+          dosep = false;
+          break;
+        case 'servolift':
+        case 'servodrop':
+          var b = this.max - this.min;
+          var x = num - this.min;
+          num = Math.round((x * 100) / b);
+          post = '%';
+          break;
+      }
+
+      if (dosep) num = num.toString(10).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      $l.text('(' + num + post + ')');
     }).change();
 
     $r.after($l);
@@ -284,7 +314,7 @@ function loadSettings() {
     penmode: 0,
     showcolortext: 0,
     colorset: 'crayola_classic',
-    maxpaintdistance: 8000,
+    maxpaintdistance: 8040,
     fillspacing: 10,
     fillprecision: 14,
     strokeovershoot: 5,

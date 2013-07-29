@@ -43,12 +43,12 @@
     <fieldset>
       <legend>Brush Servo</legend>
       <div>
-        <label for="servolift">Lift Position:</label>
+        <label for="servolift">Up Position:</label>
         <input type="range" id="servolift" min="10000" max="25000"/>
       </div>
 
       <div>
-        <label for="servodrop">Drop Position:</label>
+        <label for="servodrop">Down Position:</label>
         <input type="range" id="servodrop" min="10000" max="25000"/>
       </div>
 
@@ -159,9 +159,9 @@
       <hr>
 
       <div>
-        <label for="maxpaintdistance">Paint Refill Draw Distance:</label>
+        <label for="maxpaintdistance">Refill Distance:</label>
         <input type="range" title="Move left to get paint more often, right to get paint less often" id="maxpaintdistance" min="500" max="20000" />
-        <aside>The distance in steps for the brush to paint on the paper before it should go get more paint on the brush. Default is <b>8,000</b>.</aside>
+        <aside>The distance for the brush to paint on the paper before it should go get more water/paint on the brush. Default is <b>48cm / 19in</b>.</aside>
       </div>
 
       <div>
@@ -225,9 +225,9 @@
       </div>
 
       <div>
-        <label for="latencyoffset">Movement Buffer Latency Offset:</label>
+        <label for="latencyoffset">Buffer Smoothing:</label>
         <input type="range" title="Move right for more offset (smooth), left for negative offset (jerky)" id="latencyoffset" min="-100" max="500" />
-        <aside>Removes time (in milliseconds) from API callback duration, buffering and smoothing out subsequent position calls. Default is <b>15ms</b>. Negative values add extra delay. Only increase if painting is jittery.</aside>
+        <aside>Removes time from API callback duration, forces buffering and smoothing out subsequent position calls. Default is <b>15ms</b>. Negative values add extra delay. Only increase if painting is jittery.</aside>
       </div>
 
       <div>

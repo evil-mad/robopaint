@@ -755,3 +755,7 @@ body.home #settings {
   line-height: 30px;
   vertical-align: bottom;
 }
+
+#settings #maxpaintdistance {
+  width: 35%;
+}
