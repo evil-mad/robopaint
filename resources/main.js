@@ -309,7 +309,7 @@ function loadSettings() {
     swapmotors: g.get('swapMotors'),
     serialpath: g.get('serialPath'),
     httpport: g.get('httpPort'),
-    latencyoffset: g.get('bufferLatencyOffset'),
+    latencyoffset: 20,
     servodrop: b.get('servo:min'),
     servolift: b.get('servo:max'),
     servotime: b.get('servo:duration'),
