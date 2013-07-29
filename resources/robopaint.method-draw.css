@@ -11,7 +11,18 @@ button.zoomfit {
   bottom: 10px;
 }
 
+@media (max-width: 750px) {
+  #zoom_panel {
+    right: 5px;
+  }
+
+  button.zoomfit {
+    right: 73px;
+  }
+}
+
 #tools_bottom_3 {
+  width: 360px;
   position: relative;
   z-index: 1;
 }
