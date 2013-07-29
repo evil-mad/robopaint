@@ -2,6 +2,7 @@ global.$ = $;
 
 var fs = require('fs');
 var cncserver = require('cncserver');
+var gui = require('nw.gui');
 
 var barHeight = 40;
 var isModal = false;
@@ -216,6 +217,13 @@ $(function() {
     }
     return false;
   });
+
+  // Bind help click (it's special)
+  $('#bar-help').click(function(){
+    gui.Shell.openExternal(this.href);
+    return false;
+  });
+
 })
 
 // Fetches all watercolor sets available from the colorsets dir

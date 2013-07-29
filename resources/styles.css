@@ -531,6 +531,21 @@ body.home #bar {
   padding-top: 5px;
 }
 
+body.home #bar-help {
+  font-weight: bold;
+  color: #fff !important;
+  background-color: #444;
+  border-radius: 20px;
+  padding: 0 8px;
+  margin-right: 8px;
+}
+
+body.home #bar-help:hover {
+  background-color: transparent;
+  box-shadow: 0 0 2px 3px #444;
+  color: #444 !important;
+}
+
 body.home #bar span.separator {
   padding-right: 7px;
   font-size: 26px;
