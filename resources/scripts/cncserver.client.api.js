@@ -79,6 +79,7 @@ cncserver.api = {
       _delete('pen',{
         success: function(d){
           cncserver.state.pen = d;
+          cncserver.hideDrawPoint(); // hide drawpoint (will be off draw canvas)
           if (callback) callback(d);
         },
         error: function(e) {
@@ -96,6 +97,7 @@ cncserver.api = {
       _put('motors',{
         data: {reset: 1},
         success: function(d){
+          cncserver.hideDrawPoint(); // hide drawpoint (will be off draw canvas)
           if (callback) callback(d);
         },
         error: function(e) {
@@ -191,6 +193,8 @@ cncserver.api = {
           callback(false); return;
           break;
       }
+
+      cncserver.hideDrawPoint(); // hide drawpoint (will be off draw canvas)
 
       // Store the last changed color state
       if (toolName.indexOf('color') !== -1) {

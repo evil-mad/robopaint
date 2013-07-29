@@ -41,6 +41,7 @@ $(function() {
   serverConnect(); // "Connect", and get the initial pen state
   bindControls(); // Bind all clickable controls
   loadSVG(); // Load the default SVG
+  $('#drawpoint').hide(); // Hide the drawpoint
 
   loadColorsets(); // Get & Load the colorsets, then cache the default
 
@@ -340,7 +341,12 @@ $(function() {
     cncserver.moveDrawPoint = function(point) {
       // Move visible drawpoint
       // Add 48 to each side for 1/2in offset
+      $('#drawpoint').show();
       $('#drawpoint').attr('transform', 'translate(' + (point.x + 48) + ',' + (point.y + 48) + ')');
+    }
+
+    cncserver.hideDrawPoint = function() {
+      $('#drawpoint').hide();
     }
 
     // Bind to Tool Change nav items
