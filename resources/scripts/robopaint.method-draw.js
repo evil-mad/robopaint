@@ -44,12 +44,15 @@ $(function() {
       methodDraw.canvas.selectAllInCurrentLayer();
       methodDraw.canvas.ungroupSelectedElement();
       methodDraw.canvas.clearSelection();
+
+      methodDraw.canvas.undoMgr.resetUndoStack();
     }
 
     // Load last drawing
     if (localStorage["svgedit-default"]) {
       methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
     } else {
+      methodDraw.canvas.undoMgr.resetUndoStack();
       // Set zoom to fit empty canvas at init
       methodDraw.zoomChanged(window, 'canvas');
     }
