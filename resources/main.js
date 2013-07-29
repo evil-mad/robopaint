@@ -12,9 +12,6 @@ var initalizing = false;
 var appMode = 'home';
 $subwindow = {}; // Placeholder for subwindow iframe
 
-// Clear last used image
-// TODO: Make this a selectable option?
-delete localStorage["svgedit-default"];
 
 // Pull the list of available ports
 cncserver.getPorts(function(ports) {
@@ -320,6 +317,7 @@ function loadSettings() {
     filltype: 'line-straight',
     fillangle: 0,
     penmode: 0,
+    openlast: 0,
     showcolortext: 0,
     colorset: 'crayola_classic',
     maxpaintdistance: 8040,
@@ -355,9 +353,18 @@ function loadSettings() {
     $input.change();
   }
 
-  addSettingsRangeValues();
+  afterSettings();
 }
 
+// Call anything that needs to happen after settings have been loaded
+function afterSettings() {
+  addSettingsRangeValues(); // Add in the range value displays
+
+  // Clear last used image
+  if (settings.openlast == 0) delete localStorage["svgedit-default"];
+}
+
+// Actually save settings to local storage
 function saveSettings() {
   localStorage["cncserver-settings"] = JSON.stringify(settings);
 }
