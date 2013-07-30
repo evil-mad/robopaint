@@ -413,3 +413,16 @@ $(function() {
   }
 
 });
+
+// Triggered on before close or switch mode, call callback to complete operation
+function onClose(callback, isGlobal) {
+  if (cncserver.state.buffer.length) {
+    var r = confirm("Are you sure you want to go?\n\
+Exiting print mode while printing will cancel all your jobs. Click OK to leave.");
+    if (r == true) {
+      callback(); // Close/continue
+    }
+  } else {
+    callback(); // Close/continue
+  }
+}

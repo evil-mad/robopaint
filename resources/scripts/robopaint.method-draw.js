@@ -277,6 +277,19 @@ function bindColorSelect() {
   });
 }
 
+// Triggered on before close or switch mode, call callback to complete operation
+function onClose(callback, isGlobal){
+  if (isGlobal && !settings.openlast && methodDraw.canvas.undoMgr.getUndoStackSize() > 0) {
+    var r = confirm("Are you sure you want to quit?\n\
+Your changes to this image will not be saved before printing. Click Ok to Quit.");
+    if (r == true) {
+      callback(); // Close/continue
+    }
+  } else {
+    callback();
+  }
+}
+
 // Takes all content and ensures it's centered and sized to fit exactly within
 // the drawing canvas, big or small.
 function autoSizeContent() {

@@ -10,7 +10,8 @@ var settings = {}; // Holds the "permanent" app settings data
 var statedata = {}; // Holds per app session volitile settings
 var initalizing = false;
 var appMode = 'home';
-$subwindow = {}; // Placeholder for subwindow iframe
+var $subwindow = {}; // Placeholder for subwindow iframe
+var subWin = {}; // Placeholder for subwindow "window" object
 
 
 // Pull the list of available ports
@@ -31,6 +32,8 @@ cncserver.getPorts(function(ports) {
 function initialize() {
   initalizing = true;
 
+  gui.Window.get().on('close', onClose); // Catch close event
+
   // Bind settings controls
   bindSettingsControls();
 
@@ -39,7 +42,7 @@ function initialize() {
 
   // Add the secondary page iFrame to the page
   $subwindow = $('<iframe>').attr({
-    height: $(window).height()-barHeight,
+    height: $(window).height() - barHeight,
     border: 0,
     id: 'subwindow'
   }).css('top', $(window).height()).hide();
@@ -108,6 +111,25 @@ function initialize() {
   });
 }
 
+// By just having this function prevents gui Window close...
+function onClose() {
+  var w = this;
+
+  checkModeClose(function(){
+    w.close(true); // Until this is called
+  }, true);
+}
+
+// Runs subwindow close delay functions, runs callback when done.
+// isGlobal demarks a application level quit
+function checkModeClose(callback, isGlobal) {
+  if (appMode == 'print' || appMode == 'edit') {
+    subWin.onClose(callback, isGlobal);
+  } else {
+    callback();
+  }
+}
+
 // Initialize and bind Quickload file list
 function initQuickload() {
   var $load = $('#bar-load');
@@ -147,8 +169,6 @@ function initQuickload() {
     // Push the files contents into the localstorage object
     window.localStorage.setItem('svgedit-default', fileContents);
 
-    var subWin = $subwindow[0].contentWindow;
-
     if (appMode == 'print') {
       subWin.cncserver.canvas.loadSVG();
     } else if (appMode == 'edit') {
@@ -170,6 +190,7 @@ function fadeInWindow() {
   if ($subwindow.offset().top != barHeight) {
     $subwindow.hide().css('top', barHeight).fadeIn('slow');
   }
+  subWin = $subwindow[0].contentWindow;
 }
 
 // Document Ready...
@@ -186,32 +207,35 @@ $(function() {
 
   // Bind links for toolbar
   $('#bar a.mode').click(function(e) {
-    var $target = $(e.target);
-    var mode = $target[0].id.split('-')[1];
+    checkModeClose(function(){
+      var $target = $(e.target);
+      var mode = $target[0].id.split('-')[1];
 
-    if (mode != 'settings') appMode = mode;
+      if (mode != 'settings') appMode = mode;
 
-    // Don't do anything fi already selected
-    if ($target.is('.selected')) {
-      return false;
-    }
+      // Don't do anything fi already selected
+      if ($target.is('.selected')) {
+        return false;
+      }
 
-    // Don't select settings (as it's a modal on top window)
-    if (mode !== 'settings') {
-      $('#bar a.selected').removeClass('selected');
-      $target.addClass('selected');
-    }
+      // Don't select settings (as it's a modal on top window)
+      if (mode !== 'settings') {
+        $('#bar a.selected').removeClass('selected');
+        $target.addClass('selected');
+      }
 
-    switch (mode) {
-      case 'home':
-        $subwindow.fadeOut('slow');
-        break;
-      case 'settings':
-        setSettingsWindow(true);
-        break
-      default:
-        $subwindow.attr('src', $target.attr('href'));
-    }
+      switch (mode) {
+        case 'home':
+          $subwindow.fadeOut('slow', function(){$subwindow.attr('src', "");});
+          break;
+        case 'settings':
+          setSettingsWindow(true);
+          break
+        default:
+          $subwindow.attr('src', $target.attr('href'));
+      }
+    });
+
     return false;
   });
 
