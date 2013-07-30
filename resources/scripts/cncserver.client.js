@@ -377,63 +377,39 @@ $(function() {
   }
 
   function responsiveResize(){
-    // These value should be static, set originally from central canvas config
-    var svgOffset = {
-      top: 20,
-      left: 235
-    };
-
     var w = $(window).width();
     var h = $(window).height();
 
+    // These value should be static, set originally from central canvas config
+    var mainOffset = {
+      top: 20,
+      left: 0
+    };
 
-    var margin = 40; // TODO: Place this somewhere better
-    var rightMargin = $(window).width() - $('#control').offset().left;
-    var scale = 0;
-    var $sim = $('#sim');
-    var $shadow = $('#shadow');
-
-
-    // Tool selection height scale
-    var toolMax = 735;
+    var toolScale = 1.3;
+    var toolRightMargin = 40;
     var $tools = $('#tools');
-    if (h < toolMax) {
-      scale = (h - $tools.offset().top - 20) / $tools.height();
-    } else {
-      scale = 1;
+    var controlLeftMargin = 60;
+
+    // Scale tools to height match full size canvas
+    $tools.css('-webkit-transform', 'scale(' + toolScale + ')');
+    var toolWidth = $tools.width() * toolScale;
+
+    // Calculate scale for both width and height...
+    var scale = {
+      x: (w - ($('#control').width() + controlLeftMargin)) / (cncserver.canvas.width + toolWidth + toolRightMargin),
+      y: (h - (mainOffset.top + 40)) / cncserver.canvas.height
     }
 
-    // Update the global canvas left offset
-    cncserver.canvas.offset.left = svgOffset.left * scale;
-    var offsetDifference = svgOffset.left - cncserver.canvas.offset.left;
-
-    $tools.css({
-      '-webkit-transform': 'scale(' + scale + ')'
-    });
-
-    $svg.css('left', cncserver.canvas.offset.left);
-    $sim.css('left', cncserver.canvas.offset.left);
-    $shadow.css('left', cncserver.canvas.offset.left);
-
-
-    // Scale SVG Canvas
-    scale = {
-      x: (w - svgOffset.left - margin - rightMargin + offsetDifference) / cncserver.canvas.width,
-      y: (h - svgOffset.top - margin) / cncserver.canvas.height
-    }
-
-    // Use the shorter of the two
+    // ...use the smaller of the two
     cncserver.canvas.scale = scale.x < scale.y ? scale.x : scale.y;
 
-    $('svg#main, #sim, #shadow')
+    $('#scale-container') // Actually do the scaling
       .css('-webkit-transform', 'scale(' + cncserver.canvas.scale + ')');
 
-    // Set position of edit tools based on SVG left side
-    $('#edit-tools').css('left', cncserver.canvas.offset.left - 38);
-
-    // Fix body background height (html tag backgrounds are weird!)
-    $('body').height(h);
-
+    // TODO: Find out where these inconsistencies in size/position come from
+    cncserver.canvas.offset.left = (toolWidth + toolRightMargin - 1) * cncserver.canvas.scale;
+    cncserver.canvas.offset.top = mainOffset.top + (22 * cncserver.canvas.scale);
   }
 
 });
