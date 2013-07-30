@@ -70,6 +70,16 @@ button.zoomfit {
   border: 1px solid #ddd;
 }
 
+button#auto-color {
+  position: absolute;
+  bottom: 10px;
+  left: 360px;
+  font-size: 0.8em;
+  line-height: 68%;
+  white-space: nowrap;
+}
+
+
 #rotate, #autosize {
   margin-left: 14px;
   border: 0;

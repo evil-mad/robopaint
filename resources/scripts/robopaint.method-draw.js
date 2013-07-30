@@ -14,13 +14,14 @@ var cache = {};
 // Only for using the color conversion utilities
 var cncserver = {config: {}};
 $('<script>').attr({type: 'text/javascript', src: "../../scripts/cncserver.client.utils.js"}).appendTo('head');
+$('<script>').attr({type: 'text/javascript', src: "../../scripts/cncserver.client.wcb.js"}).appendTo('head');
 
 // Page load complete...
 $(function() {
   parent.fadeInWindow(); // Trigger iframe window reposition / fade in
 
   // Parent keypresses push focus to window
-  parent.document.onkeydown = function(e) { window.focus();}
+  parent.document.onkeydown = function(e) {window.focus();}
   window.focus() // Set window focus (required for keyboard shortcuts)
 
   // Remove elements we don't want =============================================
@@ -168,6 +169,18 @@ function addElements() {
   $('#tools_bottom_3').append(buildPalette());
   loadColorsets();
   bindColorSelect();
+
+ // Add Autocolor button
+ var recover = false;
+ $('#tools_bottom_3').append(
+   $('<button>')
+     .attr({id:"auto-color", title:"Pick the closest match for existing colors in the drawing. Click again to UNDO."})
+     .text('Auto Color')
+     .click(function(){
+       cncserver.wcb.autoColor($('#svgcontent'), recover);
+       recover = !recover;
+     })
+ );
 
 }
 
