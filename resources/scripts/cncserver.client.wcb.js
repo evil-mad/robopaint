@@ -63,8 +63,9 @@ cncserver.wcb = {
   // Wet the brush and get more of selected paint color, then return to
   // point given and trigger callback
   getMorePaint: function(point, callback) {
-    var name = $('#' + cncserver.state.color).text().toLowerCase();
     var $stat = cncserver.utils.log('Going to get some more ' + name + ' paint...')
+    var name = cncserver.utils.getMediaName().toLowerCase();
+
     cncserver.api.tools.change('water0dip', function(d){
       cncserver.api.tools.change(cncserver.state.color, function(d){
         cncserver.api.pen.resetCounter();

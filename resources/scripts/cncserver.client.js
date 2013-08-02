@@ -365,8 +365,7 @@ $(function() {
       }
 
       // Standard tool change...
-      var stuff = this.id.indexOf('water') == -1 ? $(this).text().toLowerCase() + ' paint' : 'water'
-      var $stat = cncserver.utils.log('Putting some ' + stuff + ' on the brush...')
+      var stuff = cncserver.utils.getMediaName(this.id).toLowerCase();
       cncserver.api.tools.change(this.id, function(d){
         $stat.logDone(d);
         cncserver.api.pen.resetCounter();

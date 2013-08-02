@@ -372,6 +372,17 @@ cncserver.utils = {
 
   },
 
+  getMediaName: function(toolName) {
+    if (typeof toolName == 'undefined') toolName = cncserver.state.color;
+
+    if (toolName.indexOf('water') !== -1) {
+      return "Water";
+    } else {
+      var colors = cncserver.statedata.colorsets[cncserver.settings.colorset].colors;
+      return colors[toolName.substr(-1, 1)];
+    }
+  },
+
   // Simulation draw of current buffer
   simulateBuffer: function() {
     var c = $('#sim')[0];
