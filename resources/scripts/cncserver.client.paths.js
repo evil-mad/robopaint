@@ -40,25 +40,55 @@ cncserver.paths = {
     // We can think of the very first brush down as waiting till we should paint
     cncserver.state.process.waiting = true;
 
-    var i = 0;
+    var distance = 0;
     var lastPoint = {};
     var p = {};
     var delta = {};
+    var lastPathSeg = 1;
+    var cPathSeg = 1;
+    var subPathCount = 0;
 
     runNextPoint();
 
     function runNextPoint() {
       if (cncserver.state.process.cancel) return; // Long process kill
 
-      if (i <= $path.maxLength) {
-        i+= parseInt(options.strokeprecision);
+      lastPoint = {x:p.x, y:p.y}; // Store the last run point
 
-        lastPoint = {x:p.x, y:p.y}; // Store the last run point
-        p = $path.getPoint(i); // Get a new point
+      if (distance <= $path.maxLength) {
+
+        p = $path.getPoint(distance); // Get a new point
         delta = {x:lastPoint.x - p.x, y: lastPoint.y - p.y} // Store the difference
+        cPathSeg = $path[0].getPathSegAtLength(distance); // Store the current seg ID
+
+        // Increment distance, only after the first check
+        // allows for starting at distance 0
+        distance+= parseInt(options.strokeprecision);
 
         // If the path is still visible here
         if (cncserver.paths.getPointPathCollide(p) == $path[0]){
+
+          if (cPathSeg != lastPathSeg) {
+            // If our last segment jumped, check if it's a move to path
+            // TODO: Support differences other than previous
+            if (cPathSeg > lastPathSeg+1) {
+              var seg = $path[0].pathSegList.getItem(cPathSeg-1);
+              if (seg.pathSegTypeAsLetter.toLowerCase() == "m") {
+                subPathCount++;
+                run('status', 'Drawing subpath #' + subPathCount);
+                run('up');
+                run('move', p);
+                run('down');
+              }
+            } else {
+              run('move', p);
+            }
+
+            lastPathSeg = cPathSeg;
+          } else {
+            run('move', p);
+          }
+
           // Move to point!
           run('move', p);
 
@@ -71,8 +101,11 @@ cncserver.paths = {
           if (!cncserver.state.process.waiting) {
             // Figure out how much change since last point, move more before lifting
             if (delta.x || delta.y) {
-              var o = {x: p.x - (delta.x * options.strokeovershoot), y: p.y - (delta.y * options.strokeovershoot)};
-              run('move', o); // Overshoot to make up for brush flexibility
+               // Overshoot to make up for brush flexibility
+              run('move', {
+                x: p.x - (delta.x * options.strokeovershoot),
+                y: p.y - (delta.y * options.strokeovershoot)
+              });
             }
 
             run('up');
@@ -83,8 +116,11 @@ cncserver.paths = {
       } else { // Done
         // Figure out how much change since last point, move more before lifting
         if (delta.x || delta.y) {
-          var o = {x: p.x - (delta.x * options.strokeovershoot), y: p.y - (delta.y * options.strokeovershoot)};
-          run('move', o); // Overshoot to make up for brush flexibility
+          // Overshoot to make up for brush flexibility
+          run('move', {
+            x: p.x - (delta.x * options.strokeovershoot),
+            y: p.y - (delta.y * options.strokeovershoot)
+          });
         }
 
         run('up');
