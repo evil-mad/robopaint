@@ -211,32 +211,17 @@ nav#tools .water {
 }
 
 nav#tools a:hover, nav#tools a:focus {
-  animation-name: hover-pulse;
-  animation-duration: 1000ms;
-  animation-iteration-count: infinite;
-
   -webkit-animation-name: hover-pulse;
   -webkit-animation-duration: 1000ms;
   -webkit-animation-iteration-count: infinite;
 }
 
 /* Animation Keyframes */
-@keyframes hover-pulse {
-  0%   { box-shadow: 0 0 2px 5px red; }
-  50%  { box-shadow: 0 0 6px 8px red; }
-  100%  { box-shadow: 0 0 2px 5px red; }
-}
 
 @-webkit-keyframes hover-pulse {
   0%   { box-shadow: 0 0 2px 5px red; }
   50%  { box-shadow: 0 0 6px 8px red; }
   100%  { box-shadow: 0 0 2px 5px red; }
-}
-
-@keyframes hover-pulse-selected {
-  0%   { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
-  50%  { box-shadow: 0 0 0 3px #fff, 0 0 6px 8px #33F; }
-  100%  { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
 }
 
 @-webkit-keyframes hover-pulse-selected {
@@ -245,11 +230,6 @@ nav#tools a:hover, nav#tools a:focus {
   100%  { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
 }
 
-@keyframes hover-button {
-  0%   { box-shadow: 0 0 2px 8px #33F; }
-  50%  { box-shadow: 0 0 6px 8px #33F; }
-  100%  { box-shadow: 0 0 2px 8px #33F; }
-}
 
 @-webkit-keyframes hover-button {
   0%   { box-shadow: 0 0 2px 8px #33F; }
@@ -257,16 +237,10 @@ nav#tools a:hover, nav#tools a:focus {
   100%  { box-shadow: 0 0 2px 8px #33F; }
 }
 
-@keyframes pause-active {
-  0%   { box-shadow: 0 0 0 18px yellow; }
-  50%  { box-shadow: 0 0 0 5px yellow; }
-  100%  { box-shadow: 0 0 0 18px yellow; }
-}
-
 @-webkit-keyframes pause-active {
-  0%   { box-shadow: 0 0 0 18px yellow; }
-  50%  { box-shadow: 0 0 0 5px yellow; }
-  100%  { box-shadow: 0 0 0 18px yellow; }
+  0%   { box-shadow: 0 0 10px 10px #04aa1e; }
+  50%  { box-shadow: 0 0 10px 5px #04aa1e; }
+  100%  { box-shadow: 0 0 10px 10px #04aa1e; }
 }
 
 nav#tools div.static {
@@ -321,10 +295,6 @@ nav#tools .color {
 }
 
 nav#tools .color.selected {
-  animation-name: hover-pulse-selected;
-  animation-duration: 3000ms;
-  animation-iteration-count: infinite;
-
   -webkit-animation-name: hover-pulse-selected;
   -webkit-animation-duration: 3000ms;
   -webkit-animation-iteration-count: infinite;
@@ -356,10 +326,6 @@ fieldset#control {
 }
 
 #control button:hover {
-  animation-name: hover-button;
-  animation-duration: 3000ms;
-  animation-iteration-count: infinite;
-
   -webkit-animation-name: hover-button;
   -webkit-animation-duration: 3000ms;
   -webkit-animation-iteration-count: infinite;
