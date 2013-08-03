@@ -122,7 +122,12 @@ function onClose() {
 
 // Runs subwindow close delay functions, runs callback when done.
 // isGlobal demarks a application level quit
-function checkModeClose(callback, isGlobal) {
+function checkModeClose(callback, isGlobal, destination) {
+  // Settings mode not considered mode closer
+  if (destination == 'settings') {
+    callback(); return;
+  }
+
   if (appMode == 'print' || appMode == 'edit') {
     subWin.onClose(callback, isGlobal);
   } else {
@@ -234,7 +239,7 @@ $(function() {
         default:
           $subwindow.attr('src', $target.attr('href'));
       }
-    });
+    }, false, e.target.id.split('-')[1]);
 
     return false;
   });
