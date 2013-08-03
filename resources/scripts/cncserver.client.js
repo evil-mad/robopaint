@@ -20,7 +20,6 @@ var cncserver = {
       name: 'idle',
       waiting: false,
       busy: false,
-      cancel: false,
       paused: false,
       max: 0
     }

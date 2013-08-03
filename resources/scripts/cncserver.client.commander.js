@@ -112,7 +112,6 @@ cncserver.cmd = {
 // currently processing the buffer queue
 setInterval(function(){
   if (!cncserver.state.process.busy && cncserver.state.buffer.length && !cncserver.state.process.paused) {
-    cncserver.state.process.cancel = false;
     cncserver.cmd.executeNext();
   }
 }, 10);

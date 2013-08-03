@@ -51,8 +51,6 @@ cncserver.paths = {
     runNextPoint();
 
     function runNextPoint() {
-      if (cncserver.state.process.cancel) return; // Long process kill
-
       lastPoint = {x:p.x, y:p.y}; // Store the last run point
 
       if (distance <= $path.maxLength) {
@@ -173,8 +171,6 @@ cncserver.paths = {
     runNextFill();
 
     function runNextFill() {
-      if (cncserver.state.process.cancel) return; // Long process kill
-
       pathPos+= parseInt(options.fillprecision);
       p = $fill.getPoint(pathPos);
 
@@ -293,8 +289,6 @@ cncserver.paths = {
     runNextFill();
 
     function runNextFill() {
-      if (cncserver.state.process.cancel) return; // Long process kill
-
       linePos+= options.fillprecision;
 
       var shortcut = false;
@@ -467,8 +461,6 @@ cncserver.paths = {
 
     // Fill up the slow point path finder points
     function runNextFill() {
-      if (cncserver.state.process.cancel) return; // Long process kill
-
       fillCount+= parseInt(options.fillprecision);
       p = $fill.getPoint(fillCount);
 
@@ -540,7 +532,6 @@ cncserver.paths = {
       }
 
       var repeatInterval = setInterval(function(){
-        if (cncserver.state.process.cancel) return; // Long process kill
         count++;
 
         runner.runOnce();
