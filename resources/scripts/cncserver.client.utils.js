@@ -275,50 +275,35 @@ cncserver.utils = {
     });
   },
 
-  log: function(msg) {
-    var $logitem = $('<div>').append(
-     $('<span>').addClass('time').text(new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")),
-     $('<span>').addClass('message').text(msg).attr('title', msg),
-     $('<span>').addClass('status loading').html('&nbsp;').attr('title', 'Loading...')
-    );
+  // Set the current status message
+  status: function(msg, st) {
 
-    // Easy updating!
-    $logitem.logDone = function(msg, classname, doHide){
-      var $item = $logitem.children('.status');
+    var $status = $('#statusmessage');
+    var classname = 'wait';
 
-      // Allow direct passing of object for success/error
-      if (typeof msg != "string") {
-        // If no classname, assume based on msg
-        if (!classname) {
-          classname = (msg === false ? 'error' : 'success')
-        }
+    // String messages, just set em
+    if (typeof msg == "string") {
+      $status.text(msg);
+    } else if (Object.prototype.toString.call(msg) == "[object Array]") {
+      // If it's an array, flop the message based on the status var
 
-        if (msg === false) {
-          msg = 'Error!';
-          $item.attr('title', 'Error: The request failed. Check the bot or the logs for problems.');
-        } else {
-          msg = 'Success';
-          $item.attr('title', 'Everything worked great!');
-        }
-      }
+      // If there's not a second error message, default it.
+      if (msg.length == 1) msg.push('Connection Problem &#x2639;');
 
-      // If no classname STILL, just make one out of the text
-      if (!classname) {
-        classname = msg.toLowerCase();
-      }
-      $item.removeClass('loading').addClass(classname).text(msg);
-
-      // Hide the element after 5 seconds if requested
-      if (doHide) {
-        setTimeout(function(){
-          $logitem.fadeOut('slow');
-        }, 5000);
-      }
+      $status.text((st == false) ? msg[1] : msg[0]);
     }
 
-    $logitem.appendTo($('#log'));
-    $('#log')[0].scrollTop = $('#log')[0].scrollHeight;
-    return $logitem;
+    // If stat var is actually set
+    if (typeof st != 'undefined') {
+      if (typeof st == 'string') {
+        classname = st;
+      } else {
+        classname = (st == false) ? 'error' : 'success'
+      }
+
+    }
+
+    $status.attr('class', classname); // Reset class to only the set class
   },
 
   // Easy set for progress!

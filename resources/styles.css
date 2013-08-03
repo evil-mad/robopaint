@@ -52,58 +52,6 @@ img.logo {
   }
 }
 
-/* Status Area
-#status {
-  background-color: whitesmoke;
-  border-radius: 12px 0;
-  height: 4em;
-  left: 215px;
-  margin-top: 0.5em;
-  padding: 3px;
-  width: 723px;
-  position: absolute;
-}
-
-#cancel {
-  color: red;
-}
-
-#pause {
-  color: green;
-}
-
-#pause.active {
-  font-weight: bold;
-  margin-left: -1%;
-  margin-right: -1%;
-  width: 10.5%;
-
-  animation-name: pause-active;
-  animation-duration: 500ms;
-  animation-iteration-count: infinite;
-
-  -webkit-animation-name: pause-active;
-  -webkit-animation-duration: 500ms;
-  -webkit-animation-iteration-count: infinite;
-}
-
-#status button {
-  float: right;
-  margin-left: 1%;
-  width: 9%;
-}
-
-#status .progress-wrapper {
-  bottom: 0;
-  overflow: hidden;
-  position: absolute;
-  width: 99%;
-}
-
-#status progress {
-  width: 78%;
-}*/
-
 /* Drawing Area */
 
 #scale-container {
@@ -332,96 +280,71 @@ fieldset#control {
 }
 
 #control fieldset {
+  padding: 0 7px 7px;
   border: 1px solid #C9A165;
   margin: 0.5em 0;
 }
+
+#control fieldset legend {
+  font-size: 0.9em;
+  text-align: left;
+  font-weight: bold;
+}
+
+#parkafter-option {
+  float: left;
+  margin-bottom: 0.6em;
+  margin-bottom: 0.25em;
+}
+
+#status {
+  text-align: center;
+}
+
+#status progress {
+  width: 100%;
+}
+
+#status #pause {
+  background: linear-gradient(to bottom, #eff7f9 0%,rgb(249, 234, 239) 50%,rgb(242, 218, 230) 51%,rgb(249, 229, 231) 100%);
+  border-radius: 11px;
+  box-shadow: 0 0 14px 6px red;
+  float: none;
+  display: inline;
+  height: 1.9em;
+  width: 5em;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 13px;
+  margin-bottom: 7px;
+}
+
+#status #pause:hover {
+  box-shadow: 0 0 14px 10px #a80302;
+  -webkit-animation: none;
+}
+
+#status #pause.active {
+  background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
+  box-shadow: 0 0 14px 6px #04aa1e;
+
+  -webkit-animation-name: pause-active;
+  -webkit-animation-duration: 1500ms;
+  -webkit-animation-iteration-count: infinite;
+}
+
+
+#statusmessage {
+  margin-top: 0.5em;
+  line-height: 1em;
+  margin-bottom: 0.6em;
+}
+
 
 #control button:disabled, #control button:disabled:hover {
   opacity: 0.5;
   animation: none;
   -webkit-animation: none;
-}
-
-/* Color Action selection */
-nav#color-action #color-action-label {
-  display: block;
-  font-weight: bold;
-}
-
-nav#color-action input {
-  display:none;
-}
-
-nav#color-action label {
-    display:block;
-    background-color:#ddd;
-    padding:4px 11px;
-    font-family:Arial;
-    font-size:16px;
-}
-
-nav#color-action input[type="radio"]:checked + label {
- background-color:#bbb;
-}
-
-/* Status Log */
-#log {
-  border: 1px solid black;
-  height: 1.2em;
-  overflow: auto;
-}
-
-#log div {
-  overflow: hidden;
-  position: relative;
-  border-top: 1px dashed #ddd;
-  font-family: monospace;
-  font-weight: bold;
-  height: 1.5em;
-  line-height: 1.5em;
-}
-
-#log span {
-  display: block;
-  position: absolute;
-}
-
-#log span.message {
-  left: 6em;
-}
-
-#log span.time {
-  padding-left: 0.5em;
-  color: #777777;
-}
-
-#log span.status {
-  min-width: 80px;
-  padding: 0 1em;
-  right: 0;
-  text-align: center;
-}
-
-#log span.success {
-  background-color: green;
-  color: white;
-}
-
-#log span.error {
-  background-color: red;
-  color: white;
-}
-
-#log span.complete {
-  background-color: blue;
-  color: white;
-}
-
-#log span.loading {
-  background-color: #fff;
-  background-image: url("images/log-loader.gif");
-  background-position: center center;
-  background-repeat: no-repeat;
 }
 
 /* Image side edit tools */

@@ -48,12 +48,12 @@ cncserver.wcb = {
 
   // Grouping function to do a full wash of the brush
   fullWash: function(callback) {
-    var $log = cncserver.utils.log('Doing a full brush wash...');
+    cncserver.utils.status('Doing a full brush wash...');
     cncserver.api.tools.change('water0', function(){
       cncserver.api.tools.change('water1', function(){
         cncserver.api.tools.change('water2', function(d){
           cncserver.api.pen.resetCounter();
-          $log.logDone(d, false, true);
+          cncserver.utils.status(['Brush should be clean'], d);
           if (callback) callback(d);
         });
       });
@@ -63,15 +63,15 @@ cncserver.wcb = {
   // Wet the brush and get more of selected paint color, then return to
   // point given and trigger callback
   getMorePaint: function(point, callback) {
-    var $stat = cncserver.utils.log('Going to get some more ' + name + ' paint...')
     var name = cncserver.utils.getMediaName().toLowerCase();
 
+    cncserver.utils.status('Going to get some more ' + name + '...')
     cncserver.api.tools.change('water0dip', function(d){
       cncserver.api.tools.change(cncserver.state.color, function(d){
         cncserver.api.pen.resetCounter();
         cncserver.api.pen.up(function(d){
           cncserver.api.pen.move(point, function(d) {
-            $stat.logDone('Done', 'complete', true);
+            cncserver.utils.status(['Continuing to paint with ' + name]);
             if (callback) callback(d);
           });
         });
@@ -184,19 +184,14 @@ cncserver.wcb = {
     var jobIndex = 0;
     doNextJob();
 
-    var $logItem = cncserver.utils.log('Full automatic painting! ' +
-      $('path', context).length + ' paths, ' + finalJobs.length + ' jobs');
-
+    cncserver.utils.status('Auto Paint: ' +
+      $('path', context).length + ' paths, ' +
+      finalJobs.length + ' jobs');
 
     // Nothing manages color during automated runs, so you have to hang on to it
     var runColor = cncserver.state.color;
 
     function doNextJob() {
-      // Long process kill
-      if (cncserver.state.process.cancel) {
-        return;
-      }
-
       var job = finalJobs[jobIndex];
       var run = cncserver.cmd.run;
 
@@ -214,18 +209,16 @@ cncserver.wcb = {
 
         if (job.t == 'stroke'){
           job.p.addClass('selected');
-          run([['log', 'Drawing path ' + job.p[0].id + ' stroke...']]);
+          run([['status', 'Drawing path ' + job.p[0].id + ' stroke...']]);
           cncserver.paths.runOutline(job.p, function(){
             jobIndex++;
-            run([['logdone', true]]);
             doNextJob();
           })
         } else if (job.t == 'fill') {
-          run([['log', 'Drawing path ' + job.p[0].id + ' fill...']]);
+          run([['status', 'Drawing path ' + job.p[0].id + ' fill...']]);
 
           function fillCallback(){
             jobIndex++;
-            run([['logdone', true]]);
             doNextJob();
           }
 
@@ -235,7 +228,6 @@ cncserver.wcb = {
         if (callback) callback();
         run(['wash','park']);
         // Done!
-        $logItem.logDone('Complete')
       }
     }
   }

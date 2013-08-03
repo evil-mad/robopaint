@@ -8,7 +8,6 @@
  */
 
 // TODO: DO this better!
-var lastlog = {};
 var returnPoints = [];
 var lastPoint = {};
 
@@ -78,12 +77,8 @@ cncserver.cmd = {
       case "down":
         cncserver.api.pen.down(cncserver.cmd.cb);
         break;
-      case "log":
-        lastlog = cncserver.utils.log(next[1]);
-        cncserver.cmd.cb(true);
-        break;
-      case "logdone":
-        lastlog.logDone(true, false, next[1]);
+      case "status":
+        cncserver.utils.status(next[1], next[2]);
         cncserver.cmd.cb(true);
         break;
       case "wash":

@@ -41,7 +41,7 @@
     <nav>
       <button id="draw" title="Stroke the selected path with an outline">Stroke Path</button>
       <button id="fill" title="Fill the selected path with a given fill style">Fill Path</button>
-      <div>
+      <div id="parkafter-option">
         <input type="checkbox" checked id="parkafter"/>
         <label for="parkafter">Park after fill/stroke</label>
       </div>
@@ -62,19 +62,13 @@
     </nav>
   </fieldset>
 
-  <fieldset>
+  <fieldset id="status">
     <legend>Status</legend>
-    <div id="status">
-      <div id="log"></div>
-      <div class="progress-wrapper">
-        <progress title="Current progress" max="100" value="0"></progress>
-        <button id="cancel">Cancel</button>
-        <button id="pause">Pause</button>
-      </div>
+    <div id="statusmessage"></div>
+    <div class="progress-wrapper">
+      <progress title="Current progress" max="100" value="0"></progress>
+      <button id="pause" title="Click to stop current operations">STOP</button>
     </div>
-    <nav>
-      <button id="stopresume" title="Start or stop the print">STOP</button>
-    </nav>
   </fieldset>
 </fieldset>
 

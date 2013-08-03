@@ -57,9 +57,9 @@ $(function() {
   // Initial server connection handler
   function serverConnect() {
     // Get initial pen data from server
-    var $log = cncserver.utils.log('Connecting...');
+    cncserver.utils.status('Connecting to bot...');
     cncserver.api.pen.stat(function(d){
-      $log.logDone(d);
+      cncserver.utils.status(['Connected Successfully!'], d);
       cncserver.state.pen.state = 1; // Assume down
       cncserver.api.pen.up(); // Send to put up
       cncserver.state.pen.state = 0; // Assume it's up (doesn't return til later)
@@ -187,22 +187,20 @@ $(function() {
     $('#fill').prop('disabled', true);
 
     // Pause management
-    var pauseLog = {};
-    var pauseText = 'Click to pause current operations';
-    var resumeText = 'Click to resume previous operations';
+    var pauseText = 'Click to stop current operations';
+    var resumeText = 'Click to resume operations';
     var pausePenState = 0;
     $('#pause').click(function(){
 
       if (!cncserver.state.process.paused) {
-        // Only attempt to pauselog if something is going on, but always allow pause
+        // Only attempt to status pause if something is going on, but always allow pause
         if (cncserver.state.buffer.length) {
-          pauseLog = cncserver.utils.log('Pausing current process...');
+          cncserver.utils.status('Pausing current process...');
         } else {
           $('#pause').addClass('active').attr('title', resumeText).text('Resume');
         }
         cncserver.state.process.paused = true;
       } else {
-        if (pauseLog.length) pauseLog.fadeOut('slow');
         cncserver.state.process.paused = false;
 
         // Execute next should put us where we need to be
@@ -213,7 +211,10 @@ $(function() {
           }
         });
 
-        $('#pause').removeClass('active').attr('title', pauseText).text('Pause');
+        $('#pause').removeClass('active').attr('title', pauseText).text('STOP');
+        if (cncserver.state.buffer.length) {
+          cncserver.utils.status('Drawing resumed...', true);
+        }
         pausePenState = 0;
       }
     });
@@ -229,32 +230,10 @@ $(function() {
       }
 
       function _pauseDone() {
-        pauseLog.logDone('Done', 'complete');
+        cncserver.utils.status('Paused. Click resume to continue.', 'complete');
         $('#pause').addClass('active').attr('title', resumeText).text('Resume');
       }
     }
-
-    // Cancel Management
-    $('#cancel').click(function(){
-      if (!cncserver.state.process.cancel && cncserver.state.buffer.length) {
-        cncserver.state.process.cancel = true;
-
-        cncserver.state.process.busy = false;
-        cncserver.state.process.max = 0;
-        cncserver.utils.progress({val: 0, max: 0});
-
-        cncserver.state.buffer = []; // Kill the buffer
-        cncserver.api.pen.park(); // Park
-        // Clear all loading logs into cancelled state
-        $('#log > div:visible').each(function(){
-          if ($(this).children('.loading').length) {
-            $(this).children('.loading')
-            .removeClass('loading').text('Canceled')
-            .addClass('error');
-          }
-        })
-      }
-    });
 
     // Bind sim view click
     $('#showsim, #sim').click(function(e) {
@@ -267,16 +246,19 @@ $(function() {
 
     // Bind to control buttons
     $('#park').click(function(){
-      cncserver.api.pen.park(cncserver.utils.log('Parking brush...').logDone);
+      cncserver.utils.status('Parking brush...');
+      cncserver.api.pen.park(function(d){
+        cncserver.utils.status(['Brush parked succesfully', "Can't Park, already parked"], d);
+      });
     });
 
     $('#draw').click(function(){
       $('#draw').prop('disabled', true);
-      cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' outline...']]);
+      cncserver.cmd.run([['status', 'Painting along selected path...']]);
       cncserver.paths.runOutline($path, function(){
         if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
-        cncserver.cmd.run('logdone');
         $('#draw').prop('disabled', false);
+        cncserver.cmd.run([['status', 'Painting complete', true]]);
       });
     });
 
@@ -297,10 +279,14 @@ $(function() {
     });
 
     $('#disable').click(function(){
-      cncserver.api.motors.unlock(cncserver.utils.log('Unlocking stepper motors...').logDone);
+      cncserver.utils.status('Unlocking motors...');
+      cncserver.api.motors.unlock(function(d){
+        cncserver.utils.status(['Motors unlocked! Will re-lock at next move'], d);
+      });
     });
     $('#zero').click(function(){
-      cncserver.api.pen.zero(cncserver.utils.log('Resetting absolute position...').logDone);
+      cncserver.utils.status('Absolute position reset', true);
+      cncserver.api.pen.zero();
     });
 
     $('#auto-paint').click(function(){
@@ -329,20 +315,23 @@ $(function() {
     // Bind to fill controls
     $('#fill').click(function(){
       $('#fill').prop('disabled', true);
-      cncserver.cmd.run([['log', 'Drawing path ' + $path[0].id + ' fill...']]);
+      cncserver.cmd.run([['status', 'Filling selected path...']]);
       cncserver.paths.runFill($path, function(){
         $('#fill').prop('disabled', false);
         if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
-        cncserver.cmd.run('logdone');
+        cncserver.cmd.run([['status', 'Painting complete', true]]);
       });
     });
 
     // Move the visible draw position indicator
-    cncserver.moveDrawPoint = function(point) {
+    cncserver.moveDrawPoint = function(p) {
       // Move visible drawpoint
+      var $d = $('#drawpoint');
+
+      $d.show().attr('fill', cncserver.state.pen.state ? '#FF0000' : '#00FF00');
+
       // Add 48 to each side for 1/2in offset
-      $('#drawpoint').show();
-      $('#drawpoint').attr('transform', 'translate(' + (point.x + 48) + ',' + (point.y + 48) + ')');
+      $d.attr('transform', 'translate(' + (p.x + 48) + ',' + (p.y + 48) + ')');
     }
 
     cncserver.hideDrawPoint = function() {
@@ -366,8 +355,9 @@ $(function() {
 
       // Standard tool change...
       var stuff = cncserver.utils.getMediaName(this.id).toLowerCase();
+      cncserver.utils.status('Putting some ' + stuff + ' on the brush...')
       cncserver.api.tools.change(this.id, function(d){
-        $stat.logDone(d);
+        cncserver.utils.status(['There is now ' + stuff + ' on the brush'], d);
         cncserver.api.pen.resetCounter();
       });
 
