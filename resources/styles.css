@@ -308,7 +308,7 @@ fieldset#control {
 #status #pause {
   background: linear-gradient(to bottom, #eff7f9 0%,rgb(249, 234, 239) 50%,rgb(242, 218, 230) 51%,rgb(249, 229, 231) 100%);
   border-radius: 11px;
-  box-shadow: 0 0 14px 6px red;
+  box-shadow: 0 0 14px 6px rgba(255,0,0,0.5);
   float: none;
   display: inline;
   height: 1.9em;
@@ -320,7 +320,7 @@ fieldset#control {
 }
 
 #status #pause:hover {
-  box-shadow: 0 0 14px 10px #a80302;
+  box-shadow: 0 0 14px 10px rgba(255,0,0,1);
   -webkit-animation: none;
 }
 
