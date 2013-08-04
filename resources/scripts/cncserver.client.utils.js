@@ -283,14 +283,14 @@ cncserver.utils = {
 
     // String messages, just set em
     if (typeof msg == "string") {
-      $status.text(msg);
+      $status.html(msg);
     } else if (Object.prototype.toString.call(msg) == "[object Array]") {
       // If it's an array, flop the message based on the status var
 
       // If there's not a second error message, default it.
       if (msg.length == 1) msg.push('Connection Problem &#x2639;');
 
-      $status.text((st == false) ? msg[1] : msg[0]);
+      $status.html((st == false) ? msg[1] : msg[0]);
     }
 
     // If stat var is actually set
