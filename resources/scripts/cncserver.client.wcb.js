@@ -115,18 +115,18 @@ cncserver.wcb = {
 
     $('path', context).each(function(){
       var $p = $(this);
-      var stroke = convert($p.attr('stroke'));
-      var fill = convert($p.attr('fill'));
+      var stroke = convert($p.css('stroke'));
+      var fill = convert($p.css('fill'));
 
       // Occasionally, these come back undefined
       stroke = (stroke == null) ? false : 'color' + colorMatch(stroke);
       fill = (fill == null) ? false : 'color' + colorMatch(fill);
 
       // Account for fill/stroke opacity
-      var op = $p.attr('fill-opacity');
+      var op = $p.css('fill-opacity');
       if (typeof op != 'undefined') fill = (op < 0.5) ? false : fill;
 
-      op = $p.attr('stroke-opacity');
+      op = $p.css('stroke-opacity');
       if (typeof op != 'undefined') stroke = (op < 0.5) ? false : stroke;
 
       // Don't actually fill or stroke for white... (color8)
