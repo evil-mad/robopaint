@@ -291,7 +291,7 @@ fieldset#control {
   font-weight: bold;
 }
 
-#parkafter-option {
+#control div.check-control {
   float: left;
   margin-bottom: 0.6em;
   margin-bottom: 0.25em;
