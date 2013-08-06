@@ -158,19 +158,17 @@ cncserver.paths = {
     var fillType = $fill.attr('id').split('-')[1];
 
     var center = {
-      x: pathRect.x + (pathRect.width / 2),
-      y: pathRect.y + (pathRect.height / 2)
+      x: pathRect.x + (pathRect.width / 2) + 48,
+      y: pathRect.y + (pathRect.height / 2) + 48
     }
 
     // Center the fill path
     $fill.attr('transform', 'translate(' + center.x + ',' + center.y + ')');
 
-
     $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
     $fill.getPoint = function(distance){ // Handy helper function for gPAL
       var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
-      // Add 48 to each side for 96dpi 1/2in offset
-      return {x: p.x+48, y: p.y+48};
+      return {x: p.x-48, y: p.y-48};
     };
 
     var pathPos = 0;
@@ -256,8 +254,7 @@ cncserver.paths = {
     $fill.transformMatrix = $fill[0].getTransformToElement($fill[0].ownerSVGElement);
     $fill.getPoint = function(distance){ // Handy helper function for gPAL
       var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
-      // Add 48 to each side for 96dpi 1/2in offset
-      return {x: p.x+48, y: p.y+48};
+      return {x: p.x-48, y: p.y-48};
     };
 
     // Sanity check incoming angle to match supported angles
@@ -275,19 +272,19 @@ cncserver.paths = {
     var goRight = true;
     var gapConnectThreshold = options.fillprecision * 5;
     var done = false;
-    var leftOffset = 0;
-    var topOffset = 0;
-    var bottomLimit = 0;
+    var leftOffset = -48;
+    var topOffset = 48;
+    var bottomLimit = 48;
     var fillOffsetPadding = options.fillprecision;
 
     // Offset calculation for non-flat angles
     // TODO: Support angles other than 45
     if (options.fillangle == -45) {
       var rads = (Math.abs(options.fillangle)/2) * Math.PI / 180
-      topOffset = pathRect.height / 2;
-      leftOffset = Math.tan(rads) * (pathRect.height * 1.2);
+      topOffset = (pathRect.height / 2) + 48;
+      leftOffset = (Math.tan(rads) * (pathRect.height * 1.2))-48;
 
-      bottomLimit = Math.tan(rads) * (pathRect.width * 1.2);
+      bottomLimit = Math.tan(rads) * (pathRect.width * 1.2) + 48;
     }
 
     // Start fill position at path top left (less fill offset padding)
@@ -301,20 +298,42 @@ cncserver.paths = {
 
       var shortcut = false;
 
-      // Shortcut ending a given line based on position
-      if (options.fillangle == -45 && false) { // Probably will work for all line types..
+      // Shortcut ending a given line check based on position (45deg) ==========
+      if (options.fillangle == -45 && false) {
         // Line has run away up beyond the path
         if (goRight && p.y < pathRect.y - fillOffsetPadding) {
           shortcut = true;
           console.log('line #' + lineIteration + ' up shortcut!');
         }
+      }
 
-        // Line has run away down below path
-        if (!goRight && p.y > pathRect.y + pathRect.height) {
+      // Shortcut ending a given line check based on position (vertical) =======
+      if (options.fillangle == 90) {
+        // Line has run away down beyond the BBox
+        if (goRight && p.y > pathRect.y + pathRect.height) {
           shortcut = true;
-          console.log('line #' + lineIteration + ' down shortcut!');
+        }
+
+        // Line is too far right
+        if (p.x > pathRect.x + pathRect.width) {
+          shortcut = true;
+        }
+
+      }
+
+      // Shortcut ending a given line check based on position (horizontal) =====
+      if (options.fillangle == 0) {
+        // Line has run away down beyond the BBox
+        if (goRight && p.x > pathRect.x + pathRect.width) {
+          shortcut = true;
+        }
+
+        // Line is beyond the bottom
+        if (p.y > pathRect.y + pathRect.height) {
+          shortcut = true;
         }
       }
+
 
       // If we've used up this line, move on to the next one!
       if (linePos > max || shortcut) {
@@ -348,8 +367,8 @@ cncserver.paths = {
           y: pathRect.y + lineSpace.y - fillOffsetPadding + topOffset
         };
 
-        if (fillOrigin.y > pathRect.y + pathRect.height + bottomLimit ||
-            fillOrigin.x > pathRect.x + pathRect.width + leftOffset ) {
+        if (fillOrigin.y > pathRect.y + pathRect.height + bottomLimit + 24 ||
+            fillOrigin.x > pathRect.x + pathRect.width - leftOffset + 24 ) {
           done = true;
         } else {
           // Set new position of fill line, and reset counter
@@ -422,6 +441,8 @@ cncserver.paths = {
         }
         setTimeout(runNextFill, 0);
       } else { // DONE!
+        // Reset position of fill line (avoids odd prefill lines)
+        $fill.attr('transform', 'translate(0,0)');
         if (callback) callback();
       }
     }
@@ -448,8 +469,8 @@ cncserver.paths = {
     var points = []; // Final points to run TSP on
 
     var center = {
-      x: pathRect.x + (pathRect.width / 2),
-      y: pathRect.y + (pathRect.height / 2)
+      x: pathRect.x + (pathRect.width / 2) + 48,
+      y: pathRect.y + (pathRect.height / 2) + 48
     }
 
     // Center the fill path
@@ -459,7 +480,7 @@ cncserver.paths = {
     $fill.getPoint = function(distance){ // Handy helper function for gPAL
       var p = this[0].getPointAtLength(distance).matrixTransform(this.transformMatrix);
       // Add 48 to each side for 96dpi 1/2in offset
-      return {x: p.x+48, y: p.y+48};
+      return {x: p.x-48, y: p.y-48};
     };
 
     var fillCount = 0;
