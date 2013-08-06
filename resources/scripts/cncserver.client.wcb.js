@@ -181,8 +181,6 @@ cncserver.wcb = {
       }
     });
 
-    var jobIndex = 0;
-    doNextJob();
 
     cncserver.utils.status('Auto Paint: ' +
       $('path', context).length + ' paths, ' +
@@ -190,6 +188,9 @@ cncserver.wcb = {
 
     // Nothing manages color during automated runs, so you have to hang on to it
     var runColor = cncserver.state.color;
+
+    var jobIndex = 0;
+    doNextJob();
 
     function doNextJob() {
       var job = finalJobs[jobIndex];
