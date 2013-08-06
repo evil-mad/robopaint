@@ -41,9 +41,15 @@
     <nav>
       <button id="draw" title="Stroke the selected path with an outline">Stroke Path</button>
       <button id="fill" title="Fill the selected path with a given fill style">Fill Path</button>
-      <div id="parkafter-option">
+
+      <div class="check-control">
         <input type="checkbox" checked id="parkafter"/>
         <label for="parkafter">Park after fill/stroke</label>
+      </div>
+
+      <div class="check-control">
+        <input type="checkbox" checked id="checkvisibility"/>
+        <label for="checkvisibility" title="If unchecked, tracing will rely on path shape only, ignoring path overlap.">Check stroke visibility</label>
       </div>
 
       <br/>

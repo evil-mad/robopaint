@@ -44,8 +44,8 @@ cncserver.paths = {
     var lastPoint = {};
     var p = {};
     var delta = {};
-    var lastPathSeg = 1;
-    var cPathSeg = 1;
+    var lastPathSeg = 0;
+    var cPathSeg = 0;
     var subPathCount = 0;
 
     runNextPoint();
@@ -64,7 +64,12 @@ cncserver.paths = {
         distance+= parseInt(options.strokeprecision);
 
         // If the path is still visible here
-        if (cncserver.paths.getPointPathCollide(p) == $path[0]){
+        // Assume as always visible if we're not actually checking
+        var isVisible = true;
+        if (cncserver.config.checkVisibility) {
+          isVisible = cncserver.paths.getPointPathCollide(p) == $path[0]
+        }
+        if (isVisible){
 
           if (cPathSeg != lastPathSeg) {
             // If our last segment jumped, check if it's a move to path

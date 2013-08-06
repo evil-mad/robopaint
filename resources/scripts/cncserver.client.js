@@ -28,7 +28,8 @@ var cncserver = {
   statedata: window.parent.statedata,
   config: {
     colors: [],
-    colorsYUV: []
+    colorsYUV: [],
+    checkVisibility: true
   }
 };
 
@@ -310,6 +311,12 @@ $(function() {
       if ($path.length) $path.toggleClass('selected');
 
     });
+
+    // Checkvisibility Checkbox
+    $('#checkvisibility').change(function(){
+      cncserver.config.checkVisibility = $(this).is(':checked');
+    });
+
 
     // Bind to fill controls
     $('#fill').click(function(){
