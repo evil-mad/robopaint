@@ -80,13 +80,13 @@ $(function() {
     }
 
     // Convert elements that don't play well with robopaint's handlers
-    $('circle, ellipse, rect','#svgcontent').each(function(){
-      if (this.tagName == "rect"){
-        // Don't convert non-rounded corner rectangles
-        if (!$(this).attr('rx')) return;
-      }
-
+    $('circle, ellipse, rect', '#svgcontent').each(function(){
       methodDraw.canvas.convertToPath(this);
+    });
+
+    // Reset orientation so paths have a more accessible BBox
+    $('path','#svgcontent').each(function(){
+      methodDraw.canvas.pathActions.resetOrientation(this)
     });
 
     window.localStorage.setItem('svgedit-default', methodDraw.canvas.svgCanvasToString());
