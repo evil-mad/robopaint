@@ -73,15 +73,18 @@ cncserver.paths = {
 
           if (cPathSeg != lastPathSeg) {
             // If our last segment jumped, check if it's a move to path
-            // TODO: Support differences other than previous
             if (cPathSeg > lastPathSeg+1) {
-              var seg = $path[0].pathSegList.getItem(cPathSeg-1);
-              if (seg.pathSegTypeAsLetter.toLowerCase() == "m") {
-                subPathCount++;
-                run('status', 'Drawing subpath #' + subPathCount);
-                run('up');
-                run('move', p);
-                run('down');
+              // Move through all segments from previous, to last
+              for(var checkSeg = cPathSeg-1; checkSeg > lastPathSeg; checkSeg--) {
+                var seg = $path[0].pathSegList.getItem(checkSeg);
+                if (seg.pathSegTypeAsLetter.toLowerCase() == "m") {
+                  subPathCount++;
+                  run('status', 'Drawing subpath #' + subPathCount);
+                  run('up');
+                  run('move', p);
+                  run('down');
+                  break;
+                }
               }
             } else {
               run('move', p);
