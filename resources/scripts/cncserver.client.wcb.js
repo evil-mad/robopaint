@@ -204,7 +204,7 @@ cncserver.wcb = {
 
         cncserver.utils.addShortcuts(job.p);
 
-        // Clear all selections
+        // Clear all selections at start
         $('path.selected', context).removeClass('selected');
 
         if (job.t == 'stroke'){
@@ -212,6 +212,7 @@ cncserver.wcb = {
           run([['status', 'Drawing path ' + job.p[0].id + ' stroke...']]);
           cncserver.paths.runOutline(job.p, function(){
             jobIndex++;
+            job.p.removeClass('selected'); // Deselect now that we're done
             doNextJob();
           })
         } else if (job.t == 'fill') {
