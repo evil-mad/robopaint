@@ -670,3 +670,18 @@ body.home #settings {
 #settings #maxpaintdistance {
   width: 35%;
 }
+
+/* qTip extra styles */
+.qtip-tip {
+  z-index: 1;
+}
+
+.qtip-wrapper {
+  border-radius: 9px;
+  box-shadow: 5px 5px 18px rgba(0,0,0,0.8)
+}
+
+.qtip-wrapper .qtip-content {
+  color: black !important;
+  font-size: 1.2em;
+}

@@ -40,6 +40,9 @@ function initialize() {
   // Load the quickload list
   initQuickload();
 
+  // Bind the tooltips
+  initToolTips();
+
   // Add the secondary page iFrame to the page
   $subwindow = $('<iframe>').attr({
     height: $(window).height() - barHeight,
@@ -133,6 +136,51 @@ function checkModeClose(callback, isGlobal, destination) {
   } else {
     callback();
   }
+}
+
+// Bind the toolbar button tool tips
+function initToolTips() {
+
+  function beforeQtip(){
+    // Move position to be more centered for outer elements
+    if (this.id <= 1) {
+      this.elements.wrapper.parent().css('margin-left', -30);
+    }
+
+    if (this.getPosition().left + this.getDimensions().width + 250 > $(window).width()) {
+      this.elements.wrapper.parent().css('margin-left', 30);
+    }
+
+  }
+
+  $('#bar a, nav a').qtip({
+    style: {
+      border: {
+        width: 5,
+        radius: 10
+      },
+      padding: 10,
+      tip: true,
+      textAlign: 'center',
+      name: 'blue'
+    },
+    position: {
+      corner: {
+        target: 'bottomMiddle',
+        tooltip: 'topMiddle'
+      },
+      adjust: {
+        screen: true,
+        y: 6,
+        x: -5
+      }
+    },
+    api: {
+      beforeShow: beforeQtip
+    }
+  }).click(function(){
+    $(this).qtip("hide");
+  });
 }
 
 // Initialize and bind Quickload file list
