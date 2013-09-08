@@ -205,6 +205,7 @@ function initQuickload() {
     if ($loadList.is(':visible')) {
       $loadList.fadeOut('slow');
     } else {
+      $loadList.css('left', $load.offset().left + $load.width());
       $loadList.fadeIn('fast');
     }
     return false;

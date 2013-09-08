@@ -389,10 +389,9 @@ fieldset#control {
   background-color: #FFFFFF;
   border: 1px solid #999999;
   border-radius: 0 15px 15px 15px;
-  left: 215px;
   position: absolute;
   top: -16px;
-  z-index: -1;
+  z-index: 1;
   padding: 0;
   list-style: none;
   overflow: hidden;
