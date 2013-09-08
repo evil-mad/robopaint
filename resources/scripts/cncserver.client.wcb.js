@@ -60,10 +60,22 @@ cncserver.wcb = {
     });
   },
 
+  // Get the name of paint/water/media on the brush
+  getMediaName: function(toolName) {
+    if (typeof toolName == 'undefined') toolName = cncserver.state.color;
+
+    if (toolName.indexOf('water') !== -1) {
+      return "Water";
+    } else {
+      var colors = cncserver.statedata.colorsets[cncserver.settings.colorset].colors;
+      return colors[toolName.substr(-1, 1)];
+    }
+  },
+
   // Wet the brush and get more of selected paint color, then return to
   // point given and trigger callback
   getMorePaint: function(point, callback) {
-    var name = cncserver.utils.getMediaName().toLowerCase();
+    var name = cncserver.wcb.getMediaName().toLowerCase();
 
     cncserver.utils.status('Going to get some more ' + name + '...')
     cncserver.api.tools.change('water0dip', function(d){
@@ -231,6 +243,70 @@ cncserver.wcb = {
         run(['wash','park']);
         // Done!
       }
+    }
+  },
+
+  // Simulation draw of current buffer
+  simulateBuffer: function() {
+    var c = $('#sim')[0];
+    var ctx = c.getContext("2d");
+    // Clear sim canvas
+    c.width = c.width;
+
+    // Set stroke color
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+    ctx.lineWidth = 4;
+
+    var doDraw = false;
+    console.log('Start draw, buffer:', cncserver.state.buffer.length);
+
+    // Move through every item in the command buffer
+    for (var i in cncserver.state.buffer) {
+      var next = cncserver.state.buffer[i];
+
+      // Ensure it's an array
+      if (typeof next == "string"){
+        next = [next];
+      }
+
+      // What's the command?
+      switch (next[0]) {
+        case 'down':
+          doDraw = false;
+          //ctx.beginPath();
+          break;
+        case 'up':
+          //ctx.closePath();
+          doDraw = true;
+          break;
+        case 'move':
+          // Add 48 to each side for 1/2in offset
+          var x = next[1].x + 48; //(next[1].x / cncserver.canvas.width) * c.width;
+          var y = next[1].y + 48; //(next[1].y / cncserver.canvas.height) * c.height;
+
+          if (doDraw) {
+            ctx.lineTo(x, y);
+          } else {
+            ctx.moveTo(x, y);
+          }
+
+          //ctx.lineTo(x, y);
+          break;
+      }
+    }
+    ctx.stroke();
+    $('#sim').show();
+    console.log('Simulation draw done!');
+
+  },
+
+  // Retrieve a fill path depending on config
+  getFillPath: function(options){
+    var ft = options.filltype;
+    if (ft == 'tsp') {
+      return $('#fill-spiral');
+    } else {
+      return $('#fill-' + ft);
     }
   }
 };
