@@ -1,3 +1,11 @@
+/**
+ * @file Holds all initially loaded and Node.js specific initialization code,
+ * central cncserver object to control low-level non-restful APIs, and general
+ * "top-level" UI initialization for settings.
+ *
+ * TODO: This should probably be broken up
+ */
+
 global.$ = $;
 
 var fs = require('fs');
