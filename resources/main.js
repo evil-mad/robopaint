@@ -313,11 +313,21 @@ $(function() {
 
 // Fetches all watercolor sets available from the colorsets dir
 function getColorsets() {
-  var sets = JSON.parse(fs.readFileSync('resources/colorsets/colorsets.json'));
+  var colorsetDir = 'resources/colorsets/';
+  var files = fs.readdirSync(colorsetDir);
+  var sets = [];
+
+  // List all files, only add directories
+  for(var i in files) {
+    if (fs.statSync(colorsetDir + files[i]).isDirectory()) {
+      sets.push(files[i]);
+    }
+  }
+
   statedata.colorsets = {'ALL': sets};
 
   $.each(sets, function(i, set){
-    var setDir = 'resources/colorsets/' + set + '/';
+    var setDir = colorsetDir + set + '/';
     var c = JSON.parse(fs.readFileSync(setDir + set + '.json'));
 
     $('#colorset').append(
@@ -327,10 +337,27 @@ function getColorsets() {
         .prop('selected', set == settings.colorset)
     );
 
+    // Process Colors to avoid re-processing later
+    var colorsOut = [];
+    for (var i in c.colors){
+      var name = Object.keys(c.colors[i])[0];
+      var h = c.colors[i][name];
+      var r = robopaint.utils.colorStringToArray(h);
+      colorsOut.push({
+        name: name,
+        color: {
+          HEX: h,
+          RGB: r,
+          HSL: robopaint.utils.rgbToHSL(r),
+          YUV: robopaint.utils.rgbToYUV(r)
+        }
+      });
+    }
+
     statedata.colorsets[set] = {
       name: c.name,
       baseClass: c.styles.baseClass,
-      colors: c.colors,
+      colors: colorsOut,
       stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src})
     };
   });

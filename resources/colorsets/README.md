@@ -2,7 +2,7 @@
 Everything you need to know to make your own!
 
 ## First Steps
-So you've got a new set of watercolor paint that CNC Server doesn't know about?
+So you've got a new set of watercolor paint that RoboPaint doesn't know about?
 First you've got to paint a swatch!
 
 All colors shown in the application aren't meant to be the colors as they look
@@ -15,7 +15,7 @@ and make a swatch of all the colors, with each brush stroke about 2 inches long.
 Once that's dried, you're ready for the next step.
 
 ## File Structure
-CNC Server for WaterColorBot colorsets consist of a minimum of two files per
+RoboPaint for WaterColorBot colorsets consist of a minimum of two files per
 colorset with a given machine name (EG "my_colorset"), in a folder with that
 same name. The whole structure might look like this, inside of this
 `resources/colorsets/` folder:
@@ -27,7 +27,7 @@ same name. The whole structure might look like this, inside of this
 ```
 
 We recommend simply copying the [classic_crayola](classic_crayola) colorset that
-came with CNC server, and renaming the folder and the two files.
+came with RoboPaint, and renaming the folder and the two files.
 
 ## File Format: JSON
 The format for the JSON file is incredibly simple, even if you've never touched
@@ -43,14 +43,14 @@ dashes. EG:
     "baseClass": "my-colorset"
   },
   "colors": [
-    "Periwinkle",
-    "Puce",
-    "Purple",
-    "Pink",
-    "Pugnatious Pug",
-    "Pale Parnsip",
-    "Piquent Panda",
-    "Pumpkin"
+    {"Periwinkle": "#a3b4aa"},
+    {"Puce": "#bb39b9"},
+    {"Purple": "#abcdef"},
+    {"Pink": "#12ab34"},
+    {"Pugnatious Pug": "#34AB12"},
+    {"Pale Parnsip": "#694236"},
+    {"Piquent Panda": "#444"},
+    {"Pumpkin": "#aabbcc"}
   ]
 }
 ```
@@ -72,31 +72,13 @@ pick the colors with an eyedropper tool in a
 you'd like, even gradients, as long as the final css includes a hexadecimal
 `background-color` property for every `#color[number]` element in the css.
 
-## Adding it to the list
-Once you're done, add your folder/machine name to the
-[colorsets.json](colorsets.json) file, in the order that you want it to be
-displayed in the app. if we wanted it displayed last, our final colorsets.json
-file might look like this:
-
-```
-[
-  "crayola_classic",
-  "prang_glitter",
-  "my_colorset",
-]
-```
-
-Again, if you're ever making changes to a JSON file, be sure and run your final
-text through [JSON Lint](http://jsonlint.org) to make sure you're not making
-any silly mistakes.
-
 ## You're done!
-Just reload the main page and your new colorset should show up, selectable
-immediately.
+Just reload the program and your new colorset should show up, selectable
+immediately in the Settings -> installed paint set dropdown.
 
 Wasn't that easy? Here's a pat on the back and a cocolate chip cookie. Good job!
 :cookie:
 
-If you'd like to get ***your*** colorset back into the WaterColorBot project,
+If you'd like to get ***your*** colorset back into the RoboPaint project,
 just follow the instructions for contributing back with a pull request at the
-bottom of [the main project readme](https://github.com/techninja/watercolorbot/blob/master/README.md).
+bottom of [the main project readme](https://github.com/techninja/robopaint/blob/master/README.md).

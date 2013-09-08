@@ -5,13 +5,13 @@
     "baseClass": "prang-glitter"
   },
   "colors": [
-    "Ruby",
-    "Tangerine",
-    "Canary",
-    "Emerald",
-    "Sapphire",
-    "Lilac",
-    "Silver",
-    "Gold"
+    {"Ruby": "#f0846c"},
+    {"Tangerine": "#efa038"},
+    {"Canary": "#dede5d"},
+    {"Emerald": "#2ca440"},
+    {"Sapphire": "#32c0c4"},
+    {"Lilac": "#cdb2d0"},
+    {"Silver": "#b1bcac"},
+    {"Gold": "#aba66d"}
   ]
 }
