@@ -1,5 +1,6 @@
 /**
- * @file Holds all CNC Server utility helper functions
+ * @file Holds all Utility helper functions, must not be linked to anything
+ * cncserver specific as ever function should be atomic (at least to this file)
  */
 
 /**
@@ -11,7 +12,7 @@
  * @param   array  color    The RGB color to be converted
  * @return  Array           The HSL representation
  */
-cncserver.utils = {
+robopaint.utils = {
   rgbToHSL: function (color){
     if (!color) return false;
 
@@ -112,14 +113,14 @@ cncserver.utils = {
 
   // Takes source color and matches it to closest array of colors from colorset
   // Source color input is a triplet array [r,g,b] or jQuery RGB string
-  closestColor: function(source, whiteLimit){
+  closestColor: function(source, whiteLimit, colors){
     if (typeof source == 'string'){
-      source = cncserver.utils.colorStringToArray(source);
+      source = utils.colorStringToArray(source);
     }
 
     // Assume false (white) if null
     if (source == null || isNaN(source[0])){
-      source = cncserver.utils.colorStringToArray('#FFFFFF');
+      source = utils.colorStringToArray('#FFFFFF');
     }
 
     // Value where Luminosity at or above will lock to White
@@ -128,18 +129,18 @@ cncserver.utils = {
     }
 
     // Return white if the luminosity is above the given threshold
-    if (cncserver.utils.rgbToHSL(source)[2] >= whiteLimit) {
+    if (utils.rgbToHSL(source)[2] >= whiteLimit) {
       //return cncserver.config.colors.length-1;
     }
 
     // Convert to YUV to better match human perception of colors
-    source = cncserver.utils.rgbToYUV(source);
+    source = utils.rgbToYUV(source);
 
     var lowestIndex = 0;
     var lowestValue = 1000; // High value start is replaced immediately below
     var distance = 0;
-    for (var i=0; i < cncserver.config.colors.length; i++){
-      var c = cncserver.config.colorsYUV[i];
+    for (var i=0; i < colors.length; i++){
+      var c = colors[i].color.YUV;
 
       // Color distance finder
       distance = Math.sqrt(
