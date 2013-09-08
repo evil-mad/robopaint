@@ -19,10 +19,10 @@ cncserver.cmd = {
     if (!cncserver.state.buffer.length) {
       cncserver.state.process.busy = false;
       cncserver.state.process.max = 0;
-      cncserver.utils.progress({val: 0, max: 0});
+      robopaint.wcb.progress({val: 0, max: 0});
     } else {
       // Update the progress bar
-      cncserver.utils.progress({
+      robopaint.wcb.progress({
         val: cncserver.state.process.max - cncserver.state.buffer.length,
         max: cncserver.state.process.max
       });
@@ -82,7 +82,7 @@ cncserver.cmd = {
         cncserver.api.pen.down(cncserver.cmd.cb);
         break;
       case "status":
-        cncserver.utils.status(next[1], next[2]);
+        robopaint.wcb.status(next[1], next[2]);
         cncserver.cmd.cb(true);
         break;
       case "wash":

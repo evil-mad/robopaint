@@ -21,6 +21,8 @@ var appMode = 'home';
 var $subwindow = {}; // Placeholder for subwindow iframe
 var subWin = {}; // Placeholder for subwindow "window" object
 
+// Set the global scope object for any robopaint level details
+var robopaint = {};
 
 // Pull the list of available ports
 cncserver.getPorts(function(ports) {

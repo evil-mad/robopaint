@@ -1,8 +1,39 @@
 /**
- * @file Holds all CNC Server watercolorbot specific configuration
+ * @file Holds all Robopaint watercolorbot specific configuration and utility
+ * functions.
  */
 
 cncserver.wcb = {
+  // Set the current status message
+  status: function(msg, st) {
+
+    var $status = $('#statusmessage');
+    var classname = 'wait';
+
+    // String messages, just set em
+    if (typeof msg == "string") {
+      $status.html(msg);
+    } else if (Object.prototype.toString.call(msg) == "[object Array]") {
+      // If it's an array, flop the message based on the status var
+
+      // If there's not a second error message, default it.
+      if (msg.length == 1) msg.push('Connection Problem &#x2639;');
+
+      $status.html((st == false) ? msg[1] : msg[0]);
+    }
+
+    // If stat var is actually set
+    if (typeof st != 'undefined') {
+      if (typeof st == 'string') {
+        classname = st;
+      } else {
+        classname = (st == false) ? 'error' : 'success'
+      }
+
+    }
+
+    $status.attr('class', classname); // Reset class to only the set class
+  },
 
   // Move through every path element inside a given context
   // and match its stroke and fill color to a given colorset
@@ -17,7 +48,7 @@ cncserver.wcb = {
           // Find the closest color
           setColor = $(this).css('fill');
           $(this).data('oldColor', setColor);
-          i = cncserver.utils.closestColor(setColor);
+          i = robopaint.utils.closestColor(setColor, c);
           setColor = 'rgb(' + c[i].join(',') + ')';
         } else {
           // Recover the old color
@@ -33,7 +64,7 @@ cncserver.wcb = {
           // Find the closest color
           setColor = $(this).css('stroke');
           $(this).data('oldStrokeColor', setColor);
-          i = cncserver.utils.closestColor(setColor);
+          i = robopaint.utils.closestColor(setColor, cncserver.config.colors);
           setColor = 'rgb(' + c[i].join(',') + ')';
         } else {
           // Recover the old color
@@ -48,12 +79,12 @@ cncserver.wcb = {
 
   // Grouping function to do a full wash of the brush
   fullWash: function(callback) {
-    cncserver.utils.status('Doing a full brush wash...');
+    cncserver.wcb.status('Doing a full brush wash...');
     cncserver.api.tools.change('water0', function(){
       cncserver.api.tools.change('water1', function(){
         cncserver.api.tools.change('water2', function(d){
           cncserver.api.pen.resetCounter();
-          cncserver.utils.status(['Brush should be clean'], d);
+          cncserver.wcb.status(['Brush should be clean'], d);
           if (callback) callback(d);
         });
       });
@@ -77,13 +108,13 @@ cncserver.wcb = {
   getMorePaint: function(point, callback) {
     var name = cncserver.wcb.getMediaName().toLowerCase();
 
-    cncserver.utils.status('Going to get some more ' + name + '...')
+    cncserver.wcb.status('Going to get some more ' + name + '...')
     cncserver.api.tools.change('water0dip', function(d){
       cncserver.api.tools.change(cncserver.state.color, function(d){
         cncserver.api.pen.resetCounter();
         cncserver.api.pen.up(function(d){
           cncserver.api.pen.move(point, function(d) {
-            cncserver.utils.status(['Continuing to paint with ' + name]);
+            cncserver.wcb.status(['Continuing to paint with ' + name]);
             if (callback) callback(d);
           });
         });
@@ -98,7 +129,7 @@ cncserver.wcb = {
     // Use JS internal sort by slapping a zero padded value into an array
     $.each(cncserver.config.colorsYUV, function(index, color){
       if (index != 8) { // Ignore white
-        colorsort.push(cncserver.utils.pad(color[0], 3) + '|' + 'color' + index);
+        colorsort.push(robopaint.utils.pad(color[0], 3) + '|' + 'color' + index);
       }
     });
     colorsort.sort().reverse();
@@ -122,8 +153,9 @@ cncserver.wcb = {
 
     // Holds all jobs keyed by color
     var jobs = {};
-    var colorMatch = cncserver.utils.closestColor;
-    var convert = cncserver.utils.colorStringToArray;
+    var c = cncserver.config.colors;
+    var colorMatch = robopaint.utils.closestColor;
+    var convert = robopaint.utils.colorStringToArray;
 
     $('path', context).each(function(){
       var $p = $(this);
@@ -131,8 +163,8 @@ cncserver.wcb = {
       var fill = convert($p.css('fill'));
 
       // Occasionally, these come back undefined
-      stroke = (stroke == null) ? false : 'color' + colorMatch(stroke);
-      fill = (fill == null) ? false : 'color' + colorMatch(fill);
+      stroke = (stroke == null) ? false : 'color' + colorMatch(stroke, c);
+      fill = (fill == null) ? false : 'color' + colorMatch(fill, c);
 
       // Account for fill/stroke opacity
       var op = $p.css('fill-opacity');
@@ -194,7 +226,7 @@ cncserver.wcb = {
     });
 
 
-    cncserver.utils.status('Auto Paint: ' +
+    cncserver.wcb.status('Auto Paint: ' +
       $('path', context).length + ' paths, ' +
       finalJobs.length + ' jobs');
 
@@ -215,7 +247,7 @@ cncserver.wcb = {
           runColor = job.c;
         }
 
-        cncserver.utils.addShortcuts(job.p);
+        robopaint.utils.addShortcuts(job.p);
 
         // Clear all selections at start
         $('path.selected', context).removeClass('selected');
@@ -307,6 +339,17 @@ cncserver.wcb = {
       return $('#fill-spiral');
     } else {
       return $('#fill-' + ft);
+    }
+  },
+
+  // Easy set for progress!
+  progress: function(options){
+    if (typeof options.val !== "undefined") {
+      $('progress').attr('value', options.val);
+    }
+
+    if (typeof options.max !== "undefined") {
+      $('progress').attr('max', options.max);
     }
   }
 };

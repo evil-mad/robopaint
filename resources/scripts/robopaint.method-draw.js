@@ -244,7 +244,7 @@ function cacheColors() {
 
   $('#colors .color').each(function(){
     cncserver.config.colors.push(
-      cncserver.utils.colorStringToArray($(this).css('background-color'))
+      robopaint.utils.colorStringToArray($(this).css('background-color'))
     );
   });
   // Also add white paper for near-white color detection
@@ -252,7 +252,7 @@ function cacheColors() {
 
   // Add cached YUV conversions for visual color matching
   $.each(cncserver.config.colors, function(i, color){
-    cncserver.config.colorsYUV.push(cncserver.utils.rgbToYUV(color));
+    cncserver.config.colorsYUV.push(robopaint.utils.rgbToYUV(color));
   });
 }
 
@@ -261,7 +261,7 @@ function bindColorSelect() {
   $('#colors .color, #colors .static div').click(function(e){
     var isStroke = $('#tool_stroke').hasClass('active');
     var picker = isStroke ? "stroke" : "fill";
-    var color = cncserver.utils.rgbToHex($(this).css('background-color'));
+    var color = robopaint.utils.rgbToHex($(this).css('background-color'));
     var paint = null;
     var noUndo = false;
 
