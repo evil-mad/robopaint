@@ -153,7 +153,7 @@ function initToolTips() {
 
   }
 
-  $('#bar a, nav a').qtip({
+  $('#bar a.tipped, nav a').qtip({
     style: {
       border: {
         width: 5,
