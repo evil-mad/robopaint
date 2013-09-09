@@ -147,7 +147,7 @@ cncserver.paths = {
     var run = cncserver.cmd.run;
 
     // Default options object to a copy of the full global settings object
-    if (typeof options == 'undefined') options = jQuery.extend({}, cncserver.settings);
+    if (typeof options == 'undefined') options = jQuery.extend({}, robopaint.settings);
 
     // Hide sim window
     $('#sim').hide();
@@ -715,7 +715,7 @@ cncserver.paths = {
   runFill: function($path, callback, options) {
 
     // Default options object to a copy of the full global settings object
-    if (typeof options == 'undefined') options = jQuery.extend({}, cncserver.settings);
+    if (typeof options == 'undefined') options = jQuery.extend({}, robopaint.settings);
 
     // runFill common stuff for code reuse ==================================
     $('#sim').hide(); // Hide sim window

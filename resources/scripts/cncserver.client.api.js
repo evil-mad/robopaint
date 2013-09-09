@@ -178,7 +178,7 @@ cncserver.api = {
     change: function(toolName, callback){
       // Disallow tool changes for different pen modes (no water or paint)
       // TODO: This is pretty hacky and should probably be fixed elsewhere
-      switch(parseInt(cncserver.settings.penmode)) {
+      switch(parseInt(robopaint.settings.penmode)) {
         case 1: // Dissallow paint
           if (toolName.indexOf('color') !== -1) {
             callback(false); return;

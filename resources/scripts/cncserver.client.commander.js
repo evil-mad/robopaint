@@ -30,17 +30,17 @@ cncserver.cmd = {
     if (!cncserver.state.buffer.length) {
       cncserver.state.process.busy = false;
       cncserver.state.process.max = 0;
-      cncserver.commander.progress({val: 0, max: 0});
+      cncserver.cmd.progress({val: 0, max: 0});
     } else {
       // Update the progress bar
-      cncserver.commander.progress({
+      cncserver.cmd.progress({
         val: cncserver.state.process.max - cncserver.state.buffer.length,
         max: cncserver.state.process.max
       });
 
       // Check for paint refill
       if (!cncserver.state.process.paused) {
-        if (cncserver.state.pen.distanceCounter > cncserver.settings.maxpaintdistance) {
+        if (cncserver.state.pen.distanceCounter > robopaint.settings.maxpaintdistance) {
           var returnPoint = returnPoints[returnPoints.length-1] ? returnPoints[returnPoints.length-1] : lastPoint;
           cncserver.wcb.getMorePaint(returnPoint, function(){
             cncserver.api.pen.down(cncserver.cmd.executeNext);
@@ -93,7 +93,7 @@ cncserver.cmd = {
         cncserver.api.pen.down(cncserver.cmd.cb);
         break;
       case "status":
-        robopaint.wcb.status(next[1], next[2]);
+        cncserver.wcb.status(next[1], next[2]);
         cncserver.cmd.cb(true);
         break;
       case "wash":

@@ -56,8 +56,7 @@ cncserver.wcb = {
     if (toolName.indexOf('water') !== -1) {
       return "Water";
     } else {
-      var colors = cncserver.statedata.colorsets[cncserver.settings.colorset].colors;
-      return colors[toolName.substr(-1, 1)];
+      return cncserver.config.colors[toolName.substr(-1, 1)].name;
     }
   },
 
@@ -85,9 +84,9 @@ cncserver.wcb = {
     var colorsort = [];
 
     // Use JS internal sort by slapping a zero padded value into an array
-    $.each(cncserver.config.colorsYUV, function(index, color){
+    $.each(cncserver.config.colors, function(index, color){
       if (index != 8) { // Ignore white
-        colorsort.push(robopaint.utils.pad(color[0], 3) + '|' + 'color' + index);
+        colorsort.push(robopaint.utils.pad(color.color.YUV[0], 3) + '|' + 'color' + index);
       }
     });
     colorsort.sort().reverse();

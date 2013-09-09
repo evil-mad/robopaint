@@ -337,6 +337,9 @@ function getColorsets() {
         .prop('selected', set == settings.colorset)
     );
 
+    // Add pure white to the end of the color set for auto-color
+    c.colors.push({'White': '#FFFFFF'});
+
     // Process Colors to avoid re-processing later
     var colorsOut = [];
     for (var i in c.colors){
