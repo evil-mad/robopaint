@@ -3,16 +3,16 @@
  * cncserver specific as ever function should be atomic (at least to this file)
  */
 
-/**
- * Converts an RGB color value to HSL. Conversion formula
- * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
- * Assumes r, g, and b are contained in the set [0, 255] and
- * returns h, s, and l in the set [0, 1].
- *
- * @param   array  color    The RGB color to be converted
- * @return  Array           The HSL representation
- */
 robopaint.utils = {
+  /**
+  * Converts an RGB color value to HSL. Conversion formula
+  * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+  * Assumes r, g, and b are contained in the set [0, 255] and
+  * returns h, s, and l in the set [0, 1].
+  *
+  * @param   array  color    The RGB color to be converted
+  * @return  Array           The HSL representation
+  */
   rgbToHSL: function (color){
     if (!color) return false;
 
@@ -40,6 +40,12 @@ robopaint.utils = {
     return [h, s, l];
   },
 
+  /**
+  * Converts an RGB color value to YUV.
+  *
+  * @param   array  color    The RGB color array to be converted
+  * @return  array           The YUV representation
+  */
   rgbToYUV: function(color) {
     if (!color) return false;
 
@@ -111,20 +117,20 @@ robopaint.utils = {
 
   },
 
-  // Takes source color and matches it to closest array of colors from colorset
+  // Takes source color and matches it to closest array of colors from "colors"
   // Source color input is a triplet array [r,g,b] or jQuery RGB string
   closestColor: function(source, colors){
     if (typeof source == 'string'){
-      source = utils.colorStringToArray(source);
+      source = robopaint.utils.colorStringToArray(source);
     }
 
     // Assume false (white) if null
     if (source == null || isNaN(source[0])){
-      source = utils.colorStringToArray('#FFFFFF');
+      source = robopaint.utils.colorStringToArray('#FFFFFF');
     }
 
     // Convert to YUV to better match human perception of colors
-    source = utils.rgbToYUV(source);
+    source = robopaint.utils.rgbToYUV(source);
 
     var lowestIndex = 0;
     var lowestValue = 1000; // High value start is replaced immediately below
@@ -175,5 +181,50 @@ robopaint.utils = {
     var xdiff = Math.abs(p1[0]-p2[0]);
     var ydiff = Math.abs(p1[1]-p2[1]);
     return Math.sqrt(xdiff*xdiff + ydiff*ydiff);
+  },
+
+  // Move through every path element inside a given context
+  // and match its stroke and fill color to a given colorset
+  autoColor: function(context, recover, colors, recolorTypes){
+    if (!recolorTypes){
+      recolorTypes = "path";
+    }
+
+    $(recolorTypes, context).each(function(){
+      var i = 0;
+      var setColor = "";
+
+      if ($(this).css('fill') !== "none") {
+        if (!recover) {
+          // Find the closest color
+          setColor = $(this).css('fill');
+          $(this).data('oldColor', setColor);
+          i = robopaint.utils.closestColor(setColor, colors);
+          setColor = 'rgb(' + colors[i].color.RGB.join(',') + ')';
+        } else {
+          // Recover the old color
+          setColor = $(this).data('oldColor');
+        }
+
+        // Set the new color!
+        $(this).css('fill', setColor)
+      }
+
+      if ($(this).css('stroke') !== "none") {
+        if (!recover) {
+          // Find the closest color
+          setColor = $(this).css('stroke');
+          $(this).data('oldStrokeColor', setColor);
+          i = robopaint.utils.closestColor(setColor, colors);
+          setColor = 'rgb(' + colors[i].color.RGB.join(',') + ')';
+        } else {
+          // Recover the old color
+          setColor = $(this).data('oldStrokeColor');
+        }
+
+        // Set the new color!
+        $(this).css('stroke', setColor)
+      }
+    });
   }
 };

@@ -35,48 +35,6 @@ cncserver.wcb = {
     $status.attr('class', classname); // Reset class to only the set class
   },
 
-  // Move through every path element inside a given context
-  // and match its stroke and fill color to a given colorset
-  autoColor: function(context, recover){
-    $('path', context).each(function(){
-      var i = 0;
-      var c = cncserver.config.colors;
-      var setColor = "";
-
-      if ($(this).css('fill') !== "none") {
-        if (!recover) {
-          // Find the closest color
-          setColor = $(this).css('fill');
-          $(this).data('oldColor', setColor);
-          i = robopaint.utils.closestColor(setColor, c);
-          setColor = 'rgb(' + c[i].join(',') + ')';
-        } else {
-          // Recover the old color
-          setColor = $(this).data('oldColor');
-        }
-
-        // Set the new color!
-        $(this).css('fill', setColor)
-      }
-
-      if ($(this).css('stroke') !== "none") {
-        if (!recover) {
-          // Find the closest color
-          setColor = $(this).css('stroke');
-          $(this).data('oldStrokeColor', setColor);
-          i = robopaint.utils.closestColor(setColor, cncserver.config.colors);
-          setColor = 'rgb(' + c[i].join(',') + ')';
-        } else {
-          // Recover the old color
-          setColor = $(this).data('oldStrokeColor');
-        }
-
-        // Set the new color!
-        $(this).css('stroke', setColor)
-      }
-    });
-  },
-
   // Grouping function to do a full wash of the brush
   fullWash: function(callback) {
     cncserver.wcb.status('Doing a full brush wash...');
@@ -149,7 +107,7 @@ cncserver.wcb = {
     $('path.selected', context).removeClass('selected');
 
     // Make sure the colors are ready
-    $('#auto-color:not(.undo)').click();
+    robopaint.utils.autoColor(context, false, cncserver.config.colors);
 
     // Holds all jobs keyed by color
     var jobs = {};
