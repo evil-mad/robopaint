@@ -44,6 +44,10 @@ body.print {
   background-color: #E3BC83;
 }
 
+body.print-manual {
+  background-image:url('images/seamless-wood_blue.jpg');
+}
+
 img.logo {
   margin-left: -100px;
   height: 37px;
