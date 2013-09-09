@@ -37,16 +37,24 @@ cncserver.wcb = {
 
   // Grouping function to do a full wash of the brush
   fullWash: function(callback) {
-    cncserver.wcb.status('Doing a full brush wash...');
-    cncserver.api.tools.change('water0', function(){
-      cncserver.api.tools.change('water1', function(){
-        cncserver.api.tools.change('water2', function(d){
-          cncserver.api.pen.resetCounter();
-          cncserver.wcb.status(['Brush should be clean'], d);
-          if (callback) callback(d);
+    switch(parseInt(robopaint.settings.penmode)) {
+      case 3:
+      case 2: // Dissallow water
+        cncserver.wcb.status('Full wash command ignored for draw mode ' + robopaint.settings.penmode);
+        if (callback) callback(true);
+        break;
+      default:
+        cncserver.wcb.status('Doing a full brush wash...');
+        cncserver.api.tools.change('water0', function(){
+          cncserver.api.tools.change('water1', function(){
+            cncserver.api.tools.change('water2', function(d){
+              cncserver.api.pen.resetCounter();
+              cncserver.wcb.status(['Brush should be clean'], d);
+              if (callback) callback(d);
+            });
+          });
         });
-      });
-    });
+    }
   },
 
   // Get the name of paint/water/media on the brush
@@ -60,23 +68,90 @@ cncserver.wcb = {
     }
   },
 
+  // Wrapper for toolchange to manage pen mode logic
+  setMedia: function(toolName, callback){
+    var name = cncserver.wcb.getMediaName(toolName).toLowerCase();
+    var mode = parseInt(robopaint.settings.penmode);
+
+    // Water change
+    if (name == "water") {
+      switch(mode) {
+        case 3: // Dissallow all
+        case 2: // Dissallow water
+          cncserver.wcb.status('Water ignored for draw mode ' + mode);
+          if (callback) callback(true);
+          return;
+      }
+    } else { // Color Change
+      switch(mode) {
+        case 3: // Dissallow all
+        case 1: // Dissallow paint
+          cncserver.wcb.status('Paint ignored for draw mode ' + mode);
+          if (callback) callback(true);
+          return;
+      }
+    }
+
+    // If we've gotten this far, we can make the change!
+
+    cncserver.wcb.status('Putting some ' + name + ' on the brush...');
+    cncserver.api.tools.change(toolName, function(d){
+      cncserver.wcb.status(['There is now ' + name + ' on the brush'], d);
+      cncserver.api.pen.resetCounter();
+      if (callback) callback(d);
+    });
+
+  },
+
   // Wet the brush and get more of selected paint color, then return to
   // point given and trigger callback
   getMorePaint: function(point, callback) {
     var name = cncserver.wcb.getMediaName().toLowerCase();
 
-    cncserver.wcb.status('Going to get some more ' + name + '...')
-    cncserver.api.tools.change('water0dip', function(d){
-      cncserver.api.tools.change(cncserver.state.color, function(d){
-        cncserver.api.pen.resetCounter();
-        cncserver.api.pen.up(function(d){
-          cncserver.api.pen.move(point, function(d) {
-            cncserver.wcb.status(['Continuing to paint with ' + name]);
-            if (callback) callback(d);
+    // Reset the counter for every mode on getMorePaint
+    cncserver.api.pen.resetCounter();
+
+    // Change what happens here depending on penmode
+    switch(parseInt(robopaint.settings.penmode)) {
+      case 1: // Dissallow paint
+        cncserver.wcb.status('Going to get some more water...')
+        cncserver.api.tools.change("water0", function(d){
+          cncserver.api.pen.up(function(d){
+            cncserver.api.pen.move(point, function(d) {
+              cncserver.wcb.status(['Continuing to paint with ' + name]);
+              if (callback) callback(d);
+            });
           });
         });
-      });
-    });
+        break;
+      case 2: // Dissallow water
+        cncserver.wcb.status('Going to get some more ' + name + ', no water...')
+        cncserver.api.tools.change(cncserver.state.color, function(d){
+          cncserver.api.pen.up(function(d){
+            cncserver.api.pen.move(point, function(d) {
+              cncserver.wcb.status(['Continuing to paint with ' + name]);
+              if (callback) callback(d);
+            });
+          });
+        });
+        break;
+      case 3: // Dissallow All
+        // Get paint ignored for draw mode 3
+        if (callback) callback(true);
+        break;
+      default:
+        cncserver.wcb.status('Going to get some more ' + name + '...')
+        cncserver.api.tools.change('water0dip', function(d){
+          cncserver.api.tools.change(cncserver.state.color, function(d){
+            cncserver.api.pen.up(function(d){
+              cncserver.api.pen.move(point, function(d) {
+                cncserver.wcb.status(['Continuing to paint with ' + name]);
+                if (callback) callback(d);
+              });
+            });
+          });
+        });
+    }
   },
 
   // Returns a list of the current colorset, sorted by luminosty, or Y value
@@ -229,7 +304,7 @@ cncserver.wcb = {
         }
       } else {
         if (callback) callback();
-        run(['wash','park']);
+        run(['wash','park', ['status', 'AutoPaint Complete!']]);
         // Done!
       }
     }

@@ -241,13 +241,8 @@ $(function() {
         return false;
       }
 
-      // Standard tool change...
-      var stuff = cncserver.wcb.getMediaName(this.id).toLowerCase();
-      cncserver.wcb.status('Putting some ' + stuff + ' on the brush...')
-      cncserver.api.tools.change(this.id, function(d){
-        cncserver.wcb.status(['There is now ' + stuff + ' on the brush'], d);
-        cncserver.api.pen.resetCounter();
-      });
+      // Manual media set
+      cncserver.wcb.setMedia(this.id);
 
       return false;
     });

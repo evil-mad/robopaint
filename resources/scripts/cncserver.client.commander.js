@@ -83,7 +83,7 @@ cncserver.cmd = {
         $('#tools .selected').removeClass('selected');
         $('#' + next[1]).addClass('selected');
 
-        cncserver.api.tools.change(next[1], cncserver.cmd.cb);
+        cncserver.wcb.setMedia(next[1], cncserver.cmd.cb);
         break;
       case "up":
         returnPoints = [];
