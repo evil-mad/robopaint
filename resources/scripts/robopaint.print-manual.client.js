@@ -137,6 +137,10 @@ $(function() {
         if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
         $('#draw').prop('disabled', false);
         cncserver.cmd.run([['status', 'Painting complete', true]]);
+        if (cncserver.config.canvasDebug) {
+          $('canvas#debug').show();
+        }
+
       });
     });
 
@@ -255,12 +259,12 @@ $(function() {
 
     // These value should be static, set originally from central canvas config
     var mainOffset = {
-      top: 20,
-      left: 0
+      top: 30,
+      left: 20
     };
 
     var toolScale = 1.3;
-    var toolRightMargin = 40;
+    var toolRightMargin = 5;
     var $tools = $('#tools');
     var controlLeftMargin = 60;
 
@@ -281,8 +285,8 @@ $(function() {
       .css('-webkit-transform', 'scale(' + cncserver.canvas.scale + ')');
 
     // TODO: Find out where these inconsistencies in size/position come from
-    cncserver.canvas.offset.left = (toolWidth + toolRightMargin - 1) * cncserver.canvas.scale;
-    cncserver.canvas.offset.top = mainOffset.top + (22 * cncserver.canvas.scale);
+    cncserver.canvas.offset.left = mainOffset.left + ((toolWidth + toolRightMargin) * cncserver.canvas.scale);
+    cncserver.canvas.offset.top = mainOffset.top;
   }
 
 });

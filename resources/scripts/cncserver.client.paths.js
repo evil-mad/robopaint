@@ -7,10 +7,21 @@ cncserver.paths = {
   // Will NOT work if point is outside visible screen range!
   // TODO: maybe this can be replaced by polygonal collision detection? :P
   getPointPathCollide: function(point) {
-    return document.elementFromPoint( // Add 48 to each side for 96dpi 1/2in offset
-      ((point.x+48) * cncserver.canvas.scale) + cncserver.canvas.offset.left,
-      ((point.y+48) * cncserver.canvas.scale) + cncserver.canvas.offset.top
-    );
+
+    // Add 48 to each side for 96dpi 1/2in offset
+    var x = ((point.x+48) * cncserver.canvas.scale) + cncserver.canvas.offset.left;
+    var y = ((point.y+48) * cncserver.canvas.scale) + cncserver.canvas.offset.top;
+
+    // Debug for positioning canvas offset (damn tricky without this)
+    if (cncserver.config.canvasDebug) {
+      var ctx = $('canvas#debug')[0].getContext("2d");
+      ctx.strokeStyle = "rgba(255, 0, 0, 0.8)";
+      ctx.lineWidth = 2;
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+
+    return document.elementFromPoint(x, y);
   },
 
   // Convert all document svg elements capable into paths!

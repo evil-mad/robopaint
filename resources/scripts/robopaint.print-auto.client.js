@@ -30,7 +30,9 @@ $(function() {
       if (cncserver.state.buffer.length == 0) {
         $('#pause').removeClass('ready').attr('title', stateText.pause).text('Pause');
         cncserver.wcb.autoPaint($('#cncserversvg'), function(){
-          $('#pause').attr('class', 'ready').attr('title', stateText.ready).text('Start');
+          if (cncserver.config.canvasDebug) {
+            $('canvas#debug').show();
+          }
         });
       } else {
         // With something in the queue... we're either pausing, or resuming
@@ -130,9 +132,9 @@ $(function() {
     // These value should be static, set originally from central canvas config
     var mainOffset = {
       top: 30,
-      left: 40,
+      left: 20,
       bottom: 30,
-      right: $('#control').width() + 30
+      right: $('#control').width() + 50
     };
 
     // Calculate scale for both width and height...
@@ -148,8 +150,8 @@ $(function() {
       .css('-webkit-transform', 'scale(' + cncserver.canvas.scale + ')');
 
     // TODO: Find out where these inconsistencies in size/position come from
-    cncserver.canvas.offset.left = mainOffset.left; // * cncserver.canvas.scale;
-    cncserver.canvas.offset.top = mainOffset.top; //+ (22 * cncserver.canvas.scale);
+    cncserver.canvas.offset.left = mainOffset.left;
+    cncserver.canvas.offset.top = mainOffset.top;
   }
 
 });

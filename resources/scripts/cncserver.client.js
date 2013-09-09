@@ -32,6 +32,7 @@ var cncserver = {
   },
   config: {
     colors: robopaint.statedata.colorsets[robopaint.settings.colorset].colors,
+    canvasDebug: false, // Debug mode for helping find canvas offsets
     checkVisibility: true
   }
 };
