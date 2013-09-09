@@ -599,9 +599,7 @@ function bindSettingsControls() {
     }
 
     if (this.id == 'colorset' || this.id == 'showcolortext') {
-      if (appMode == 'print') {
-        $subwindow[0].contentWindow.cncserver.updateColorSet();
-      } else if (appMode == 'edit'){
+      if ($subwindow[0].contentWindow.updateColorSet) {
         $subwindow[0].contentWindow.updateColorSet();
       }
     }
