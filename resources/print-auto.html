@@ -17,56 +17,25 @@
     <script src="scripts/cncserver.client.wcb.js"></script>
     <script src="scripts/cncserver.client.commander.js"></script>
     <script src="scripts/cncserver.client.paths.js"></script>
-    <script src="scripts/robopaint-manual.client.js"></script>
+    <script src="scripts/robopaint.print-auto.client.js"></script>
 
     <title>WaterColorBot!</title>
   </head>
-<body class="print">
+<body class="print print-auto">
 
   <script type="text/javascript">
     $(function() { parent.fadeInWindow(); })
   </script>
 
 <fieldset id="control">
-  <h2>WaterColorBot Controls</h2>
-  <fieldset>
-    <legend>Automatic</legend>
-    <nav>
-      <button id="auto-paint" title="Paint the entire drawing automatically. Verifies colors by running auto color first.">Auto Paint</button>
-      <button id="auto-color" title="Pick the closest match for existing colors in the drawing. Click again to UNDO.">Auto Color</button>
-    </nav>
-  </fieldset>
+  <legend>Auto-paint&trade;</legend>
 
-  <fieldset>
-    <legend>Manual</legend>
-    <nav>
-      <button id="draw" title="Stroke the selected path with an outline">Stroke Path</button>
-      <button id="fill" title="Fill the selected path with a given fill style">Fill Path</button>
-
-      <div class="check-control">
-        <input type="checkbox" checked id="parkafter"/>
-        <label for="parkafter">Park after fill/stroke</label>
-      </div>
-
-      <div class="check-control">
-        <input type="checkbox" checked id="checkvisibility"/>
-        <label for="checkvisibility" title="If unchecked, tracing will rely on path shape only, ignoring path overlap.">Check stroke visibility</label>
-      </div>
-
-      <br/>
-      <button id="pen">Lower Brush</button>
-      <button id="calibrate" title="Position the brush center at the top left corner for calibration">Top Left</button>
-      <button id="showsim" title="View the buffer simulation">Preview</button>
-    </nav>
-  </fieldset>
-
-  <fieldset>
-    <legend>Machine</legend>
-    <nav>
-      <button id="park" title="Move the carriage back to the home position">Park Home</button>
-      <button id="disable" title="Unlocks/Disables stepper motors to allow them to be moved by hand">Unlock Motors</button>
-      <button id="zero" title="Resets relative known position to 0">Zero Position</button>
-    </nav>
+  <fieldset id="buttons">
+    <legend>Control</legend>
+    <button id="pause" class="ready" title="Click to start painting your picture!">Start</button>
+    <button id="pen" class="normal">Lower Brush</button>
+    <button id="park" class="normal" title="Move the carriage back to the home position">Park Home</button>
+    <button id="disable" class="normal" title="Unlocks/Disables stepper motors to allow them to be moved by hand">Unlock Motors</button>
   </fieldset>
 
   <fieldset id="status">
@@ -74,34 +43,11 @@
     <div id="statusmessage"></div>
     <div class="progress-wrapper">
       <progress title="Current progress" max="100" value="0"></progress>
-      <button id="pause" title="Click to stop current operations">STOP</button>
     </div>
   </fieldset>
 </fieldset>
 
 <div id="scale-container">
-  <nav id="tools">
-    <nav id="waters">
-      <a id="water0" title="Water 1" class="water" title="Water 1" href="#"></a>
-      <a id="water1" title="Water 2" class="water" title="Water 2" href="#"></a>
-      <a id="water2" title="Water 3" class="water" title="Water 3" href="#"></a>
-    </nav>
-
-    <nav id="colors">
-      <a id="color0" class="color" href="#"></a>
-      <a id="color1" class="color selected" href="#"></a>
-      <a id="color2" class="color" href="#"></a>
-      <a id="color3" class="color" href="#"></a>
-      <a id="color4" class="color" href="#"></a>
-      <a id="color5" class="color" href="#"></a>
-      <a id="color6" class="color" href="#"></a>
-      <a id="color7" class="color" href="#"></a>
-      <div class="static">
-        <a id="colorx" title="Wash Brush" href="#">X</a>
-      </div>
-    </nav>
-  </nav>
-
   <canvas id="sim" height="864" width="1152"></canvas>
 
   <svg id="main" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">

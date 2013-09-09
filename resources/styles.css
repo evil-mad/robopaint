@@ -56,8 +56,8 @@ img.logo {
 
 #scale-container {
   position: absolute;
-  top: 20px;
-  left: 0;
+  top: 30px;
+  left: 20px;
   -webkit-transform-origin: 0 0 0;
 }
 
@@ -73,6 +73,13 @@ svg#main, #sim, #shadow {
   left: 290px;
 }
 
+body.print-auto svg#main,
+body.print-auto #sim,
+body.print-auto #shadow {
+  top: 0;
+  left: 0;
+}
+
 svg#main * {
   stroke-width: 8 !important;
 }
@@ -83,7 +90,7 @@ svg#main #cncserversvg path.selected {
   stroke-opacity: 1 !important;
 }
 
-svg#main g path:hover {
+body.print-manual svg#main g path:hover {
   stroke: red !important;
   stroke-opacity: 1 !important;
 }
@@ -250,14 +257,14 @@ nav#tools .color.selected {
 
 /* Nav Controls & Button Graphics */
 fieldset#control {
-  background-image: url("images/seamless-wood.jpg");
+  background-color: rgba(255,255,255,0.6);
   border: 1px solid #C9A165;
   border-radius: 0.5em 0.5em 0.5em 0.5em;
   box-shadow: 0 0 8px 2px #EBC089 inset, 1px 1px 3px rgba(0, 0, 0, 0.2);
-  padding: 0.75em;
+  padding: 0.75em 0;
   position: absolute;
   right: 1em;
-  width: 12.5em;
+  width: 14em;
   margin-top: 1em;
   -webkit-transform-origin: right top;
 }
@@ -281,7 +288,8 @@ fieldset#control {
 
 #control fieldset {
   padding: 0 7px 7px;
-  border: 1px solid #C9A165;
+  border: 0;
+  border-top: 1px solid #C9A165;
   margin: 0.5em 0;
 }
 
@@ -297,6 +305,38 @@ fieldset#control {
   margin-bottom: 0.25em;
 }
 
+/* Auto print specific */
+body.print-auto fieldset#control {
+  top: 20px;
+}
+
+body.print-auto #control>legend {
+  width: 49%;
+  font-weight: bold;
+  text-align: center;
+}
+
+body.print-auto #buttons {
+  margin-top: -9px;
+  padding-top: 5px;
+  margin-bottom: 6px;
+}
+
+body.print-auto #buttons button.normal {
+  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  font-size: 1.1em;
+  width: 190px;
+  color: #FFF;
+  margin: 0 auto;
+  float: none;
+  display: block;
+  margin-top: 0.3em;
+  padding: 4px;
+  background: linear-gradient(to bottom, #3093c7, #1c5a85);
+}
+
+/* Status Specific */
 #status {
   text-align: center;
 }
@@ -305,26 +345,30 @@ fieldset#control {
   width: 100%;
 }
 
-#status #pause {
+.print #pause {
   background: linear-gradient(to bottom, #eff7f9 0%,rgb(249, 234, 239) 50%,rgb(242, 218, 230) 51%,rgb(249, 229, 231) 100%);
   border-radius: 11px;
   box-shadow: 0 0 14px 6px rgba(255,0,0,0.5);
   float: none;
-  display: inline;
+  margin: 0.5em auto;
+  display: block;
   height: 1.9em;
   width: 5em;
   font-size: 24px;
   font-weight: bold;
-  margin-top: 13px;
-  margin-bottom: 7px;
 }
 
-#status #pause:hover {
+.print #pause.ready {
+  box-shadow: 0 0 14px 6px rgba(0,255,0,0.5);
+  background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
+}
+
+#pause:hover {
   box-shadow: 0 0 14px 10px rgba(255,0,0,1);
   -webkit-animation: none;
 }
 
-#status #pause.active {
+.print #pause.active {
   background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
   box-shadow: 0 0 14px 6px #04aa1e;
 
@@ -333,13 +377,11 @@ fieldset#control {
   -webkit-animation-iteration-count: infinite;
 }
 
-
 #statusmessage {
   margin-top: 0.5em;
   line-height: 1em;
   margin-bottom: 0.6em;
 }
-
 
 #control button:disabled, #control button:disabled:hover {
   opacity: 0.5;
@@ -454,13 +496,13 @@ body.home #bar a {
 }
 
 body.home #bar a:hover {
-  text-shadow: 0 0 11px blue;
+  text-shadow: 0 0 15px red;
 }
 
 body.home #bar a.selected,
 body.home #bar a:hover.selected{
-  color: #00A000;
-  text-shadow: 0 0 11px red;
+  color: #FFF;
+  text-shadow: 0 0 11px #710909;
   cursor: default;
 }
 
