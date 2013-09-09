@@ -102,6 +102,10 @@ cncserver.cmd = {
       case "park":
         cncserver.api.pen.park(cncserver.cmd.cb);
         break;
+      case "custom":
+        cncserver.cmd.cb();
+        if (next[1]) next[1](); // Run custom passed callback
+        break;
       default:
         console.debug('Queue shortcut not found:' + next[0]);
     }
