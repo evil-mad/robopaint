@@ -7,14 +7,14 @@
 // Add in the robopaint specific Method Draw css override file
 $('<link>').attr({rel: 'stylesheet', href: "../../robopaint.method-draw.css"}).appendTo('head');
 
-var statedata = window.parent.statedata;
-var settings = window.parent.settings;
-var cache = {};
+// Set the global scope object for any robopaint level details
+var robopaint = {
+  settings: window.parent.settings,
+  statedata: window.parent.statedata
+};
 
 // Only for using the color conversion utilities
-var cncserver = {config: {}};
-$('<script>').attr({type: 'text/javascript', src: "../../scripts/cncserver.client.utils.js"}).appendTo('head');
-$('<script>').attr({type: 'text/javascript', src: "../../scripts/cncserver.client.wcb.js"}).appendTo('head');
+$('<script>').attr({type: 'text/javascript', src: "../../scripts/robopaint.utils.js"}).appendTo('head');
 
 // Page load complete...
 $(function() {
@@ -172,12 +172,15 @@ function addElements() {
 
  // Add Autocolor button
  var recover = false;
+
+ // jQuery selector list of objects to recolor
+ var types = 'path, rect:not(#canvas_background), circle, ellipse, line, polygon';
  $('#tools_bottom_3').append(
    $('<button>')
      .attr({id:"auto-color", title:"Pick the closest match for existing colors in the drawing. Click again to UNDO."})
      .text('Auto Color')
      .click(function(){
-       cncserver.wcb.autoColor($('#svgcontent'), recover);
+       robopaint.utils.autoColor($('#svgcontent'), recover, robopaint.colors, types);
        recover = !recover;
      })
  );
@@ -210,50 +213,24 @@ function buildPalette(){
 
 // Load in the colorset data
 function loadColorsets() {
-  for(var i in statedata.colorsets['ALL']) {
-    var set = statedata.colorsets[statedata.colorsets['ALL'][i]];
+  for(var i in robopaint.statedata.colorsets['ALL']) {
+    var set = robopaint.statedata.colorsets[robopaint.statedata.colorsets['ALL'][i]];
     $('head').append(set.stylesheet);
   }
 
   updateColorSet();
 }
 
+// Update the rendering of the color set when it changes, called from main.js
 function updateColorSet(){
-  var set = statedata.colorsets[settings.colorset];
+  var set = robopaint.statedata.colorsets[robopaint.settings.colorset];
+  robopaint.colors = set.colors; // Update shortcut
   $('#colors').attr('class', '').addClass(set.baseClass);
   for (var i in set.colors) {
     $('#color' + i)
-      .text(settings.showcolortext ? set.colors[i] : "")
-      .attr('title', settings.showcolortext ? "" : set.colors[i]);
+      .text(robopaint.settings.showcolortext ? set.colors[i].name : "")
+      .attr('title', robopaint.settings.showcolortext ? "" : set.colors[i].name);
   }
-  setTimeout(cacheColors, 500);
-}
-
-// Cache the current colorset config for measuring against as HSL
-function cacheColors() {
-  cncserver.config.colors = [];
-  cncserver.config.colorsYUV = [];
-
-  // Check to see if CSS is loaded...
-  var colorTest = $('#color0').css('background-color');
-  if (colorTest == "transparent" || colorTest == "rgba(0, 0, 0, 0)") {
-    setTimeout(cacheColors, 500);
-    console.info('css still loading...');
-    return;
-  }
-
-  $('#colors .color').each(function(){
-    cncserver.config.colors.push(
-      robopaint.utils.colorStringToArray($(this).css('background-color'))
-    );
-  });
-  // Also add white paper for near-white color detection
-  cncserver.config.colors.push([255,255,255]);
-
-  // Add cached YUV conversions for visual color matching
-  $.each(cncserver.config.colors, function(i, color){
-    cncserver.config.colorsYUV.push(robopaint.utils.rgbToYUV(color));
-  });
 }
 
 // Bind the click event for each color
@@ -292,7 +269,7 @@ function bindColorSelect() {
 
 // Triggered on before close or switch mode, call callback to complete operation
 function onClose(callback, isGlobal){
-  if (isGlobal && !settings.openlast && methodDraw.canvas.undoMgr.getUndoStackSize() > 0) {
+  if (isGlobal && !robopaint.settings.openlast && methodDraw.canvas.undoMgr.getUndoStackSize() > 0) {
     var r = confirm("Are you sure you want to quit?\n\
 Your changes to this image will not be saved before printing. Click Ok to Quit.");
     if (r == true) {
