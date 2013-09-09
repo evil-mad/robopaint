@@ -340,16 +340,5 @@ cncserver.wcb = {
     } else {
       return $('#fill-' + ft);
     }
-  },
-
-  // Easy set for progress!
-  progress: function(options){
-    if (typeof options.val !== "undefined") {
-      $('progress').attr('value', options.val);
-    }
-
-    if (typeof options.max !== "undefined") {
-      $('progress').attr('max', options.max);
-    }
   }
 };

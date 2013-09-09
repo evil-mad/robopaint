@@ -12,6 +12,17 @@ var returnPoints = [];
 var lastPoint = {};
 
 cncserver.cmd = {
+  // Easy set for progress!
+  progress: function(options){
+    if (typeof options.val !== "undefined") {
+      $('progress').attr('value', options.val);
+    }
+
+    if (typeof options.max !== "undefined") {
+      $('progress').attr('max', options.max);
+    }
+  },
+
   // CMD specific callback handler
   cb: function(d) {
     // TODO: check for errors
@@ -19,10 +30,10 @@ cncserver.cmd = {
     if (!cncserver.state.buffer.length) {
       cncserver.state.process.busy = false;
       cncserver.state.process.max = 0;
-      robopaint.wcb.progress({val: 0, max: 0});
+      cncserver.commander.progress({val: 0, max: 0});
     } else {
       // Update the progress bar
-      robopaint.wcb.progress({
+      cncserver.commander.progress({
         val: cncserver.state.process.max - cncserver.state.buffer.length,
         max: cncserver.state.process.max
       });
