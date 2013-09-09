@@ -29,11 +29,15 @@ $(function() {
       // With nothing in the queue, start autopaint!
       if (cncserver.state.buffer.length == 0) {
         $('#pause').removeClass('ready').attr('title', stateText.pause).text('Pause');
-        cncserver.wcb.autoPaint($('#cncserversvg'), function(){
-          if (cncserver.config.canvasDebug) {
-            $('canvas#debug').show();
+        cncserver.wcb.autoPaint($('#cncserversvg'),
+          function(){ // Finished spooling callback
+            if (cncserver.config.canvasDebug) {
+              $('canvas#debug').show();
+            }
+          }, function(){ // Actually Complete callback
+            $('#pause').attr('class', 'ready').attr('title', stateText.ready).text('Start');
           }
-        });
+        );
       } else {
         // With something in the queue... we're either pausing, or resuming
         if (!cncserver.state.process.paused) {

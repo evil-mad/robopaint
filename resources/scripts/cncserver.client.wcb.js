@@ -176,7 +176,7 @@ cncserver.wcb = {
 
   // Move through all paths in a given context, pull out all jobs and begin to
   // Push them into the buffer
-  autoPaint: function(context, callback) {
+  autoPaint: function(context, callback, completeCallback) {
      // Clear all selections
     $('path.selected', context).removeClass('selected');
 
@@ -304,7 +304,7 @@ cncserver.wcb = {
         }
       } else {
         if (callback) callback();
-        run(['wash','park', ['status', 'AutoPaint Complete!']]);
+        run(['wash','park', ['status', 'AutoPaint Complete!'], ['custom', completeCallback]]);
         // Done!
       }
     }
