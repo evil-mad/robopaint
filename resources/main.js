@@ -16,13 +16,18 @@ var barHeight = 40;
 var isModal = false;
 var settings = {}; // Holds the "permanent" app settings data
 var statedata = {}; // Holds per app session volitile settings
-var initalizing = false;
+var initializing = false;
 var appMode = 'home';
 var $subwindow = {}; // Placeholder for subwindow iframe
 var subWin = {}; // Placeholder for subwindow "window" object
 
 // Set the global scope object for any robopaint level details
 var robopaint = {};
+
+// Option buttons for connections
+// TODO: Redo this is a message management window system!!!
+var $options;
+var $stat;
 
 // Pull the list of available ports
 cncserver.getPorts(function(ports) {
@@ -40,7 +45,7 @@ cncserver.getPorts(function(ports) {
  * Central home screen initialization function
  */
 function initialize() {
-  initalizing = true;
+  initializing = true;
 
   gui.Window.get().on('close', onClose); // Catch close event
 
@@ -67,59 +72,72 @@ function initialize() {
   });
 
   // Prep the connection status overlay
-  var $stat = $('body.home h1');
-
-  var $opt = $('<div>').addClass('options')
-        .text('What do you want to do?');
-  $opt.append(
+  $stat = $('body.home h1');
+  $options = $('<div>').addClass('options')
+        .text('What do you want to do?').hide();
+  $options.append(
     $('<div>').append(
       $('<button>').addClass('continue').click(function(e){
         $stat.fadeOut('slow');
         cncserver.continueSimulation();
         cncserver.serialReadyInit();
 
-        // Initialize settings...
-        loadSettings();
-        saveSettings();
-        initalizing = false;
+        if (initializing) {
+          // Initialize settings...
+          loadSettings();
+          saveSettings();
+          initializing = false;
+        }
+
         setModal(false);
       }).text('Continue in Simulation mode'),
 
       $('<button>').addClass('reconnect').click(function(e){
-        // TODO: Reconnect!
-        setSettingsWindow(true);
+        // Reconnect! Basically Resets status and tries start aagain
+        $options.hide();
+        startSerial();
       }).text('Try to Reconnect')
     )
   );
+  $options.appendTo($stat);
 
   // Actually try to init the connection and handle the various callbacks
+  startSerial();
+
+}
+
+function startSerial(){
+  setMessage('Starting up...', 'loading');
+
   cncserver.start({
     success: function() {
-      $stat.text('Port found, connecting...');
+      setMessage('Port found, connecting...');
     },
     error: function(err) {
-      $stat.attr('class', 'warning')
-        .text('Couldn\'t connect! - ' + err);
-      $opt.appendTo($stat);
+      setMessage('Couldn\'t connect! - ' + err, 'warning');
+      $options.slideDown('slow');
     },
     connect: function() {
-      $stat.text('Connected!')
-        .attr('class', 'success')
-        .fadeOut('slow');
-      setModal(false);
-      $('body.home nav').fadeIn('slow');
+      setMessage('Connected!', 'success');
 
-      // Initialize settings...
-      loadSettings();
-      saveSettings();
-      initalizing = false;
+      $stat.fadeOut('slow');
+      setModal(false);
+
+      // If caught on startup...
+      if (initializing) {
+        $('body.home nav').fadeIn('slow');
+
+        // Initialize settings...
+        loadSettings();
+        saveSettings();
+        initializing = false;
+      }
     },
     disconnect: function() {
       setModal(true);
-      $stat.show()
-        .attr('class', 'error')
-        .text('Bot Disconnected!');
-      $opt.appendTo($stat);
+      $stat.show();
+      setMessage('Bot Disconnected!', 'error');
+      $options.slideDown();
     }
   });
 }
@@ -553,7 +571,7 @@ function bindSettingsControls() {
         }
 
         cncserver.sendSetup(setID, $input.val());
-        if (!initalizing) cncserver.setPen(penState);
+        if (!initializing) cncserver.setPen(penState);
 
         // Save settings
         settings[this.id] = $input.val();
@@ -617,7 +635,7 @@ function bindSettingsControls() {
       }
     }
 
-    if (!initalizing) saveSettings();
+    if (!initializing) saveSettings();
   });
 
   // Done Button
@@ -636,6 +654,19 @@ function setSettingsWindow(toggle) {
     $('#settings').fadeOut('slow');
   }
   setModal(toggle);
+}
+
+// Modal message setting functions
+// TODO: Do this far better
+function setMessage(txt, mode){
+  if (txt) {
+    $('b', $stat).text(txt);
+  }
+
+  if (mode) {
+    $stat.attr('class', mode);
+  }
+
 }
 
 function setModal(toggle){
