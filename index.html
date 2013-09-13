@@ -197,14 +197,9 @@
   <div id="settings-advanced">
     <fieldset>
       <legend>Misc</legend>
-      <div>
-        <label for="httpport">Server at {your IP}:</label>
-        <input type="text" id="httpport"/>
-        <aside>When running supported apps, this would be the server IP and port to enter into the app.</aside>
-      </div>
 
       <div>
-        <label for="penmode">Drawing Mode:</label>
+        <label for="penmode">Hardware Drawing Setup:</label>
         <select id="penmode">
           <option value="0">0: Default (Brush, Water & Paint)</option>
           <option value="1">1: Water Only (No Paint: Buddha Board)</option>
@@ -219,6 +214,22 @@
         <input type="checkbox" id="openlast"/>
       </div>
 
+    </fieldset>
+
+    <fieldset>
+      <legend>API Server</legend>
+      <div>
+        <label for="httpport">Server at {your IP}:</label>
+        <input type="text" id="httpport"/>
+
+        <aside>When running supported apps, this would be the server IP and port to enter into the app. <b>Change requires App restart.</b></aside>
+      </div>
+
+      <div>
+        <label for="httplocalonly">Only allow connections from this computer:</label>
+        <input type="checkbox" id="httplocalonly"/>
+        <aside>Uncheck this to connect to the CNCServer API in RoboPaint from other devices. <b>Change requires App restart.</b></aside>
+      </div>
     </fieldset>
 
     <fieldset>

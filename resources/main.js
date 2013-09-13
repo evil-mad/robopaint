@@ -52,6 +52,9 @@ function initialize() {
   // Bind settings controls
   bindSettingsControls();
 
+  // Load up initial settings!
+  loadSettings();
+
   // Load the quickload list
   initQuickload();
 
@@ -442,6 +445,7 @@ function loadSettings() {
     swapmotors: g.get('swapMotors'),
     serialpath: g.get('serialPath'),
     httpport: g.get('httpPort'),
+    httplocalonly: g.get('httpLocalOnly'),
     latencyoffset: 20,
     servodrop: b.get('servo:min'),
     servolift: b.get('servo:max'),
@@ -594,6 +598,10 @@ function bindSettingsControls() {
         pushKey = ['g', 'httpPort'];
         pushVal = $input.val();
         break;
+      case 'httplocalonly':
+        pushKey = ['g', 'httpLocalOnly'];
+        pushVal = $input.is(':checked');
+        break;
       case 'latencyoffset':
         pushKey = ['g', 'bufferLatencyOffset'];
         pushVal = $input.val();
@@ -620,8 +628,10 @@ function bindSettingsControls() {
     }
 
     if (this.id == 'colorset' || this.id == 'showcolortext') {
-      if ($subwindow[0].contentWindow.updateColorSet) {
-        $subwindow[0].contentWindow.updateColorSet();
+      if ($subwindow[0]) {
+        if ($subwindow[0].contentWindow.updateColorSet) {
+          $subwindow[0].contentWindow.updateColorSet();
+        }
       }
     }
 
