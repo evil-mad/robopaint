@@ -388,7 +388,7 @@ function getColorsets() {
 }
 
 function addSettingsRangeValues() {
-  $('input:[type=range]').each(function(){
+  $('input:[type=range]:not(.processed)').each(function(){
     var $r = $(this);
     var $l = $('<label>').addClass('rangeval');
 
@@ -426,7 +426,7 @@ function addSettingsRangeValues() {
       $l.text('(' + num + post + ')');
     }).change();
 
-    $r.after($l);
+    $r.addClass('processed').after($l);
   })
 }
 
