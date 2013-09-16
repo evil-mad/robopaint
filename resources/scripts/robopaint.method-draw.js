@@ -18,6 +18,12 @@ $('<script>').attr({type: 'text/javascript', src: "../../scripts/robopaint.utils
 
 // Page load complete...
 $(function() {
+
+  // Fit Controls to the screen size
+  responsiveResize();
+  $(window).resize(responsiveResize);
+
+
   parent.fadeInWindow(); // Trigger iframe window reposition / fade in
 
   // Parent keypresses push focus to window
@@ -311,4 +317,10 @@ function autoSizeContent() {
   // Ungroup, and clear selection.. as if nothing had happened!
   methodDraw.canvas.ungroupSelectedElement();
   methodDraw.canvas.clearSelection();
+}
+
+// Resize specific controls to match window requirements not easily done with CSS
+function responsiveResize() {
+  var h = $(window).height();
+  $('#tools_top').height(h-61);
 }

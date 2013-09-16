@@ -8,6 +8,20 @@ body {
   overflow: hidden;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color:#4F80FF;
+}
+
+#tools_top {
+  overflow: hidden;
+  overflow-y: auto;
+  z-index: 2;
+}
+
 button.zoomfit {
   position: absolute;
   right: 250px;
