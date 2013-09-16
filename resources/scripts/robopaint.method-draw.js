@@ -47,11 +47,6 @@ $(function() {
       // Set zoom to fit canvas at load
       methodDraw.zoomChanged(window, 'canvas');
 
-      // Ungroup the elements that were just forced into a group :/
-      methodDraw.canvas.selectAllInCurrentLayer();
-      methodDraw.canvas.ungroupSelectedElement();
-      methodDraw.canvas.clearSelection();
-
       methodDraw.canvas.undoMgr.resetUndoStack();
     }
 
@@ -78,20 +73,28 @@ $(function() {
 
   // Method Draw Closing / Switching ===========================================
   window.onbeforeunload = function (){
-    // Remove unwanted elements
-    $('#svgcontent title').remove()
 
-    if ($('#svgcontent g').length > 1) {
-      $('#svgcontent g:first').remove();
-    }
+    // Remove unwanted elements~~~~~~~~~~~~
+    $('#svgcontent title').remove() // Get rid of titles!
+
+    // Save the top level group objects before moving elements...
+    var $topGroups = $('#svgcontent>g');
+
+    // Move all SVG child elements to SVG root
+    $('#svgcontent>g:last').children().appendTo('#svgcontent');
+    $topGroups.remove(); // Remove editor groupings
 
     // Convert elements that don't play well with robopaint's handlers
-    $('circle, ellipse, rect', '#svgcontent').each(function(){
+    var $elems = $('circle, ellipse', '#svgcontent');
+    console.log('Converting ' + $elems.length + ' elements into paths for printing...');
+    $elems.each(function(){
       methodDraw.canvas.convertToPath(this);
     });
 
     // Reset orientation so paths have a more accessible BBox
-    $('path','#svgcontent').each(function(){
+    $elems = $('path','#svgcontent');
+    console.log('Resetting path orientation for ' + $elems.length + ' paths for printing...');
+    $elems.each(function(){
       methodDraw.canvas.pathActions.resetOrientation(this)
     });
 
