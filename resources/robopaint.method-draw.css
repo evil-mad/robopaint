@@ -11,13 +11,20 @@ button.zoomfit {
   bottom: 10px;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 850px) {
   #zoom_panel {
     right: 5px;
   }
 
   button.zoomfit {
     right: 73px;
+  }
+}
+
+/* Hide Zoom button to keep it from underlapping autopaint button */
+@media (max-width: 655px) {
+  button.zoomfit {
+    display: none;
   }
 }
 
