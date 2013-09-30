@@ -129,12 +129,13 @@ function startSerial(){
       // If caught on startup...
       if (initializing) {
         $('body.home nav').fadeIn('slow');
-
-        // Initialize settings...
-        loadSettings();
-        saveSettings();
         initializing = false;
       }
+
+      // Initialize settings...
+      loadSettings();
+      saveSettings();
+
     },
     disconnect: function() {
       setModal(true);
