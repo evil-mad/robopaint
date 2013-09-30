@@ -674,6 +674,32 @@ body.home #settings {
   margin-bottom: 1em;
 }
 
+#settings fieldset > fieldset {
+  margin-top: 0.75em;
+}
+
+/* Custom styling for speed fieldset */
+#settings fieldset.speed {
+  margin-bottom: 1em;
+  padding-top: 0.75em;
+  padding-bottom: 0;
+}
+
+#settings fieldset.speed label {
+  display: block;
+  text-align: center;
+}
+
+#settings fieldset.speed input {
+  display: block;
+  width: 90%;
+}
+
+#settings fieldset.speed div {
+  float: left;
+  width: 48%;
+}
+
 #settings > div {
   padding:10px;
   height: 75%;

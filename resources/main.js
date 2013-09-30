@@ -396,6 +396,7 @@ function addSettingsRangeValues() {
     $r.change(function(){
       var num = parseInt($r.val());
       var post = "";
+      var wrap = ['(', ')'];
       var dosep = true;
 
       if (['servotime', 'latencyoffset'].indexOf(this.id) != -1) {
@@ -420,11 +421,32 @@ function addSettingsRangeValues() {
           num = Math.round((x * 100) / b);
           post = '%';
           break;
+        case 'movespeed':
+        case 'paintspeed':
+          num = Math.round((num / this.max) * 100);
+          var msg = "";
+
+          if (num < 25) {
+            msg = "Paintbrush on a Snail";
+          } else if (num < 50) {
+            msg = "Painfully Slow";
+          } else if (num < 75) {
+            msg = "Medium";
+          } else if (num < 80) {
+            msg = "Fast (default)";
+          } else {
+            msg = "Stupid Fast!";
+          }
+
+          dosep = false;
+          wrap = ['', ''];
+          post = "% - " + msg;
+          break;
       }
 
       if (dosep) num = num.toString(10).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      $l.text('(' + num + post + ')');
+      $l.text(wrap[0] + num + post + wrap[1]);
     }).change();
 
     $r.addClass('processed').after($l);

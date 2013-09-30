@@ -129,35 +129,27 @@
 
     <fieldset>
       <legend>General</legend>
+      <fieldset class="speed">
+        <legend>Carriage Movement Speed:</legend>
+        <div>
+          <label for="movespeed">...while Brush is Up:</label>
+          <input type="range" id="movespeed" min="200" max="2000" title="Move left for slower, right for faster."/>
+        </div>
+        <div>
+          <label for="paintspeed">...while Brush is Down:</label>
+          <input type="range" id="paintspeed" min="200" max="2000" title="Move left for slower, right for faster."/>
+        </div>
+      </fieldset>
+
       <div>
         <label for="showcolortext">Show color name:</label>
         <input type="checkbox" id="showcolortext"/>
-        <aside>When checked, color names will display for print colors, otherwise they will only be visible on hover.</aside>
+        <aside>When checked, color names will display on the paint palette for print colors, otherwise they will only be visible on hover.</aside>
       </div>
 
       <div>
         <label for="colorset">Installed Paint Set:</label>
         <select id="colorset"></select>
-      </div>
-
-      <div>
-        <label for="movespeed">Moving speed (brush up):</label>
-        <select id="movespeed">
-          <option value="700">Slow</option>
-          <option value="1500">Medium (default)</option>
-          <option value="2500">Fast</option>
-          <option value="3000">Ludicrous!</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="paintspeed">Painting speed (brush down):</label>
-        <select id="paintspeed">
-          <option value="500">Slow</option>
-          <option value="1000">Medium (default)</option>
-          <option value="1500">Fast</option>
-          <option value="2500">Ludicrous!</option>
-        </select>
       </div>
 
       <hr>
