@@ -605,19 +605,19 @@ function bindSettingsControls() {
         break;
       case 'latencyoffset':
         pushKey = ['g', 'bufferLatencyOffset'];
-        pushVal = $input.val();
+        pushVal = parseInt($input.val());
         break;
       case 'servotime':
         pushKey = ['b', 'servo:duration'];
-        pushVal = $input.val();
+        pushVal = parseInt($input.val());
         break;
       case 'movespeed':
         pushKey = ['b', 'speed:moving'];
-        pushVal = $input.children(':selected').val();
+        pushVal = parseInt($input.val());
         break;
       case 'paintspeed':
         pushKey = ['b', 'speed:drawing'];
-        pushVal = $input.children(':selected').val();
+        pushVal = parseInt($input.val());
         break;
         // Doesn't break on purpose!
       default: // Nothing special to set, just change the settings object value
