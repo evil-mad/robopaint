@@ -634,14 +634,10 @@ body.home #modalmask:before {
 
 body.home #settings {
   display:none;
-  margin-top: -23%;
   height: 70%;
-  margin-left: -35%;
   box-shadow: 3px 3px 12px;
   padding: 1em;
   position: absolute;
-  left: 50%;
-  top: 50%;
   width: 70%;
   background-color: #aaa;
   border-radius: 8px;

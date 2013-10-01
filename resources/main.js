@@ -71,8 +71,17 @@ function initialize() {
   $subwindow.appendTo('body');
 
   $(window).resize(function(){
-    $subwindow.height($(window).height()-barHeight);
+    // Position settings window dead center
+    var $s = $('#settings');
+    var size = [$s.width(), $s.height()];
+    var win = [$(window).width(), $(window).height()];
+    $s.css({left: (win[0]/2) - (size[0]/2), top: (win[1]/2) - (size[1]/2)});
+
+    // Set subwindow height
+    $subwindow.height($(window).height() - barHeight);
   });
+
+  $(window).resize(); // Initial resize
 
   // Prep the connection status overlay
   $stat = $('body.home h1');
