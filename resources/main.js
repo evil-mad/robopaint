@@ -70,7 +70,8 @@ function initialize() {
 
   $subwindow.appendTo('body');
 
-  $(window).resize(function(){
+  $(window).resize(responsiveResize);
+  function responsiveResize() {
     // Position settings window dead center
     var $s = $('#settings');
     var size = [$s.width(), $s.height()];
@@ -79,9 +80,9 @@ function initialize() {
 
     // Set subwindow height
     $subwindow.height($(window).height() - barHeight);
-  });
+  };
 
-  $(window).resize(); // Initial resize
+  responsiveResize(); // Initial resize
 
   // Prep the connection status overlay
   $stat = $('body.home h1');
