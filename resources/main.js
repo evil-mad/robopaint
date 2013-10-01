@@ -423,11 +423,10 @@ function addSettingsRangeValues() {
           num = num+ ' cm / ' + (Math.round((num / 2.54) * 10) / 10) + ' in';
           dosep = false;
           break;
-        case 'servolift':
-        case 'servodrop':
-          var b = this.max - this.min;
-          var x = num - this.min;
-          num = Math.round((x * 100) / b);
+        case 'servoup':
+        case 'servopaint':
+        case 'servowash':
+          num = num/10;
           post = '%';
           break;
         case 'movespeed':
@@ -479,8 +478,9 @@ function loadSettings() {
     httpport: g.get('httpPort'),
     httplocalonly: g.get('httpLocalOnly'),
     latencyoffset: 20,
-    servodrop: b.get('servo:min'),
-    servolift: b.get('servo:max'),
+    servowash: parseFloat(b.get('servo:presets:wash'))*10,
+    servopaint: parseFloat(b.get('servo:presets:paint'))*10,
+    servoup: parseFloat(b.get('servo:presets:up'))*10,
     servotime: b.get('servo:duration'),
     movespeed: b.get('speed:moving'),
     paintspeed: b.get('speed:drawing'),
@@ -597,23 +597,18 @@ function bindSettingsControls() {
     var pushVal = '';
 
     switch (this.id) {
-      case 'servolift':
-      case 'servodrop':
-        var setID = 4;
-        var penState = 1;
-        if (this.id == 'servodrop') {
-          setID = 5;
-          penState = 0;
-        }
-
-        cncserver.sendSetup(setID, $input.val());
-        if (!initializing) cncserver.setPen(penState);
+      case 'servoup':
+      case 'servopaint':
+      case 'servowash':
+        var name = this.id.substr(5);
 
         // Save settings
+        cncserver.conf.bot.set('servo:presets:' + name, parseFloat($input.val()/10));
+        if (!initializing) cncserver.setHeight(name);
         settings[this.id] = $input.val();
         break;
 
-      // TODO: Make the following pull from paster pushkey list
+      // TODO: Make the following pull from master pushkey list
       case 'invertx':
         pushKey = ['g', 'invertAxis:x'];
         pushVal = $input.is(':checked');
@@ -682,6 +677,7 @@ function bindSettingsControls() {
 
   // Done Button
   $('#settings-done').click(function(e) {
+    cncserver.setHeight('up');
     setSettingsWindow(false);
   });
 }
