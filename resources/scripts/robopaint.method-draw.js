@@ -223,8 +223,8 @@ function buildPalette(){
 // Load in the colorset data
 function loadColorsets() {
   for(var i in robopaint.statedata.colorsets['ALL']) {
-    var set = robopaint.statedata.colorsets[robopaint.statedata.colorsets['ALL'][i]];
-    $('head').append(set.stylesheet);
+    var set = robopaint.statedata.colorsets['ALL'][i];
+    $('<link>').attr({rel: 'stylesheet', href: '../../colorsets/' + set + '/' + set + '.css'}).appendTo('head');
   }
 
   updateColorSet();
