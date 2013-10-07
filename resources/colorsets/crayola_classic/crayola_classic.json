@@ -5,13 +5,13 @@
     "baseClass": "crayola-classic"
   },
   "colors": [
-    {"Black": "#3E3A39"},
-    {"Red": "#A72611"},
-    {"Orange": "#FF6A00"},
-    {"Yellow": "#F7F756"},
-    {"Green": "#2E6F3A"},
-    {"Blue": "#353AAA"},
-    {"Violet": "#907DBD"},
-    {"Brown": "#844B35"}
+    {"Black": "#000000"},
+    {"Red": "#FF0000"},
+    {"Orange": "#FFA500"},
+    {"Yellow": "#FFFF00"},
+    {"Green": "#008000"},
+    {"Blue": "#0000FF"},
+    {"Purple": "#800080"},
+    {"Brown": "#8B4513"}
   ]
 }

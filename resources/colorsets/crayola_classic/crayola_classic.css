@@ -1,32 +1,32 @@
 .crayola-classic #color0 {
-  background-color: #3E3A39; /* Black */
+  background-color: black; /* Black */
 }
 
 .crayola-classic #color1 {
-  background-color: #A72611; /* Red */
+  background-color: red; /* Red */
 }
 
 .crayola-classic #color2 {
-  background-color: #FF6A00; /* Orange */
+  background-color: orange; /* Orange */
 }
 
 #colors.crayola-classic #color3 {
-  background-color: #F7F756; /* Yellow */
+  background-color: yellow; /* Yellow */
   color: black;
 }
 
 .crayola-classic #color4 {
-  background-color: #2E6F3A; /* Green */
+  background-color: green; /* Green */
 }
 
 .crayola-classic #color5 {
-  background-color: #353AAA; /* Blue */
+  background-color: blue; /* Blue */
 }
 
 .crayola-classic #color6 {
-  background-color: #907DBD; /* Violet */
+  background-color: purple; /* Violet */
 }
 
 .crayola-classic #color7 {
-  background-color: #844B35; /* Brown */
+  background-color: SaddleBrown; /* Brown */
 }
