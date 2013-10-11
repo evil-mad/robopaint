@@ -39,6 +39,10 @@ body.home {
   overflow: hidden;
 }
 
+.hidden {
+  display: none;
+}
+
 body.print {
   background-image:url('images/seamless-wood.jpg');
   background-color: #E3BC83;
@@ -560,16 +564,12 @@ body.home h1.loading {
 body.home nav {
   position: absolute;
   top: 70%;
-  left: 50%;
-  width: 320px;
-  height: 140px;
-  margin-left: -160px;
+  left: 250px;
   margin-top: -70px;
   overflow: hidden;
 }
 
 body.home nav a {
-  display: block;
   width: 100px;
   height: 100px;
   border-radius: 65px;

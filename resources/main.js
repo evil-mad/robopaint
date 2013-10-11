@@ -71,17 +71,6 @@ function initialize() {
   $subwindow.appendTo('body');
 
   $(window).resize(responsiveResize);
-  function responsiveResize() {
-    // Position settings window dead center
-    var $s = $('#settings');
-    var size = [$s.width(), $s.height()];
-    var win = [$(window).width(), $(window).height()];
-    $s.css({left: (win[0]/2) - (size[0]/2), top: (win[1]/2) - (size[1]/2)});
-
-    // Set subwindow height
-    $subwindow.height($(window).height() - barHeight);
-  };
-
   responsiveResize(); // Initial resize
 
   // Prep the connection status overlay
@@ -118,6 +107,24 @@ function initialize() {
   startSerial();
 
 }
+
+function responsiveResize() {
+  // Position settings window dead center
+  var $s = $('#settings');
+  var size = [$s.width(), $s.height()];
+  var win = [$(window).width(), $(window).height()];
+  $s.css({left: (win[0]/2) - (size[0]/2), top: (win[1]/2) - (size[1]/2)});
+
+  // Position window
+  size = $('nav').width();
+  $('nav').css('left', (win[0]/2) - (size/2))
+
+  // Set subwindow height
+  if ($subwindow.height) {
+    $subwindow.height($(window).height() - barHeight);
+  }
+
+};
 
 function startSerial(){
   setMessage('Starting up...', 'loading');
@@ -499,6 +506,7 @@ function loadSettings() {
     strokeovershoot: 5,
     tsprunnertype: 'OPT',
     strokeprecision: 6,
+    manualpaintenable: 0,
     gapconnect: 1
   };
 
@@ -646,7 +654,6 @@ function bindSettingsControls() {
         pushKey = ['b', 'speed:drawing'];
         pushVal = parseInt($input.val());
         break;
-        // Doesn't break on purpose!
       default: // Nothing special to set, just change the settings object value
         if ($input.attr('type') == 'checkbox') {
           settings[this.id] = $input.is(':checked');
@@ -655,6 +662,13 @@ function bindSettingsControls() {
         }
     }
 
+    // Update available modes
+    if (this.id == 'manualpaintenable') {
+      $('#manual, #bar-manual').toggle(settings[this.id]);
+      responsiveResize();
+    }
+
+    // Update paint sets when changes made that would effect them
     if (this.id == 'colorset' || this.id == 'showcolortext') {
       if ($subwindow[0]) {
         if ($subwindow[0].contentWindow.updateColorSet) {
