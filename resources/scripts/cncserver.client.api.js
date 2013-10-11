@@ -22,34 +22,39 @@ cncserver.api = {
     },
 
    /**
-    * Set pen position up (not drawing)
+    * Set pen position height
     * @param {function} callback
     *   Function to callback when done, including data from response body
-    * @param {boolean} flop
-    *   Set to true to swap pen position state to 1 (down/draw)
+    * @param {float|string} value
+    *   0 to 1 float, and named constants
     */
-    up: function(callback, flop){
+    height: function(value, callback){
       // Short circuit if state already matches local state
-      if (cncserver.state.pen.state == flop ? 1 : 0) {
-        callback(cncserver.state.pen);
+      if (cncserver.state.pen.state == value) {
+        if (callback) callback(cncserver.state.pen);
         return;
       }
 
       _put('pen', {
-        data: { state: flop ? 1 : 0}, // 0 is off (no draw), 1 is on (do draw)
+        data: { state: value},
         success: function(d){
           cncserver.state.pen = d;
           if (callback) callback(d);
         },
         error: function(e) {
-          callback(false);
+          if (callback) callback(false);
         }
       });
     },
 
     // Shortcut call to the above with flop set to true
+    up: function(callback) {
+      this.height(0, callback);
+    },
+
+    // Shortcut call to the above with flop set to true
     down: function(callback) {
-      this.up(callback, true);
+      this.height(1, callback);
     },
 
    /**
