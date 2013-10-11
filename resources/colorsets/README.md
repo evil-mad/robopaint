@@ -7,7 +7,7 @@ First you've got to paint a swatch!
 
 All colors shown in the application aren't meant to be the colors as they look
 in the set, but **how they look painted on white paper**. That way the
-auto-coloring alorithm can be as close as possible when matching drawings to
+auto-coloring algorithm can be as close as possible when matching drawings to
 what they might look like painted.
 
 So, what are you waiting for? Wet your brush, get some nice bright white paper,
@@ -69,16 +69,16 @@ Fill in the css color hex code for each one using your keen eyeballs and a
 [color picker](http://www.colorpicker.com/), or take a picture in sunlight, and
 pick the colors with an eyedropper tool in a
 [photo editor](http://www.gimp.org/). You can then add any other fancy rules
-you'd like, even gradients, as long as the final css includes a hexadecimal
-`background-color` property for every `#color[number]` element in the css.
+you'd like, even gradients. The actual color will be taken directly from the
+JSON file, so it doesn't matter how crazy the colorset can be.
 
 ## You're done!
 Just reload the program and your new colorset should show up, selectable
 immediately in the Settings -> installed paint set dropdown.
 
-Wasn't that easy? Here's a pat on the back and a cocolate chip cookie. Good job!
+Wasn't that easy? Here's a pat on the back and a chocolate chip cookie. Good job!
 :cookie:
 
 If you'd like to get ***your*** colorset back into the RoboPaint project,
 just follow the instructions for contributing back with a pull request at the
-bottom of [the main project readme](https://github.com/techninja/robopaint/blob/master/README.md).
+bottom of [the main project readme](https://github.com/evil-mad/robopaint).

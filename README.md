@@ -9,15 +9,13 @@ a speedy framework of API calls to interact with the WaterColorBot, while
 RoboPaint is the clean interface in an easy to install app!
 
 
-IMPORTANT NOTE: **** THIS IS PRE-RELEASE SOFTWARE ****
+#### IMPORTANT NOTE: *THIS IS PRE-RELEASE SOFTWARE*
 Features, specifications, and interfaces may change frequently and without
 warning or remorse prior to our first official release.
-First official release is currently estimated at mid-September, 2013.
-
 
 
 ## Downloads / Install
-Go to the [releases page](https://github.com/techninja/robopaint/releases) and
+Go to the [releases page](https://github.com/evil-mad/robopaint/releases) and
 pick out the latest release, then choose the package for your system by clicking
 the green download buttons for Windows, Linux or Mac.
 
@@ -40,13 +38,13 @@ portions of paths aren't drawn.
 
 ## Problems?
 ***Stuck on something?*** Submit an issue! Click the
-[issues tab](https://github.com/techninja/robopaint/issues) and see if someone
+[issues tab](https://github.com/evil-mad/robopaint/issues) and see if someone
 is covering your question or problem, if not, ask away! Someone will be around
 to help soon.
 
 ***Know how to fix a problem? Or want to add a new feature??*** Submit a pull
 request! Just fork the repo using the button on the
-[RoboPaint github homepage](https://github.com/techninja/robopaint), and
+[RoboPaint github homepage](https://github.com/evil-mad/robopaint), and
 this will give you your own version of RoboPaint. Make your change in a few
 commits to your branch, then click the pull request button at the top! Talk
 about what changes you made and submit. A maintainer of the project will check
@@ -55,7 +53,7 @@ your work will be merged into the project!
 
 ## ETC.
 
-All code MIT licensed. Created by TechNinja, with support and collaboration from
+All code MIT licensed. Created by [TechNinja](https://github.com/techninja), with support and collaboration from
 [Evil Mad Scientist](http://evilmadscientist.com). Don't forget, you can
 discover more crazy maker fun with
 [Sylvia's Super-Awesome Maker Show](http://sylviashow.com)!
