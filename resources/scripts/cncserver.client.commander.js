@@ -109,7 +109,7 @@ cncserver.cmd = {
       default:
         console.debug('Queue shortcut not found:' + next[0]);
     }
-    if (executeCallback) executeCallback();
+    if (typeof executeCallback == "function") executeCallback();
   },
 
   // Add a command to the queue! format is cmd short name, arguments
