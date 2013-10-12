@@ -184,9 +184,7 @@ cncserver.api = {
       cncserver.hideDrawPoint(); // hide drawpoint (will be off draw canvas)
 
       // Store the last changed color state
-      if (toolName.indexOf('color') !== -1) {
-        cncserver.state.color = toolName;
-      }
+      cncserver.state.media = toolName;
 
       _put('tools/' + toolName, {
         success: callback,

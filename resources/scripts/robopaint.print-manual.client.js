@@ -7,7 +7,6 @@ $(function() {
   var $path = {};
   var $svg = $('svg#main');
 
-  bindControls(); // Bind all clickable controls
   $('#drawpoint').hide(); // Hide the drawpoint
 
   // Add in a callback for when loading is complete
@@ -58,11 +57,20 @@ $(function() {
   }
 
 
-
-  function bindControls() {
+  window.bindControls = function() {
     // Ensure buttons are disabled as we have no selection
     $('#draw').prop('disabled', true);
     $('#fill').prop('disabled', true);
+
+    // Add selection from last machine tool
+    $('.color, .water').removeClass('selected');
+    if (cncserver.state.pen.tool) {
+      cncserver.state.media = cncserver.state.pen.tool;
+    } else {
+      cncserver.state.media = "water0";
+    }
+
+    $('#' + cncserver.state.media).addClass('selected');
 
     // Pause management
     var pauseText = 'Click to stop current operations';
@@ -229,7 +237,7 @@ $(function() {
     // Bind to Tool Change nav items
     $('nav#tools a').click(function(e){
 
-      if ($(this).is('.color')) {
+      if ($(this).is('.color, .water')) {
         $('nav#tools a.selected').removeClass('selected');
         $(this).addClass('selected');
       }
@@ -238,6 +246,7 @@ $(function() {
       if ($(this).is('#colorx')) {
         cncserver.wcb.fullWash();
         $('nav#tools a.selected').removeClass('selected');
+        $('#water0').addClass('selected');
         return false;
       }
 

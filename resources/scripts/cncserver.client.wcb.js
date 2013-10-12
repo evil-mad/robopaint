@@ -49,6 +49,7 @@ cncserver.wcb = {
           cncserver.api.tools.change('water1', function(){
             cncserver.api.tools.change('water2', function(d){
               cncserver.api.pen.resetCounter();
+              cncserver.state.media = 'water0';
               cncserver.wcb.status(['Brush should be clean'], d);
               if (callback) callback(d);
             });
@@ -59,7 +60,7 @@ cncserver.wcb = {
 
   // Get the name of paint/water/media on the brush
   getMediaName: function(toolName) {
-    if (typeof toolName == 'undefined') toolName = cncserver.state.color;
+    if (typeof toolName != 'string') toolName = cncserver.state.media;
 
     if (toolName.indexOf('water') !== -1) {
       return "Water";
@@ -126,7 +127,7 @@ cncserver.wcb = {
         break;
       case 2: // Dissallow water
         cncserver.wcb.status('Going to get some more ' + name + ', no water...')
-        cncserver.api.tools.change(cncserver.state.color, function(d){
+        cncserver.api.tools.change(cncserver.state.media, function(d){
           cncserver.api.pen.up(function(d){
             cncserver.api.pen.move(point, function(d) {
               cncserver.wcb.status(['Continuing to paint with ' + name]);
@@ -142,7 +143,7 @@ cncserver.wcb = {
       default:
         cncserver.wcb.status('Going to get some more ' + name + '...')
         cncserver.api.tools.change('water0dip', function(d){
-          cncserver.api.tools.change(cncserver.state.color, function(d){
+          cncserver.api.tools.change(cncserver.state.media, function(d){
             cncserver.api.pen.up(function(d){
               cncserver.api.pen.move(point, function(d) {
                 cncserver.wcb.status(['Continuing to paint with ' + name]);
@@ -263,7 +264,7 @@ cncserver.wcb = {
       finalJobs.length + ' jobs');
 
     // Nothing manages color during automated runs, so you have to hang on to it
-    var runColor = cncserver.state.color;
+    var runColor = cncserver.state.media;
 
     var jobIndex = 0;
     doNextJob();

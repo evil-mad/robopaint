@@ -270,7 +270,8 @@ nav#tools .color {
   width: 85px;
 }
 
-nav#tools .color.selected {
+nav#tools .color.selected,
+nav#tools .water.selected {
   -webkit-animation-name: hover-pulse-selected;
   -webkit-animation-duration: 3000ms;
   -webkit-animation-iteration-count: infinite;
