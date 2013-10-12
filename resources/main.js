@@ -61,6 +61,9 @@ function initialize() {
   // Bind the tooltips
   initToolTips();
 
+  // Fill in the IP Address of local interfaces
+  $('#settings div.httpport label span').text(getIPs());
+
   // Add the secondary page iFrame to the page
   $subwindow = $('<iframe>').attr({
     height: $(window).height() - barHeight,
@@ -114,6 +117,8 @@ function responsiveResize() {
   var size = [$s.width(), $s.height()];
   var win = [$(window).width(), $(window).height()];
   $s.css({left: (win[0]/2) - (size[0]/2), top: (win[1]/2) - (size[1]/2)});
+  // Set height for inner settings content window, just remove tab and H2 height
+  $s.find('.settings-content').height($s.height() - 80);
 
   // Position window
   size = $('nav').width();
@@ -125,6 +130,27 @@ function responsiveResize() {
   }
 
 };
+
+// Utility function for grabbing a list of local IP addresses
+function getIPs() {
+  if (settings.httplocalonly) {
+    return "localhost";
+  } else {
+    var os=require('os');
+    var ifaces=os.networkInterfaces();
+    var out = [];
+
+    for (var dev in ifaces) {
+      ifaces[dev].forEach(function(details){
+        if (details.family=='IPv4') {
+          out.push(details.address);
+        }
+      });
+    }
+
+    return out.join(', ');
+  }
+}
 
 function startSerial(){
   setMessage('Starting up...', 'loading');
@@ -628,7 +654,7 @@ function bindSettingsControls() {
         break;
       case 'swapmotors':
         pushKey = ['g', 'swapMotors'];
-        pushVal = $input.is(':checked');
+        pushVal = $input .is(':checked');
         break;
       case 'httpport':
         pushKey = ['g', 'httpPort'];

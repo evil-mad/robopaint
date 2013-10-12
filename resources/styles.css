@@ -666,12 +666,41 @@ body.home #settings {
   margin: 0;
 }
 
-#settings fieldset {
-  margin-bottom: 1em;
+#settings fieldset,
+#settings .settings-content > fieldset:last-child {
+  /* Default space between each defaut fieldset, and at the bottom of all
+  majors fieldsets for a particular settings tab */
+  margin-bottom: 0.5em;
+}
+
+#settings .settings-content > fieldset {
+  /* Space between each major fieldset */
+  margin-bottom: 1.5em;
+}
+
+#settings .settings-content > fieldset > legend {
+  font-size: 1.2em;
+}
+
+#settings fieldset > div {
+ margin: 0.75em 0;
 }
 
 #settings fieldset > fieldset {
-  margin-top: 0.75em;
+  margin-top: 0.5em;
+}
+
+#settings fieldset > fieldset legend {
+  font-style: italic;
+}
+
+#settings fieldset >:nth-child(2) {
+  margin-top: 0;
+}
+
+#settings div.httpport label span {
+  font-size: 0.9em;
+  font-style: italic;
 }
 
 /* Custom styling for speed fieldset */
@@ -694,9 +723,21 @@ body.home #settings {
 #settings fieldset.speed div {
   float: left;
   width: 48%;
+  margin: 0;
 }
 
-#settings > div {
+/* Custom styling for filltype fieldset */
+#settings fieldset.filltype {
+  float: right;
+  margin-top: -2.5em;
+}
+
+#settings fieldset.filltype div:last-child {
+  margin-bottom: 0;
+}
+
+#settings > div.settings-content {
+  border-radius: 0 10px;
   padding:10px;
   height: 75%;
   overflow-y: auto;
@@ -736,9 +777,11 @@ body.home #settings {
 
 #settings input[type=range] {
   margin-left: 5px;
+  width: 50%;
 }
 
 #settings label.rangeval {
+  white-space: nowrap;
   padding-left: 8px;
   font-size: 0.9em;
   font-weight: bold;

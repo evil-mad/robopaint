@@ -42,9 +42,9 @@
     <li><a href="#settings-advanced">Advanced</a></li>
   </ul>
 
-  <div id="settings-common">
+  <div id="settings-common" class="settings-content">
     <fieldset>
-      <legend>Brush/Servo</legend>
+      <legend>Brush-lift (servo) Motor</legend>
       <div>
         <label for="servoup">Up Position:</label>
         <input type="range" id="servoup" min="0" max="1000"/>
@@ -69,7 +69,7 @@
       </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="hidden">
       <legend>Serial connection</legend>
         <select id="ports" title="Available serial ports">
           <option value="auto">Auto-port</option>
@@ -79,7 +79,76 @@
     </fieldset>
   </div>
 
-  <div id="settings-output">
+  <div id="settings-output" class="settings-content">
+    <fieldset>
+      <legend>General</legend>
+      <fieldset class="speed">
+        <legend>Carriage Movement Speed:</legend>
+        <div>
+          <label for="movespeed">...while Brush is Up:</label>
+          <input type="range" id="movespeed" min="200" max="2000" title="Move left for slower, right for faster."/>
+        </div>
+        <div>
+          <label for="paintspeed">...while Brush is Down:</label>
+          <input type="range" id="paintspeed" min="200" max="2000" title="Move left for slower, right for faster."/>
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="penmode">Painting/Drawing Mode:</label>
+        <select id="penmode">
+          <option value="0">Default (Brush, Water & Paint)</option>
+          <option value="1">Water Only (No Paint: Buddha Board)</option>
+          <option value="2">Paint Only (No Water: Non-watercolors)</option>
+          <option value="3">No Water or Paint (Pen/Pencil mode)</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="showcolortext">Show color names:</label>
+        <input type="checkbox" id="showcolortext"/>
+        <aside>When checked, color names will display on the paint palette for print colors, otherwise they will only be visible on hover.</aside>
+      </div>
+
+      <div>
+        <label for="colorset">Installed Paint Set:</label>
+        <select id="colorset"></select>
+      </div>
+
+      <hr>
+
+      <div>
+        <label for="maxpaintdistance">Refill Distance:</label>
+        <input type="range" title="Move left to get paint more often, right to get paint less often" id="maxpaintdistance" min="500" max="20000" />
+        <aside>The distance for the brush to paint on the paper before it should go get more water/paint on the brush. Default is <b>48cm / 19in</b>.</aside>
+      </div>
+
+      <div>
+        <label for="strokeprecision">Stroke Precision:</label>
+        <select id="strokeprecision">
+          <option value="1">Uber Fine [slow] (1)</option>
+          <option value="2">Very Fine (2)</option>
+          <option value="4">Fine (4)</option>
+          <option value="6">Default (6)</option>
+          <option value="10">Coarse (10)</option>
+          <option value="15">Very Coarse [fast] (15)</option>
+        </select>
+        <aside>How accurately outlines are retraced to be drawn. Smaller precision value = more detail, but more processing/drawing time.</aside>
+      </div>
+
+      <div>
+        <label for="strokeovershoot">Stroke Overshoot:</label>
+        <select id="strokeovershoot">
+          <option value="1">Tiny (1)</option>
+          <option value="5">Medium (5)</option>
+          <option value="8">Longer (8)</option>
+          <option value="13">Yikes (13)</option>
+          <option value="20">Unhelpful (20)</option>
+        </select>
+        <aside>The distance factor to move the brush beyond when lifting to make up for brush bend. Default is <b>5</b>.</aside>
+      </div>
+    </fieldset>
+
     <fieldset>
       <legend>Fill</legend>
       <div>
@@ -93,7 +162,7 @@
         </select>
       </div>
 
-      <fieldset>
+      <fieldset class="filltype">
         <legend>Line/Hatch Fills</legend>
         <div>
           <label for="fillangle">Line Angle:</label>
@@ -102,7 +171,8 @@
             <option value="45">Diagonal (45&deg;)</option>
             <option value="90">Vertical (90&deg;)</option>
           </select>
-
+        </div>
+        <div>
           <label for="fillspacing">Line Spacing:</label>
           <select id="fillspacing">
             <option value="1">Miniscule (1)</option>
@@ -134,128 +204,18 @@
       </div>
 
     </fieldset>
-
-    <fieldset>
-      <legend>General</legend>
-      <fieldset class="speed">
-        <legend>Carriage Movement Speed:</legend>
-        <div>
-          <label for="movespeed">...while Brush is Up:</label>
-          <input type="range" id="movespeed" min="200" max="2000" title="Move left for slower, right for faster."/>
-        </div>
-        <div>
-          <label for="paintspeed">...while Brush is Down:</label>
-          <input type="range" id="paintspeed" min="200" max="2000" title="Move left for slower, right for faster."/>
-        </div>
-      </fieldset>
-
-      <div>
-        <label for="showcolortext">Show color name:</label>
-        <input type="checkbox" id="showcolortext"/>
-        <aside>When checked, color names will display on the paint palette for print colors, otherwise they will only be visible on hover.</aside>
-      </div>
-
-      <div>
-        <label for="colorset">Installed Paint Set:</label>
-        <select id="colorset"></select>
-      </div>
-
-      <hr>
-
-      <div>
-        <label for="maxpaintdistance">Refill Distance:</label>
-        <input type="range" title="Move left to get paint more often, right to get paint less often" id="maxpaintdistance" min="500" max="20000" />
-        <aside>The distance for the brush to paint on the paper before it should go get more water/paint on the brush. Default is <b>48cm / 19in</b>.</aside>
-      </div>
-
-      <div>
-        <label for="strokeprecision">Stroke Precision:</label>
-        <select id="strokeprecision">
-          <option value="1">Uber Fine [slow] (1)</option>
-          <option value="2">Very Fine (2)</option>
-          <option value="4">Fine (4)</option>
-          <option value="6">Default (6)</option>
-          <option value="10">Coarse (10)</option>
-          <option value="15">Very Coarse [fast] (15)</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="strokeovershoot">Stroke Overshoot:</label>
-        <select id="strokeovershoot">
-          <option value="1">Tiny (1)</option>
-          <option value="5">Medium (5)</option>
-          <option value="8">Longer (8)</option>
-          <option value="13">Yikes (13)</option>
-          <option value="20">Unhelpful (20)</option>
-        </select>
-        <aside>The distance factor to move the brush beyond when lifting to make up for brush bend. Default is <b>5</b>.</aside>
-      </div>
-    </fieldset>
   </div>
 
-  <div id="settings-advanced">
-    <fieldset>
-      <legend>Misc</legend>
-
-      <div>
-        <label for="penmode">Hardware Drawing Setup:</label>
-        <select id="penmode">
-          <option value="0">0: Default (Brush, Water & Paint)</option>
-          <option value="1">1: Water Only (No Paint: Buddha Board)</option>
-          <option value="2">2: Paint Only (No Water: Non-watercolors)</option>
-          <option value="3">3: No Water or Paint (Pen/Pencil mode)</option>
-        </select>
-        <aside><b><i>ALPHA</i></b> Disables API calls to restricted areas based on which mode is selected.</aside>
-      </div>
-
-      <div>
-        <label for="openlast">Open last image on startup:</label>
-        <input type="checkbox" id="openlast"/>
-      </div>
-
-    </fieldset>
-
-    <fieldset>
-      <legend>Modes</legend>
-      <aside>Enable or disable experimental RoboPaint modes</aside>
-
-      <div>
-        <label for="manualpaintenable">Manual paint:</label>
-        <input type="checkbox" id="manualpaintenable"/>
-        <aside>Like Auto-paint, but allows for more control over what elements are painted, and a number of other options.</aside>
-      </div>
-
-    </fieldset>
-
-    <fieldset>
-      <legend>API Server</legend>
-      <div>
-        <label for="httpport">Server at {your IP}:</label>
-        <input type="text" id="httpport"/>
-
-        <aside>When running supported apps, this would be the server IP and port to enter into the app. <b>Change requires App restart.</b></aside>
-      </div>
-
-      <div>
-        <label for="httplocalonly">Only allow connections from this computer:</label>
-        <input type="checkbox" id="httplocalonly"/>
-        <aside>Uncheck this to connect to the CNCServer API in RoboPaint from other devices. <b>Change requires App restart.</b></aside>
-      </div>
-    </fieldset>
-
+  <div id="settings-advanced" class="settings-content">
     <fieldset>
       <legend>X/Y Steppers</legend>
 
       <div>
         <label for="invertx">Invert X axis:</label>
-        <input type="checkbox" id="invertx"/>
-      </div>
-
-      <div>
+        <input type="checkbox" id="invertx"/><b> | </b>
         <label for="inverty">Invert Y axis:</label>
         <input type="checkbox" id="inverty"/>
-        <aside>Use only if your windings are backwards.</aside>
+        <aside>In case one of your motors moves backwards.</aside>
       </div>
 
       <div>
@@ -267,7 +227,44 @@
       <div>
         <label for="swapmotors">Swap X for Y:</label>
         <input type="checkbox" id="swapmotors"/>
-        <aside>Switches the X and Y, as if you'd hooked the stepper motors up backwards.</aside>
+        <aside>In case you've accidentally wired up Motor 1 where Motor 2 is supposed to go.</aside>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Misc</legend>
+
+      <fieldset>
+        <legend>Modes</legend>
+        <aside>Enable or disable experimental RoboPaint modes</aside>
+
+        <div>
+          <label for="manualpaintenable">Manual paint:</label>
+          <input type="checkbox" id="manualpaintenable"/>
+          <aside>Like Auto-paint, but allows for more control over what elements are painted, and a number of other options.</aside>
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="openlast">Open last image on startup:</label>
+        <input type="checkbox" id="openlast"/>
+      </div>
+
+    </fieldset>
+
+    <fieldset>
+      <legend>API Server</legend>
+      <div class="httpport">
+        <label for="httpport">Server at (<span>...</span>):</label>
+        <input type="text" id="httpport"/>
+
+        <aside>When running supported apps, this would be the server IP and port to enter into the app. <b>Change requires App restart.</b></aside>
+      </div>
+
+      <div>
+        <label for="httplocalonly">Only allow connections from this computer:</label>
+        <input type="checkbox" id="httplocalonly"/>
+        <aside>Uncheck this to connect to the CNCServer API in RoboPaint from other devices. <b>Change requires App restart.</b></aside>
       </div>
     </fieldset>
   </div>
