@@ -703,6 +703,15 @@ function bindSettingsControls() {
       }
     }
 
+    // Update visibility of paintsets on penmode change
+    if (this.id == 'penmode') {
+      if ($subwindow[0]) {
+        if ($subwindow[0].contentWindow.responsiveResize) {
+          $subwindow[0].contentWindow.responsiveResize();
+        }
+      }
+    }
+
     // If there's a key to override for CNC server, set it
     if (pushKey.length) {
       settings[this.id] = pushVal;

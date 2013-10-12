@@ -248,6 +248,8 @@ $(function() {
     });
   }
 
+  // Externalize for remote triggering
+  window.responsiveResize = responsiveResize;
   function responsiveResize(){
     var w = $(window).width();
     var h = $(window).height();
@@ -262,6 +264,27 @@ $(function() {
     var toolRightMargin = 5;
     var $tools = $('#tools');
     var controlLeftMargin = 60;
+    var mode = robopaint.settings.penmode;
+
+    // Allow Water
+    if (mode == 0 || mode == 1) {
+      $('#waters').css('visibility', 'visible');
+    }
+
+    // Allow Paint
+    if (mode == 0 || mode == 2) {
+      $('#colors').css('visibility', 'visible');
+    }
+
+    // Hide Water
+    if (mode == 3 || mode == 2) {
+      $('#waters').css('visibility', 'hidden');
+    }
+
+    // Hide Paint
+    if (mode == 3 || mode == 1) {
+      $('#colors').css('visibility', 'hidden');
+    }
 
     // Scale tools to height match full size canvas
     $tools.css('-webkit-transform', 'scale(' + toolScale + ')');
