@@ -336,6 +336,10 @@ body.print-auto #control>legend {
   width: 49%;
   font-weight: bold;
   text-align: center;
+  font-size: 1.2em;
+  position: absolute;
+  top: -26px;
+  right: 54px;
 }
 
 body.print-auto #buttons {
