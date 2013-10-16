@@ -727,7 +727,12 @@ function bindSettingsControls() {
 
   // Done Button
   $('#settings-done').click(function(e) {
-    cncserver.setHeight('up');
+    if (appMode == 'print' || appMode == 'manual') {
+      if ($subwindow[0].contentWindow.cncserver.state.buffer.length == 0) {
+        cncserver.setHeight('up');
+      }
+    }
+
     setSettingsWindow(false);
   });
 }
