@@ -29,6 +29,8 @@ $(function() {
       // With nothing in the queue, start autopaint!
       if (cncserver.state.buffer.length == 0) {
         $('#pause').removeClass('ready').attr('title', stateText.pause).text('Pause');
+        $('#buttons button.normal').prop('disabled', true); // Disable options
+
         cncserver.wcb.autoPaint($('#cncserversvg'),
           function(){ // Finished spooling callback
             if (cncserver.config.canvasDebug) {
@@ -36,6 +38,7 @@ $(function() {
             }
           }, function(){ // Actually Complete callback
             $('#pause').attr('class', 'ready').attr('title', stateText.ready).text('Start');
+            $('#buttons button.normal').prop('disabled', false); // Enable options
           }
         );
       } else {
@@ -47,6 +50,8 @@ $(function() {
         } else {
           // Resuming ===============
           cncserver.state.process.paused = false;
+
+          $('#buttons button.normal').prop('disabled', true); // Disable options
 
           // Execute next should put us where we need to be
           cncserver.cmd.executeNext(function(){
@@ -76,6 +81,7 @@ $(function() {
 
       function _pauseDone() {
         cncserver.wcb.status('Paused. Click resume to continue.', 'complete');
+        $('#buttons button.normal').prop('disabled', false); // Enable options
         $('#pause').addClass('active').attr('title', stateText.resume).text('Resume');
       }
     }
