@@ -59,6 +59,13 @@ $(function() {
       cncserver.api.pen.up(); // Send to put up
       cncserver.state.pen.state = 0; // Assume it's up (doesn't return til later)
 
+      // Default last tool to given in returned state
+      if (cncserver.state.pen.tool) {
+        cncserver.state.media = cncserver.state.pen.tool;
+      } else {
+        cncserver.state.media = "water0";
+      }
+
       // Set the Pen state button
       $('#pen').addClass(!cncserver.state.pen.state ? 'down' : 'up');
       if (window.bindControls) window.bindControls();

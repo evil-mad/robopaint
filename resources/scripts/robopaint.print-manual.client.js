@@ -64,12 +64,6 @@ $(function() {
 
     // Add selection from last machine tool
     $('.color, .water').removeClass('selected');
-    if (cncserver.state.pen.tool) {
-      cncserver.state.media = cncserver.state.pen.tool;
-    } else {
-      cncserver.state.media = "water0";
-    }
-
     $('#' + cncserver.state.media).addClass('selected');
 
     // Pause management
