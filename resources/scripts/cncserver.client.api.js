@@ -12,7 +12,7 @@ cncserver.api = {
     stat: function(callback){
       _get('pen', {
         success: function(d){
-          cncserver.state.pen = d;
+          cncserver.state.updatePen(d);
           if (callback) callback(d);
         },
         error: function(e) {
@@ -38,7 +38,7 @@ cncserver.api = {
       _put('pen', {
         data: { state: value},
         success: function(d){
-          cncserver.state.pen = d;
+          cncserver.state.updatePen(d);
           if (callback) callback(d);
         },
         error: function(e) {
@@ -66,7 +66,7 @@ cncserver.api = {
       _put('pen', {
         data: { resetCounter: 1},
         success: function(d){
-          cncserver.state.pen = d;
+          cncserver.state.updatePen(d);
           if (callback) callback(d);
         },
         error: function(e) {
@@ -83,7 +83,7 @@ cncserver.api = {
     park: function(callback){
       _delete('pen',{
         success: function(d){
-          cncserver.state.pen = d;
+          cncserver.state.updatePen(d);
           cncserver.hideDrawPoint(); // hide drawpoint (will be off draw canvas)
           if (callback) callback(d);
         },
@@ -146,7 +146,7 @@ cncserver.api = {
           ignoreTimeout: point.ignoreTimeout
         },
         success: function(d){
-          cncserver.state.pen = d;
+          cncserver.state.updatePen(d);
           if (callback) callback(d);
         },
         error: function(e) {

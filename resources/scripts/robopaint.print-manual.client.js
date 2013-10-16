@@ -147,15 +147,7 @@ $(function() {
     });
 
     $('#pen').click(function(){
-      if (cncserver.state.pen.state) {
-        cncserver.api.pen.up(function(){
-          $('#pen').removeClass('up').addClass('down').text('Lower Brush');
-        });
-      } else {
-        cncserver.api.pen.down(function(){
-          $('#pen').removeClass('down').addClass('up').text('Raise Brush');
-        });
-      }
+      cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
     });
 
     $('#calibrate').click(function(){

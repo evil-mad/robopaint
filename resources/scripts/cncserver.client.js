@@ -53,6 +53,23 @@ $(function() {
   function serverConnect() {
     // Get initial pen data from server
     cncserver.wcb.status('Connecting to bot...');
+
+    // Setup general pen status update callback, called from cncserver.api.js
+    // TODO: This handily works for both manual and auto as they have the same
+    // named buttons, but should probably be generalized
+    cncserver.state.updatePen = function(d) {
+      cncserver.state.pen = d;
+
+      // Update button text
+      var toState = 'up';
+
+      if (cncserver.state.pen.state == "up" || cncserver.state.pen.state == 0){
+        toState = 'down';
+      }
+
+      $('#pen').attr('class','normal ' + toState);
+    }
+
     cncserver.api.pen.stat(function(d){
       cncserver.wcb.status(['Connected Successfully!'], d);
       cncserver.state.pen.state = 1; // Assume down

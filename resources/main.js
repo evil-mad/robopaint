@@ -727,12 +727,16 @@ function bindSettingsControls() {
 
   // Done Button
   $('#settings-done').click(function(e) {
+    // Force the pen up when exiting...
     if (appMode == 'print' || appMode == 'manual') {
+      // Unless we' have're probably printing something
       if ($subwindow[0].contentWindow.cncserver.state.buffer.length == 0) {
-        cncserver.setHeight('up');
+        // Use the more abstracted API to allow sub-app callbacks to handle specifics
+        $subwindow[0].contentWindow.cncserver.api.pen.up();
       }
+    } else {
+      cncserver.setHeight('up');
     }
-
     setSettingsWindow(false);
   });
 }
