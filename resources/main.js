@@ -82,7 +82,7 @@ function initialize() {
         .text('What do you want to do?').hide();
   $options.append(
     $('<div>').append(
-      $('<button>').addClass('continue').click(function(e){
+      $('<button>').addClass('continue normal').click(function(e){
         $stat.fadeOut('slow');
         cncserver.continueSimulation();
         cncserver.serialReadyInit();
@@ -97,7 +97,7 @@ function initialize() {
         setModal(false);
       }).text('Continue in Simulation mode'),
 
-      $('<button>').addClass('reconnect').click(function(e){
+      $('<button>').addClass('reconnect normal').click(function(e){
         // Reconnect! Basically Resets status and tries start aagain
         $options.hide();
         startSerial();

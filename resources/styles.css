@@ -62,6 +62,21 @@ img.logo {
   width: 200px;
 }
 
+/* Attempt some kind of button standardization */
+button.normal {
+  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  font-size: 1em;
+  color: #FFF;
+  margin-top: 0.3em;
+  padding: 0.2em 0.4em;
+  background: linear-gradient(to bottom, #3093c7, #1c5a85);
+}
+
+button.normal:focus {
+  outline: 2px solid #fff;
+}
+
 @media (max-width: 650px) {
   img.logo {
     width: 150px;
@@ -348,18 +363,13 @@ body.print-auto #buttons {
   margin-bottom: 6px;
 }
 
+/* Control panel specific button adjustments */
 body.print-auto #buttons button.normal {
-  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
-  border-radius: 7px;
   font-size: 1.1em;
-  width: 190px;
-  color: #FFF;
-  margin: 0 auto;
   float: none;
+  margin: 0.2em auto;
   display: block;
-  margin-top: 0.3em;
-  padding: 4px;
-  background: linear-gradient(to bottom, #3093c7, #1c5a85);
+  width: 190px;
 }
 
 /* Status Specific */
@@ -649,6 +659,11 @@ body.home #settings {
   background-color: #aaa;
   border-radius: 8px;
   z-index: 15;
+}
+
+/* Connection options buttons specifics */
+body.home div.options button.normal {
+  font-size: 0.6em;
 }
 
 /* Settings Window Tabs */
