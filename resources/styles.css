@@ -571,9 +571,9 @@ body.home nav {
 }
 
 body.home nav a {
-  width: 100px;
-  height: 100px;
-  border-radius: 65px;
+  width: 121px;
+  height: 121px;
+  border-radius: 74px;
   text-align: center;
   border: 4px solid #aaa;
   float: left;
@@ -583,7 +583,7 @@ body.home nav a {
   text-decoration: none;
   font-weight: bold;
   font-size: 1.8em;
-  line-height: 100px;
+  line-height: 4.1em;
   overflow: hidden;
 }
 
