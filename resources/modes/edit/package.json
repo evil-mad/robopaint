@@ -1,0 +1,13 @@
+{
+  "name": "edit",
+  "version": "0.1.0",
+	"type": "robopaint_mode",
+	"icon": "icon-edit",
+	"weight": -5,
+	"word": "Create",
+	"core": true,
+  "description": "Open, resize, and edit existing vector artwork.",
+  "main": "../../method-editor/editor/index.html",
+  "author": "techninja",
+  "license": "MIT"
+}
