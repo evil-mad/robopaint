@@ -460,7 +460,8 @@ function addSettingsRangeValues() {
         case 'servoup':
         case 'servopaint':
         case 'servowash':
-          num = num/10;
+          num = Math.round(num/10);
+          dosep = false;
           post = '%';
           break;
         case 'movespeed':
