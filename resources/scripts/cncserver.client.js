@@ -21,7 +21,8 @@ var cncserver = {
   state: {
     pen: {},
     buffer: [], // Hold commands to be interpreted as free operations come
-    color: 'color1', // Default color selection
+    media: '', // What we think is currently on the brush
+    mediaTarget: '', // What we "want" to paint with
     process: {
       name: 'idle',
       waiting: false,
@@ -82,6 +83,9 @@ $(function() {
       } else {
         cncserver.state.media = "water0";
       }
+
+      // Default target to "current" media on startup
+      cncserver.state.mediaTarget = cncserver.state.media;
 
       // Set the Pen state button
       $('#pen').addClass(!cncserver.state.pen.state ? 'down' : 'up');

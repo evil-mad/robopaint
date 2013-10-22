@@ -95,6 +95,9 @@ cncserver.wcb = {
 
     // If we've gotten this far, we can make the change!
 
+    // Save the targeted media (separate from media state)
+    cncserver.state.mediaTarget = toolName;
+
     cncserver.wcb.status('Putting some ' + name + ' on the brush...');
     cncserver.api.tools.change(toolName, function(d){
       cncserver.wcb.status(['There is now ' + name + ' on the brush'], d);
@@ -104,10 +107,10 @@ cncserver.wcb = {
 
   },
 
-  // Wet the brush and get more of selected paint color, then return to
+  // Wet the brush and get more of targeted media, then return to
   // point given and trigger callback
   getMorePaint: function(point, callback) {
-    var name = cncserver.wcb.getMediaName().toLowerCase();
+    var name = cncserver.wcb.getMediaName(cncserver.state.mediaTarget).toLowerCase();
 
     // Reset the counter for every mode on getMorePaint
     cncserver.api.pen.resetCounter();
@@ -119,7 +122,7 @@ cncserver.wcb = {
         cncserver.api.tools.change("water0", function(d){
           cncserver.api.pen.up(function(d){
             cncserver.api.pen.move(point, function(d) {
-              cncserver.wcb.status(['Continuing to paint with ' + name]);
+              cncserver.wcb.status(['Continuing to paint with water']);
               if (callback) callback(d);
             });
           });
@@ -127,7 +130,7 @@ cncserver.wcb = {
         break;
       case 2: // Dissallow water
         cncserver.wcb.status('Going to get some more ' + name + ', no water...')
-        cncserver.api.tools.change(cncserver.state.media, function(d){
+        cncserver.api.tools.change(cncserver.state.mediaTarget, function(d){
           cncserver.api.pen.up(function(d){
             cncserver.api.pen.move(point, function(d) {
               cncserver.wcb.status(['Continuing to paint with ' + name]);
@@ -143,7 +146,7 @@ cncserver.wcb = {
       default:
         cncserver.wcb.status('Going to get some more ' + name + '...')
         cncserver.api.tools.change('water0dip', function(d){
-          cncserver.api.tools.change(cncserver.state.media, function(d){
+          cncserver.api.tools.change(cncserver.state.mediaTarget, function(d){
             cncserver.api.pen.up(function(d){
               cncserver.api.pen.move(point, function(d) {
                 cncserver.wcb.status(['Continuing to paint with ' + name]);
