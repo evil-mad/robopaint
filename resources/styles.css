@@ -77,10 +77,11 @@ button.normal:focus {
   outline: 2px solid #fff;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 690px) {
   img.logo {
-    width: 150px;
-    margin-left: -75px;
+    top: 7px;
+    width: 126px;
+    margin-left: -32px;
   }
 }
 
