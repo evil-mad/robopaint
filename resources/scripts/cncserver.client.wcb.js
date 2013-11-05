@@ -36,7 +36,9 @@ cncserver.wcb = {
   },
 
   // Grouping function to do a full wash of the brush
-  fullWash: function(callback) {
+  fullWash: function(callback, useDip) {
+    var toolExt = useDip ? 'dip' : '';
+
     switch(parseInt(robopaint.settings.penmode)) {
       case 3:
       case 2: // Dissallow water
@@ -45,9 +47,9 @@ cncserver.wcb = {
         break;
       default:
         cncserver.wcb.status('Doing a full brush wash...');
-        cncserver.api.tools.change('water0', function(){
-          cncserver.api.tools.change('water1', function(){
-            cncserver.api.tools.change('water2', function(d){
+        cncserver.api.tools.change('water0' + toolExt, function(){
+          cncserver.api.tools.change('water1' + toolExt, function(){
+            cncserver.api.tools.change('water2' + toolExt, function(d){
               cncserver.api.pen.resetCounter();
               cncserver.state.media = 'water0';
               cncserver.wcb.status(['Brush should be clean'], d);
