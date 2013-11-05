@@ -196,15 +196,75 @@ nav#tools .water {
   height: 150px;
   margin-bottom: 51px;
   width: 150px;
+  position: relative;
 
   background: #c5deea; /* Old browsers */
   background: radial-gradient(ellipse at center, #c5deea 0%,#b1c9d6 44%,#a6e3f4 100%); /* W3C */
 }
 
-nav#tools a:hover, nav#tools a:focus {
+nav#tools a a:hover, nav#tools a a:focus {
   -webkit-animation-name: hover-pulse;
   -webkit-animation-duration: 1000ms;
   -webkit-animation-iteration-count: infinite;
+}
+
+/* Tools Sub options */
+nav#tools a:hover a.sub-option {
+  display: block;
+}
+
+nav#tools a.sub-option {
+  display: none;
+}
+
+nav#tools #colors a.sub-option {
+  width: 43px;
+  height: 58px;
+  position: absolute;
+  background-color: rgba(0,0,0,0.2);
+}
+
+  nav#tools #colors a.sub-option.full {
+    border-top-left-radius: 150px;
+    border-bottom-left-radius: 150px;
+  }
+
+  nav#tools #colors a.sub-option.dip {
+    right: 8px;
+    border-top-right-radius: 150px;
+    border-bottom-right-radius: 150px;
+  }
+
+
+nav#tools #waters a.sub-option {
+  width: 72px;
+  height: 75px;
+  right: 0;
+  position: absolute;
+  background-color: rgba(0,0,0,0.2);
+  line-height: 4.5em;
+  text-align: center;
+}
+
+  nav#tools #waters a.sub-option.full {
+    border-top-right-radius: 72px;
+  }
+
+  nav#tools #waters a.sub-option.dip {
+    bottom: 0;
+    line-height: 3.5em;
+    border-bottom-right-radius: 72px;
+  }
+
+
+nav#tools div.static a#colorx a.sub-option {
+  top: 5px;
+  display: none;
+  font-size: 16px;
+}
+
+nav#tools div.static a#colorx:hover a.sub-option {
+  display: block;
 }
 
 /* Animation Keyframes */
