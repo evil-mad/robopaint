@@ -11,6 +11,10 @@ $(function() {
 
   // Add in a callback for when loading is complete
   cncserver.canvas.loadSVGCallback = function(){
+
+    // Initialize the record buffer
+    cncserver.state.recordBuffer = [];
+
     // Bind SVG path elements click for $path select/deselect
     $svg.click(function(e){
       var selected = false;
@@ -208,6 +212,26 @@ $(function() {
         if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
         cncserver.cmd.run([['status', 'Painting complete', true]]);
       });
+    });
+
+    // Bind to Recording Buttons
+    $('fieldset.recording button').click(function(e){
+      if (this.id == 'record-toggle') {
+        cncserver.state.isRecording = !cncserver.state.isRecording;
+        if (cncserver.state.isRecording) {
+          $(this).text('Stop Recording');
+        } else {
+          $(this).text('Start Recording');
+          if (cncserver.state.recordBuffer.length) {
+            $('#record-play, #record-clear').prop('disabled', false);
+          }
+        }
+      } else if (this.id == 'record-play') {
+        $.merge(cncserver.state.buffer, cncserver.state.recordBuffer);
+      } else if (this.id == 'record-clear') {
+        cncserver.state.recordBuffer = [];
+        $('#record-play, #record-clear').prop('disabled', true);
+      }
     });
 
     // Move the visible draw position indicator

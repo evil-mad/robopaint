@@ -114,10 +114,12 @@ cncserver.cmd = {
       cncserver.state.process.max+= arguments.length;
       $.each(arguments[0], function(i, args){
         cncserver.state.buffer.unshift(args);
+        if (cncserver.state.isRecording) cncserver.state.recordBuffer.unshift(args);
       });
     } else {
       cncserver.state.process.max++;
       cncserver.state.buffer.unshift(arguments);
+      if (cncserver.state.isRecording) cncserver.state.recordBuffer.unshift(arguments);
     }
 
   }
