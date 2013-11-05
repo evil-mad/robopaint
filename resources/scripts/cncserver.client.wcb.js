@@ -67,7 +67,7 @@ cncserver.wcb = {
     if (toolName.indexOf('water') !== -1) {
       return "Water";
     } else {
-      return cncserver.config.colors[toolName.substr(-1, 1)].name;
+      return cncserver.config.colors[toolName.substr(5, 1)].name;
     }
   },
 
