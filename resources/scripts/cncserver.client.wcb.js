@@ -100,6 +100,11 @@ cncserver.wcb = {
     // Save the targeted media (separate from media state)
     cncserver.state.mediaTarget = toolName;
 
+    // Visually show the selection
+    var idName = toolName.indexOf('dip') !== -1 ? toolName.slice(0, -3) : toolName;
+    $('nav#tools a.selected').removeClass('selected');
+    $('nav#tools #' + idName).addClass('selected');
+
     cncserver.wcb.status('Putting some ' + name + ' on the brush...');
     cncserver.api.tools.change(toolName, function(d){
       cncserver.wcb.status(['There is now ' + name + ' on the brush'], d);

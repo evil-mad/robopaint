@@ -79,10 +79,6 @@ cncserver.cmd = {
         cncserver.api.pen.move(next[1], cncserver.cmd.cb);
         break;
       case "tool":
-        // Reflect color selection
-        $('#tools .selected').removeClass('selected');
-        $('#' + next[1]).addClass('selected');
-
         cncserver.wcb.setMedia(next[1], cncserver.cmd.cb);
         break;
       case "up":
