@@ -122,7 +122,10 @@ function responsiveResize() {
 
   // Position window
   size = $('nav').width();
-  $('nav').css('left', (win[0]/2) - (size/2))
+  $('nav').css({
+    left: (win[0]/2) - (size/2),
+    top: '70%'
+  });
 
   // Set subwindow height
   if ($subwindow.height) {
