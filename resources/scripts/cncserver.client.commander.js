@@ -93,7 +93,7 @@ cncserver.cmd = {
         cncserver.cmd.cb(true);
         break;
       case "wash":
-        cncserver.wcb.fullWash(cncserver.cmd.cb);
+        cncserver.wcb.fullWash(cncserver.cmd.cb, next[1]);
         break;
       case "park":
         cncserver.api.pen.park(cncserver.cmd.cb);
