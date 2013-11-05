@@ -126,10 +126,15 @@ $(function() {
 
     // Bind to control buttons
     $('#park').click(function(){
-      cncserver.wcb.status('Parking brush...');
-      cncserver.api.pen.park(function(d){
-        cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
-      });
+      // If we're paused, run it directly, otherwise add to buffer
+      if (cncserver.state.process.paused) {
+        cncserver.wcb.status('Parking brush...');
+        cncserver.api.pen.park(function(d){
+          cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
+        });
+      } else {
+        cncserver.cmd.run('park');
+      }
     });
 
     $('#draw').click(function(){
@@ -220,24 +225,51 @@ $(function() {
       $('#drawpoint').hide();
     }
 
-    // Bind to Tool Change nav items
-    $('nav#tools a').click(function(e){
+    // Add extra dom to allow for specific sub-selection of dip/full paint & water
+    $('nav#tools a').each(function(){
+      var $t = $(this);
 
-      if ($(this).is('.color, .water')) {
-        $('nav#tools a.selected').removeClass('selected');
-        $(this).addClass('selected');
+      $('<a>')
+        .text('Full')
+        .attr('title', 'Full dip and wiggle')
+        .addClass('sub-option full')
+        .appendTo($t);
+      $('<a>')
+        .text('Dip')
+        .attr('title', 'Single momentary dip')
+        .addClass('sub-option dip')
+        .appendTo($t);
+    });
+
+
+    // Bind to Tool Change nav items
+    $('nav#tools a a').click(function(e){
+      var $p = $(this).parent();
+      var isDip = $(this).is('.dip'); // Full or dip?
+      var toolExt = isDip ? 'dip' : '';
+
+      if ($p.is('.color, .water')) {
+        // If we're paused, run it directly, otherwise add to buffer
+        if (cncserver.state.process.paused) {
+          cncserver.wcb.setMedia($p.attr('id') + toolExt);
+          $('nav#tools a.selected').removeClass('selected');
+          $p.addClass('selected');
+        } else {
+          cncserver.cmd.run([['tool', $p.attr('id') + toolExt]]);
+        }
       }
 
       // X clicked: Do a full brush wash
-      if ($(this).is('#colorx')) {
-        cncserver.wcb.fullWash();
-        $('nav#tools a.selected').removeClass('selected');
-        $('#water0').addClass('selected');
-        return false;
+      if ($p.is('#colorx')) {
+        // If we're paused, run it directly, otherwise add to buffer
+        if (cncserver.state.process.paused) {
+          cncserver.wcb.fullWash(null, isDip);
+          $('nav#tools a.selected').removeClass('selected');
+          $('#water0').addClass('selected');
+        } else {
+          cncserver.cmd.run([['wash', isDip]]);
+        }
       }
-
-      // Manual media set
-      cncserver.wcb.setMedia(this.id);
 
       return false;
     });
