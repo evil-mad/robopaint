@@ -56,8 +56,8 @@ $(function() {
 
   // Add all the colorsets CSS files
   for(var i in robopaint.statedata.colorsets['ALL']) {
-    var set = robopaint.statedata.colorsets[robopaint.statedata.colorsets['ALL'][i]];
-    $('head').append(set.stylesheet);
+    var set = robopaint.statedata.colorsets['ALL'][i];
+    $('<link>').attr({rel: 'stylesheet', href: 'colorsets/' + set + '/' + set + '.css'}).appendTo('head');
   }
 
 
