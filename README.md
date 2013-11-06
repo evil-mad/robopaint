@@ -14,8 +14,8 @@ Go to the [releases page](https://github.com/evil-mad/robopaint/releases) and
 pick out the latest release, then choose the package for your system by clicking
 the green download buttons for Windows, Linux or Mac.
 
-*(Linux & Windows user during BETA period: Simply copy folder from zip file to
-Desktop or other folder, then run executable. System installer coming soon!)*
+*Linux users: Simply copy folder from zip file to
+Desktop or other folder, then run executable. System installer coming soon!*
 
 
 ## Features
