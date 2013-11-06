@@ -9,11 +9,6 @@ a speedy framework of API calls to interact with the WaterColorBot, while
 RoboPaint is the clean interface in an easy to install app!
 
 
-#### IMPORTANT NOTE: *THIS IS PRE-RELEASE SOFTWARE*
-Features, specifications, and interfaces may change frequently and without
-warning or remorse prior to our first official release.
-
-
 ## Downloads / Install
 Go to the [releases page](https://github.com/evil-mad/robopaint/releases) and
 pick out the latest release, then choose the package for your system by clicking
