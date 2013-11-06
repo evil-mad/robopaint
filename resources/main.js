@@ -47,6 +47,9 @@ cncserver.getPorts(function(ports) {
 function initialize() {
   initializing = true;
 
+  // Set visible version from manifest
+  $('span.version').text('(v' + gui.App.manifest.version + ')');
+
   gui.Window.get().on('close', onClose); // Catch close event
 
   // Bind settings controls
