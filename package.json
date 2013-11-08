@@ -1,12 +1,12 @@
 {
   "name": "robopaint",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "index.html",
   "author": "techninja",
   "license": "MIT",
   "window": {
-    "toolbar": false,
+    "toolbar": true,
     "position": "center",
     "min_width": 600,
     "min_height": 420,
