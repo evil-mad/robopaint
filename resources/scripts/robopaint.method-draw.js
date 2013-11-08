@@ -109,13 +109,47 @@ function removeElements() {
   $('#tool_snap, #view_grid, #rect_panel label, #path_panel label').remove();
   $('#g_panel label, #ellipse_panel label, #line label').remove();
   $('#text_panel label').remove();
-  $('#tool_save, #tool_export').remove(); // Save and export, they shall return!
+  $('#tool_export').remove(); // Save and export, they shall return!
   $('#palette').hide();
 }
 
 
 // Add in extra Method Draw elements
 function addElements() {
+  if (!robopaint.statedata.lastFile) robopaint.statedata.lastFile = '';
+
+  // Add NW integrated save functionality
+  var fileSave = $('<input>').attr({
+    type: 'file',
+    nwsaveas: robopaint.statedata.lastFile
+  });
+
+  methodDraw.setCustomHandlers({
+    save: function(win, svg) {
+      fileSave.change(function(e) {
+        var path = this.value;
+
+        // Verify .svg extension
+        if (path.split('.').pop().toLowerCase() !== 'svg') {
+          path += '.svg';
+        }
+
+        robopaint.statedata.lastFile = path;
+        $(this).attr('nwsaveas', path);
+
+        window.parent.fs.writeFile(path, svg, function(err) {
+            if(err) {
+              window.alert('There was an error writing the file. \n\n Check your permissions or file name and try again. \n\n ERR# ' + err.errno + ',  Code: ' + err.code);
+              console.log('Error saving file:', err);
+            }
+        });
+      }).click();
+    }
+  });
+
+
+
+
   // Add and bind Auto Zoom Button / Menu item
   $('#zoom_panel').before(
     $('<button>').addClass('zoomfit zoomfitcanvas')
