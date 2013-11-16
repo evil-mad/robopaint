@@ -6,7 +6,7 @@
   "author": "techninja",
   "license": "MIT",
   "window": {
-    "toolbar": true,
+    "toolbar": false,
     "position": "center",
     "min_width": 600,
     "min_height": 420,
