@@ -152,8 +152,8 @@ $(function() {
       .css('-webkit-transform', 'scale(' + cncserver.canvas.scale + ')');
 
     // TODO: Find out where these inconsistencies in size/position come from
-    cncserver.canvas.offset.left = mainOffset.left;
-    cncserver.canvas.offset.top = mainOffset.top;
+    cncserver.canvas.offset.left = mainOffset.left+1;
+    cncserver.canvas.offset.top = mainOffset.top+1;
   }
 
 });
