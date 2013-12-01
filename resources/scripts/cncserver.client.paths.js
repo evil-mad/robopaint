@@ -172,8 +172,9 @@ cncserver.paths = {
     var distance = 0;
     var lastPoint = {};
     var p = {};
-    var delta = {};
+    var drawAngle = 0;
     var lastPathSeg = 0;
+    var overshootMultiplier = 4.5;
     var cPathSeg = 0;
     var subPathCount = 0;
 
@@ -185,7 +186,7 @@ cncserver.paths = {
       if (distance <= $path.maxLength) {
 
         p = $path.getPoint(distance); // Get a new point
-        delta = {x:lastPoint.x - p.x, y: lastPoint.y - p.y}; // Store the difference
+        drawAngle = Math.atan2(p.x - lastPoint.x, lastPoint.y - p.y);
         cPathSeg = $path[0].getPathSegAtLength(distance); // Store the current seg ID
 
         // Increment distance, only after the first check
@@ -234,11 +235,11 @@ cncserver.paths = {
         } else { // Path is invisible, lift the brush if we're not already waiting
           if (!cncserver.state.process.waiting) {
             // Figure out how much change since last point, move more before lifting
-            if (delta.x || delta.y) {
-               // Overshoot to make up for brush flexibility
+            if (lastPoint.x && options.strokeovershoot) {
+              // Overshoot to make up for brush flexibility
               run('move', {
-                x: p.x - Math.min(delta.x * options.strokeovershoot, options.strokeovershoot),
-                y: p.y - Math.min(delta.y * options.strokeovershoot, options.strokeovershoot)
+                x: p.x + (options.strokeovershoot * Math.sin(drawAngle) * overshootMultiplier),
+                y: p.y - (options.strokeovershoot * Math.cos(drawAngle) * overshootMultiplier)
               });
             }
 
@@ -248,7 +249,14 @@ cncserver.paths = {
         }
         setTimeout(runNextPoint, 0);
       } else { // Done
-        // TODO: Properly implement angle based overshoot for the end
+        // Overshoot to make up for brush flexibility
+        if (options.strokeovershoot) {
+          run('move', {
+            x: p.x + (options.strokeovershoot * Math.sin(drawAngle) * overshootMultiplier),
+            y: p.y - (options.strokeovershoot * Math.cos(drawAngle) * overshootMultiplier)
+          });
+        }
+
 
         run('up');
         console.info($path[0].id + ' path outline run done!');
