@@ -197,7 +197,10 @@ cncserver.paths = {
         // Assume as always visible if we're not actually checking
         var isVisible = true;
         if (cncserver.config.checkVisibility) {
-          isVisible = cncserver.paths.getPointPathCollide(p) == $path[0];
+          var pathAtPoint = cncserver.paths.getPointPathCollide(p);
+          if (pathAtPoint != $path[0]) {
+            isVisible = false;
+          }
         }
         if (isVisible){
 
