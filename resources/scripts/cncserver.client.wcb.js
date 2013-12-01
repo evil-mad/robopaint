@@ -273,8 +273,10 @@ cncserver.wcb = {
       $('path', context).length + ' paths, ' +
       finalJobs.length + ' jobs');
 
-    // Nothing manages color during automated runs, so you have to hang on to it
-    var runColor = cncserver.state.media;
+    // Nothing manages color during automated runs, so you have to hang on to it.
+    // Though we don't actually give it a default value, this ensures we get a
+    // full wash before every auto-paint initialization
+    var runColor;
 
     var jobIndex = 0;
     doNextJob();
