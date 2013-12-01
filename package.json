@@ -17,5 +17,9 @@
   },
   "dependencies" : {
     "cncserver": "https://github.com/techninja/cncserver/tarball/master"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evil-mad/robopaint.git"
   }
 }
