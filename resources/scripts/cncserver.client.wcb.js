@@ -130,7 +130,9 @@ cncserver.wcb = {
           cncserver.api.pen.up(function(d){
             cncserver.api.pen.move(point, function(d) {
               cncserver.wcb.status(['Continuing to paint with water']);
-              if (callback) callback(d);
+                cncserver.api.pen.down(function(d){
+                  if (callback) callback(d);
+                })
             });
           });
         });
@@ -141,7 +143,9 @@ cncserver.wcb = {
           cncserver.api.pen.up(function(d){
             cncserver.api.pen.move(point, function(d) {
               cncserver.wcb.status(['Continuing to paint with ' + name]);
-              if (callback) callback(d);
+                cncserver.api.pen.down(function(d){
+                  if (callback) callback(d);
+                })
             });
           });
         });
@@ -157,7 +161,9 @@ cncserver.wcb = {
             cncserver.api.pen.up(function(d){
               cncserver.api.pen.move(point, function(d) {
                 cncserver.wcb.status(['Continuing to paint with ' + name]);
-                if (callback) callback(d);
+                  cncserver.api.pen.down(function(d){
+                    if (callback) callback(d);
+                  })
               });
             });
           });
