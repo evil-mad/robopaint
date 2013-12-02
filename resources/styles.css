@@ -707,6 +707,14 @@ body.home #logo {
   z-index: 0;
 }
 
+body.home #loader {
+  display: none;
+  width: 50%;
+  position: absolute;
+  top: 10px; left: 0; bottom: 0; right: 0;
+  margin: auto;
+}
+
 /* Settings Modal dialog */
 body.home #modalmask,
 body.home #modalmask:before {

@@ -323,7 +323,7 @@ function initQuickload() {
 // When the window is done loading, it will call this.
 function fadeInWindow() {
   if ($subwindow.offset().top != barHeight) {
-    $subwindow.hide().css('top', barHeight).fadeIn('slow');
+    $subwindow.hide().css('top', barHeight).fadeIn('fast');
   }
   subWin = $subwindow[0].contentWindow;
 }
@@ -361,13 +361,17 @@ $(function() {
 
       switch (mode) {
         case 'home':
+          $('nav, #logo').fadeIn('slow');
+          $('#loader').hide();
           $subwindow.fadeOut('slow', function(){$subwindow.attr('src', "");});
           break;
         case 'settings':
           setSettingsWindow(true);
           break
         default:
-          $subwindow.attr('src', $target.attr('href'));
+          $('nav, #logo').fadeOut('slow');
+          $('#loader').fadeIn();
+          $subwindow.fadeOut('slow', function(){$subwindow.attr('src', $target.attr('href'));});
       }
     }, false, e.target.id.split('-')[1]);
 
