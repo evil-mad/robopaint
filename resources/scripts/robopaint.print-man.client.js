@@ -71,7 +71,7 @@ $(function() {
     $('#' + cncserver.state.media).addClass('selected');
 
     // Pause management
-    var pauseText = 'Click to stop current operations';
+    var pauseText = 'Click to pause buffer running to bot';
     var resumeText = 'Click to resume operations';
     var pausePenState = 0;
     $('#pause').click(function(){
@@ -95,7 +95,7 @@ $(function() {
           }
         });
 
-        $('#pause').removeClass('active').attr('title', pauseText).text('STOP');
+        $('#pause').removeClass('active').attr('title', pauseText).text('PAUSE');
         if (cncserver.state.buffer.length) {
           cncserver.wcb.status('Drawing resumed...', true);
         }
@@ -127,6 +127,39 @@ $(function() {
         cncserver.wcb.simulateBuffer();
       }
     });
+
+    // Setup settings group tabs
+    $('ul.tabs').each(function(){
+      var $links = $(this).find('a');
+
+      var $active = $($links[0]);
+      $active.addClass('active');
+      var $content = $($active.attr('href'));
+
+      // Hide the remaining content
+      $links.not($active).each(function () {
+        $($(this).attr('href')).hide();
+      });
+
+      // Bind the click event handler for tabs
+      $(this).on('click', 'a', function(e){
+        // Make the old tab inactive.
+        $active.removeClass('active');
+        $content.hide();
+
+        // Update the variables with the new link and content
+        $active = $(this);
+        $content = $($(this).attr('href'));
+
+        // Make the tab active.
+        $active.addClass('active');
+        $content.show();
+
+        // Prevent the anchor's default click action
+        e.preventDefault();
+      });
+    });
+
 
     // Bind to control buttons
     $('#park').click(function(){
