@@ -165,8 +165,10 @@ $(function() {
 
     $('#disable').click(function(){
       cncserver.wcb.status('Unlocking motors...');
+      cncserver.api.pen.up();
+      cncserver.api.pen.zero();
       cncserver.api.motors.unlock(function(d){
-        cncserver.wcb.status(['Motors unlocked! Will re-lock at next move'], d);
+        cncserver.wcb.status(['Motors unlocked! Place in home corner when done'], d);
       });
     });
     $('#zero').click(function(){
