@@ -52,6 +52,10 @@ body.print-manual {
   background-image:url('images/seamless-wood_blue.jpg');
 }
 
+body.print-manual #status {
+  margin-top: -10px;
+}
+
 img.logo {
   margin-left: -100px;
   height: 37px;
@@ -71,7 +75,7 @@ span.version {
 }
 
 /* Attempt some kind of button standardization */
-button.normal {
+button.normal, body.print-manual ul.tabs li a {
   text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
   border-radius: 7px;
   font-size: 1em;
@@ -79,6 +83,43 @@ button.normal {
   margin-top: 0.3em;
   padding: 0.2em 0.4em;
   background: linear-gradient(to bottom, #3093c7, #1c5a85);
+}
+
+/* Button Tabs! Sorta... */
+body.print-manual ul.tabs {
+  margin-left: 5px;
+}
+
+body.print-manual ul.tabs li a {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding-bottom: 2px;
+  position: relative;
+  top: 2px;
+}
+
+body.print-manual ul.tabs li a.active {
+  color: black;
+  background: #F6F7FA;
+  border: 1px solid #555;
+  border-bottom: none;
+  padding-bottom: 4px;
+  top: 0;
+}
+
+body.print-manual ul.tabs {
+  margin-left: 5px;
+}
+
+body.print-manual #tab-content {
+  padding: 0.2em 0;
+  border-radius: 7px;
+  background-color: rgba(255,255,255,0.7);
+  border-top: 1px solid #C9A165;
+}
+
+body.print-manual #tab-content fieldset {
+  border: none;
 }
 
 button.normal:focus {
@@ -176,6 +217,20 @@ canvas#sim {
   top: 20px;
   z-index: 5;
   display: none;
+}
+
+/* Directionality */
+#paint-angle {
+  background-image: url('images/rotation_grid.png');
+  background-size: 200px;
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+#paint-angle img {
+  width: 200px;
 }
 
 /* Nav Tools */
@@ -373,6 +428,7 @@ fieldset#control {
   width: 14em;
   margin-top: 1em;
   -webkit-transform-origin: right top;
+  padding-bottom: 0;
 }
 
 #control button {
@@ -769,7 +825,7 @@ body.home div.options button.normal {
   font-weight: bold;
 }
 
-#settings ul {
+#settings ul, ul.tabs {
   padding: 0;
   margin: 0;
 }
@@ -860,12 +916,12 @@ body.home div.options button.normal {
   margin-bottom: 0.5em;
 }
 
-#settings .tabs li {
+ul.tabs li {
   list-style:none;
   display:inline;
 }
 
-#settings .tabs a {
+ul.tabs a {
   padding:5px 10px;
   display:inline-block;
   background:#666;
@@ -873,7 +929,7 @@ body.home div.options button.normal {
   text-decoration:none;
 }
 
-#settings .tabs a.active {
+ul.tabs a.active {
   background:#fff;
   color:#000;
 }

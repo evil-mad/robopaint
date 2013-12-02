@@ -30,64 +30,73 @@
 <canvas id="debug" height="864" width="1152"></canvas>
 
 <fieldset id="control">
-  <h2>WaterColorBot Controls</h2>
-  <fieldset>
-    <legend>Automatic</legend>
-    <nav>
-      <button class="normal" id="auto-paint" title="Paint the entire drawing automatically. Verifies colors by running auto color first.">Auto Paint</button>
-      <button class="normal" id="auto-color" title="Pick the closest match for existing colors in the drawing. Click again to UNDO.">Auto Color</button>
-    </nav>
-  </fieldset>
-
-  <fieldset>
-    <legend>Manual</legend>
-    <nav>
-      <button class="normal" id="draw" title="Stroke the selected path with an outline">Stroke Path</button>
-      <button class="normal" id="fill" title="Fill the selected path with a given fill style">Fill Path</button>
-
-      <div class="check-control">
-        <input type="checkbox" checked id="parkafter"/>
-        <label for="parkafter">Park after fill/stroke</label>
-      </div>
-
-      <div class="check-control">
-        <input type="checkbox" checked id="checkvisibility"/>
-        <label for="checkvisibility" title="If unchecked, tracing will rely on path shape only, ignoring path overlap.">Check stroke visibility</label>
-      </div>
-
-      <br/>
-      <button class="normal" id="pen">Brush</button>
-      <button class="normal" id="calibrate" title="Position the brush center at the top left corner for calibration">Top Left</button>
-      <button class="normal" id="showsim" title="View the buffer simulation">Preview</button>
-    </nav>
-  </fieldset>
-
-  <fieldset>
-    <legend>Machine</legend>
-    <nav>
-      <button class="normal" id="park" title="Move the carriage back to the home position">Park Home</button>
-      <button class="normal" id="disable" title="Unlocks/Disables stepper motors to allow them to be moved by hand">Unlock Motors</button>
-      <button class="normal" id="zero" title="Resets relative known position to 0">Zero Position</button>
-    </nav>
-  </fieldset>
-
-  <fieldset class="recording">
-    <legend>Recording</legend>
-    <nav>
-      <button class="normal" id="record-toggle" title="Starts/stops recording current actions">Start Record</button>
-      <button class="normal" id="record-play" disabled title="Shunts recorded commands into current buffer">Playback Recording</button>
-      <button class="normal" id="record-clear" disabled title="Clears the record buffer">Clear Recording</button>
-    </nav>
-  </fieldset>
-
   <fieldset id="status">
     <legend>Status</legend>
     <div id="statusmessage"></div>
     <div class="progress-wrapper">
       <progress title="Current progress" max="100" value="0"></progress>
-      <button id="pause" title="Click to stop current operations">STOP</button>
+      <button id="pause" title="Click to pause buffer running to bot">PAUSE</button>
     </div>
   </fieldset>
+
+   <fieldset>
+    <legend>Machine</legend>
+    <nav>
+      <button class="normal" id="park" title="Move the carriage back to the home position">Park</button>
+      <button class="normal" id="disable" title="Raise brush and Unlock (disable) stepper motors, so that you can move the carriage by hand.">Unlock & Zero</button>
+    </nav>
+  </fieldset>
+
+  <ul class="tabs">
+    <li><a href="#manual-manual">Manual</a></li>
+    <li><a href="#manual-auto">Auto</a></li>
+    <li><a href="#manual-record">Record</a></li>
+    <li style="display: none;"><a href="#manual-debug">Debug</a></li>
+  </ul>
+
+  <div id="tab-content">
+    <fieldset id="manual-debug">
+      <legend>Debug</legend>
+      <div id="paint-angle"><img src="images/direction_pointer.png"/></div>
+      <button class="normal" id="showsim" title="View the buffer simulation">Buffer Preview</button>
+    </fieldset>
+
+    <fieldset id="manual-auto">
+      <nav>
+        <button class="normal" id="auto-paint" title="Paint the entire drawing automatically. Verifies colors by running auto color first.">Auto Paint</button>
+        <button class="normal" id="auto-color" title="Pick the closest match for existing colors in the drawing. Click again to UNDO.">Auto Color</button>
+      </nav>
+    </fieldset>
+
+    <fieldset id="manual-manual">
+      <nav>
+        <button class="normal" id="draw" title="Stroke the selected path with an outline">Stroke Path</button>
+        <button class="normal" id="fill" title="Fill the selected path with a given fill style">Fill Path</button>
+
+        <div class="check-control">
+          <input type="checkbox" checked id="parkafter"/>
+          <label for="parkafter">Park after fill/stroke</label>
+        </div>
+
+        <div class="check-control">
+          <input type="checkbox" checked id="checkvisibility"/>
+          <label for="checkvisibility" title="If unchecked, tracing will rely on path shape only, ignoring path overlap.">Check stroke visibility</label>
+        </div>
+
+        <br/>
+        <button class="normal" id="pen">Brush</button>
+        <button class="normal" id="calibrate" title="Position the brush center at the top left corner for calibration">Top Left</button>
+      </nav>
+    </fieldset>
+
+    <fieldset id="manual-record" class="recording">
+      <nav>
+        <button class="normal" id="record-toggle" title="Starts/stops recording current actions">Start Record</button>
+        <button class="normal" id="record-play" disabled title="Shunts recorded commands into current buffer">Playback Recording</button>
+        <button class="normal" id="record-clear" disabled title="Clears the record buffer">Clear Recording</button>
+      </nav>
+    </fieldset>
+  </div>
 </fieldset>
 
 <div id="scale-container">
