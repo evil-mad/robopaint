@@ -29,12 +29,6 @@ cncserver.api = {
     *   0 to 1 float, and named constants
     */
     height: function(value, callback){
-      // Short circuit if state already matches local state
-      if (cncserver.state.pen.state == value) {
-        if (callback) callback(cncserver.state.pen);
-        return;
-      }
-
       _put('pen', {
         data: { state: value},
         success: function(d){
