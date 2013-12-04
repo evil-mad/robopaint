@@ -91,6 +91,7 @@ $(function() {
       $('#pen').addClass(!cncserver.state.pen.state ? 'down' : 'up');
       if (window.bindControls) window.bindControls();
 
+      parent.fadeInWindow(); // Actually show the mode window
     });
   }
 
