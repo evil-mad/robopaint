@@ -47,6 +47,10 @@ cncserver.getPorts(function(ports) {
 function initialize() {
   initializing = true;
 
+  // Bind and run inital resize first thing
+  $(window).resize(responsiveResize);
+  responsiveResize();
+
   // Set visible version from manifest
   $('span.version').text('(v' + gui.App.manifest.version + ')');
 
@@ -75,9 +79,6 @@ function initialize() {
   }).css('top', $(window).height()).hide();
 
   $subwindow.appendTo('body');
-
-  $(window).resize(responsiveResize);
-  responsiveResize(); // Initial resize
 
   // Prep the connection status overlay
   $stat = $('body.home h1');

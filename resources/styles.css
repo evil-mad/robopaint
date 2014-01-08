@@ -732,7 +732,7 @@ body.home h1.loading {
 
 body.home nav {
   position: absolute;
-  top: 150%;
+  top: -150%;
   left: 250px;
   margin-top: -70px;
   overflow: hidden;
