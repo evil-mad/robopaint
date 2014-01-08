@@ -176,9 +176,27 @@ svg#main #cncserversvg path.selected {
   stroke-opacity: 1 !important;
 }
 
+@-webkit-keyframes ants  {
+  to {
+    stroke-dashoffset: 100%;
+  }
+}
+
+body.print-manual svg#main #cncserversvg path.selected {
+  stroke: blue !important;
+  stroke-width: 10 !important;
+  stroke-opacity: 0.8 !important;
+  stroke-dasharray: 4,4;
+  -webkit-animation: ants 50s linear infinite;
+  -webkit-animation-fill-mode: forwards;
+}
+
 body.print-manual svg#main g path:hover {
   stroke: red !important;
-  stroke-opacity: 1 !important;
+  stroke-opacity: 0.8 !important;
+  stroke-dasharray: 5,5;
+  -webkit-animation: ants 70s linear infinite;
+  -webkit-animation-fill-mode: forwards;
 }
 
 #shadow {
