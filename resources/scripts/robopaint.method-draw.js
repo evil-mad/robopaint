@@ -52,7 +52,21 @@ $(function() {
 
     // Load last drawing
     if (localStorage["svgedit-default"]) {
-      methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+      var loadResult = methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+
+      // If there's an external callback waiting, trigger it
+      if (typeof window.parent.$subwindow.externalLoadCallback === "function") {
+        if (loadResult === true) {
+          autoSizeContent(); // Autosize content
+          window.parent.$('#bar-print').click(); // Load autopaint
+        } else {
+          window.parent.$subwindow.externalLoadCallback({
+            status: 'failure',
+            error: loadResult
+          });
+        }
+      }
+
     } else {
       methodDraw.canvas.undoMgr.resetUndoStack();
       // Set zoom to fit empty canvas at init
@@ -73,30 +87,43 @@ $(function() {
 
   // Method Draw Closing / Switching ===========================================
   window.onbeforeunload = function (){
+    try {
+      // Remove unwanted elements~~~~~~~~~~~~
+      $('#svgcontent title').remove() // Get rid of titles!
 
-    // Remove unwanted elements~~~~~~~~~~~~
-    $('#svgcontent title').remove() // Get rid of titles!
+      // Save the top level group objects before moving elements...
+      var $topGroups = $('#svgcontent>g');
 
-    // Save the top level group objects before moving elements...
-    var $topGroups = $('#svgcontent>g');
+      // Move all SVG child elements to SVG root
+      $('#svgcontent>g:last').children().appendTo('#svgcontent');
+      $topGroups.remove(); // Remove editor groupings
 
-    // Move all SVG child elements to SVG root
-    $('#svgcontent>g:last').children().appendTo('#svgcontent');
-    $topGroups.remove(); // Remove editor groupings
+      // Convert elements that don't play well with robopaint's handlers
+      var $elems = $('circle, ellipse', '#svgcontent');
+      console.log('Converting ' + $elems.length + ' elements into paths for printing...');
+      $elems.each(function(){
+        methodDraw.canvas.convertToPath(this);
+      });
 
-    // Convert elements that don't play well with robopaint's handlers
-    var $elems = $('circle, ellipse', '#svgcontent');
-    console.log('Converting ' + $elems.length + ' elements into paths for printing...');
-    $elems.each(function(){
-      methodDraw.canvas.convertToPath(this);
-    });
+      // Reset orientation so paths have a more accessible BBox
+      $elems = $('path','#svgcontent');
+      console.log('Resetting path orientation for ' + $elems.length + ' paths for printing...');
+      $elems.each(function(){
+        methodDraw.canvas.pathActions.resetOrientation(this)
+      });
+    } catch(e) {
+      console.log(e);
 
-    // Reset orientation so paths have a more accessible BBox
-    $elems = $('path','#svgcontent');
-    console.log('Resetting path orientation for ' + $elems.length + ' paths for printing...');
-    $elems.each(function(){
-      methodDraw.canvas.pathActions.resetOrientation(this)
-    });
+      // If there's an external callback waiting, trigger the error
+      if (typeof window.parent.$subwindow.externalLoadCallback === "function") {
+        window.parent.$subwindow.externalLoadCallback({
+          status: 'failure',
+          error: e
+        });
+      } else {
+        return("Oops! Looks like there are some errors in your SVG that RoboPaint couldn't automatically fix. \n\n We suggest you open the SVG in Inkscape or another SVG editor, simplify the document or just resave it. \n\n You can continue and try to print this, but you may have issues. Error given below: \n\n\n" + e.message);
+      }
+    }
 
     window.localStorage.setItem('svgedit-default', methodDraw.canvas.svgCanvasToString());
   };

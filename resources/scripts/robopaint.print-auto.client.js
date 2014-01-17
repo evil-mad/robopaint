@@ -12,7 +12,21 @@ $(function() {
   setTimeout(responsiveResize, 500);
   $(window).resize(responsiveResize);
 
+  // Callback for when SVG loading is complete
+  cncserver.canvas.loadSVGCallback = function(){
+    // If there's an external callback waiting, trigger it
+    if (typeof window.parent.$subwindow.externalLoadCallback === "function") {
+      window.parent.$subwindow.externalLoadCallback({
+        status: 'success',
+        pathCount: $('#cncserversvg path').length
+      });
+
+      // TODO: Trigger printing/Alert User, set queue status?
+    }
+  }
+
   cncserver.canvas.loadSVG(); // Load the default SVG
+
 
   function bindControls() {
 
