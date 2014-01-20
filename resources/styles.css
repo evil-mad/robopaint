@@ -1,6 +1,7 @@
 @charset "UTF-8";
 /*
-  @file
+  @file Holds ALL styles for all modes and windows for RoboPaint (except method-draw).
+  TODO: Really should be cleaned up and segregated into a base file and mode files
 */
 
 canvas#debug {
