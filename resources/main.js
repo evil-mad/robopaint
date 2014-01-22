@@ -545,6 +545,7 @@ function loadSettings() {
     tsprunnertype: 'OPT',
     strokeprecision: 6,
     manualpaintenable: 0,
+    remoteprint: 0,
     gapconnect: 1
   };
 
@@ -704,6 +705,10 @@ function bindSettingsControls() {
     if (this.id == 'manualpaintenable') {
       $('#manual, #bar-manual').toggle(settings[this.id]);
       responsiveResize();
+    }
+
+    if (this.id == 'remoteprint') {
+      $('#bar-remoteprint').toggle(settings[this.id]);
     }
 
     // Update paint sets when changes made that would effect them

@@ -821,6 +821,26 @@ body.home #settings {
   z-index: 15;
 }
 
+/* Print Mode Modal dialog */
+body.home #remoteprint-mask,
+body.home #remoteprint-mask:before {
+  background-image: url('images/glass.jpg');
+  opacity: 0.7;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 11;
+}
+
+body.home #remoteprint-mask:before {
+  background-image: none;
+  content: ' ';
+  background-color: #D8BFD8;
+  opacity: 0.8;
+}
+
 /* Connection options buttons specifics */
 body.home div.options button.normal {
   font-size: 0.6em;

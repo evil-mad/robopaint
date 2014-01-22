@@ -27,9 +27,16 @@
   </span>
 
   <span class="right">
+    <a id="bar-remoteprint" class="tipped hidden" href="#" title="Remote Paint: Enable Painting files from external programs">P</a>
     <a id="bar-help" title="Help! (Open web docs)" class="tipped" href="http://wiki.evilmadscientist.com/RoboPaint">?</a>
     <a id="bar-settings" class="mode icon-cog-alt tipped" href="#" title="Settings">&nbsp;</a>
   </span>
+</div>
+
+<div id="remoteprint-mask" class="hidden">
+  <h1>Remote Paint Mode</h1>
+  <aside>Remote paint mode acts as a host to allow external applications to send drawings to RoboPaint. Only use this mode with your bot completely ready to start as there will be no warning once it's begun. Click below to pause a current operation or leave this mode.</aside>
+  <button class="cancel">Exit Remote Paint Mode</button><button class="pause">Pause<button>
 </div>
 
 <div id="modalmask"></div>
@@ -243,6 +250,11 @@
           <label for="manualpaintenable">Manual paint:</label>
           <input type="checkbox" id="manualpaintenable"/>
           <aside>Like Auto-paint, but allows for more control over what elements are painted, and a number of other options.</aside>
+        </div>
+        <div>
+          <label for="remoteprint">Remote paint:</label>
+          <input type="checkbox" id="remoteprint"/>
+          <aside>Allows properly configured remote applications to send graphics to RoboPaint to automatically be painted/drawn. <em>For this to function outside this computer, the checkbox for "Only allow connections from this computer" below must be <b>unchecked</b>.</em></aside>
         </div>
       </fieldset>
 
