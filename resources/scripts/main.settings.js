@@ -22,7 +22,7 @@ function loadSettings() {
     httplocalonly: g.get('httpLocalOnly'),
     latencyoffset: 20,
     servowash: parseFloat(b.get('servo:presets:wash'))*10,
-    servopaint: parseFloat(b.get('servo:presets:paint'))*10,
+    servopaint: parseFloat(b.get('servo:presets:draw'))*10,
     servoup: parseFloat(b.get('servo:presets:up'))*10,
     servotime: b.get('servo:duration'),
     movespeed: b.get('speed:moving'),
@@ -148,6 +148,9 @@ function bindSettingsControls() {
       case 'servopaint':
       case 'servowash':
         var name = this.id.substr(5);
+
+        // Shim to translate robopaint name to cncserver name
+        if (name == "paint") name = 'draw';
 
         // Save settings
         cncserver.conf.bot.set('servo:presets:' + name, parseFloat($input.val()/10));
