@@ -30,12 +30,84 @@ var robopaint = {};
 var $options;
 var $stat;
 
-
-// Document Ready...
+/**
+ * Central home screen initialization (jQuery document ready callback)
+ */
 $(function() {
-  initialize();
+ initializing = true;
+
+  // Bind and run inital resize first thing
+  $(window).resize(responsiveResize);
+  responsiveResize();
+
+  // Set visible version from manifest
+  $('span.version').text('(v' + gui.App.manifest.version + ')');
+
+  // Bind settings controls
+  bindSettingsControls();
+
+  // Load up initial settings!
+  loadSettings();
+
+  // Load the quickload list
+  initQuickload();
+
+  // Bind the tooltips
+  initToolTips();
+
+  // Add the secondary page iFrame to the page
+  $subwindow = $('<iframe>').attr({
+    height: $(window).height() - barHeight,
+    border: 0,
+    id: 'subwindow'
+  })
+    .css('top', $(window).height())
+    .hide()
+    .appendTo('body');
+
+  // Prep the connection status overlay
+  $stat = $('body.home h1');
+  $options = $('.options', $stat);
+
+  // Actually try to init the connection and handle the various callbacks
+  startSerial();
 
   getColorsets(); // Load the colorset configuration data
+
+  bindMainControls(); // Bind all the controls for the main interface
+})
+
+/**
+ * Bind all DOM main window elements to their respective functionality
+ */
+function bindMainControls() {
+
+  // Bind the continue/simulation mode button functionality
+  $('button.continue', $options).click(function(e){
+    $stat.fadeOut('slow');
+    cncserver.continueSimulation();
+    cncserver.serialReadyInit();
+
+    if (initializing) {
+      // Initialize settings...
+      loadSettings();
+      saveSettings();
+      $('body.home nav').fadeIn('slow');
+      initializing = false;
+    }
+
+    setModal(false);
+  });
+
+  // Bind the reconnect button functionality
+  $('button.reconnect').click(function(e){
+    // Reconnect! Resets status and tries to start again
+    $options.hide();
+    startSerial();
+  });
+
+
+  gui.Window.get().on('close', onClose); // Catch close event
 
   // Bind links for home screen central links
   $('nav a').click(function(e) {
@@ -86,76 +158,11 @@ $(function() {
     gui.Shell.openExternal(this.href);
     return false;
   });
-
-})
+}
 
 /**
  * Specialty JS window resize callback for responsive element adjustment
  */
-function initialize() {
-  initializing = true;
-
-  // Bind and run inital resize first thing
-  $(window).resize(responsiveResize);
-  responsiveResize();
-
-  // Set visible version from manifest
-  $('span.version').text('(v' + gui.App.manifest.version + ')');
-
-  gui.Window.get().on('close', onClose); // Catch close event
-
-  // Bind settings controls
-  bindSettingsControls();
-
-  // Load up initial settings!
-  loadSettings();
-
-  // Load the quickload list
-  initQuickload();
-
-  // Bind the tooltips
-  initToolTips();
-
-  // Add the secondary page iFrame to the page
-  $subwindow = $('<iframe>').attr({
-    height: $(window).height() - barHeight,
-    border: 0,
-    id: 'subwindow'
-  }).css('top', $(window).height()).hide();
-
-  $subwindow.appendTo('body');
-
-  // Prep the connection status overlay
-  $stat = $('body.home h1');
-  $options = $('.options', $stat);
-
-  // Bind the continue in simulation mode button functionality
-  $('button.continue', $options).click(function(e){
-    $stat.fadeOut('slow');
-    cncserver.continueSimulation();
-    cncserver.serialReadyInit();
-
-    if (initializing) {
-      // Initialize settings...
-      loadSettings();
-      saveSettings();
-      $('body.home nav').fadeIn('slow');
-      initializing = false;
-    }
-
-    setModal(false);
-  });
-
-  $('button.reconnect').addClass('reconnect normal').click(function(e){
-    // Reconnect! Resets status and tries start aagain
-    $options.hide();
-    startSerial();
-  });
-
-  // Actually try to init the connection and handle the various callbacks
-  startSerial();
-}
-
 function responsiveResize() {
   // Position settings window dead center
   var $s = $('#settings');
