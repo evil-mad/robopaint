@@ -3,15 +3,33 @@
  *  For right now, this is just the high level API autopaint functionality.
  */
 
+robopaint.api = {}; // All RoboPaint API state vars should be stored here
+
+// Global print vars
+robopaint.api.printMode = false;
+robopaint.api.printQueue = [];
 
 // Establish high-level print endpoint ========================================
-robopaint.printQueue = [];
+
+var printDisabledMessage = 'Remote print is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.';
+
+/**
+ * `robopaint/v1/print` endpoint
+ * GET - List print queue and current status
+ * POST - Create new queue items to print
+ */
 cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
+
+  // Forbid any commands until printMode is enabled
+  if (!robopaint.api.printMode) {
+    return [403, printDisabledMessage];
+  }
+
   if (req.route.method == 'get') { // GET list of print queue items and status
     return {code: 200, body: {
       status: 'ready',
-      items: robopaint.printQueue.length,
-      queue: robopaint.printQueue
+      items: robopaint.api.printQueue.length,
+      queue: robopaint.api.printQueue
     }};
   } else if (req.route.method == 'post') { // POST new print item
     var options = req.body.options;
@@ -37,7 +55,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
     $subwindow.externalLoadCallback = function(e) {
       if (e.status == 'success') {
         var d = new Date();
-        robopaint.printQueue.push({
+        robopaint.api.printQueue.push({
           status: 'waiting',
           options: options,
           pathCount: e.pathCount,
@@ -47,8 +65,8 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
         res.status(201).send(JSON.stringify({
           status: 'verified and added to queue',
-          uri: '/robopaint/v1/print/' + (robopaint.printQueue.length - 1),
-          item: robopaint.printQueue[robopaint.printQueue.length - 1]
+          uri: '/robopaint/v1/print/' + (robopaint.api.printQueue.length - 1),
+          item: robopaint.api.printQueue[robopaint.api.printQueue.length - 1]
         }));
       } else {
         res.status(406).send(JSON.stringify({
@@ -76,16 +94,29 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
 });
 
-
+/**
+ * `robopaint/v1/print/[QID]` endpoint
+ * GET - Return print queue item
+ * DELETE - Cancel print queue item
+ */
 cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
   var qid = req.params.qid;
 
+  // Forbid any commands until printMode is enabled
+  if (!robopaint.api.printMode) {
+    return [403, printDisabledMessage];
+  }
+
+  if (!robopaint.printQueue[qid]){
+    return [404, 'Queue ID ' + qid + ' not found'];
+  }
+
   if (req.route.method == 'get') { // Is this a GET request?
-    if (robopaint.printQueue[qid]){
-      return {code: 200, body: robopaint.printQueue[qid]};
-    } else {
-      return [404, 'Queue ID ' + qid + ' not found'];
-    }
+    return {code: 200, body: robopaint.printQueue[qid]};
+  } else if (req.route.method == 'delete'){
+    // TODO: Actually stop printing if it was?
+    robopaint.printQueue[qid].status = cancelled;
+    return {code: 200, body: robopaint.printQueue[qid]};
   } else {
     return false; // 405 - Method Not Supported
   }
