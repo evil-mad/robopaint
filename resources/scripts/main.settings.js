@@ -99,6 +99,18 @@ function bindSettingsControls() {
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
 
+  // Pull the list of available ports
+  cncserver.getPorts(function(ports) {
+    for (var portID in ports){
+      var o = $('<option>')
+        .attr('value', ports[portID].comName)
+        .attr('title', ports[portID].pnpId);
+      o.text(ports[portID].comName);
+
+      o.appendTo('select#ports');
+    }
+  });
+
   // Setup settings group tabs
   $('ul.tabs').each(function(){
     // For each set of tabs, we want to keep track of

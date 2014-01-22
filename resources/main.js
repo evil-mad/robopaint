@@ -30,17 +30,6 @@ var robopaint = {};
 var $options;
 var $stat;
 
-// Pull the list of available ports
-cncserver.getPorts(function(ports) {
-  for (var portID in ports){
-    var o = $('<option>')
-      .attr('value', ports[portID].comName)
-      .attr('title', ports[portID].pnpId);
-    o.text(ports[portID].comName);
-
-    o.appendTo('select#ports');
-  }
-});
 
 // Document Ready...
 $(function() {
