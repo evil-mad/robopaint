@@ -859,6 +859,18 @@ body.home div.options button.normal {
   top: 1em;
 }
 
+#settings-reset {
+  text-shadow: none;
+  font-weight: bold;
+  color: rgb(209, 24, 24);
+  position: absolute;
+  right: 6em;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 #settings legend {
   font-weight: bold;
 }
