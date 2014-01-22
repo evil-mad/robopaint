@@ -226,5 +226,33 @@ robopaint.utils = {
         $(this).css('stroke', setColor)
       }
     });
+  },
+
+  /**
+  * Retreives system IP Addresses via node.js OS calls
+  *
+  * @param {bool} isLocal
+  *   Whether the server is "local only" or not.
+  * @return string
+  *   The text representing
+  */
+  getIPs: function(isLocal) {
+    if (isLocal) {
+      return "localhost";
+    } else {
+      var os=require('os');
+      var ifaces=os.networkInterfaces();
+      var out = [];
+
+      for (var dev in ifaces) {
+        ifaces[dev].forEach(function(details){
+          if (details.family=='IPv4') {
+            out.push(details.address);
+          }
+        });
+      }
+
+      return out.join(', ');
+    }
   }
 };
