@@ -263,6 +263,8 @@ function bindSettingsControls() {
   $('#settings-reset').click(function(e) {
     if (confirm('Reset all settings to factory defaults?')) {
       delete localStorage["cncserver-settings"];
+      cncserver.loadGlobalConfig();
+      cncserver.loadBotConfig();
       loadSettings();
     }
   });
