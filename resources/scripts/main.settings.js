@@ -127,16 +127,6 @@ function bindSettingsControls() {
     });
   });
 
-
-  // Keyboard shortcut for exiting window
-  $(window).keydown(function (e){
-    if (isModal) {
-      if (e.keyCode == 27) {
-        $('#settings-done').click();
-      }
-    }
-  });
-
   // Catch all settings input changes
   $('#settings input, #settings select').change(function(){
     var $input = $(this);
@@ -257,6 +247,15 @@ function bindSettingsControls() {
       cncserver.setHeight('up');
     }
     setSettingsWindow(false);
+  });
+
+  // Keyboard shortcut for exiting settings
+  $(window).keydown(function (e){
+    if (isModal) {
+      if (e.keyCode == 27) {
+        $('#settings-done').click();
+      }
+    }
   });
 
   // Reset button
