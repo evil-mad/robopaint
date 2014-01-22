@@ -138,37 +138,33 @@ function initialize() {
 
   // Prep the connection status overlay
   $stat = $('body.home h1');
-  $options = $('<div>').addClass('options')
-        .text('What do you want to do?').hide();
-  $options.append(
-    $('<div>').append(
-      $('<button>').addClass('continue normal').click(function(e){
-        $stat.fadeOut('slow');
-        cncserver.continueSimulation();
-        cncserver.serialReadyInit();
+  $options = $('.options', $stat);
 
-        if (initializing) {
-          // Initialize settings...
-          loadSettings();
-          saveSettings();
-          initializing = false;
-        }
+  // Bind the continue in simulation mode button functionality
+  $('button.continue', $options).click(function(e){
+    $stat.fadeOut('slow');
+    cncserver.continueSimulation();
+    cncserver.serialReadyInit();
 
-        setModal(false);
-      }).text('Continue in Simulation mode'),
+    if (initializing) {
+      // Initialize settings...
+      loadSettings();
+      saveSettings();
+      $('body.home nav').fadeIn('slow');
+      initializing = false;
+    }
 
-      $('<button>').addClass('reconnect normal').click(function(e){
-        // Reconnect! Basically Resets status and tries start aagain
-        $options.hide();
-        startSerial();
-      }).text('Try to Reconnect')
-    )
-  );
-  $options.appendTo($stat);
+    setModal(false);
+  });
+
+  $('button.reconnect').addClass('reconnect normal').click(function(e){
+    // Reconnect! Resets status and tries start aagain
+    $options.hide();
+    startSerial();
+  });
 
   // Actually try to init the connection and handle the various callbacks
   startSerial();
-
 }
 
 function responsiveResize() {

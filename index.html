@@ -48,7 +48,16 @@
 
 <img id="logo" src="resources/images/watercolorbot_icon.png"/>
 
-<h1 class="loading"><b>Starting up...</b></h1>
+<h1 class="loading">
+  <b>Starting up...</b>
+  <div class="options hidden">
+    What do you want to do?
+    <div>
+      <button class="continue normal">Continue in Simulation mode</button>
+      <button class="reconnect normal">Try to Reconnect</button>
+    </div>
+  </div>
+</h1>
 <nav class="hidden">
   <a href="resources/edit/index.html" id="edit" title="Open, resize, and edit existing vector artwork.">Create</a>
   <a href="resources/print-auto.html" id="print" title="Painting Mode: Print your drawing!">Print</a>
