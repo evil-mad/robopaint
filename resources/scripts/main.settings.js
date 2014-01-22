@@ -25,8 +25,8 @@ function loadSettings() {
     servopaint: parseFloat(b.get('servo:presets:draw'))*10,
     servoup: parseFloat(b.get('servo:presets:up'))*10,
     servotime: b.get('servo:duration'),
-    movespeed: b.get('speed:moving'),
-    paintspeed: b.get('speed:drawing'),
+    movespeed: parseFloat(b.get('speed:moving')),
+    paintspeed: parseFloat(b.get('speed:drawing')),
 
     // Robopaint specific defaults
     filltype: 'line-straight',
@@ -318,7 +318,6 @@ function addSettingsRangeValues() {
           break;
         case 'movespeed':
         case 'paintspeed':
-          num = Math.round((num / this.max) * 100);
           var msg = "";
 
           if (num < 25) {
