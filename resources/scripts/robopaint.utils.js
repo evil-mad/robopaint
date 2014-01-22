@@ -1,18 +1,20 @@
 /**
  * @file Holds all Utility helper functions, must not be linked to anything
- * cncserver specific as ever function should be atomic (at least to this file)
+ * cncserver specific as every function should be atomic (at least to this file)
  */
 
 robopaint.utils = {
   /**
-  * Converts an RGB color value to HSL. Conversion formula
-  * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
-  * Assumes r, g, and b are contained in the set [0, 255] and
-  * returns h, s, and l in the set [0, 1].
-  *
-  * @param   array  color    The RGB color to be converted
-  * @return  Array           The HSL representation
-  */
+   * Converts an RGB color value to HSL. Conversion formula
+   * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+   * Assumes r, g, and b are contained in the set [0, 255] and
+   * returns h, s, and l in the set [0, 1].
+   *
+   * @param {Array} color
+   *   The RGB color to be converted
+   * @return {Array}
+   *   The HSL representation
+   */
   rgbToHSL: function (color){
     if (!color) return false;
 
@@ -41,11 +43,13 @@ robopaint.utils = {
   },
 
   /**
-  * Converts an RGB color value to YUV.
-  *
-  * @param   array  color    The RGB color array to be converted
-  * @return  array           The YUV representation
-  */
+   * Converts an RGB color value to YUV.
+   *
+   * @param {Array} color
+   *   The RGB color array to be converted
+   * @return {Array}
+   *   The YUV representation
+   */
   rgbToYUV: function(color) {
     if (!color) return false;
 
@@ -65,7 +69,14 @@ robopaint.utils = {
     return [y,u,v];
   },
 
-  // Convert an RGB string to a hex string
+  /**
+   * Converts an RGB string to a HEX string.
+   *
+   * @param {String} rgb
+   *   The RGB color string in the format "rgb(0,0,0)"
+   * @return {String}
+   *   The string of the converted color, EG "#000000"
+   */
   rgbToHex: function(rgb) {
     var c = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
     function hex(x) {
@@ -80,7 +91,14 @@ robopaint.utils = {
 
   },
 
-  // Converts a jQuery rgb or hex color string to a proper array [r,g,b]
+  /**
+   * Converts a jQuery rgb or hex color string to a proper array [r,g,b]
+   *
+   * @param {String} string
+   *   The HTML/CSS color string in the format "rgb(0,0,0)" or "#000000"
+   * @return {Array}
+   *   The color in RGB array format: [0, 0, 0]
+   */
   colorStringToArray: function(string) {
     // Quick sanity check
     if (typeof string != 'string') {
@@ -117,8 +135,16 @@ robopaint.utils = {
 
   },
 
-  // Takes source color and matches it to closest array of colors from "colors"
-  // Source color input is a triplet array [r,g,b] or jQuery RGB string
+  /**
+   * Takes source color and matches it to the nearest color from "colors"
+   *
+   * @param {Array/String} source
+   *   triplet array [r,g,b] or jQuery RGB string like "rgb(0,0,0)"
+   * @param {Array} colors
+   *   Array of triplet arrays defining up to 7 colors, like [[r,g,b], [r,g,b], ...]
+   * @return {Number}
+   *   The index in the colors array that best matches the incoming color
+   */
   closestColor: function(source, colors){
     if (typeof source == 'string'){
       source = robopaint.utils.colorStringToArray(source);
@@ -154,13 +180,30 @@ robopaint.utils = {
     return lowestIndex;
   },
 
-  // Pad a string/number with zeros
+  /**
+   * Pad a string/number with zeros
+   *
+   * @param {String/Number} str
+   *   String or number to be padded out with zeros
+   * @param {Number} max
+   *   Max number of characters to pad out to
+   * @return {String}
+   *   The zero padded string
+   */
   pad: function(str, max) {
     if (typeof str == "number") str = String(str);
     return str.length < max ? robopaint.utils.pad("0" + str, max) : str;
   },
 
-  // Adds shortcut functions to standard $path selection
+  /**
+   * Add shortcut functions to standard $path selection like transform matrix
+   * and point x/y functions.
+   *
+   * @param {jQuery Object} $path
+   *   The selected jQuery DOM object of the path to be appended to
+   * @return {null}
+   *   $path is modified by object reference directly
+   */
   addShortcuts: function($path) {
     $path.transformMatrix = $path[0].getTransformToElement($path[0].ownerSVGElement);
     $path.getPoint = function(distance){ // Handy helper function for gPAL
@@ -171,7 +214,16 @@ robopaint.utils = {
     $path.maxLength = $path[0].getTotalLength(); // Shortcut!
   },
 
-  // Get distance between two points
+  /**
+   * Get the distance between two points... Dude, it's Geometric!!
+   *
+   * @param {Object/Array} p1
+   *   The first point in array or simple object format like [0,0] or {x: 0, y:0}
+   * @param {Object/Array} p1
+   *   The second point in the same format
+   * @return {Number}
+   *   The float distance between the two points
+   */
   getDistance: function(p1, p2) {
     if (p1.x) {
       p1 = [p1.x, p1.y];
@@ -183,8 +235,20 @@ robopaint.utils = {
     return Math.sqrt(xdiff*xdiff + ydiff*ydiff);
   },
 
-  // Move through every path element inside a given context
-  // and match its stroke and fill color to a given colorset
+  /**
+   * Move through every path element inside a given context and match its
+   * stroke and fill color to a given colorset.
+   *
+   * @param {Object/String} context
+   *   jQuery style context to operate on objects inside of
+   * @param {Boolean} recover
+   *   Whether or not to set new colors, or recover old colors
+   * @param {Array} colors
+   *   The colorset array or RGB triplets
+   * @param {String} recolorTypes
+   *   A jQuery selector of SVG object types to be recolored, defaults to "path"
+   * @return {null}
+   */
   autoColor: function(context, recover, colors, recolorTypes){
     if (!recolorTypes){
       recolorTypes = "path";
@@ -229,13 +293,13 @@ robopaint.utils = {
   },
 
   /**
-  * Retreives system IP Addresses via node.js OS calls
-  *
-  * @param {bool} isLocal
-  *   Whether the server is "local only" or not.
-  * @return string
-  *   The text representing
-  */
+   * Retreives system IP Addresses via node.js OS calls
+   *
+   * @param {bool} isLocal
+   *   Whether the server is "local only" or not.
+   * @return {string}
+   *   The text representing the accessible host/s for the server
+   */
   getIPs: function(isLocal) {
     if (isLocal) {
       return "localhost";
