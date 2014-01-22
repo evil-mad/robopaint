@@ -90,7 +90,7 @@ $(function() {
 })
 
 /**
- * Central home screen initialization function
+ * Specialty JS window resize callback for responsive element adjustment
  */
 function initialize() {
   initializing = true;
@@ -176,9 +176,11 @@ function responsiveResize() {
   if ($subwindow.height) {
     $subwindow.height($(window).height() - barHeight);
   }
-
 };
 
+/**
+ * Binds all the callbacks functions for controlling CNC Server via its Node API
+ */
 function startSerial(){
   setMessage('Starting up...', 'loading');
 
@@ -216,7 +218,10 @@ function startSerial(){
   });
 }
 
-// By just having this function prevents gui Window close...
+/**
+ * Runs on application close request to catch exits and alert user with dialog
+ * if applicable depending on mode status
+ */
 function onClose() {
   var w = this;
 
@@ -225,8 +230,17 @@ function onClose() {
   }, true);
 }
 
-// Runs subwindow close delay functions, runs callback when done.
-// isGlobal demarks a application level quit
+
+/**
+ * Runs current subwindow/mode specific close delay functions (if they exist)
+ *
+ * @param {Function} callback
+ *   Function is called when check is complete, or is passed to subwindow close
+ * @param {Boolean} isGlobal
+ *   Demarks an application level quit, function is also called for mode changes
+ * @param {String} destination
+ *   Name of mode change target. Used to denote special reactions.
+ */
 function checkModeClose(callback, isGlobal, destination) {
   // Settings mode not considered mode closer
   if (destination == 'settings') {
@@ -240,20 +254,10 @@ function checkModeClose(callback, isGlobal, destination) {
   }
 }
 
-// Bind the toolbar button tool tips
+/**
+ * Initialize the toolTip configuration and binding
+ */
 function initToolTips() {
-
-  function beforeQtip(){
-    // Move position to be more centered for outer elements
-    if (this.id <= 1) {
-      this.elements.wrapper.parent().css('margin-left', -30);
-    }
-
-    if (this.getPosition().left + this.getDimensions().width + 250 > $(window).width()) {
-      this.elements.wrapper.parent().css('margin-left', 30);
-    }
-
-  }
 
   $('#bar a.tipped, nav a').qtip({
     style: {
@@ -283,9 +287,23 @@ function initToolTips() {
   }).click(function(){
     $(this).qtip("hide");
   });
+
+  function beforeQtip(){
+    // Move position to be more centered for outer elements
+    if (this.id <= 1) {
+      this.elements.wrapper.parent().css('margin-left', -30);
+    }
+
+    if (this.getPosition().left + this.getDimensions().width + 250 > $(window).width()) {
+      this.elements.wrapper.parent().css('margin-left', 30);
+    }
+  }
 }
 
-// Initialize and bind Quickload file list
+
+/**
+ * Initialize and bind Quickload file list functionality
+ */
 function initQuickload() {
   var $load = $('#bar-load');
   var $loadList = $('#loadlist');
@@ -341,7 +359,9 @@ function initQuickload() {
 }
 
 
-// When the window is done loading, it will call this.
+/**
+ * "Public" helper function to fade in iframe when it's done loading
+ */
 function fadeInWindow() {
   if ($subwindow.offset().top != barHeight) {
     $subwindow.hide().css('top', barHeight).fadeIn('fast');
@@ -350,7 +370,9 @@ function fadeInWindow() {
 }
 
 
-// Fetches all watercolor sets available from the colorsets dir
+/**
+ * Fetches all watercolor sets available from the colorsets dir
+ */
 function getColorsets() {
   var colorsetDir = 'resources/colorsets/';
   var files = fs.readdirSync(colorsetDir);
@@ -405,8 +427,14 @@ function getColorsets() {
   });
 }
 
-// Modal message setting functions
-// TODO: Do this far better
+/**
+ * Set modal message
+ *
+ * @param {String} txt
+ *   Message to display
+ * @param {String} mode
+ *   Optional extra class to add to message element
+ */
 function setMessage(txt, mode){
   if (txt) {
     $('b', $stat).text(txt);
@@ -418,6 +446,12 @@ function setMessage(txt, mode){
 
 }
 
+/**
+ * Set modal status
+ *
+ * @param {Boolean} toggle
+ *   True for modal overlay on, false for off.
+ */
 function setModal(toggle){
   if (toggle) {
     $('#modalmask').fadeIn('slow');
