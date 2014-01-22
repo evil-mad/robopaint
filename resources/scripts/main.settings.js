@@ -6,7 +6,9 @@
  */
 
 
-// Load settings from storage and push to elements (only happens at startup)
+/**
+ * Load settings from defaults/localStorage and push to elements
+ */
 function loadSettings() {
   var g = cncserver.conf.global;
   var b = cncserver.conf.bot;
@@ -73,7 +75,9 @@ function loadSettings() {
   afterSettings();
 }
 
-// Call anything that needs to happen after settings have been loaded
+/**
+ * Called after settings have been loaded
+ */
 function afterSettings() {
   addSettingsRangeValues(); // Add in the range value displays
 
@@ -81,12 +85,16 @@ function afterSettings() {
   if (settings.openlast == 0) delete localStorage["svgedit-default"];
 }
 
-// Actually save settings to local storage
+/**
+ * Actually save settings to local storage
+ */
 function saveSettings() {
   localStorage["cncserver-settings"] = JSON.stringify(settings);
 }
 
-/*======== Direct Settings Bindings!  =========*/
+/**
+ * Bind and callback functionality for any settings specific markup/controls
+ */
 function bindSettingsControls() {
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
@@ -199,6 +207,7 @@ function bindSettingsControls() {
       responsiveResize();
     }
 
+    // Remoteprint mode click
     if (this.id == 'remoteprint') {
       $('#bar-remoteprint').toggle(settings[this.id]);
     }
@@ -274,6 +283,9 @@ function bindSettingsControls() {
 
 /**
  * Fade in/out settings modal window
+ *
+ * @param {Boolean} toggle
+ *   True ro show window, false to hide.
  */
 function setSettingsWindow(toggle) {
   if (toggle) {
@@ -284,6 +296,9 @@ function setSettingsWindow(toggle) {
   setModal(toggle);
 }
 
+/**
+ * Adds label markup for range slider controls and controls label conversion
+ */
 function addSettingsRangeValues() {
   $('input:[type=range]:not(.processed)').each(function(){
     var $r = $(this);
