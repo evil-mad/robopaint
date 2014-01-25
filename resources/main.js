@@ -43,10 +43,9 @@ $(function() {
   // Set visible version from manifest
   $('span.version').text('(v' + gui.App.manifest.version + ')');
 
-  // Bind settings controls
+  // Bind settings controls & Load up initial settings!
+  // @see scripts/main.settings.js
   bindSettingsControls();
-
-  // Load up initial settings!
   loadSettings();
 
   // Bind all the functionality required for Remote Print mode
@@ -85,7 +84,6 @@ $(function() {
  * Bind all DOM main window elements to their respective functionality
  */
 function bindMainControls() {
-
   // Bind the continue/simulation mode button functionality
   $('button.continue', $options).click(function(e){
     $stat.fadeOut('slow');
@@ -113,30 +111,30 @@ function bindMainControls() {
 
   gui.Window.get().on('close', onClose); // Catch close event
 
-  // Bind links for home screen central links
+  // Bind links for home screen central bubble nav links
   $('nav a').click(function(e) {
      $('#bar-' + e.target.id).click();
-    return false;
+    e.preventDefault();
   });
 
-  // Bind links for toolbar
+  // Bind links for toolbar ===========================
   $('#bar a.mode').click(function(e) {
+    e.preventDefault();
+
     checkModeClose(function(){
       var $target = $(e.target);
       var mode = $target[0].id.split('-')[1];
 
-      if (mode != 'settings') appMode = mode;
+      appMode = mode;
 
-      // Don't do anything fi already selected
+      // Don't do anything if already selected
       if ($target.is('.selected')) {
         return false;
       }
 
-      // Don't select settings (as it's a modal on top window)
-      if (mode !== 'settings') {
-        $('#bar a.selected').removeClass('selected');
-        $target.addClass('selected');
-      }
+      // Select element (deselect last)
+      $('#bar a.selected').removeClass('selected');
+      $target.addClass('selected');
 
       switch (mode) {
         case 'home':
@@ -144,9 +142,6 @@ function bindMainControls() {
           $('#loader').hide();
           $subwindow.fadeOut('slow', function(){$subwindow.attr('src', "");});
           break;
-        case 'settings':
-          setSettingsWindow(true);
-          break
         default:
           $('nav, #logo').fadeOut('slow');
           $('#loader').fadeIn();
@@ -154,13 +149,30 @@ function bindMainControls() {
       }
     }, false, e.target.id.split('-')[1]);
 
-    return false;
+    e.preventDefault();
+  });
+
+  // Bind toolbar modal links =======================
+  $('#bar a.modal').click(function(e){
+    var modal = this.id.split('-')[1];
+    switch(modal) {
+      case 'settings':
+        // @see scripts/main.settings.js
+        setSettingsWindow(true);
+        break;
+      case 'remoteprint':
+        // @see scripts/main.api.js
+        setPrintWindow(true);
+        break;
+    }
+
+    e.preventDefault();
   });
 
   // Bind help click (it's special)
   $('#bar-help').click(function(){
     gui.Shell.openExternal(this.href);
-    return false;
+    e.preventDefault();
   });
 }
 
@@ -310,7 +322,6 @@ function initToolTips() {
     }
   }
 }
-
 
 /**
  * Initialize and bind Quickload file list functionality
