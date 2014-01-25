@@ -853,6 +853,41 @@ body.home #remoteprint-mask:before {
   opacity: 0.8;
 }
 
+/* Remote Paint/Print Window */
+#remoteprint-window {
+  border-radius: 7em;
+  padding: 4em;
+  overflow: hidden;
+  z-index: 15;
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 10%;
+  right: 10%;
+  text-align: center;
+  background-color: rgb(223, 147, 233);
+}
+
+#remoteprint-window h3 {
+  margin-bottom: 1.3em;
+  font-size: 2.3em;
+  margin-top: -0.75em;
+}
+
+#remoteprint-window div.icons {
+  font-size: 6em;
+  margin-top: -49px;
+}
+
+#remoteprint-window div.icons span {
+  margin: -30px;
+  text-indent: 22px;
+}
+
+#remoteprint-window button {
+  margin: 1em;
+}
+
 /* Connection options buttons specifics */
 body.home div.options button.normal {
   font-size: 0.6em;

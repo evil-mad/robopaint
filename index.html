@@ -35,14 +35,21 @@
   </span>
 </div>
 
-<div id="remoteprint-mask" class="hidden">
-  <h1>Remote Paint Mode</h1>
-  <aside>Remote paint mode acts as a host to allow external applications to send drawings to RoboPaint. Only use this mode with your bot completely ready to start as there will be no warning once it's begun. Click below to pause a current operation or leave this mode.</aside>
-  <button class="cancel">Exit Remote Paint Mode</button><button class="pause">Pause<button>
-</div>
-
 <div id="modalmask"></div>
 <div id="settings">Loaded via jQuery...</div>
+
+<div id="remoteprint-window" class="hidden">
+  <h3>Remote Paint Mode</h3>
+  <!-- Silly grouped icon thing... -->
+  <div class="icons">
+    <span class="icon-cloud-thunder" title="From the Client Application">&nbsp;</span>
+    <span class="icon-shuffle" title="Through the Interwebs or your local network">&nbsp;</span>
+    <span class="icon-print" title="To your very own bot!">&nbsp;</span>
+  </div>
+  <button class="normal cancel">Exit Remote Paint Mode</button>
+  <button class="normal pause">Pause</button>
+  <aside>Remote paint mode acts as a host to allow external applications to send drawings to RoboPaint. Only use this mode with your bot completely ready to start as there will be no warning once it's begun. Click below to pause a current operation or leave this mode.</aside>
+</div>
 
 <img id="loader" src="resources/images/loading_spinner.svg"/>
 
