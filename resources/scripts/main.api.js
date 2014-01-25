@@ -45,9 +45,6 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
     if (msg) return [406, msg];
 
-    // TODO: What happens with user interaction at this point?
-    //   Should a user be kicked off or warned?
-
     // Setup the load Callback that will be checked for on the subWindow pages
     // in edit and print modes to verify and trigger actions. Only those pages
     // decide the fate of this request.
@@ -73,6 +70,8 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
           status: 'content verification failed',
           reason: e.error
         }));
+        // Return to home mode after error
+        $('#bar-home').click();
       }
 
       // Now that we're done, destroy the callback...
@@ -122,3 +121,62 @@ cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
   }
 
 });
+
+/**
+ * Bind buttons specific for remote print
+ */
+function bindRemoteControls() {
+  $('#remoteprint-window button').click(function(e) {
+    if ($(this).is('.cancel')) {
+      setPrintWindow(false);
+    }
+
+    // TODO: Enable pause
+    if ($(this).is('.pause')) {
+
+    }
+
+  });
+}
+
+
+/**
+ * Attempt/Intend to open or close print window
+ *
+ * @param {Boolean} toggle
+ *   True ro show window, false to hide.
+ */
+function setPrintWindow(tryOpen) {
+  // Sanity check: Do nothing if we're already open (or closed)
+  if (robopaint.api.printMode == tryOpen) {
+    return;
+  }
+
+  var toggle = false;
+  var msg = "Hey there, welcome to Remote Paint mode! This mode will turn RoboPaint into a graphics 'print server', ready to take an image from another application and print it immediately!";
+  msg+= "\n\n* Images sent will only be received while this mode is on";
+  msg+= "\n\n* Once an image is finished, this mode will exit";
+  msg+= "\n\n* Before clicking OK, make sure your bot is completely setup and ready to go!";
+  msg+= "\n\n* Click cancel if you're not quite ready to go. You can also exit anytime while in Remote Paint mode";
+
+  if (!tryOpen) {
+    msg = "Are you sure you want to leave Remote Paint mode?";
+    msg+= "\n\n Any print processes and client applications will be cancelled/disconnected.";
+    toggle = !confirm(msg);
+  } else {
+    toggle = confirm(msg);
+  }
+
+  // Sanity check now that we have confirmation
+  if (robopaint.api.printMode == toggle) {
+    return;
+  }
+
+  if (toggle) {
+    $('#remoteprint-window').fadeIn('slow');
+  } else {
+    $('#remoteprint-window').fadeOut('slow');
+  }
+  setModal(toggle);
+  robopaint.api.printMode = !!toggle; // Set printmode to exact boolean of toggle
+}

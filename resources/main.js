@@ -49,6 +49,10 @@ $(function() {
   // Load up initial settings!
   loadSettings();
 
+  // Bind all the functionality required for Remote Print mode
+  // @see scripts/main.api.js
+  bindRemoteControls();
+
   // Load the quickload list
   initQuickload();
 
