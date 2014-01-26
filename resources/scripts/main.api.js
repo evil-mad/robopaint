@@ -139,13 +139,8 @@ function bindRemoteControls() {
   $('#remoteprint-window button').click(function(e) {
     if ($(this).is('.cancel')) {
       setRemotePrintWindow(false);
+      robopaint.switchMode('home');
     }
-
-    // TODO: Enable pause
-    if ($(this).is('.pause')) {
-
-    }
-
   });
 }
 
