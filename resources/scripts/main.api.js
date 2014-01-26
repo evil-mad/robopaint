@@ -5,13 +5,16 @@
 
 robopaint.api = {}; // All RoboPaint API state vars should be stored here
 
-// Global print vars
-robopaint.api.printMode = false;
-robopaint.api.printQueue = [];
+// Global remote print state and storage variables
+robopaint.api.print = {
+  enabled: false,
+  queue: [], // Array of Objects for actual queue
+  requestSettings: {} // Requested print settings for a new print queue item
+}
 
 // Establish high-level print endpoint ========================================
 
-var printDisabledMessage = 'Remote print is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.';
+var printDisabledMessage = 'The SVG import API is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.';
 
 /**
  * `robopaint/v1/print` endpoint
@@ -21,15 +24,15 @@ var printDisabledMessage = 'Remote print is currently disabled. Enable it in set
 cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
   // Forbid any commands until printMode is enabled
-  if (!robopaint.api.printMode) {
+  if (!robopaint.api.print.enabled) {
     return [403, printDisabledMessage];
   }
 
   if (req.route.method == 'get') { // GET list of print queue items and status
     return {code: 200, body: {
       status: 'ready',
-      items: robopaint.api.printQueue.length,
-      queue: robopaint.api.printQueue
+      items: robopaint.api.print.queue.length,
+      queue: robopaint.api.print.queue
     }};
   } else if (req.route.method == 'post') { // POST new print item
     var options = req.body.options;
@@ -52,7 +55,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
     $subwindow.externalLoadCallback = function(e) {
       if (e.status == 'success') {
         var d = new Date();
-        robopaint.api.printQueue.push({
+        robopaint.api.print.queue.push({
           status: 'waiting',
           options: options,
           pathCount: e.pathCount,
@@ -62,8 +65,8 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
         res.status(201).send(JSON.stringify({
           status: 'verified and added to queue',
-          uri: '/robopaint/v1/print/' + (robopaint.api.printQueue.length - 1),
-          item: robopaint.api.printQueue[robopaint.api.printQueue.length - 1]
+          uri: '/robopaint/v1/print/' + (robopaint.api.print.queue.length - 1),
+          item: robopaint.api.print.queue[robopaint.api.print.queue.length - 1]
         }));
       } else {
         res.status(406).send(JSON.stringify({
@@ -102,7 +105,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
   var qid = req.params.qid;
 
   // Forbid any commands until printMode is enabled
-  if (!robopaint.api.printMode) {
+  if (!robopaint.api.print.enabled) {
     return [403, printDisabledMessage];
   }
 
@@ -148,7 +151,7 @@ function bindRemoteControls() {
  */
 function setPrintWindow(tryOpen) {
   // Sanity check: Do nothing if we're already open (or closed)
-  if (robopaint.api.printMode == tryOpen) {
+  if (robopaint.api.print.enabled == tryOpen) {
     return;
   }
 
@@ -168,7 +171,7 @@ function setPrintWindow(tryOpen) {
   }
 
   // Sanity check now that we have confirmation
-  if (robopaint.api.printMode == toggle) {
+  if (robopaint.api.print.enabled == toggle) {
     return;
   }
 
@@ -178,5 +181,5 @@ function setPrintWindow(tryOpen) {
     $('#remoteprint-window').fadeOut('slow');
   }
   setModal(toggle);
-  robopaint.api.printMode = !!toggle; // Set printmode to exact boolean of toggle
+  robopaint.api.print.enabled = !!toggle; // Set printmode to exact boolean of toggle
 }
