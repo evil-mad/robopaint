@@ -15,15 +15,16 @@ var botType = localStorage["botType"] ? localStorage["botType"] : 'watercolorbot
 
 var barHeight = 40;
 var isModal = false;
-var settings = {}; // Holds the "permanent" app settings data
-var statedata = {}; // Holds per app session volitile settings
 var initializing = false;
 var appMode = 'home';
 var $subwindow = {}; // Placeholder for subwindow iframe
 var subWin = {}; // Placeholder for subwindow "window" object
 
-// Set the global scope object for any robopaint level details
-var robopaint = {};
+// Set the global scope object for any robopaint level details needed by other modes
+var robopaint = {
+  settings: {}, // Holds the "permanent" app settings data
+  statedata: {} // Holds per app session volitile settings
+};
 
 // Option buttons for connections
 // TODO: Redo this is a message management window system!!!
@@ -407,7 +408,7 @@ function getColorsets() {
     }
   }
 
-  statedata.colorsets = {'ALL': sets};
+  robopaint.statedata.colorsets = {'ALL': sets};
 
   $.each(sets, function(i, set){
     var setDir = colorsetDir + set + '/';
@@ -417,7 +418,7 @@ function getColorsets() {
       $('<option>')
         .attr('value', set)
         .text(c.name)
-        .prop('selected', set == settings.colorset)
+        .prop('selected', set == robopaint.settings.colorset)
     );
 
     // Add pure white to the end of the color set for auto-color
@@ -440,7 +441,7 @@ function getColorsets() {
       });
     }
 
-    statedata.colorsets[set] = {
+    robopaint.statedata.colorsets[set] = {
       name: c.name,
       baseClass: c.styles.baseClass,
       colors: colorsOut,

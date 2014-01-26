@@ -14,7 +14,7 @@ function loadSettings() {
   var b = cncserver.conf.bot;
 
   // Pull settings over from CNC server / RoboPaint defaults (defined here)
-  settings = {
+  robopaint.settings = {
     // CNC Server specific settings
     invertx: g.get('invertAxis:x'),
     inverty: g.get('invertAxis:y'),
@@ -51,22 +51,22 @@ function loadSettings() {
   // Are there existing settings from a previous run? Mesh them into the defaults
   if (localStorage["cncserver-settings"]) {
     var s = JSON.parse(localStorage["cncserver-settings"]);
-    for (var key in settings) {
+    for (var key in robopaint.settings) {
       if (typeof s[key] != 'undefined') {
-        settings[key] = s[key];
+        robopaint.settings[key] = s[key];
       }
     }
   }
 
   // Actually match the form elements to the given settings
-  for (var key in settings) {
+  for (var key in robopaint.settings) {
     var $input = $('#' + key);
     switch (key) {
       default:
         if ($input.attr('type') == 'checkbox') {
-          $input.prop('checked', settings[key]);
+          $input.prop('checked', robopaint.settings[key]);
         } else {
-          $input.val(settings[key]);
+          $input.val(robopaint.settings[key]);
         }
     }
     $input.change();
@@ -82,14 +82,14 @@ function afterSettings() {
   addSettingsRangeValues(); // Add in the range value displays
 
   // Clear last used image
-  if (settings.openlast == 0) delete localStorage["svgedit-default"];
+  if (robopaint.settings.openlast == 0) delete localStorage["svgedit-default"];
 }
 
 /**
  * Actually save settings to local storage
  */
 function saveSettings() {
-  localStorage["cncserver-settings"] = JSON.stringify(settings);
+  localStorage["cncserver-settings"] = JSON.stringify(robopaint.settings);
 }
 
 /**
@@ -165,7 +165,7 @@ function bindSettingsControls() {
         // Save settings
         cncserver.conf.bot.set('servo:presets:' + name, parseFloat($input.val()/10));
         if (!initializing) cncserver.setHeight(name);
-        settings[this.id] = $input.val();
+        robopaint.settings[this.id] = $input.val();
         break;
 
       // TODO: Make the following pull from master pushkey list
@@ -207,21 +207,21 @@ function bindSettingsControls() {
         break;
       default: // Nothing special to set, just change the settings object value
         if ($input.attr('type') == 'checkbox') {
-          settings[this.id] = $input.is(':checked');
+          robopaint.settings[this.id] = $input.is(':checked');
         } else {
-          settings[this.id] = $input.val();
+          robopaint.settings[this.id] = $input.val();
         }
     }
 
     // Update available modes
     if (this.id == 'manualpaintenable') {
-      $('#manual, #bar-manual').toggle(settings[this.id]);
+      $('#manual, #bar-manual').toggle(robopaint.settings[this.id]);
       responsiveResize();
     }
 
     // Remoteprint mode click
     if (this.id == 'remoteprint') {
-      $('#bar-remoteprint').toggle(settings[this.id]);
+      $('#bar-remoteprint').toggle(robopaint.settings[this.id]);
     }
 
     // Update paint sets when changes made that would effect them
@@ -244,7 +244,7 @@ function bindSettingsControls() {
 
     // If there's a key to override for CNC server, set it
     if (pushKey.length) {
-      settings[this.id] = pushVal;
+      robopaint.settings[this.id] = pushVal;
       if (pushKey[0] == 'b') { // Bot!
         cncserver.conf.bot.set(pushKey[1], pushVal);
       } else { // Global conf
@@ -272,7 +272,7 @@ function bindSettingsControls() {
 
   // Keyboard shortcut for exiting settings
   $(window).keydown(function (e){
-    if (isModal) {
+    if (isModal && $('#settings').is(':visible')) {
       if (e.keyCode == 27) {
         $('#settings-done').click();
       }
@@ -290,7 +290,9 @@ function bindSettingsControls() {
   });
 
   // Fill in the IP Address of local interfaces
-  $('#settings div.httpport label span').text(robopaint.utils.getIPs(settings.httplocalonly));
+  $('#settings div.httpport label span').text(
+    robopaint.utils.getIPs(robopaint.settings.httplocalonly)
+  );
 }
 
 /**

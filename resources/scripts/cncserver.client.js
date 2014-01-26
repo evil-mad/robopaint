@@ -3,10 +3,7 @@
  */
 
 // Set the global scope object for any robopaint level details
-var robopaint = {
-  settings: window.parent.settings,
-  statedata: window.parent.statedata
-};
+var robopaint = window.parent.robopaint;
 
 var cncserver = {
   canvas: {

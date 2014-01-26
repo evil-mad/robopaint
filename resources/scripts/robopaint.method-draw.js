@@ -8,13 +8,7 @@
 $('<link>').attr({rel: 'stylesheet', href: "../../robopaint.method-draw.css"}).appendTo('head');
 
 // Set the global scope object for any robopaint level details
-var robopaint = {
-  settings: window.parent.settings,
-  statedata: window.parent.statedata
-};
-
-// Only for using the color conversion utilities
-$('<script>').attr({type: 'text/javascript', src: "../../scripts/robopaint.utils.js"}).appendTo('head');
+var robopaint = window.parent.robopaint;
 
 // Page load complete...
 $(function() {
