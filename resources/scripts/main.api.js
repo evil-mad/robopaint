@@ -49,6 +49,14 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
     if (msg) return [406, msg];
 
+    // Can't add queue items while one is printing! A "temporary" restriction
+    // till I get SVG verification packaged up and separated from method-draw
+    if (queue.length) {
+      if (queue[queue.length-1].status == 'printing') {
+        return [503, 'Cannot add to queue during ongoing print job.'];
+      }
+    }
+
     // Setup the load Callback that will be checked for on the subWindow pages
     // in edit and print modes to verify and trigger actions. Only those pages
     // decide the fate of this request.
