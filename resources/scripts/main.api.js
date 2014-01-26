@@ -206,11 +206,6 @@ function startPrintQueue(index, context) {
 
     // Close the window
     setRemotePrintWindow(false, true);
-
-    // Reset Values
-    $progress.val(0);
-    $pause.text('Pause');
-    $status.text('Waiting for drawing from client...');
   }
 }
 
@@ -250,6 +245,11 @@ function setRemotePrintWindow(tryOpen, force) {
   }
 
   if (toggle) {
+    // Reset inputs
+    $('#remoteprint-window progress').val(0);
+    $('#remoteprint-window button.pause').text('Pause');
+    $('#remoteprint-window #statusmessage').text('Waiting for drawing from client...');
+
     $('#remoteprint-window').fadeIn('slow');
   } else {
     $('#remoteprint-window').fadeOut('slow');
