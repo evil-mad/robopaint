@@ -221,11 +221,13 @@ function startPrintQueue(index, context) {
  *
  * @param {Boolean} toggle
  *   True to show window, false to hide.
+ * @returns {Boolean}
+ *   True if the operation was confirmed, false if it was cancelled.
  */
 function setRemotePrintWindow(tryOpen, force) {
   // Sanity check: Do nothing if we're already open (or closed)
   if (robopaint.api.print.enabled == tryOpen) {
-    return;
+    return false;
   }
 
   var toggle = false;
@@ -247,7 +249,7 @@ function setRemotePrintWindow(tryOpen, force) {
 
   // Sanity check now that we have confirmation
   if (robopaint.api.print.enabled == toggle) {
-    return;
+    return false;
   }
 
   if (toggle) {
@@ -262,4 +264,5 @@ function setRemotePrintWindow(tryOpen, force) {
   }
   setModal(toggle);
   robopaint.api.print.enabled = !!toggle; // Set printmode to exact boolean of toggle
+  return true
 }
