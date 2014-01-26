@@ -125,9 +125,13 @@ cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
     return {code: 200, body: item};
   } else if (req.route.method == 'delete'){
     if (item.status == "waiting" || item.status == "printing") {
-      item.status = 'cancelled';
-      setRemotePrintWindow(false, true);
-      robopaint.switchMode('home');
+      if (robopaint.api.print.queueItemComplete) {
+        robopaint.api.print.queueItemComplete(true);
+      } else {
+        item.status = 'cancelled';
+        setRemotePrintWindow(false, true);
+        robopaint.switchMode('home');
+      }
       return {code: 200, body: robopaint.api.print.queue[qid]};
     } else {
       return [406, "Queue item in state '" + item.status + "' cannot be cancelled"];
@@ -144,8 +148,13 @@ cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
 function bindRemoteControls() {
   $('#remoteprint-window button').click(function(e) {
     if ($(this).is('.cancel')) {
-      setRemotePrintWindow(false);
-      robopaint.switchMode('home');
+      if (setRemotePrintWindow(false)) {
+        if (robopaint.api.print.queueItemComplete) {
+          robopaint.api.print.queueItemComplete(true);
+        } else {
+          robopaint.switchMode('home');
+        }
+      }
     }
   });
 }
@@ -201,17 +210,26 @@ function startPrintQueue(index, context) {
   }, 1000);
 
   // Callback triggered when printing is complete
-  function queueItemComplete() {
+  robopaint.api.print.queueItemComplete = queueItemComplete;
+  function queueItemComplete(cancelled) {
     // Unbind elements and clear interval
     $printPause.add($printStatus).unbind('DOMSubtreeModified');
     clearInterval(checkProgress);
 
-    // Final item statuses
-    item.status = "complete";
-    item.percentComplete = 100;
+    if (!cancelled) {
+      // Final item statuses
+      item.status = "complete";
+      item.percentComplete = 100;
+    } else {
+      item.status = 'cancelled';
+      robopaint.switchMode('home');
+    }
 
     // Close the window
     setRemotePrintWindow(false, true);
+
+    // Remove the globalized function
+    delete robopaint.api.print.queueItemComplete;
   }
 }
 
