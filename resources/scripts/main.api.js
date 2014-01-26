@@ -135,7 +135,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
 function bindRemoteControls() {
   $('#remoteprint-window button').click(function(e) {
     if ($(this).is('.cancel')) {
-      setPrintWindow(false);
+      setRemotePrintWindow(false);
     }
 
     // TODO: Enable pause
@@ -150,10 +150,13 @@ function bindRemoteControls() {
 /**
  * Attempt/Intend to open or close print window
  *
+/**
+ * Attempt/Intend to open or close print window
+ *
  * @param {Boolean} toggle
- *   True ro show window, false to hide.
+ *   True to show window, false to hide.
  */
-function setPrintWindow(tryOpen) {
+function setRemotePrintWindow(tryOpen, force) {
   // Sanity check: Do nothing if we're already open (or closed)
   if (robopaint.api.print.enabled == tryOpen) {
     return;
@@ -167,9 +170,11 @@ function setPrintWindow(tryOpen) {
   msg+= "\n\n* Click cancel if you're not quite ready to go. You can also exit anytime while in Remote Paint mode";
 
   if (!tryOpen) {
-    msg = "Are you sure you want to leave Remote Paint mode?";
-    msg+= "\n\n Any print processes and client applications will be cancelled/disconnected.";
-    toggle = !confirm(msg);
+    if (!force) {
+      msg = "Are you sure you want to leave Remote Paint mode?";
+      msg+= "\n\n Any print processes and client applications will be cancelled/disconnected.";
+      toggle = !confirm(msg);
+    }
   } else {
     toggle = confirm(msg);
   }

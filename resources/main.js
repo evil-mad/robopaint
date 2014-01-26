@@ -149,7 +149,7 @@ function bindMainControls() {
         // @see scripts/main.api.js
         checkModeClose(function(){
           robopaint.switchMode('home');
-          setPrintWindow(true);
+          setRemotePrintWindow(true);
         }, false, "home");
 
         break;
