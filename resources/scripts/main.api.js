@@ -116,16 +116,16 @@ cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
     return [403, printDisabledMessage];
   }
 
-  if (!robopaint.printQueue[qid]){
+  if (!robopaint.api.print.queue[qid]){
     return [404, 'Queue ID ' + qid + ' not found'];
   }
 
   if (req.route.method == 'get') { // Is this a GET request?
-    return {code: 200, body: robopaint.printQueue[qid]};
+    return {code: 200, body: robopaint.api.print.queue[qid]};
   } else if (req.route.method == 'delete'){
     // TODO: Actually stop printing if it was?
-    robopaint.printQueue[qid].status = cancelled;
-    return {code: 200, body: robopaint.printQueue[qid]};
+    robopaint.api.print.queue[qid].status = 'cancelled';
+    return {code: 200, body: robopaint.api.print.queue[qid]};
   } else {
     return false; // 405 - Method Not Supported
   }
