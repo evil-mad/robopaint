@@ -126,28 +126,12 @@ function bindMainControls() {
       var $target = $(e.target);
       var mode = $target[0].id.split('-')[1];
 
-      appMode = mode;
-
       // Don't do anything if already selected
       if ($target.is('.selected')) {
         return false;
       }
 
-      // Select element (deselect last)
-      $('#bar a.selected').removeClass('selected');
-      $target.addClass('selected');
-
-      switch (mode) {
-        case 'home':
-          $('nav, #logo').fadeIn('slow');
-          $('#loader').hide();
-          $subwindow.fadeOut('slow', function(){$subwindow.attr('src', "");});
-          break;
-        default:
-          $('nav, #logo').fadeOut('slow');
-          $('#loader').fadeIn();
-          $subwindow.fadeOut('slow', function(){$subwindow.attr('src', $target.attr('href'));});
-      }
+      robopaint.switchMode(mode); // Actually switch to the mode
     }, false, e.target.id.split('-')[1]);
 
     e.preventDefault();
@@ -163,7 +147,11 @@ function bindMainControls() {
         break;
       case 'remoteprint':
         // @see scripts/main.api.js
-        setPrintWindow(true);
+        checkModeClose(function(){
+          robopaint.switchMode('home');
+          setPrintWindow(true);
+        }, false, "home");
+
         break;
     }
 
@@ -175,6 +163,40 @@ function bindMainControls() {
     gui.Shell.openExternal(this.href);
     e.preventDefault();
   });
+}
+
+/**
+ * Actually does the switching between modes (no checking/confirmation steps)
+ *
+ * @param {String} mode
+ *   The mode's machine name. NOTE: Does no sanity checks!
+ */
+robopaint.switchMode = function(mode) {
+  if (appMode == mode) { // Don't switch modes if already there
+    return;
+  }
+
+  appMode = mode; // Set the new mode
+
+  $target = $('a#bar-' + mode);
+
+  // Select toolbar element (and deselect last)
+  $('#bar a.selected').removeClass('selected');
+  $target.addClass('selected');
+
+  switch (mode) {
+    case 'home':
+      $('nav, #logo').fadeIn('slow');
+      $('#loader').hide();
+      $subwindow.fadeOut('slow', function(){$subwindow.attr('src', "");});
+      break;
+    default:
+      $('nav, #logo').fadeOut('slow');
+      $('#loader').fadeIn();
+      $subwindow.fadeOut('slow', function(){
+        $subwindow.attr('src', $target.attr('href'));
+      });
+  }
 }
 
 /**

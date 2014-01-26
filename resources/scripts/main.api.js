@@ -74,7 +74,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
           reason: e.error
         }));
         // Return to home mode after error
-        $('#bar-home').click();
+        robopaint.switchMode('home');
       }
 
       // Now that we're done, destroy the callback...
@@ -84,7 +84,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
     // Store the SVG content
     window.localStorage.setItem('svgedit-default', req.body.svg);
     // Switch modes (this eventually triggers the above callback)
-    $('#bar-edit').click();
+    robopaint.switchMode('edit');
 
     // TODO: Manage queue, send to print page with options
 
