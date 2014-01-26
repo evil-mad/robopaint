@@ -23,8 +23,8 @@ var printDisabledMessage = 'The SVG import API is currently disabled. Enable it 
  */
 cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
-  // Forbid any commands until printMode is enabled
-  if (!robopaint.api.print.enabled) {
+  // Forbid change commands until printMode is enabled
+  if (!robopaint.api.print.enabled && req.route.method != 'get') {
     return [403, printDisabledMessage];
   }
 
@@ -111,8 +111,8 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
   var qid = req.params.qid;
 
-  // Forbid any commands until printMode is enabled
-  if (!robopaint.api.print.enabled) {
+  // Forbid change commands until printMode is enabled
+  if (!robopaint.api.print.enabled && req.route.method != 'get') {
     return [403, printDisabledMessage];
   }
 
