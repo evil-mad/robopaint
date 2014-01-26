@@ -37,6 +37,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
   } else if (req.route.method == 'post') { // POST new print item
     var options = req.body.options;
     var msg = '';
+    var queue = robopaint.api.print.queue;
 
     // Basic sanity check incoming content
     if (!req.body.svg) msg = "body content node required: svg";
@@ -57,7 +58,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
         // Actually add item to queue
         var d = new Date();
-        robopaint.api.print.queue.push({
+        queue.push({
           status: 'waiting',
           options: options,
           pathCount: e.pathCount,
@@ -69,12 +70,12 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
         // Return response to client application finally
         res.status(201).send(JSON.stringify({
           status: 'verified and added to queue',
-          uri: '/robopaint/v1/print/' + (robopaint.api.print.queue.length - 1),
-          item: robopaint.api.print.queue[robopaint.api.print.queue.length - 1]
+          uri: '/robopaint/v1/print/' + (queue.length - 1),
+          item: queue[queue.length - 1]
         }));
 
         // Trigger printing/function management
-        startPrintQueue(robopaint.api.print.queue.length-1, e.context);
+        startPrintQueue(queue.length-1, e.context);
       } else { // Image failed to load, return error
         res.status(406).send(JSON.stringify({
           status: 'content verification failed',
