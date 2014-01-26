@@ -47,8 +47,15 @@
     <span class="icon-print" title="To your very own bot!">&nbsp;</span>
   </div>
   <button class="normal cancel">Exit Remote Paint Mode</button>
-  <button class="normal pause">Pause</button>
-  <aside>Remote paint mode acts as a host to allow external applications to send drawings to RoboPaint. Only use this mode with your bot completely ready to start as there will be no warning once it's begun. Click below to pause a current operation or leave this mode.</aside>
+  <fieldset id="status">
+    <button class="normal pause">Pause</button>
+    <legend>Status</legend>
+    <div id="statusmessage"></div>
+    <div class="progress-wrapper">
+      <progress title="Current progress" max="100" value="0"></progress>
+    </div>
+  </fieldset>
+  <aside>Remote paint mode acts as a host to allow external applications to send drawings to RoboPaint. Only use this mode with your bot completely ready to start as there will be no warning once it's begun.</aside>
 </div>
 
 <img id="loader" src="resources/images/loading_spinner.svg"/>

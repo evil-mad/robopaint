@@ -72,7 +72,10 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
           uri: '/robopaint/v1/print/' + (robopaint.api.print.queue.length - 1),
           item: robopaint.api.print.queue[robopaint.api.print.queue.length - 1]
         }));
-      } else {
+
+        // Trigger printing/function management
+        startPrintQueue(robopaint.api.print.queue.length-1, e.context);
+      } else { // Image failed to load, return error
         res.status(406).send(JSON.stringify({
           status: 'content verification failed',
           reason: e.error
@@ -150,6 +153,73 @@ function bindRemoteControls() {
 /**
  * Attempt/Intend to open or close print window
  *
+ * @param {Number} index
+ *   Queue index item to reference
+ * @param {Object} context
+ *   Context source for jQuery to use
+ */
+function startPrintQueue(index, context) {
+  var item = robopaint.api.print.queue[index];
+  var $pause = $('#remoteprint-window button.pause');
+  var $status = $('#remoteprint-window #statusmessage');
+  var $progress = $('#remoteprint-window progress');
+
+  var $printPause = $('#pause', context);
+  var $printStatus = $('#statusmessage', context);
+  var $printProgress = $('progress', context);
+
+  // Start printing
+  item.status = 'printing';
+  $printPause.click();
+
+  // Bind controls
+  $pause.click(function(e){
+    $printPause.click();
+  });
+
+  // Propagate text changes from button and message
+  $printPause.add($printStatus).bind('DOMSubtreeModified', function(e){
+    switch (e.currentTarget) {
+      case $printPause[0]:
+        $pause.text($printPause.text());
+        if ($printPause.is('.ready')) {
+          queueItemComplete();
+        }
+        break;
+      case $printStatus[0]:
+        item.printingStatus = $printStatus.text();
+        $status.text(item.printingStatus);
+        break;
+    }
+  });
+
+  // Propagate progress bar changes
+  var checkProgress = setInterval(function(){
+    item.percentComplete = Math.round(($printProgress.val() / $printProgress.attr('max')) * 100);
+    $progress.val(item.percentComplete);
+  }, 1000);
+
+  // Callback triggered when printing is complete
+  function queueItemComplete() {
+    // Unbind elements and clear interval
+    $printPause.add($printStatus).unbind('DOMSubtreeModified');
+    clearInterval(checkProgress);
+
+    // Final item statuses
+    item.status = "complete";
+    item.percentComplete = 100;
+
+    // Close the window
+    setRemotePrintWindow(false, true);
+
+    // Reset Values
+    $progress.val(0);
+    $pause.text('Pause');
+    $status.text('Waiting for drawing from client...');
+  }
+}
+
+
 /**
  * Attempt/Intend to open or close print window
  *
