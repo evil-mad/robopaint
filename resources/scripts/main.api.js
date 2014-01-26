@@ -9,7 +9,7 @@ robopaint.api = {}; // All RoboPaint API state vars should be stored here
 robopaint.api.print = {
   enabled: false,
   queue: [], // Array of Objects for actual queue
-  requestSettings: {} // Requested print settings for a new print queue item
+  requestOptions: {} // Requested print settings for a new print queue item
 }
 
 // Establish high-level print endpoint ========================================
@@ -51,18 +51,22 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
     // Setup the load Callback that will be checked for on the subWindow pages
     // in edit and print modes to verify and trigger actions. Only those pages
     // decide the fate of this request.
-    $subwindow.externalLoadCallbackOptions = options;
-    $subwindow.externalLoadCallback = function(e) {
-      if (e.status == 'success') {
+    robopaint.api.print.requestOptions = options;
+    robopaint.api.print.loadCallback = function(e) {
+      if (e.status == 'success') { // Image loaded and everything is great!
+
+        // Actually add item to queue
         var d = new Date();
         robopaint.api.print.queue.push({
           status: 'waiting',
           options: options,
           pathCount: e.pathCount,
+          percentComplete: 0,
           startTime: d.toISOString(),
           svg: localStorage['svgedit-default'],
         });
 
+        // Return response to client application finally
         res.status(201).send(JSON.stringify({
           status: 'verified and added to queue',
           uri: '/robopaint/v1/print/' + (robopaint.api.print.queue.length - 1),
@@ -78,7 +82,7 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
       }
 
       // Now that we're done, destroy the callback...
-      $subwindow.externalLoadCallback = null;
+      delete robopaint.api.print.loadCallback;
     }
 
     // Store the SVG content

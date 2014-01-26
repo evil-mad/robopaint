@@ -48,13 +48,17 @@ $(function() {
     if (localStorage["svgedit-default"]) {
       var loadResult = methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
 
-      // If there's an external callback waiting, trigger it
-      if (typeof window.parent.$subwindow.externalLoadCallback === "function") {
+      // If there's a remote print external callback waiting, trigger it =======
+      if (typeof robopaint.api.print.loadCallback === "function") {
         if (loadResult === true) {
-          autoSizeContent(); // Autosize content
-          window.parent.$('#bar-print').click(); // Load autopaint
+          if (robopaint.api.print.requestOptions.fullsize) {
+            autoSizeContent(); // Autosize content
+          }
+
+          // Pass on the requirement to call the loadCallback to AutoPaint
+          robopaint.switchMode('print'); // Load autopaint
         } else {
-          window.parent.$subwindow.externalLoadCallback({
+          robopaint.api.print.loadCallback({
             status: 'failure',
             error: loadResult
           });
@@ -109,8 +113,8 @@ $(function() {
       console.log(e);
 
       // If there's an external callback waiting, trigger the error
-      if (typeof window.parent.$subwindow.externalLoadCallback === "function") {
-        window.parent.$subwindow.externalLoadCallback({
+      if (typeof robopaint.api.print.loadCallback === "function") {
+        robopaint.api.print.loadCallback({
           status: 'failure',
           error: e
         });

@@ -14,14 +14,14 @@ $(function() {
 
   // Callback for when SVG loading is complete
   cncserver.canvas.loadSVGCallback = function(){
-    // If there's an external callback waiting, trigger it
-    if (typeof window.parent.$subwindow.externalLoadCallback === "function") {
-      window.parent.$subwindow.externalLoadCallback({
+    // If there's an remote print external callback waiting, trigger it =======
+    // ========================================================================
+    if (typeof robopaint.api.print.loadCallback === "function") {
+      robopaint.api.print.loadCallback({
         status: 'success',
-        pathCount: $('#cncserversvg path').length
+        pathCount: $('#cncserversvg path').length,
+        context: document // Pass along document context so we can cross over from parent
       });
-
-      // TODO: Trigger printing/Alert User, set queue status?
     }
   }
 
