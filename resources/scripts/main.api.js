@@ -110,22 +110,28 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
  */
 cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
   var qid = req.params.qid;
+  var item = robopaint.api.print.queue[qid];
 
   // Forbid change commands until printMode is enabled
   if (!robopaint.api.print.enabled && req.route.method != 'get') {
     return [403, printDisabledMessage];
   }
 
-  if (!robopaint.api.print.queue[qid]){
+  if (!item){
     return [404, 'Queue ID ' + qid + ' not found'];
   }
 
   if (req.route.method == 'get') { // Is this a GET request?
-    return {code: 200, body: robopaint.api.print.queue[qid]};
+    return {code: 200, body: item};
   } else if (req.route.method == 'delete'){
-    // TODO: Actually stop printing if it was?
-    robopaint.api.print.queue[qid].status = 'cancelled';
-    return {code: 200, body: robopaint.api.print.queue[qid]};
+    if (item.status == "waiting" || item.status == "printing") {
+      item.status = 'cancelled';
+      setRemotePrintWindow(false, true);
+      robopaint.switchMode('home');
+      return {code: 200, body: robopaint.api.print.queue[qid]};
+    } else {
+      return [406, "Queue item in state '" + item.status + "' cannot be cancelled"];
+    }
   } else {
     return false; // 405 - Method Not Supported
   }
