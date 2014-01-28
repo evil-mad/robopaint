@@ -45,7 +45,17 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
         }
       })(),
       items: robopaint.api.print.queue.length,
-      queue: robopaint.api.print.queue
+      queue: (function(){
+        var items = [];
+        $.each(robopaint.api.print.queue, function(id, item){
+          items.push({
+            uri: '/robopaint/v1/print/' + id,
+            name: item.options.name,
+            status: item.status
+          });
+        });
+        return items;
+      })()
     }};
   } else if (req.route.method == 'post') { // POST new print item
     var options = req.body.options;
