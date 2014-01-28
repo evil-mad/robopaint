@@ -551,6 +551,11 @@ body.print-auto #buttons button.normal {
   background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
 }
 
+.print #pause:disabled {
+  box-shadow: 0 0 14px 6px rgba(155, 155, 155, 0.5);
+  background: linear-gradient(to bottom, #ECECEC 0%,rgb(238, 238, 238) 50%,rgb(236, 236, 236) 51%,rgb(173, 173, 173) 100%);
+}
+
 #pause:hover {
   box-shadow: 0 0 14px 10px rgba(255,0,0,1);
   -webkit-animation: none;

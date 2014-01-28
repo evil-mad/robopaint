@@ -34,7 +34,8 @@ $(function() {
     var stateText = {
       ready: 'Click to start painting your picture!',
       pause: 'Click to stop current operations',
-      resume: 'Click to resume operations'
+      resume: 'Click to resume operations',
+      wait: 'Please wait while executed processes complete...'
     }
 
     var pausePenState = 0;
@@ -59,6 +60,7 @@ $(function() {
         // With something in the queue... we're either pausing, or resuming
         if (!cncserver.state.process.paused) {
           // Starting Pause =========
+          $('#pause').prop('disabled', true).attr('title', stateText.wait);
           cncserver.wcb.status('Pausing current process...');
           cncserver.state.process.paused = true;
         } else {
@@ -97,6 +99,7 @@ $(function() {
         cncserver.wcb.status('Paused. Click resume to continue.', 'complete');
         $('#buttons button.normal').prop('disabled', false); // Enable options
         $('#pause').addClass('active').attr('title', stateText.resume).text('Resume');
+        $('#pause').prop('disabled', false);
       }
     }
 
