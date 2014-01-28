@@ -51,7 +51,7 @@ $(function() {
       // If there's a remote print external callback waiting, trigger it =======
       if (typeof robopaint.api.print.loadCallback === "function") {
         if (loadResult === true) {
-          if (robopaint.api.print.requestOptions.fullsize) {
+          if (!robopaint.api.print.requestOptions.noresize) {
             autoSizeContent(); // Autosize content
           }
 
