@@ -92,7 +92,10 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
           pathCount: e.pathCount,
           percentComplete: 0,
           startTime: d.toISOString(),
+          endTime: null,
+          secondsTaken: null,
           svg: localStorage['svgedit-default'],
+          printingStatus: "Queued for printing..."
         });
 
         // Return response to client application finally
@@ -253,6 +256,11 @@ function startPrintQueue(index, context) {
       item.status = 'cancelled';
       robopaint.switchMode('home');
     }
+
+    // Set endTime and elapsed with cancel OR completion.
+    var d = new Date();
+    item.endTime = d.toISOString();
+    item.secondsTaken = (new Date(item.endTime) - new Date(item.startTime)) / 1e3;
 
     // Close the window
     setRemotePrintWindow(false, true);
