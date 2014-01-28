@@ -50,7 +50,7 @@ function loadSettings() {
 
   // Are there existing settings from a previous run? Mesh them into the defaults
   if (localStorage["cncserver-settings"]) {
-    var s = JSON.parse(localStorage["cncserver-settings"]);
+    var s = getSettings();
     for (var key in robopaint.settings) {
       if (typeof s[key] != 'undefined') {
         robopaint.settings[key] = s[key];
@@ -83,6 +83,17 @@ function afterSettings() {
 
   // Clear last used image
   if (robopaint.settings.openlast == 0) delete localStorage["svgedit-default"];
+}
+
+/**
+ * Actually retrieve settings from local storage
+ */
+function getSettings() {
+  if (localStorage["cncserver-settings"]) {
+    return JSON.parse(localStorage["cncserver-settings"]);
+  } else {
+    return {};
+  }
 }
 
 /**

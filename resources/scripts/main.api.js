@@ -9,7 +9,20 @@ robopaint.api = {}; // All RoboPaint API state vars should be stored here
 robopaint.api.print = {
   enabled: false,
   queue: [], // Array of Objects for actual queue
-  requestOptions: {} // Requested print settings for a new print queue item
+  requestOptions: {}, // Requested print settings for a new print queue item
+  settingsOverrideWhitelist: [
+    'latencyoffset',
+    'movespeed',
+    'paintspeed',
+    'filltype',
+    'fillangle',
+    'fillspacing',
+    'maxpaintdistance',
+    'fillprecision',
+    'strokeprecision',
+    'strokeovershoot',
+    'gapconnect'
+  ]
 }
 
 // Establish high-level print endpoint ========================================
@@ -210,6 +223,23 @@ function startPrintQueue(index, context) {
   var $printStatus = $('#statusmessage', context);
   var $printProgress = $('progress', context);
 
+  var oldSettings = getSettings();
+
+  // Parse and inject settingsOverides
+  if (item.options.settingsOverrides) {
+    var overrides = item.options.settingsOverrides;
+    var whitelist = robopaint.api.print.settingsOverrideWhitelist;
+    for (var key in overrides) {
+      if (whitelist.indexOf(key)) {
+        robopaint.settings[key] = overrides[key];
+      }
+    }
+
+    // Send and verify settings
+    saveSettings();
+    loadSettings();
+  }
+
   // Start printing
   item.status = 'printing';
   $printPause.click();
@@ -261,6 +291,11 @@ function startPrintQueue(index, context) {
     var d = new Date();
     item.endTime = d.toISOString();
     item.secondsTaken = (new Date(item.endTime) - new Date(item.startTime)) / 1e3;
+
+    // Reset settings to previous values
+    robopaint.settings = oldSettings;
+    saveSettings();
+    loadSettings();
 
     // Close the window
     setRemotePrintWindow(false, true);
