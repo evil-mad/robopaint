@@ -22,22 +22,34 @@ var printDisabledMessage = 'The SVG import API is currently disabled. Enable it 
  * POST - Create new queue items to print
  */
 cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
+  var queue = robopaint.api.print.queue;
 
   // Forbid change commands until printMode is enabled
   if (!robopaint.api.print.enabled && req.route.method != 'get') {
     return [403, printDisabledMessage];
   }
 
+  // Are we busy? Fill a quick var for reuse...
+  var busy = false;
+  if (queue.length) {
+    busy = queue[queue.length-1].status == 'printing';
+  }
+
   if (req.route.method == 'get') { // GET list of print queue items and status
     return {code: 200, body: {
-      status: 'ready',
+      status: (function(){
+        if (robopaint.api.print.enabled) {
+          return busy ? 'busy' : 'ready';
+        } else {
+          return 'disabled';
+        }
+      })(),
       items: robopaint.api.print.queue.length,
       queue: robopaint.api.print.queue
     }};
   } else if (req.route.method == 'post') { // POST new print item
     var options = req.body.options;
     var msg = '';
-    var queue = robopaint.api.print.queue;
 
     // Basic sanity check incoming content
     if (!req.body.svg) msg = "body content node required: svg";
@@ -51,10 +63,8 @@ cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
 
     // Can't add queue items while one is printing! A "temporary" restriction
     // till I get SVG verification packaged up and separated from method-draw
-    if (queue.length) {
-      if (queue[queue.length-1].status == 'printing') {
-        return [503, 'Cannot add to queue during ongoing print job.'];
-      }
+    if (busy) {
+      return [503, 'Cannot add to queue during ongoing print job.'];
     }
 
     // Setup the load Callback that will be checked for on the subWindow pages
