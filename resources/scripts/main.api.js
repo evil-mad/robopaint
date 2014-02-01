@@ -364,5 +364,6 @@ function setRemotePrintWindow(tryOpen, force) {
   }
   setModal(toggle);
   robopaint.api.print.enabled = !!toggle; // Set printmode to exact boolean of toggle
+  responsiveResize(); // Ensure the layout is updated now that it's enabled
   return true
 }
