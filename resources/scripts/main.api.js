@@ -215,7 +215,7 @@ function bindRemoteControls() {
  */
 function startPrintQueue(index, context) {
   var item = robopaint.api.print.queue[index];
-  var $pause = $('#remoteprint-window button.pause');
+  var $pause = $('#remoteprint-window #pause');
   var $status = $('#remoteprint-window #statusmessage');
   var $progress = $('#remoteprint-window progress');
 
@@ -246,6 +246,7 @@ function startPrintQueue(index, context) {
   // Start printing
   item.status = 'printing';
   $printPause.click();
+  $pause.prop('disabled', false); // Enable Pause button
 
   // Bind controls
   $pause.click(function(e){
@@ -257,6 +258,9 @@ function startPrintQueue(index, context) {
     switch (e.currentTarget) {
       case $printPause[0]:
         $pause.text($printPause.text());
+        $pause.attr('class', $printPause.attr('class'));
+        $pause.attr('title', $printPause.attr('title'));
+        $pause.prop('disabled', $printPause.prop('disabled'));
         if ($printPause.is('.ready')) {
           queueItemComplete();
         }
@@ -351,7 +355,7 @@ function setRemotePrintWindow(tryOpen, force) {
   if (toggle) {
     // Reset inputs
     $('#remoteprint-window progress').val(0);
-    $('#remoteprint-window button.pause').text('Pause');
+    $('#remoteprint-window button.pause').prop('disabled', true).text('Pause');
     $('#remoteprint-window #statusmessage').text('Waiting for drawing from client...');
 
     $('#remoteprint-window').fadeIn('slow');
