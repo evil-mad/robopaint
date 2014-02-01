@@ -187,6 +187,16 @@ cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
 
 });
 
+
+/**
+ * `robopaint/remote`
+ * Example HTML returning endpoint for resources/api/example.remotepaint.html
+ */
+cncserver.createServerEndpoint('/robopaint/remote', function(req, res) {
+  res.sendfile('resources/api/example.remotepaint.html')
+  return true;
+});
+
 /**
  * Bind buttons specific for remote print
  */
