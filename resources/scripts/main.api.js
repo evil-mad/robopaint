@@ -240,6 +240,9 @@ function startPrintQueue(index, context) {
     loadSettings();
   }
 
+  // Throw the image into the preview area
+  $('svg#preview g#cncserversvg').append(localStorage["svgedit-default"]);
+
   // Start printing
   item.status = 'printing';
   $printPause.click();
@@ -296,6 +299,9 @@ function startPrintQueue(index, context) {
     robopaint.settings = oldSettings;
     saveSettings();
     loadSettings();
+
+    // Empty the preview window
+    $('svg#preview g#cncserversvg').empty();
 
     // Close the window
     setRemotePrintWindow(false, true);

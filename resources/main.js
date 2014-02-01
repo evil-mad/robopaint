@@ -222,6 +222,26 @@ function responsiveResize() {
   if ($subwindow.height) {
     $subwindow.height($(window).height() - barHeight);
   }
+
+  // Remote Print Window sizing
+  if (robopaint.api.print.enabled) {
+    var $rpWindow = $('#remoteprint-window');
+    var scale = {};
+    size = [$rpWindow.width(), $rpWindow.height()];
+    var padding = {x: 20, y: 65};
+    var fullSize = [$('#preview-scale-container').width(), $('#preview-scale-container').height()];
+
+    scale.x = (size[0] - padding.x) / fullSize[0];
+    scale.y = (size[1] - padding.y) / fullSize[1];
+
+    scale = scale.x < scale.y ? scale.x : scale.y;
+
+    $('#preview-scale-container').css({
+      '-webkit-transform': 'scale(' + scale +')',
+      left: size[0]/2 - ((fullSize[0]/2) * scale) + padding.x*2,
+      top: size[1]/2 - ((fullSize[1]/2) * scale) + padding.y*2
+    });
+  }
 };
 
 /**

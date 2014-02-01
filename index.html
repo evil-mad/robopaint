@@ -46,15 +46,20 @@
     <span class="icon-shuffle" title="Through the Interwebs or your local network">&nbsp;</span>
     <span class="icon-print" title="To your very own bot!">&nbsp;</span>
   </div>
-  <button class="normal cancel">Exit Remote Paint Mode</button>
-  <fieldset id="status">
-    <button class="normal pause">Pause</button>
-    <legend>Status</legend>
-    <div id="statusmessage"></div>
-    <div class="progress-wrapper">
+
+  <div id="preview-scale-container">
+    <svg title="Image preview, if any" id="preview" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">
+      <g id="cncserversvg" transform="translate(48,48)"></g>
+    </svg>
+    <fieldset id="details">
+      <legend>Details / Controls:</legend>
+      <button class="" disabled="disabled" id="pause">Pause</button>
+      <div id="statusmessage"></div>
       <progress title="Current progress" max="100" value="0"></progress>
-    </div>
-  </fieldset>
+      <button class="normal cancel" title="Cancel current operations and exit this mode.">Exit Remote Paint Mode</button>
+    </fieldset>
+  </div>
+
 </div>
 
 <img id="loader" src="resources/images/loading_spinner.svg"/>
