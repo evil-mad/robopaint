@@ -160,7 +160,7 @@ function bindMainControls() {
   });
 
   // Bind help click (it's special)
-  $('#bar-help').click(function(){
+  $('#bar-help').click(function(e){
     gui.Shell.openExternal(this.href);
     e.preventDefault();
   });
