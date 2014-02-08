@@ -36,7 +36,7 @@ $(function() {
     // Drawing has been opened =================================================
     methodDraw.openCallback = function() {
       // Force the resolution to match what's expected
-      methodDraw.canvas.setResolution(1056,768);
+      methodDraw.canvas.setResolution(robopaint.canvas.width - 48*2, robopaint.canvas.height - 48*2);
 
       // Set zoom to fit canvas at load
       methodDraw.zoomChanged(window, 'canvas');

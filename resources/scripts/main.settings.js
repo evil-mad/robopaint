@@ -148,6 +148,15 @@ function bindSettingsControls() {
   }
   $('select#bottype').val(robopaint.currentBot.type);
 
+  // Set robopaint global aspect ratio
+  var b = botTypes[robopaint.currentBot.type].data;
+  var aspect = (b.maxArea.height - b.workArea.top) / (b.maxArea.width - b.workArea.left);
+  robopaint.canvas = {
+    width: 1152, // "Trusted" width to base transformations off of
+    height: Math.round(1152 * aspect),
+    aspect: aspect
+  };
+
   // Setup settings group tabs
   $('ul.tabs').each(function(){
     // For each set of tabs, we want to keep track of

@@ -7,8 +7,8 @@ var robopaint = window.parent.robopaint;
 
 var cncserver = {
   canvas: {
-    height: 0,
-    width: 0,
+    height: robopaint.canvas.height,
+    width: robopaint.canvas.width,
     scale: 1,
     offset: {
       top: 20,
@@ -43,9 +43,8 @@ $(function() {
   serverConnect(); // "Connect", and get the initial pen state
   $('#drawpoint').hide(); // Hide the drawpoint
 
-  // Store the canvas size
-  cncserver.canvas.height = $svg.height();
-  cncserver.canvas.width = $svg.width();
+  // Set the height based on set aspect ratio / global width
+  $svg.add('#shadow').height(robopaint.canvas.height);
 
   // Initial server connection handler
   function serverConnect() {

@@ -215,6 +215,9 @@ $(function() {
 
       $('#auto-paint, #fill, #draw').prop('disabled', true);
       cncserver.wcb.autoPaint($('#cncserversvg'), function(){
+        if (cncserver.config.canvasDebug) {
+          $('canvas#debug').show();
+        }
         $('#auto-paint, #fill, #draw').prop('disabled', false);
       });
 
@@ -375,6 +378,14 @@ $(function() {
     // Scale tools to height match full size canvas
     $tools.css('-webkit-transform', 'scale(' + toolScale + ')');
     var toolWidth = $tools.width() * toolScale;
+
+    // Nothing shown? Don't take up any room
+    if (mode == 3) {
+      toolWidth = 0;
+      $svg.add('#shadow').css('left', 0);
+    } else {
+      $svg.add('#shadow').css('left', 256);
+    }
 
     // Calculate scale for both width and height...
     var scale = {
