@@ -838,6 +838,14 @@ body.home #settings {
   z-index: 15;
 }
 
+body.home #settings .disabled {
+  background-color: #eee;
+}
+
+body.home #settings .disabled label {
+  color: #888;
+}
+
 /* Print Mode Modal dialog */
 body.home #remoteprint-mask,
 body.home #remoteprint-mask:before {
