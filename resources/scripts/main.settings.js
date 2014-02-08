@@ -33,7 +33,7 @@ function loadSettings() {
     // Robopaint specific defaults
     filltype: 'line-straight',
     fillangle: 0,
-    penmode: 0,
+    penmode: robopaint.currentBot.type == "watercolorbot" ? 0 : 3, // TODO: Pull this from toolset
     openlast: 0,
     showcolortext: 0,
     colorset: 'crayola_classic',
@@ -242,6 +242,23 @@ function bindSettingsControls() {
         pushKey = ['b', 'speed:drawing'];
         pushVal = parseInt($input.val());
         break;
+      case 'penmode':
+        // No paint?
+        toggleDisableSetting(
+          '#showcolortext, #colorset',
+          ($input.val() == 2 || $input.val() == 0),
+          'Paint required. Painting/Drawing Mode incompatible with this setting.'
+        );
+
+        // No nothing!
+        toggleDisableSetting(
+          '#maxpaintdistance',
+          $input.val() != 3,
+          'Water/Paint required. Painting/Drawing Mode incompatible with this setting.'
+        );
+
+        robopaint.settings[this.id] = $input.val();
+        break;
       case 'bottype': // Bot type change! Not a real setting
         localStorage["currentBot"] = JSON.stringify({
           type: $input.val(),
@@ -322,6 +339,12 @@ function bindSettingsControls() {
     }
   });
 
+  // Force the hand of settings to disable WCB specific options for bots without the right tools
+  var tools = botTypes[robopaint.currentBot.type].data.tools;
+  if (!tools.water0 && !tools.color0 && !tools.color7) { // Not a paint bot!
+    toggleDisableSetting('#penmode', false, 'Selected bot incompatible with painting tools.');
+  }
+
   // Reset button
   $('#settings-reset').click(function(e) {
     if (confirm('Reset all settings to factory defaults?')) {
@@ -336,6 +359,22 @@ function bindSettingsControls() {
   $('#settings div.httpport label span').text(
     robopaint.utils.getIPs(robopaint.settings.httplocalonly)
   );
+}
+
+function toggleDisableSetting(selector, toggle, message) {
+  $(selector).each(function(){
+    var $this = $(this);
+    var $parent = $this.parent();
+
+    $this.prop('disabled', !toggle);
+    $parent.toggleClass('disabled', !toggle);
+
+    if (!toggle) { // Disable element
+      $parent.attr('title', message);
+    } else { // Enable element
+      $parent.attr('title', '');
+    }
+  });
 }
 
 /**
