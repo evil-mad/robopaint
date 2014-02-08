@@ -49,7 +49,7 @@ function loadSettings() {
   };
 
   // Are there existing settings from a previous run? Mesh them into the defaults
-  if (localStorage["cncserver-settings"]) {
+  if (localStorage[settingsStorageKey()]) {
     var s = getSettings();
     for (var key in robopaint.settings) {
       if (typeof s[key] != 'undefined') {
@@ -89,10 +89,25 @@ function afterSettings() {
  * Actually retrieve settings from local storage
  */
 function getSettings() {
-  if (localStorage["cncserver-settings"]) {
-    return JSON.parse(localStorage["cncserver-settings"]);
+  if (localStorage[settingsStorageKey()]) {
+    return JSON.parse(localStorage[settingsStorageKey()]);
   } else {
     return {};
+  }
+}
+
+/**
+ * Get the settings key (based on bot type)
+ *
+ * @returns {String}
+ *   Name of current bot specific settings key
+ */
+function settingsStorageKey() {
+  var t = robopaint.currentBot.type;
+  if (t == 'watercolorbot') {
+    return 'cncserver-settings';
+  } else {
+    return t + '-settings';
   }
 }
 
@@ -100,7 +115,7 @@ function getSettings() {
  * Actually save settings to local storage
  */
 function saveSettings() {
-  localStorage["cncserver-settings"] = JSON.stringify(robopaint.settings);
+  localStorage[settingsStorageKey()] = JSON.stringify(robopaint.settings);
 }
 
 /**
@@ -121,6 +136,17 @@ function bindSettingsControls() {
       o.appendTo('select#ports');
     }
   });
+
+  // Pull the list of available bot types
+  var botTypes = cncserver.getSupportedBots();
+  for (var type in botTypes) {
+    var o = $('<option>')
+      .attr('value', type)
+      .text(botTypes[type].name);
+
+      o.appendTo('select#bottype');
+  }
+  $('select#bottype').val(robopaint.currentBot.type);
 
   // Setup settings group tabs
   $('ul.tabs').each(function(){
@@ -216,6 +242,12 @@ function bindSettingsControls() {
         pushKey = ['b', 'speed:drawing'];
         pushVal = parseInt($input.val());
         break;
+      case 'bottype': // Bot type change! Not a real setting
+        localStorage["currentBot"] = JSON.stringify({
+          type: $input.val(),
+          name: $('#bottype option:selected').text()
+        });
+        return;
       default: // Nothing special to set, just change the settings object value
         if ($input.attr('type') == 'checkbox') {
           robopaint.settings[this.id] = $input.is(':checked');
@@ -293,7 +325,7 @@ function bindSettingsControls() {
   // Reset button
   $('#settings-reset').click(function(e) {
     if (confirm('Reset all settings to factory defaults?')) {
-      delete localStorage["cncserver-settings"];
+      delete localStorage[settingsStorageKey()];
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
       loadSettings();

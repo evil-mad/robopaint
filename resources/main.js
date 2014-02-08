@@ -11,8 +11,6 @@ var fs = require('fs');
 var cncserver = require('cncserver');
 var gui = require('nw.gui');
 
-var botType = localStorage["botType"] ? localStorage["botType"] : 'watercolorbot';
-
 var barHeight = 40;
 var isModal = false;
 var initializing = false;
@@ -23,7 +21,9 @@ var subWin = {}; // Placeholder for subwindow "window" object
 // Set the global scope object for any robopaint level details needed by other modes
 var robopaint = {
   settings: {}, // Holds the "permanent" app settings data
-  statedata: {} // Holds per app session volitile settings
+  statedata: {}, // Holds per app session volitile settings
+  // currentBot lies outside of settings as it actually controls what settings will be loaded
+  currentBot: getCurrentBot()
 };
 
 // Option buttons for connections
@@ -41,8 +41,9 @@ $(function() {
   $(window).resize(responsiveResize);
   responsiveResize();
 
-  // Set visible version from manifest
-  $('span.version').text('(v' + gui.App.manifest.version + ')');
+  // Set visible version from manifest (with appended bot type if not WCB)
+  var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
+  $('span.version').text('(v' + gui.App.manifest.version + ')' + bt);
 
   // Bind settings controls & Load up initial settings!
   // @see scripts/main.settings.js
@@ -251,6 +252,7 @@ function startSerial(){
   setMessage('Starting up...', 'loading');
 
   cncserver.start({
+    botType: robopaint.currentBot.type,
     success: function() {
       setMessage('Port found, connecting...');
     },
@@ -525,4 +527,21 @@ function setModal(toggle){
   }
 
   isModal = toggle;
+}
+
+/**
+ * Simple wrapper to pull out current bot from storage
+ *
+ * @returns {Object}
+ *   Current/default from storage
+ */
+function getCurrentBot() {
+  var bot = {type: 'watercolorbot', name: 'WaterColorBot'};
+
+  try {
+    bot = JSON.parse(localStorage['currentBot']);
+  } catch(e) {
+    // Parse error.. will stick with default
+  }
+  return bot;
 }
