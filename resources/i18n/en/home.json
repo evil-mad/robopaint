@@ -1,0 +1,50 @@
+{
+  "_meta": {
+    "creator": "techninja",
+    "target": "en-us",
+    "release": "0.7.5"
+  },
+  "common": {
+    "pause": "Pause",
+    "resume": "Resume",
+    "stop": "Stop"
+  },
+  "status": {
+    "start": "Starting up...",
+    "question": "What do you want to do?",
+    "button": {
+      "continue": "Continue in Simulation mode",
+      "retry": "Try to Reconnect"
+    }
+  },
+  "nav": {
+    "toolbar": {
+      "home": "Home Screen",
+      "edit": "Open, resize, and edit existing vector artwork.",
+      "open": "Open an example image",
+      "printauto": "Painting Mode: Print your drawing!",
+      "printmanual": "Manual Mode: Customize your print",
+      "help": "Help! (Open web docs)",
+      "settings": "Settings"
+    },
+    "bubble": {
+      "edit": "Create",
+      "printauto": "Print",
+      "printmanual": "Manual"
+    }
+  },
+  "remoteprint": {
+    "icontitle": {
+      "from": "From the Client Application",
+      "through": "Through the Interwebs or your local network",
+      "to": "To your very own bot!"
+    },
+    "details": {
+      "title": "Details / Controls:",
+      "exit": {
+        "text": "Exit Remote Paint Mode",
+        "title": "Cancel current operations and exit this mode."
+      }
+    }
+  }
+}

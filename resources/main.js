@@ -545,3 +545,25 @@ function getCurrentBot() {
   }
   return bot;
 }
+
+/**
+ * Early called translate trigger for loading transltions and static
+ * strings.
+ */
+function translatePage() {
+  // Load "all" resources via filesync to avoid any waiting
+  var data = JSON.parse(fs.readFileSync("resources/i18n/en/home.json", 'utf8'));
+
+  var resources = {
+    en: { translation: data }
+  };
+
+  i18n.init({
+    resStore: resources,
+    ns: 'translation'
+  }, function(t) {
+    robopaint.t = t;
+
+    $('[data-i18n]').i18n();
+  });
+}
