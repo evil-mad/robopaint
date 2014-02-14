@@ -122,9 +122,6 @@ function saveSettings() {
  * Bind and callback functionality for any settings specific markup/controls
  */
 function bindSettingsControls() {
-  // Node Blocking load to get the settings HTML content in
-  $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
-
   // Pull the list of available ports
   cncserver.getPorts(function(ports) {
     for (var portID in ports){

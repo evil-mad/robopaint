@@ -551,6 +551,11 @@ function getCurrentBot() {
  * strings.
  */
 function translatePage() {
+  // Shoehorn settings HTML into page first...
+  // Node Blocking load to get the settings HTML content in
+  $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
+
+
   // Load "all" resources via filesync to avoid any waiting
   var data = JSON.parse(fs.readFileSync("resources/i18n/en/home.json", 'utf8'));
 

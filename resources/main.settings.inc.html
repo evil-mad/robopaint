@@ -2,35 +2,33 @@
 <button id="settings-reset" class="normal" title="Revert all settings to default">Reset</button>
 <h2>Settings</h2>
 <ul class="tabs">
-  <li><a href="#settings-output">Painting Style</a></li>
-  <li><a href="#settings-common">Basic Setup</a></li>
-  <li><a href="#settings-advanced">Advanced</a></li>
+  <li><a href="#settings-output" data-i18n>settings.tabs.output</a></li>
+  <li><a href="#settings-common" data-i18n>settings.tabs.common</a></li>
+  <li><a href="#settings-advanced" data-i18n>settings.tabs.advanced</a></li>
 </ul>
 
 <div id="settings-common" class="settings-content">
   <fieldset>
-    <legend>Brush-lift (servo) Motor</legend>
+    <legend data-i18n>settings.common.servo.title</legend>
     <div>
-      <label for="servoup">Up Position:</label>
+      <label for="servoup" data-i18n>settings.common.servo.up</label>
       <input type="range" id="servoup" min="0" max="1000"/>
     </div>
 
     <div>
-      <label for="servopaint">Draw Position:</label>
+      <label for="servopaint" data-i18n>settings.common.servo.paint</label>
       <input type="range" id="servopaint" min="0" max="1000"/>
     </div>
 
     <div>
-      <label for="servowash">Wash Position:</label>
+      <label for="servowash" data-i18n>settings.common.servo.wash</label>
       <input type="range" id="servowash" min="0" max="1000"/>
     </div>
 
     <div>
-      <label for="servotime">Duration:</label>
+      <label for="servotime" data-i18n>settings.common.servo.time</label>
       <input type="range" id="servotime" min="0" value="200" max="1000"/>
-      <aside>Amount of time (in milliseconds) we should wait for a movement through
-        the full up/down range. <b>Default is 340</b>, set to 0 to not wait at all.
-        Smaller movements will take a proportionately smaller amount of time.</aside>
+      <aside data-i18n>settings.common.servo.timedetails</aside>
     </div>
   </fieldset>
 
@@ -46,127 +44,127 @@
 
 <div id="settings-output" class="settings-content">
   <fieldset>
-    <legend>General</legend>
+    <legend data-i18n>settings.output.generaltitle</legend>
     <fieldset class="speed">
-      <legend>Carriage Movement Speed:</legend>
+      <legend data-i18n>settings.output.move.title</legend>
       <div>
-        <label for="movespeed">...while Brush is Up:</label>
-        <input type="range" id="movespeed" min="10" max="100" title="Move left for slower, right for faster."/>
+        <label for="movespeed" data-i18n>settings.output.move.up</label>
+        <input type="range" id="movespeed" min="10" max="100" data-i18n="[title]settings.output.general.move.hint"/>
       </div>
       <div>
-        <label for="paintspeed">...while Brush is Down:</label>
-        <input type="range" id="paintspeed" min="10" max="100" title="Move left for slower, right for faster."/>
+        <label for="paintspeed" data-i18n>settings.output.move.down</label>
+        <input type="range" id="paintspeed" min="10" max="100" data-i18n="[title]settings.output.general.move.hint"/>
       </div>
     </fieldset>
 
     <div>
-      <label for="penmode">Painting/Drawing Mode:</label>
+      <label for="penmode" data-i18n>settings.output.penmode.title</label>
       <select id="penmode">
-        <option value="0">Default (Brush, Water & Paint)</option>
-        <option value="1">Water Only (No Paint: Buddha Board)</option>
-        <option value="2">Paint Only (No Water: Non-watercolors)</option>
-        <option value="3">No Water or Paint (Pen/Pencil mode)</option>
+        <option value="0" data-i18n>settings.output.penmode.opt0</option>
+        <option value="1" data-i18n>settings.output.penmode.opt1</option>
+        <option value="2" data-i18n>settings.output.penmode.opt2</option>
+        <option value="3" data-i18n>settings.output.penmode.opt3</option>
       </select>
     </div>
 
     <div>
-      <label for="showcolortext">Show color names:</label>
+      <label for="showcolortext" data-i18n>settings.output.showcolortext.title</label>
       <input type="checkbox" id="showcolortext"/>
-      <aside>When checked, color names will display on the paint palette for print colors, otherwise they will only be visible on hover.</aside>
+      <aside data-i18n>settings.output.showcolortext.detail</aside>
     </div>
 
     <div>
-      <label for="colorset">Installed Paint Set:</label>
+      <label for="colorset" data-i18n>settings.output.colorset</label>
       <select id="colorset"></select>
     </div>
 
     <hr>
 
     <div>
-      <label for="maxpaintdistance">Refill Distance:</label>
-      <input type="range" title="Move left to get paint more often, right to get paint less often" id="maxpaintdistance" min="500" max="20000" />
-      <aside>The distance for the brush to paint on the paper before it should go get more water/paint on the brush. Default is <b>48cm / 19in</b>.</aside>
+      <label for="maxpaintdistance" data-i18n>settings.output.maxpaintdistance.title</label>
+      <input type="range" data-i18n="[title]settings.output.maxpaintdistance.hint" id="maxpaintdistance" min="500" max="20000" />
+      <aside data-i18n>settings.output.maxpaintdistance.detail</aside>
     </div>
 
     <div>
-      <label for="strokeprecision">Stroke Precision:</label>
+      <label for="strokeprecision" data-i18n>settings.output.strokeprecision.title</label>
       <select id="strokeprecision">
-        <option value="1">Uber Fine [slow] (1)</option>
-        <option value="2">Very Fine (2)</option>
-        <option value="4">Fine (4)</option>
-        <option value="6">Default (6)</option>
-        <option value="10">Coarse (10)</option>
-        <option value="15">Very Coarse [fast] (15)</option>
+        <option value="1" data-i18n>settings.output.strokeprecision.opt0</option>
+        <option value="2" data-i18n>settings.output.strokeprecision.opt1</option>
+        <option value="4" data-i18n>settings.output.strokeprecision.opt2</option>
+        <option value="6" data-i18n>settings.output.strokeprecision.opt3</option>
+        <option value="10" data-i18n>settings.output.strokeprecision.opt4</option>
+        <option value="15" data-i18n>settings.output.strokeprecision.opt5</option>
       </select>
-      <aside>How accurately outlines are retraced to be drawn. Smaller precision value = more detail, but more processing/drawing time.</aside>
+      <aside data-i18n>settings.output.strokeprecision.detail</aside>
     </div>
 
     <div>
-      <label for="strokeovershoot">Stroke Overshoot:</label>
+      <label for="strokeovershoot" data-i18n>settings.output.strokeprecision.title</label>
       <select id="strokeovershoot">
-        <option value="0">None (0)</option>
-        <option value="1">Tiny (2mm)</option>
-        <option value="5">Medium (5mm)</option>
-        <option value="8">Longer (8mm)</option>
-        <option value="13">Yikes (13mm)</option>
-        <option value="20">Unhelpful (20mm)</option>
+        <option value="0" data-i18n>settings.output.strokeprecision.opt0</option>
+        <option value="1" data-i18n>settings.output.strokeprecision.opt1</option>
+        <option value="5" data-i18n>settings.output.strokeprecision.opt2</option>
+        <option value="8" data-i18n>settings.output.strokeprecision.opt3</option>
+        <option value="13" data-i18n>settings.output.strokeprecision.opt4</option>
+        <option value="20" data-i18n>settings.output.strokeprecision.opt5</option>
       </select>
-      <aside>The distance factor to move the brush beyond when lifting to make up for brush bend. Default is <b>5mm</b>.</aside>
+      <aside data-i18n>settings.output.strokeprecision.detail</aside>
     </div>
   </fieldset>
 
   <fieldset>
     <legend>Fill</legend>
     <div>
-      <label for="filltype">Type:</label>
+      <label for="filltype" data-i18n>settings.output.filltype.title</label>
       <select id="filltype">
-        <option value="line-straight">Straight line</option>
-        <option value="line-triangle">Triangle line</option>
-        <option value="line-sine">Sine line</option>
-        <option value="spiral">Center spiral</option>
-        <option value="tsp">TSP Squiggle</option>
+        <option value="line-straight" data-i18n>settings.output.filltype.opt0</option>
+        <option value="line-triangle" data-i18n>settings.output.filltype.opt1</option>
+        <option value="line-sine" data-i18n>settings.output.filltype.opt2</option>
+        <option value="spiral" data-i18n>settings.output.filltype.opt3</option>
+        <option value="tsp" data-i18n>settings.output.filltype.opt4</option>
       </select>
     </div>
 
     <fieldset class="filltype">
-      <legend>Line/Hatch Fills</legend>
+      <legend data-i18n>settings.output.linefilltitle</legend>
       <div>
-        <label for="fillangle">Line Angle:</label>
+        <label for="fillangle" data-i18n>settings.output.fillangle.title</label>
         <select id="fillangle">
-          <option value="0">Horizontal (0&deg;)</option>
-          <option value="45">Diagonal (45&deg;)</option>
-          <option value="90">Vertical (90&deg;)</option>
+          <option value="0" data-i18n>settings.output.fillangle.opt0</option>
+          <option value="45" data-i18n>settings.output.fillangle.opt1</option>
+          <option value="90" data-i18n>settings.output.fillangle.opt2</option>
         </select>
       </div>
       <div>
-        <label for="fillspacing">Line Spacing:</label>
+        <label for="fillspacing" data-i18n>settings.output.fillspacing.title</label>
         <select id="fillspacing">
-          <option value="1">Miniscule (1)</option>
-          <option value="5">Tiny (5)</option>
-          <option value="10">Default (10)</option>
-          <option value="15">Medium (15)</option>
-          <option value="25">Wide (25)</option>
-          <option value="40">Spacious (40)</option>
+          <option value="1" data-i18n>settings.output.fillspacing.opt0</option>
+          <option value="5" data-i18n>settings.output.fillspacing.opt1</option>
+          <option value="10" data-i18n>settings.output.fillspacing.opt2</option>
+          <option value="15" data-i18n>settings.output.fillspacing.opt3</option>
+          <option value="25" data-i18n>settings.output.fillspacing.opt4</option>
+          <option value="40" data-i18n>settings.output.fillspacing.opt5</option>
         </select>
       </div>
     </fieldset>
 
     <div>
-      <label for="fillprecision">Fill Precision:</label>
+      <label for="fillprecision" data-i18n>settings.output.fillprecision.title</label>
       <select id="fillprecision">
-        <option value="1">Uber Fine (1)</option>
-        <option value="3">Very Fine (3)</option>
-        <option value="7">Fine (7)</option>
-        <option value="14">Default (14)</option>
-        <option value="21">Coarse (21)</option>
-        <option value="35">Very Coarse (35)</option>
+        <option value="1" data-i18n>settings.output.fillprecision.opt0</option>
+        <option value="3" data-i18n>settings.output.fillprecision.opt1</option>
+        <option value="7" data-i18n>settings.output.fillprecision.opt2</option>
+        <option value="14" data-i18n>settings.output.fillprecision.opt3</option>
+        <option value="21" data-i18n>settings.output.fillprecision.opt4</option>
+        <option value="35" data-i18n>settings.output.fillprecision.opt5</option>
       </select>
     </div>
 
     <div>
-      <label for="gapconnect">Connect small gaps:</label>
+      <label for="gapconnect" data-i18n>settings.output.gapconnect.title</label>
       <input type="checkbox" id="gapconnect" checked/>
-      <aside>Makes back and forth fills smoother by not lifting brush at edges.</aside>
+      <aside data-i18n>settings.output.gapconnect.detail</aside>
     </div>
 
   </fieldset>
@@ -174,74 +172,74 @@
 
 <div id="settings-advanced" class="settings-content">
   <fieldset>
-    <legend>X/Y Steppers</legend>
+    <legend data-i18n>settings.advanced.steppers.title</legend>
 
     <div>
-      <label for="invertx">Invert X axis:</label>
+      <label for="invertx" data-i18n>settings.advanced.steppers.invertx</label>
       <input type="checkbox" id="invertx"/><b> | </b>
-      <label for="inverty">Invert Y axis:</label>
+      <label for="inverty" data-i18n>settings.advanced.steppers.inverty</label>
       <input type="checkbox" id="inverty"/>
-      <aside>In case one of your motors moves backwards.</aside>
+      <aside data-i18n>settings.advanced.steppers.invertdetail</aside>
     </div>
 
     <div>
-      <label for="latencyoffset">Buffer Smoothing:</label>
-      <input type="range" title="Move right for more offset (smooth), left for negative offset (jerky)" id="latencyoffset" min="-100" max="500" />
-      <aside>Removes time from API callback duration, forces buffering and smoothing out subsequent position calls. Default is <b>20 ms</b>. Negative values add extra delay. Only increase if painting is jittery.</aside>
+      <label for="latencyoffset" data-i18n>settings.advanced.steppers.buffer.title</label>
+      <input type="range" data-i18n="[title]settings.advanced.steppers.buffer.hover" id="latencyoffset" min="-100" max="500" />
+      <aside data-i18n>settings.advanced.steppers.buffer.detail</aside>
     </div>
 
     <div>
-      <label for="swapmotors">Swap X for Y:</label>
+      <label for="swapmotors" data-i18n>settings.advanced.steppers.swap</label>
       <input type="checkbox" id="swapmotors"/>
-      <aside>In case you've accidentally wired up Motor 1 where Motor 2 is supposed to go.</aside>
+      <aside data-i18n>settings.advanced.steppers.swapdetail</aside>
     </div>
   </fieldset>
 
   <fieldset>
-    <legend>Misc</legend>
+    <legend data-i18n>settings.advanced.misctitle</legend>
 
     <fieldset>
-      <legend>Modes</legend>
-      <aside>Enable or disable experimental RoboPaint modes</aside>
+      <legend data-i18n>settings.advanced.modes.title</legend>
+      <aside data-i18n>settings.advanced.modes.detail</aside>
 
       <div>
-        <label for="manualpaintenable">Manual paint:</label>
+        <label for="manualpaintenable" data-i18n>settings.advanced.modes.manual.title</label>
         <input type="checkbox" id="manualpaintenable"/>
-        <aside>Like Auto-paint, but allows for more control over what elements are painted, and a number of other options.</aside>
+        <aside data-i18n>settings.advanced.modes.manual.detail</aside>
       </div>
       <div>
-        <label for="remoteprint">Remote paint:</label>
+        <label for="remoteprint" data-i18n>settings.advanced.modes.remoteprint.title</label>
         <input type="checkbox" id="remoteprint"/>
-        <aside>Allows properly configured remote applications to send graphics to RoboPaint to automatically be painted/drawn. <em>For this to function outside this computer, the checkbox for "Only allow connections from this computer" below must be <b>unchecked</b>.</em></aside>
+        <aside data-i18n>settings.advanced.modes.remoteprint.detail</aside>
       </div>
     </fieldset>
 
     <div>
-      <label for="openlast">Open last image on startup:</label>
+      <label for="openlast" data-i18n>settings.advanced.openlast</label>
       <input type="checkbox" id="openlast"/>
     </div>
 
     <div>
-      <label for="bottype">Type of drawing bot connected:</label>
-      <select id="bottype" title="Supported Bot List">
+      <label for="bottype" data-i18n>settings.advanced.bottype.title</label>
+      <select id="bottype" data-i18n="[title]settings.advanced.bottype.hover">
       </select>
-      <aside>RoboPaint was made for the WaterColorBot, but because it's based on CNC Server it can talk to any bot that it supports! <b>Change requires App restart.</b></aside>
+      <aside data-i18n>settings.advanced.bottype.detail</aside>
     </div>
   </fieldset>
 
   <fieldset>
-    <legend>API Server</legend>
+    <legend data-i18n>settings.advanced.api.title</legend>
     <div class="httpport">
-      <label for="httpport">Server at (<span>...</span>):</label>
+      <label for="httpport"><b data-i18n>settings.advanced.api.server</b> (<span>...</span>):</label>
       <input type="number" id="httpport"/>
 
-      <aside>When running supported apps, this would be the server IP and port to enter into the app. <b>Change requires App restart.</b></aside>
+      <aside data-i18n>settings.advanced.api.detail</aside>
     </div>
 
     <div>
-      <label for="httplocalonly">Only allow connections from this computer:</label>
+      <label for="httplocalonly" data-i18n>settings.advanced.httplocalonly.title</label>
       <input type="checkbox" id="httplocalonly"/>
-      <aside>Uncheck this to connect to the CNCServer API in RoboPaint from other devices. <b>Change requires App restart.</b></aside>
+      <aside data-i18n>settings.advanced.httplocalonly.detail</aside>
     </div>
   </fieldset>
 </div>
