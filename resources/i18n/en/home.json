@@ -63,6 +63,10 @@
         "text": "Exit Remote Paint Mode",
         "title": "Cancel current operations and exit this mode."
       }
+    },
+    "api": {
+      "disabled": "The SVG import API is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.",
+      "busy": "Cannot add to queue during ongoing print job."
     }
   },
   "settings": {
