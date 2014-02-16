@@ -43,7 +43,7 @@ $(function() {
 
   // Set visible version from manifest (with appended bot type if not WCB)
   var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
-  $('span.version').text('(v' + gui.App.manifest.version + ')' + bt);
+  $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
 
   // Bind settings controls & Load up initial settings!
   // @see scripts/main.settings.js
@@ -249,19 +249,19 @@ function responsiveResize() {
  * Binds all the callbacks functions for controlling CNC Server via its Node API
  */
 function startSerial(){
-  setMessage('Starting up...', 'loading');
+  setMessage(robopaint.t('status.start'), 'loading');
 
   cncserver.start({
     botType: robopaint.currentBot.type,
     success: function() {
-      setMessage('Port found, connecting...');
+      setMessage(robopaint.t('status.found'));
     },
     error: function(err) {
-      setMessage('Couldn\'t connect! - ' + err, 'warning');
+      setMessage(robopaint.t('status.error') + ' - ' + err, 'warning');
       $options.slideDown('slow');
     },
     connect: function() {
-      setMessage('Connected!', 'success');
+      setMessage(robopaint.t('status.success'), 'success');
 
       $stat.fadeOut('slow');
       setModal(false);
@@ -280,7 +280,7 @@ function startSerial(){
     disconnect: function() {
       setModal(true);
       $stat.show();
-      setMessage('Bot Disconnected!', 'error');
+      setMessage(robopaint.t('status.disconnect'), 'error');
       $options.slideDown();
     }
   });

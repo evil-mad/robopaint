@@ -145,6 +145,11 @@ function bindSettingsControls() {
   }
   $('select#bottype').val(robopaint.currentBot.type);
 
+  // Apply bolding to details text
+  $('aside').each(function(){
+    $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));
+  });
+
   // Set robopaint global aspect ratio
   var b = botTypes[robopaint.currentBot.type].data;
   var aspect = (b.maxArea.height - b.workArea.top) / (b.maxArea.width - b.workArea.left);
@@ -253,14 +258,14 @@ function bindSettingsControls() {
         toggleDisableSetting(
           '#showcolortext, #colorset',
           ($input.val() == 2 || $input.val() == 0),
-          'Paint required. Painting/Drawing Mode incompatible with this setting.'
+          robopaint.t('settings.output.penmode.warningPaint')
         );
 
         // No nothing!
         toggleDisableSetting(
           '#maxpaintdistance',
           $input.val() != 3,
-          'Water/Paint required. Painting/Drawing Mode incompatible with this setting.'
+          robopaint.t('settings.output.penmode.warningAll')
         );
 
         robopaint.settings[this.id] = $input.val();
@@ -348,12 +353,12 @@ function bindSettingsControls() {
   // Force the hand of settings to disable WCB specific options for bots without the right tools
   var tools = botTypes[robopaint.currentBot.type].data.tools;
   if (!tools.water0 && !tools.color0 && !tools.color7) { // Not a paint bot!
-    toggleDisableSetting('#penmode', false, 'Selected bot incompatible with painting tools.');
+    toggleDisableSetting('#penmode', false, robopaint.t('settings.advanced.bottype.warning'));
   }
 
   // Reset button
   $('#settings-reset').click(function(e) {
-    if (confirm('Reset all settings to factory defaults?')) {
+    if (confirm(robopaint.t('settings.buttons.reset.confirm'))) {
       delete localStorage[settingsStorageKey()];
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
@@ -413,7 +418,7 @@ function addSettingsRangeValues() {
       var dosep = true;
 
       if (['servotime', 'latencyoffset'].indexOf(this.id) != -1) {
-        post = " ms"
+        post = " " + robopaint.t('common.time.ms');
       }
 
 
@@ -424,7 +429,8 @@ function addSettingsRangeValues() {
         case "maxpaintdistance":
           // Display as Centimeters (16.6667 mm per step!)
           num = Math.round((num / 166.7) * 10) / 10;
-          num = num+ ' cm / ' + (Math.round((num / 2.54) * 10) / 10) + ' in';
+          num = num+ ' ' + robopaint.t('common.metric.cm') + ' / ' +
+            (Math.round((num / 2.54) * 10) / 10) + ' ' + robopaint.t('common.imperial.in');
           dosep = false;
           break;
         case 'servoup':
@@ -439,15 +445,15 @@ function addSettingsRangeValues() {
           var msg = "";
 
           if (num < 25) {
-            msg = "Paintbrush on a Snail";
+            msg = robopaint.t('settings.output.move.speed0');
           } else if (num < 50) {
-            msg = "Painfully Slow";
+            msg = robopaint.t('settings.output.move.speed1');
           } else if (num < 75) {
-            msg = "Medium";
+            msg = robopaint.t('settings.output.move.speed2');
           } else if (num < 80) {
-            msg = "Fast (default)";
+            msg = robopaint.t('settings.output.move.speed3');
           } else {
-            msg = "Stupid Fast!";
+            msg = robopaint.t('settings.output.move.speed4');
           }
 
           dosep = false;
