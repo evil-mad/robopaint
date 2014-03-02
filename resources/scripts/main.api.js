@@ -175,7 +175,10 @@ cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
       } else {
         item.status = 'cancelled';
         setRemotePrintWindow(false, true);
-        robopaint.switchMode('home');
+        // Clear close and park
+        $subwindow[0].contentWindow.unBindEvents(function(){
+          robopaint.switchMode('home');
+        });
       }
       return {code: 200, body: robopaint.api.print.queue[qid]};
     } else {
@@ -301,7 +304,10 @@ function startPrintQueue(index, context) {
       item.percentComplete = 100;
     } else {
       item.status = 'cancelled';
-      robopaint.switchMode('home');
+      // Clear close and park
+      $subwindow[0].contentWindow.unBindEvents(function(){
+        robopaint.switchMode('home');
+      });
     }
 
     // Set endTime and elapsed with cancel OR completion.

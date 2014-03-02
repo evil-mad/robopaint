@@ -57,7 +57,7 @@ $(function() {
     // Setup general pen status update callback, called from cncserver.api.js
     // TODO: This handily works for both manual and auto as they have the same
     // named buttons, but should probably be generalized
-    cncserver.state.updatePen = function(d) {
+    robopaint.$(robopaint.cncserver.api).bind('updatePen', function(e, d) {
       cncserver.state.pen = d;
 
       // Update button text
@@ -68,12 +68,17 @@ $(function() {
       }
 
       $('#pen').attr('class','normal ' + toState);
-    }
+    });
 
-    cncserver.api.pen.stat(function(d){
+    // Bind to API toolChange
+    robopaint.$(robopaint.cncserver.api).bind('toolChange', function(toolName){
+      cncserver.state.media = toolName;
+    });
+
+    robopaint.cncserver.api.pen.stat(function(d){
       cncserver.wcb.status(['Connected Successfully!'], d);
       cncserver.state.pen.state = 1; // Assume down
-      cncserver.api.pen.up(); // Send to put up
+      robopaint.cncserver.api.pen.up(); // Send to put up
       cncserver.state.pen.state = 0; // Assume it's up (doesn't return til later)
 
       // Default last tool to given in returned state
