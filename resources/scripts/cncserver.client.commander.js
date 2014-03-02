@@ -60,7 +60,10 @@ cncserver.cmd = {
     if (!console) {
       // At this point the parent window is gone and we don't need to do anything
       // but a bit of cleanup
-      delete cncserver;
+      delete cncserver.wcb;
+      delete cncserver.config;
+      delete cncserver.paths;
+      delete cncserver.state;
       return;
     }
 
