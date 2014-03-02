@@ -183,7 +183,7 @@ function bindMainControls() {
  * @param {String} mode
  *   The mode's machine name. NOTE: Does no sanity checks!
  */
-robopaint.switchMode = function(mode) {
+robopaint.switchMode = function(mode, callback) {
   if (appMode == mode) { // Don't switch modes if already there
     return;
   }
@@ -200,13 +200,17 @@ robopaint.switchMode = function(mode) {
     case 'home':
       $('nav, #logo').fadeIn('slow');
       $('#loader').hide();
-      $subwindow.fadeOut('slow', function(){$subwindow.attr('src', "");});
+      $subwindow.fadeOut('slow', function(){
+        $subwindow.attr('src', "");
+        if (callback) callback();
+      });
       break;
     default:
       $('nav, #logo').fadeOut('slow');
       $('#loader').fadeIn();
       $subwindow.fadeOut('slow', function(){
         $subwindow.attr('src', $target.attr('href'));
+        if (callback) callback();
       });
   }
 }
@@ -326,7 +330,7 @@ function checkModeClose(callback, isGlobal, destination) {
     callback(); return;
   }
 
-  if (appMode == 'print' || appMode == 'edit') {
+  if (appMode == 'print' || appMode == 'edit' || appMode == 'manual') {
     subWin.onClose(callback, isGlobal);
   } else {
     callback();

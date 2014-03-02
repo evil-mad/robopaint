@@ -1,5 +1,8 @@
 /**
  * @file Holds all CNC Server central controller objects and DOM management code
+ * This is currently manifested as a shared "library" between the two drawing
+ * SVG drawing modes, and might need to be abstracted out to be more supportive
+ * for other modes.
  */
 
 // Set the global scope object for any robopaint level details

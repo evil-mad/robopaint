@@ -571,6 +571,30 @@ body.print-auto #buttons button.normal {
   -webkit-animation-iteration-count: infinite;
 }
 
+.print #cancel {
+  border: none;
+  font-size: 17px;
+  border-radius: 11px;
+  margin: 1.1em auto;
+  margin-bottom: 0.5em;
+  float: none;
+  background-color: transparent;
+  text-decoration: underline;
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.print-manual #cancel {
+  margin-bottom: 0;
+}
+
+.print #cancel:disabled {
+  color: #777;
+  cursor: default;
+  font-style: italic;
+}
+
 #statusmessage {
   font-size: 0.9em;
   height: 2em;

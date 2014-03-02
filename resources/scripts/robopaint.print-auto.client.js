@@ -30,6 +30,21 @@ $(function() {
 
   function bindControls() {
 
+    // Cancel Print
+    $('#cancel').click(function(){
+      var cancelPrint = confirm("Are you sure you want to cancel the current print job and reset (for example, to start a new print job)?");
+      if (cancelPrint) {
+        robopaint.cncserver.api.buffer.clear(function(){
+          cncserver.state.buffer = [];
+          robopaint.cncserver.api.pen.park();
+          unBindEvents();
+          robopaint.switchMode('home', function(){
+            robopaint.switchMode('print');
+          });
+        });
+      }
+    });
+
     // Pause management
     var stateText = {
       ready: 'Click to start painting your picture!',
@@ -45,6 +60,7 @@ $(function() {
       if (cncserver.state.buffer.length == 0) {
         $('#pause').removeClass('ready').attr('title', stateText.pause).text('Pause');
         $('#buttons button.normal').prop('disabled', true); // Disable options
+        $('#cancel').prop('disabled', false); // Enable the cancel print button
 
         cncserver.wcb.autoPaint($('#cncserversvg'),
           function(){ // Finished spooling callback
@@ -54,6 +70,7 @@ $(function() {
           }, function(){ // Actually Complete callback
             $('#pause').attr('class', 'ready').attr('title', stateText.ready).text('Start');
             $('#buttons button.normal').prop('disabled', false); // Enable options
+            $('#cancel').prop('disabled', true); // Disable the cancel print button
           }
         );
       } else {
