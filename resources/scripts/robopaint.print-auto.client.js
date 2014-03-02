@@ -90,7 +90,7 @@ $(function() {
       // Remember the state, and then make sure it's up
       pausePenState = cncserver.state.pen.state;
       if (pausePenState == 1) {
-        cncserver.api.pen.up(_pauseDone);
+        robopaint.cncserver.api.pen.up(_pauseDone);
       } else {
         _pauseDone();
       }
@@ -107,41 +107,42 @@ $(function() {
     // Bind to control buttons
     $('#park').click(function(){
       cncserver.wcb.status('Parking brush...');
-      cncserver.api.pen.park(function(d){
+      robopaint.cncserver.api.pen.park(function(d){
         cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
       });
     });
 
 
     $('#pen').click(function(){
-      cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
+      robopaint.cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
     });
 
 
     // Motor unlock: Also lifts pen and zeros out.
     $('#disable').click(function(){
       cncserver.wcb.status('Unlocking motors...');
-      cncserver.api.pen.up();
-      cncserver.api.pen.zero();
-      cncserver.api.motors.unlock(function(d){
+      robopaint.cncserver.api.pen.up();
+      robopaint.cncserver.api.pen.zero();
+      robopaint.cncserver.api.motors.unlock(function(d){
         cncserver.wcb.status(['Motors unlocked! Place in home corner when done'], d);
       });
     });
 
     // Move the visible draw position indicator
-    cncserver.moveDrawPoint = function(p) {
+    robopaint.$(robopaint.cncserver.api).bind('movePoint', function(e, p) {
       // Move visible drawpoint
       var $d = $('#drawpoint');
 
       $d.show().attr('fill', cncserver.state.pen.state ? '#FF0000' : '#00FF00');
 
       // Add 48 to each side for 1/2in offset
+      p = cncserver.wcb.getAbsCoord(p);
       $d.attr('transform', 'translate(' + (p.x + 48) + ',' + (p.y + 48) + ')');
-    }
+    });
 
-    cncserver.hideDrawPoint = function() {
+    robopaint.$(robopaint.cncserver.api).bind('offCanvas', function() {
       $('#drawpoint').hide();
-    }
+    });
   }
 
   function responsiveResize(){

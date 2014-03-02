@@ -108,7 +108,7 @@ $(function() {
       // Remember the state, and then make sure it's up
       pausePenState = cncserver.state.pen.state;
       if (pausePenState == 1) {
-        cncserver.api.pen.up(_pauseDone);
+        robopaint.cncserver.api.pen.up(_pauseDone);
       } else {
         _pauseDone();
       }
@@ -166,7 +166,7 @@ $(function() {
       // If we're paused, run it directly, otherwise add to buffer
       if (cncserver.state.process.paused) {
         cncserver.wcb.status('Parking brush...');
-        cncserver.api.pen.park(function(d){
+        robopaint.cncserver.api.pen.park(function(d){
           cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
         });
       } else {
@@ -177,10 +177,14 @@ $(function() {
     $('#draw').click(function(){
       $('#draw').prop('disabled', true);
       cncserver.cmd.run([['status', 'Painting along selected path...']]);
+      $path.removeClass('ants'); // Can't stroke with ants! Screws up visibility
+
       cncserver.paths.runOutline($path, function(){
         if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
         $('#draw').prop('disabled', false);
+        $path.addClass('ants');
         cncserver.cmd.run([['status', 'Painting complete', true]]);
+
         if (cncserver.config.canvasDebug) {
           $('canvas#debug').show();
         }
@@ -189,35 +193,36 @@ $(function() {
     });
 
     $('#pen').click(function(){
-      cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
+      robopaint.cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
     });
 
     $('#calibrate').click(function(){
-      cncserver.api.pen.move({x: 0, y:0});
+      robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord({x: 0, y:0}));
     });
 
     $('#disable').click(function(){
       cncserver.wcb.status('Unlocking motors...');
-      cncserver.api.pen.up();
-      cncserver.api.pen.zero();
-      cncserver.api.motors.unlock(function(d){
+      robopaint.cncserver.api.pen.up();
+      robopaint.cncserver.api.pen.zero();
+      robopaint.cncserver.api.motors.unlock(function(d){
         cncserver.wcb.status(['Motors unlocked! Place in home corner when done'], d);
       });
     });
     $('#zero').click(function(){
       cncserver.wcb.status('Absolute position reset', true);
-      cncserver.api.pen.zero();
+      robopaint.cncserver.api.pen.zero();
     });
 
     $('#auto-paint').click(function(){
       // Momentarily hide selection
-      if ($path.length) $path.toggleClass('selected');
+      if ($path.length) $path.toggleClass('selected').removeClass('ants');
 
       $('#auto-paint, #fill, #draw').prop('disabled', true);
       cncserver.wcb.autoPaint($('#cncserversvg'), function(){
         if (cncserver.config.canvasDebug) {
           $('canvas#debug').show();
         }
+        if ($path.length) $path.toggleClass('selected').addClass('ants');
         $('#auto-paint, #fill, #draw').prop('disabled', false);
       });
 
@@ -273,19 +278,20 @@ $(function() {
     });
 
     // Move the visible draw position indicator
-    cncserver.moveDrawPoint = function(p) {
+    robopaint.$(robopaint.cncserver.api).bind('movePoint', function(e, p) {
       // Move visible drawpoint
       var $d = $('#drawpoint');
 
       $d.show().attr('fill', cncserver.state.pen.state ? '#FF0000' : '#00FF00');
 
       // Add 48 to each side for 1/2in offset
+      p = cncserver.wcb.getAbsCoord(p);
       $d.attr('transform', 'translate(' + (p.x + 48) + ',' + (p.y + 48) + ')');
-    }
+    });
 
-    cncserver.hideDrawPoint = function() {
+    robopaint.$(robopaint.cncserver.api).bind('offCanvas', function() {
       $('#drawpoint').hide();
-    }
+    });
 
     // Add extra dom to allow for specific sub-selection of dip/full paint & water
     $('nav#tools a').each(function(){

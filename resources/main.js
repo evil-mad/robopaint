@@ -23,7 +23,9 @@ var robopaint = {
   settings: {}, // Holds the "permanent" app settings data
   statedata: {}, // Holds per app session volitile settings
   // currentBot lies outside of settings as it actually controls what settings will be loaded
-  currentBot: getCurrentBot()
+  currentBot: getCurrentBot(),
+  cncserver: cncserver, // Holds the reference to the real CNC server object with API wrappers
+  $: $, // Top level jQuery Object for non-shared object bindings
 };
 
 // Option buttons for connections
@@ -49,6 +51,15 @@ $(function() {
   // @see scripts/main.settings.js
   bindSettingsControls();
   loadSettings();
+
+  // Set base CNC Server API wrapper access location
+  if (!robopaint.cncserver.api) robopaint.cncserver.api = {};
+  robopaint.cncserver.api.server = {
+    domain: 'localhost',
+    port: robopaint.settings.httpport,
+    protocol: 'http',
+    version: '1'
+  }
 
   // Bind all the functionality required for Remote Print mode
   // @see scripts/main.api.js

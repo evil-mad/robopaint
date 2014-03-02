@@ -331,7 +331,7 @@ function bindSettingsControls() {
       // Unless we' have're probably printing something
       if ($subwindow[0].contentWindow.cncserver.state.buffer.length == 0) {
         // Use the more abstracted API to allow sub-app callbacks to handle specifics
-        $subwindow[0].contentWindow.cncserver.api.pen.up();
+        robopaint.cncserver.api.pen.up();
       }
     } else {
       cncserver.setHeight('up');

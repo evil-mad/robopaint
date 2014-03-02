@@ -47,10 +47,10 @@ cncserver.wcb = {
         break;
       default:
         cncserver.wcb.status('Doing a full brush wash...');
-        cncserver.api.tools.change('water0' + toolExt, function(){
-          cncserver.api.tools.change('water1' + toolExt, function(){
-            cncserver.api.tools.change('water2' + toolExt, function(d){
-              cncserver.api.pen.resetCounter();
+        robopaint.cncserver.api.tools.change('water0' + toolExt, function(){
+          robopaint.cncserver.api.tools.change('water1' + toolExt, function(){
+            robopaint.cncserver.api.tools.change('water2' + toolExt, function(d){
+              robopaint.cncserver.api.pen.resetCounter();
               cncserver.state.media = 'water0';
               cncserver.wcb.status(['Brush should be clean'], d);
               if (callback) callback(d);
@@ -106,12 +106,30 @@ cncserver.wcb = {
     $('nav#tools #' + idName).addClass('selected');
 
     cncserver.wcb.status('Putting some ' + name + ' on the brush...');
-    cncserver.api.tools.change(toolName, function(d){
+    robopaint.cncserver.api.tools.change(toolName, function(d){
       cncserver.wcb.status(['There is now ' + name + ' on the brush'], d);
-      cncserver.api.pen.resetCounter();
+      robopaint.cncserver.api.pen.resetCounter();
       if (callback) callback(d);
     });
 
+  },
+
+  // Convert a screen coord to one in the correct format for the API
+  getPercentCoord: function(point) {
+    return {
+      // Remove 1/2in (96dpi / 2) from total width for right/bottom offset
+      x: (point.x / (cncserver.canvas.width - 48)) * 100,
+      y: (point.y / (cncserver.canvas.height - 48)) * 100
+    };
+  },
+
+  // Convert a strict percent coord to an absolute canvas based one
+  getAbsCoord: function(point) {
+    return {
+      // Remove 1/2in (96dpi / 2) from total width for right/bottom offset
+      x: (point.x / 100) * (cncserver.canvas.width - 48) ,
+      y: (point.y / 100) * (cncserver.canvas.height - 48)
+    };
   },
 
   // Wet the brush and get more of targeted media, then return to
@@ -120,17 +138,17 @@ cncserver.wcb = {
     var name = cncserver.wcb.getMediaName(cncserver.state.mediaTarget).toLowerCase();
 
     // Reset the counter for every mode on getMorePaint
-    cncserver.api.pen.resetCounter();
+    robopaint.cncserver.api.pen.resetCounter();
 
     // Change what happens here depending on penmode
     switch(parseInt(robopaint.settings.penmode)) {
       case 1: // Dissallow paint
         cncserver.wcb.status('Going to get some more water...')
-        cncserver.api.tools.change("water0", function(d){
-          cncserver.api.pen.up(function(d){
-            cncserver.api.pen.move(point, function(d) {
+        robopaint.cncserver.api.tools.change("water0", function(d){
+          robopaint.cncserver.api.pen.up(function(d){
+            robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord(point), function(d) {
               cncserver.wcb.status(['Continuing to paint with water']);
-                cncserver.api.pen.down(function(d){
+                robopaint.cncserver.api.pen.down(function(d){
                   if (callback) callback(d);
                 })
             });
@@ -139,11 +157,11 @@ cncserver.wcb = {
         break;
       case 2: // Dissallow water
         cncserver.wcb.status('Going to get some more ' + name + ', no water...')
-        cncserver.api.tools.change(cncserver.state.mediaTarget, function(d){
-          cncserver.api.pen.up(function(d){
-            cncserver.api.pen.move(point, function(d) {
+        robopaint.cncserver.api.tools.change(cncserver.state.mediaTarget, function(d){
+          robopaint.cncserver.api.pen.up(function(d){
+            robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord(point), function(d) {
               cncserver.wcb.status(['Continuing to paint with ' + name]);
-                cncserver.api.pen.down(function(d){
+                robopaint.cncserver.api.pen.down(function(d){
                   if (callback) callback(d);
                 })
             });
@@ -156,12 +174,12 @@ cncserver.wcb = {
         break;
       default:
         cncserver.wcb.status('Going to get some more ' + name + '...')
-        cncserver.api.tools.change('water0dip', function(d){
-          cncserver.api.tools.change(cncserver.state.mediaTarget, function(d){
-            cncserver.api.pen.up(function(d){
-              cncserver.api.pen.move(point, function(d) {
+        robopaint.cncserver.api.tools.change('water0dip', function(d){
+          robopaint.cncserver.api.tools.change(cncserver.state.mediaTarget, function(d){
+            robopaint.cncserver.api.pen.up(function(d){
+              robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord(point), function(d) {
                 cncserver.wcb.status(['Continuing to paint with ' + name]);
-                  cncserver.api.pen.down(function(d){
+                  robopaint.cncserver.api.pen.down(function(d){
                     if (callback) callback(d);
                   })
               });

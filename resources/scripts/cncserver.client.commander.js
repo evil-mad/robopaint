@@ -54,6 +54,16 @@ cncserver.cmd = {
   },
 
   executeNext: function(executeCallback) {
+    // Because we're interacting with an object in the parent scope, this file
+    // stays loaded even after its parent window instance dies. An easy way
+    // to see if it's dead, is if console is null (evaluates false)
+    if (!console) {
+      // At this point the parent window is gone and we don't need to do anything
+      // but a bit of cleanup
+      delete cncserver;
+      return;
+    }
+
     if (!cncserver.state.buffer.length) {
       cncserver.cmd.cb();
       return;
@@ -74,17 +84,17 @@ cncserver.cmd = {
           returnPoints.pop();
         }
         lastPoint = next[1];
-        cncserver.api.pen.move(next[1], cncserver.cmd.cb);
+        robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord(next[1]), cncserver.cmd.cb);
         break;
       case "tool":
         cncserver.wcb.setMedia(next[1], cncserver.cmd.cb);
         break;
       case "up":
         returnPoints = [];
-        cncserver.api.pen.up(cncserver.cmd.cb);
+        robopaint.cncserver.api.pen.up(cncserver.cmd.cb);
         break;
       case "down":
-        cncserver.api.pen.down(cncserver.cmd.cb);
+        robopaint.cncserver.api.pen.down(cncserver.cmd.cb);
         break;
       case "status":
         cncserver.wcb.status(next[1], next[2]);
@@ -94,7 +104,7 @@ cncserver.cmd = {
         cncserver.wcb.fullWash(cncserver.cmd.cb, next[1]);
         break;
       case "park":
-        cncserver.api.pen.park(cncserver.cmd.cb);
+        robopaint.cncserver.api.pen.park(cncserver.cmd.cb);
         break;
       case "custom":
         cncserver.cmd.cb();

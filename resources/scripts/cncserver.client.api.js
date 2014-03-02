@@ -1,7 +1,22 @@
 /**
  * @file Holds all CNC Server API controller functions and RESTful interactions
  * abstracted for use in the client side application
+ *
+ * In use, must set the "server" object like the following:
+ *
+ * cncserver.api.server = {
+ *   domain: 'localhost',
+ *   port: 4242,
+ *   protocol: 'http',
+ *   version: '1'
+ * }
  */
+
+/**
+ * Restful API wrappers
+ */
+if (!cncserver) cncserver = {};
+
 cncserver.api = {
   pen: {
    /**
@@ -12,11 +27,11 @@ cncserver.api = {
     stat: function(callback){
       _get('pen', {
         success: function(d){
-          cncserver.state.updatePen(d);
+          $(cncserver.api).trigger('updatePen', [d]);
           if (callback) callback(d);
         },
         error: function(e) {
-          callback(false);
+          if (callback) callback(false);
         }
       });
     },
@@ -32,7 +47,7 @@ cncserver.api = {
       _put('pen', {
         data: { state: value},
         success: function(d){
-          cncserver.state.updatePen(d);
+          $(cncserver.api).trigger('updatePen', [d]);
           if (callback) callback(d);
         },
         error: function(e) {
@@ -60,11 +75,11 @@ cncserver.api = {
       _put('pen', {
         data: { resetCounter: 1},
         success: function(d){
-          cncserver.state.updatePen(d);
+          $(cncserver.api).trigger('updatePen', [d]);
           if (callback) callback(d);
         },
         error: function(e) {
-          callback(false);
+          if (callback) callback(false);
         }
       });
     },
@@ -77,12 +92,12 @@ cncserver.api = {
     park: function(callback){
       _delete('pen',{
         success: function(d){
-          cncserver.state.updatePen(d);
-          cncserver.hideDrawPoint(); // hide drawpoint (will be off draw canvas)
+          $(cncserver.api).trigger('updatePen', [d]);
+          $(cncserver.api).trigger('offCanvas');
           if (callback) callback(d);
         },
         error: function(e) {
-          callback(false);
+          if (callback) callback(false);
         }
       });
     },
@@ -96,11 +111,11 @@ cncserver.api = {
       _put('motors',{
         data: {reset: 1},
         success: function(d){
-          cncserver.hideDrawPoint(); // hide drawpoint (will be off draw canvas)
+          $(cncserver.api).trigger('offCanvas');
           if (callback) callback(d);
         },
         error: function(e) {
-          callback(false);
+          if (callback) callback(false);
         }
       });
     },
@@ -108,7 +123,7 @@ cncserver.api = {
    /**
     * Set pen to absolute x/y point within defined cncserver canvas width/height
     * @param {object} point
-    *   {x,y} point object of coordinate within width/height of canvas to move to
+    *   {x,y} point object of coordinate within 0-100% of canvas to move to
     * @param {function} callback
     *   Function to callback when done, including data from response body
     */
@@ -118,33 +133,26 @@ cncserver.api = {
         return;
       }
 
-      // Move the visible drawpoint
-      cncserver.moveDrawPoint(point);
+      $(cncserver.api).trigger('movePoint', [point]);
 
-      var percent = {
-        // Remove 1/2in (96dpi / 2) from total width for right/bottom offset
-        x: (point.x / (cncserver.canvas.width - 48)) * 100,
-        y: (point.y / (cncserver.canvas.height - 48)) * 100
-      }
-
-      // Sanity check outputs
-      percent.x = percent.x > 100 ? 100 : percent.x;
-      percent.y = percent.y > 100 ? 100 : percent.y;
-      percent.x = percent.x < 0 ? 0 : percent.x;
-      percent.y = percent.y < 0 ? 0 : percent.y;
+      // Sanity check inputs
+      point.x = point.x > 100 ? 100 : point.x;
+      point.y = point.y > 100 ? 100 : point.y;
+      point.x = point.x < 0 ? 0 : point.x;
+      point.y = point.y < 0 ? 0 : point.y;
 
       _put('pen', {
         data: {
-          x: percent.x,
-          y: percent.y,
+          x: point.x,
+          y: point.y,
           ignoreTimeout: point.ignoreTimeout
         },
         success: function(d){
-          cncserver.state.updatePen(d);
+          $(cncserver.api).trigger('updatePen', [d]);
           if (callback) callback(d);
         },
         error: function(e) {
-          callback(false);
+          if (callback) callback(false);
         }
       });
     }
@@ -175,15 +183,59 @@ cncserver.api = {
     *   Function to callback when done, including data from response body
     */
     change: function(toolName, callback){
-      cncserver.hideDrawPoint(); // hide drawpoint (will be off draw canvas)
-
-      // Store the last changed color state
-      cncserver.state.media = toolName;
+      $(cncserver.api).trigger('offCanvas');
+      $(cncserver.api).trigger('toolChange');
 
       _put('tools/' + toolName, {
         success: callback,
         error: function(e) {
-          callback(false);
+          if (callback) callback(false);
+        }
+      });
+    }
+  },
+
+  buffer: {
+   /**
+    * Pause all bot operations until resumed
+    */
+    pause: function(callback){
+      _put('buffer', {
+        data: {paused: true},
+        success: function(d) {
+          $(cncserver.api).trigger('paused');
+          if (callback) callback(d);
+        },
+        error: function(e) {
+          if (callback) callback(false);
+        }
+      });
+    },
+
+   /**
+    * Pause all bot operations until resumed
+    */
+    resume: function(callback){
+      _put('buffer', {
+        data: {paused: false},
+        success: function(d) {
+          $(cncserver.api).trigger('resumed');
+          if (callback) callback(d);
+        },
+        error: function(e) {
+          if (callback) callback(false);
+        }
+      });
+    },
+
+   /**
+    * Pause all bot operations until resumed
+    */
+    clear: function(callback){
+      _delete('buffer', {
+        success: callback,
+        error: function(e) {
+          if (callback) callback(false);
         }
       });
     }
@@ -204,8 +256,14 @@ function _delete(path, options) {
 }
 
 function _request(method, path, options) {
+  var srv = cncserver.api.server;
+  if (!srv) {
+    console.error('CNC Server API client domain configuration not ready. Set cncserver.api.server correctly!');
+    return;
+  }
+
   $.ajax({
-    url: 'http://localhost:4242/v1/' + path,
+    url: srv.protocol + '://' + srv.domain + ':' + srv.port + '/v' + srv.version + '/' + path,
     type: method,
     data: options.data,
     success: options.success,
