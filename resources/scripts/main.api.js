@@ -371,7 +371,7 @@ function setRemotePrintWindow(tryOpen, force) {
   if (toggle) {
     // Reset inputs
     $('#remoteprint-window progress').val(0);
-    $('#remoteprint-window button.pause').prop('disabled', true).text('Pause');
+    $('#remoteprint-window button#pause').prop('disabled', true).text('Pause');
     $('#remoteprint-window #statusmessage').text('Waiting for drawing from client...');
 
     $('#remoteprint-window').fadeIn('slow');
