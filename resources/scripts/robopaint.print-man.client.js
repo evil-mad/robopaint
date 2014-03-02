@@ -31,7 +31,7 @@ $(function() {
 
         $path = $(e.target);
         robopaint.utils.addShortcuts($path);
-        $path.addClass('selected');
+        $path.addClass('selected').addClass('ants');
         cncserver.path = $path;
       }
 

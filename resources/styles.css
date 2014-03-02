@@ -183,7 +183,7 @@ svg#main #cncserversvg path.selected {
   }
 }
 
-body.print-manual svg#main #cncserversvg path.selected {
+body.print-manual svg#main #cncserversvg path.selected.ants {
   stroke: blue !important;
   stroke-width: 10 !important;
   stroke-opacity: 0.8 !important;
