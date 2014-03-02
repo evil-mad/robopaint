@@ -128,9 +128,32 @@ function onClose(callback, isGlobal) {
     var r = confirm("Are you sure you want to go?\n\
 Exiting print mode while printing will cancel all your jobs. Click OK to leave.");
     if (r == true) {
-      callback(); // Close/continue
+      unBindEvents(callback); // Cleanup, close, continue
     }
   } else {
-    callback(); // Close/continue
+    unBindEvents(callback);  // Cleanup, close, continue
+  }
+}
+
+// When closing, make sure to tidy up bound events
+// TODO: Namespace this to ensure only the ones we set are cleaned up
+function unBindEvents(callback) {
+  robopaint.$(robopaint.cncserver.api).unbind('updatePen');
+  robopaint.$(robopaint.cncserver.api).unbind('toolChange');
+  robopaint.$(robopaint.cncserver.api).unbind('offCanvas');
+  robopaint.$(robopaint.cncserver.api).unbind('movePoint');
+
+  // Clear CNC Server Buffer and set to resume state
+  if (cncserver.state.buffer.length) {
+    cncserver.state.buffer = [];
+    cncserver.state.process.paused = true;
+    robopaint.cncserver.api.buffer.clear(function(){
+      robopaint.cncserver.api.buffer.resume(function(){
+        robopaint.cncserver.api.pen.park();
+        if (callback) callback();
+      });
+    });
+  } else {
+    if (callback) callback();
   }
 }
