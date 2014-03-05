@@ -97,7 +97,7 @@ $(function() {
       $topGroups.remove(); // Remove editor groupings
 
       // Convert elements that don't play well with robopaint's handlers
-      var $elems = $('circle, ellipse', '#svgcontent');
+      var $elems = $('circle, ellipse, line, polyline', '#svgcontent');
       console.log('Converting ' + $elems.length + ' elements into paths for printing...');
       $elems.each(function(){
         methodDraw.canvas.convertToPath(this);
