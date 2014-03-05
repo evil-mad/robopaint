@@ -54,6 +54,10 @@ $(function() {
     // Get initial pen data from server
     cncserver.wcb.status('Connecting to bot...');
 
+    // Ensure bot is cleared and ready to receive commands at startup
+    robopaint.cncserver.api.buffer.clear();
+    robopaint.cncserver.api.buffer.resume();
+
     // Setup general pen status update callback, called from cncserver.api.js
     // TODO: This handily works for both manual and auto as they have the same
     // named buttons, but should probably be generalized
