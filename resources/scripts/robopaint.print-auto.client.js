@@ -34,10 +34,7 @@ $(function() {
     $('#cancel').click(function(){
       var cancelPrint = confirm("Are you sure you want to cancel the current print job and reset (for example, to start a new print job)?");
       if (cancelPrint) {
-        robopaint.cncserver.api.buffer.clear(function(){
-          cncserver.state.buffer = [];
-          robopaint.cncserver.api.pen.park();
-          unBindEvents();
+        unBindEvents(function(){
           robopaint.switchMode('home', function(){
             robopaint.switchMode('print');
           });
