@@ -154,6 +154,8 @@ function addElements() {
       fileSave.change(function(e) {
         var path = this.value;
 
+        if (!path) return; // Cancelled!
+
         // Verify .svg extension
         if (path.split('.').pop().toLowerCase() !== 'svg') {
           path += '.svg';
