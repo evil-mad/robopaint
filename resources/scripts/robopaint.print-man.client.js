@@ -346,11 +346,13 @@ $(function() {
       if ($p.is('#colorx')) {
         // If we're paused, run it directly, otherwise add to buffer
         if (cncserver.state.process.paused) {
-          cncserver.wcb.fullWash(null, isDip);
+          cncserver.wcb.fullWash(function(){
+            robopaint.cncserver.api.pen.park();
+          }, isDip);
           $('nav#tools a.selected').removeClass('selected');
           $('#water0').addClass('selected');
         } else {
-          cncserver.cmd.run([['wash', isDip]]);
+          cncserver.cmd.run([['wash', isDip], 'park']);
         }
       }
 
