@@ -156,16 +156,13 @@ function unBindEvents(callback) {
   robopaint.$(robopaint.cncserver.api).unbind('movePoint');
 
   // Clear CNC Server Buffer and set to resume state
-  if (cncserver.state.buffer.length) {
-    cncserver.state.buffer = [];
-    cncserver.state.process.paused = true;
+  cncserver.state.buffer = [];
+  cncserver.state.process.paused = true;
+  robopaint.cncserver.api.buffer.resume(function(){
     robopaint.cncserver.api.buffer.clear(function(){
-      robopaint.cncserver.api.buffer.resume(function(){
-        robopaint.cncserver.api.pen.park();
-        if (callback) callback();
-      });
+      robopaint.cncserver.api.pen.park();
+      if (callback) callback();
     });
-  } else {
-    if (callback) callback();
-  }
+  });
+
 }
