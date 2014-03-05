@@ -134,7 +134,7 @@ function removeElements() {
   $('#tool_snap, #view_grid, #rect_panel label, #path_panel label').remove();
   $('#g_panel label, #ellipse_panel label, #line label').remove();
   $('#text_panel label').remove();
-  $('#tool_export').remove(); // Save and export, they shall return!
+  $('#tool_export').remove();
   $('#palette').hide();
 }
 
@@ -161,15 +161,40 @@ function addElements() {
           path += '.svg';
         }
 
-        robopaint.statedata.lastFile = path;
-        $(this).attr('nwsaveas', path);
+        // Clean out lines 2-6 (& 8) (if existing)
+        var lines = svg.split("\n");
+        var backTitle = "  <title>background</title>";
+        if (lines[4] == backTitle || lines[3] == backTitle) {
 
-        window.parent.fs.writeFile(path, svg, function(err) {
-            if(err) {
-              window.alert('There was an error writing the file. \n\n Check your permissions or file name and try again. \n\n ERR# ' + err.errno + ',  Code: ' + err.code);
-              console.log('Error saving file:', err);
+          var offset = lines[4] == backTitle ? 1 : 0;
+          var out = [];
+          for(var i in lines) {
+            var skip = false;
+
+            var skipRules = [
+              i < 6 + offset && i > 0,
+              i == 7 + offset
+            ];
+
+            for (var s in skipRules) {
+              skip = skip ? skip : skipRules[s];
             }
-        });
+
+            if (!skip) {
+              out.push(lines[i]);
+            }
+          }
+          svg = out.join("\n");
+        }
+
+        try {
+          window.parent.fs.writeFileSync(path, svg);
+          robopaint.statedata.lastFile = path;
+          $(this).attr('nwsaveas', path);
+        } catch(e) {
+          window.alert('There was an error writing the file. \n\n Check your permissions or file name and try again. \n\n ERR# ' + err.errno + ',  Code: ' + err.code);
+          console.log('Error saving file:', err);
+        }
       }).click();
     }
   });
