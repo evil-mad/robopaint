@@ -772,6 +772,11 @@ body.home h1.loading {
   background-color: #b1c9d6;
 }
 
+body.home h1 span.message {
+  font-size: 16px;
+  display: block;
+}
+
 body.home nav {
   position: absolute;
   top: -150%;
