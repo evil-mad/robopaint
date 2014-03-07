@@ -3,6 +3,7 @@
  *  For right now, this is just the high level API autopaint functionality.
  */
 
+if (!robopaint) robopaint = {};
 robopaint.api = {}; // All RoboPaint API state vars should be stored here
 
 // Global remote print state and storage variables
@@ -29,176 +30,179 @@ robopaint.api.print = {
 
 var printDisabledMessage = 'The SVG import API is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.';
 
-/**
- * `robopaint/v1/print` endpoint
- * GET - List print queue and current status
- * POST - Create new queue items to print
- */
-cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
-  var queue = robopaint.api.print.queue;
+// Trigger to create all endpoints when endpoint creation is ready
+robopaint.api.bindCreateEndpoints = function(){
+  /**
+   * `robopaint/v1/print` endpoint
+   * GET - List print queue and current status
+   * POST - Create new queue items to print
+   */
+  cncserver.createServerEndpoint('/robopaint/v1/print', function(req, res) {
+    var queue = robopaint.api.print.queue;
 
-  // Forbid change commands until printMode is enabled
-  if (!robopaint.api.print.enabled && req.route.method != 'get') {
-    return [403, printDisabledMessage];
-  }
+    // Forbid change commands until printMode is enabled
+    if (!robopaint.api.print.enabled && req.route.method != 'get') {
+      return [403, printDisabledMessage];
+    }
 
-  // Are we busy? Fill a quick var for reuse...
-  var busy = false;
-  if (queue.length) {
-    busy = queue[queue.length-1].status == 'printing';
-  }
+    // Are we busy? Fill a quick var for reuse...
+    var busy = false;
+    if (queue.length) {
+      busy = queue[queue.length-1].status == 'printing';
+    }
 
-  if (req.route.method == 'get') { // GET list of print queue items and status
-    return {code: 200, body: {
-      status: (function(){
-        if (robopaint.api.print.enabled) {
-          return busy ? 'busy' : 'ready';
-        } else {
-          return 'disabled';
-        }
-      })(),
-      items: robopaint.api.print.queue.length,
-      queue: (function(){
-        var items = [];
-        $.each(robopaint.api.print.queue, function(id, item){
-          items.push({
-            uri: '/robopaint/v1/print/' + id,
-            name: item.options.name,
-            status: item.status
+    if (req.route.method == 'get') { // GET list of print queue items and status
+      return {code: 200, body: {
+        status: (function(){
+          if (robopaint.api.print.enabled) {
+            return busy ? 'busy' : 'ready';
+          } else {
+            return 'disabled';
+          }
+        })(),
+        items: robopaint.api.print.queue.length,
+        queue: (function(){
+          var items = [];
+          $.each(robopaint.api.print.queue, function(id, item){
+            items.push({
+              uri: '/robopaint/v1/print/' + id,
+              name: item.options.name,
+              status: item.status
+            });
           });
-        });
-        return items;
-      })()
-    }};
-  } else if (req.route.method == 'post') { // POST new print item
-    var options = req.body.options;
-    var msg = '';
+          return items;
+        })()
+      }};
+    } else if (req.route.method == 'post') { // POST new print item
+      var options = req.body.options;
+      var msg = '';
 
-    // Basic sanity check incoming content
-    if (!req.body.svg) msg = "body content node required: svg";
-    if (!req.body.options) {
-      msg = 'body content node required: options';
-    } else {
-      if (!req.body.options.name) msg = 'name option required: options.name';
-    }
-
-    if (msg) return [406, msg];
-
-    // Can't add queue items while one is printing! A "temporary" restriction
-    // till I get SVG verification packaged up and separated from method-draw
-    if (busy) {
-      return [503, 'Cannot add to queue during ongoing print job.'];
-    }
-
-    // Setup the load Callback that will be checked for on the subWindow pages
-    // in edit and print modes to verify and trigger actions. Only those pages
-    // decide the fate of this request.
-    robopaint.api.print.requestOptions = options;
-    robopaint.api.print.loadCallback = function(e) {
-      if (e.status == 'success') { // Image loaded and everything is great!
-
-        // Actually add item to queue
-        var d = new Date();
-        queue.push({
-          status: 'waiting',
-          options: options,
-          pathCount: e.pathCount,
-          percentComplete: 0,
-          startTime: d.toISOString(),
-          endTime: null,
-          secondsTaken: null,
-          svg: localStorage['svgedit-default'],
-          printingStatus: "Queued for printing..."
-        });
-
-        // Return response to client application finally
-        res.status(201).send(JSON.stringify({
-          status: 'verified and added to queue',
-          uri: '/robopaint/v1/print/' + (queue.length - 1),
-          item: queue[queue.length - 1]
-        }));
-
-        // Trigger printing/function management
-        startPrintQueue(queue.length-1, e.context);
-      } else { // Image failed to load, return error
-        res.status(406).send(JSON.stringify({
-          status: 'content verification failed',
-          reason: e.error
-        }));
-        // Return to home mode after error
-        robopaint.switchMode('home');
-      }
-
-      // Now that we're done, destroy the callback...
-      delete robopaint.api.print.loadCallback;
-    }
-
-    // Store the SVG content
-    window.localStorage.setItem('svgedit-default', req.body.svg);
-    // Switch modes (this eventually triggers the above callback)
-    robopaint.switchMode('edit');
-
-    // TODO: Manage queue, send to print page with options
-
-    return true; // Tell the server endpoint we'll handle the response from here...
-
-  } else {
-    return false; // 405 - Method Not Supported
-  }
-
-});
-
-/**
- * `robopaint/v1/print/[QID]` endpoint
- * GET - Return print queue item
- * DELETE - Cancel print queue item
- */
-cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
-  var qid = req.params.qid;
-  var item = robopaint.api.print.queue[qid];
-
-  // Forbid change commands until printMode is enabled
-  if (!robopaint.api.print.enabled && req.route.method != 'get') {
-    return [403, printDisabledMessage];
-  }
-
-  if (!item){
-    return [404, 'Queue ID ' + qid + ' not found'];
-  }
-
-  if (req.route.method == 'get') { // Is this a GET request?
-    return {code: 200, body: item};
-  } else if (req.route.method == 'delete'){
-    if (item.status == "waiting" || item.status == "printing") {
-      if (robopaint.api.print.queueItemComplete) {
-        robopaint.api.print.queueItemComplete(true);
+      // Basic sanity check incoming content
+      if (!req.body.svg) msg = "body content node required: svg";
+      if (!req.body.options) {
+        msg = 'body content node required: options';
       } else {
-        item.status = 'cancelled';
-        setRemotePrintWindow(false, true);
-        // Clear close and park
-        $subwindow[0].contentWindow.unBindEvents(function(){
-          robopaint.switchMode('home');
-        });
+        if (!req.body.options.name) msg = 'name option required: options.name';
       }
-      return {code: 200, body: robopaint.api.print.queue[qid]};
+
+      if (msg) return [406, msg];
+
+      // Can't add queue items while one is printing! A "temporary" restriction
+      // till I get SVG verification packaged up and separated from method-draw
+      if (busy) {
+        return [503, 'Cannot add to queue during ongoing print job.'];
+      }
+
+      // Setup the load Callback that will be checked for on the subWindow pages
+      // in edit and print modes to verify and trigger actions. Only those pages
+      // decide the fate of this request.
+      robopaint.api.print.requestOptions = options;
+      robopaint.api.print.loadCallback = function(e) {
+        if (e.status == 'success') { // Image loaded and everything is great!
+
+          // Actually add item to queue
+          var d = new Date();
+          queue.push({
+            status: 'waiting',
+            options: options,
+            pathCount: e.pathCount,
+            percentComplete: 0,
+            startTime: d.toISOString(),
+            endTime: null,
+            secondsTaken: null,
+            svg: localStorage['svgedit-default'],
+            printingStatus: "Queued for printing..."
+          });
+
+          // Return response to client application finally
+          res.status(201).send(JSON.stringify({
+            status: 'verified and added to queue',
+            uri: '/robopaint/v1/print/' + (queue.length - 1),
+            item: queue[queue.length - 1]
+          }));
+
+          // Trigger printing/function management
+          startPrintQueue(queue.length-1, e.context);
+        } else { // Image failed to load, return error
+          res.status(406).send(JSON.stringify({
+            status: 'content verification failed',
+            reason: e.error
+          }));
+          // Return to home mode after error
+          robopaint.switchMode('home');
+        }
+
+        // Now that we're done, destroy the callback...
+        delete robopaint.api.print.loadCallback;
+      }
+
+      // Store the SVG content
+      window.localStorage.setItem('svgedit-default', req.body.svg);
+      // Switch modes (this eventually triggers the above callback)
+      robopaint.switchMode('edit');
+
+      // TODO: Manage queue, send to print page with options
+
+      return true; // Tell the server endpoint we'll handle the response from here...
+
     } else {
-      return [406, "Queue item in state '" + item.status + "' cannot be cancelled"];
+      return false; // 405 - Method Not Supported
     }
-  } else {
-    return false; // 405 - Method Not Supported
-  }
 
-});
+  });
+
+  /**
+   * `robopaint/v1/print/[QID]` endpoint
+   * GET - Return print queue item
+   * DELETE - Cancel print queue item
+   */
+  cncserver.createServerEndpoint('/robopaint/v1/print/:qid', function(req, res) {
+    var qid = req.params.qid;
+    var item = robopaint.api.print.queue[qid];
+
+    // Forbid change commands until printMode is enabled
+    if (!robopaint.api.print.enabled && req.route.method != 'get') {
+      return [403, printDisabledMessage];
+    }
+
+    if (!item){
+      return [404, 'Queue ID ' + qid + ' not found'];
+    }
+
+    if (req.route.method == 'get') { // Is this a GET request?
+      return {code: 200, body: item};
+    } else if (req.route.method == 'delete'){
+      if (item.status == "waiting" || item.status == "printing") {
+        if (robopaint.api.print.queueItemComplete) {
+          robopaint.api.print.queueItemComplete(true);
+        } else {
+          item.status = 'cancelled';
+          setRemotePrintWindow(false, true);
+          // Clear close and park
+          $subwindow[0].contentWindow.unBindEvents(function(){
+            robopaint.switchMode('home');
+          });
+        }
+        return {code: 200, body: robopaint.api.print.queue[qid]};
+      } else {
+        return [406, "Queue item in state '" + item.status + "' cannot be cancelled"];
+      }
+    } else {
+      return false; // 405 - Method Not Supported
+    }
+
+  });
 
 
-/**
- * `robopaint/remote`
- * Example HTML returning endpoint for resources/api/example.remotepaint.html
- */
-cncserver.createServerEndpoint('/robopaint/remote', function(req, res) {
-  res.sendfile('resources/api/example.remotepaint.html')
-  return true;
-});
+  /**
+   * `robopaint/remote`
+   * Example HTML returning endpoint for resources/api/example.remotepaint.html
+   */
+  cncserver.createServerEndpoint('/robopaint/remote', function(req, res) {
+    res.sendfile('resources/api/example.remotepaint.html')
+    return true;
+  });
+}
 
 /**
  * Bind buttons specific for remote print
