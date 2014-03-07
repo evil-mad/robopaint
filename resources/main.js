@@ -6,10 +6,19 @@
  */
 
 global.$ = $;
+var gui = require('nw.gui');
+
+// Global Keypress catch for debug
+$(document).keypress(function(e){
+  console.log(e);
+  if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
+    gui.Window.get().showDevTools();
+  }
+});
+
 
 var fs = require('fs');
 var cncserver = require('cncserver');
-var gui = require('nw.gui');
 
 var barHeight = 40;
 var isModal = false;
