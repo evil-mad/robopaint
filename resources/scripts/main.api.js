@@ -31,7 +31,11 @@ robopaint.api.print = {
 var printDisabledMessage = 'The SVG import API is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.';
 
 // Trigger to create all endpoints when endpoint creation is ready
+robopaint.api.endpointsBound = false
 robopaint.api.bindCreateEndpoints = function(){
+  if (robopaint.api.endpointsBound) return; // Only bind endpoints ONCE
+  robopaint.api.endpointsBound = true;
+
   /**
    * `robopaint/v1/print` endpoint
    * GET - List print queue and current status

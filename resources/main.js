@@ -126,6 +126,8 @@ function bindMainControls() {
       initializing = false;
     }
 
+    robopaint.api.bindCreateEndpoints();
+
     setModal(false);
   });
 
