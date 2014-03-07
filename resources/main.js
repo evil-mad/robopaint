@@ -48,6 +48,7 @@ var $stat;
 $(function() {
  initializing = true;
 
+ try {
   // Bind and run inital resize first thing
   $(window).resize(responsiveResize);
   responsiveResize();
@@ -100,6 +101,11 @@ $(function() {
   getColorsets(); // Load the colorset configuration data
 
   bindMainControls(); // Bind all the controls for the main interface
+ } catch(e) {
+   $('body.home h1').attr('class', 'error').text('Error During Initialization:')
+     .append($('<span>').addClass('message').text(e.message));
+   console.log(e);
+ }
 })
 
 /**
@@ -275,39 +281,46 @@ function responsiveResize() {
 function startSerial(){
   setMessage('Starting up...', 'loading');
 
-  cncserver.start({
-    botType: robopaint.currentBot.type,
-    success: function() {
-      setMessage('Port found, connecting...');
-    },
-    error: function(err) {
-      setMessage('Couldn\'t connect! - ' + err, 'warning');
-      $options.slideDown('slow');
-    },
-    connect: function() {
-      setMessage('Connected!', 'success');
+  try {
+    cncserver.start({
+      botType: robopaint.currentBot.type,
+      success: function() {
+        setMessage('Port found, connecting...');
+      },
+      error: function(err) {
+        setMessage('Couldn\'t connect! - ' + err, 'warning');
+        $options.slideDown('slow');
+      },
+      connect: function() {
+        setMessage('Connected!', 'success');
 
-      $stat.fadeOut('slow');
-      setModal(false);
+        $stat.fadeOut('slow');
+        setModal(false);
 
-      // If caught on startup...
-      if (initializing) {
-        $('body.home nav').fadeIn('slow');
-        initializing = false;
+        // If caught on startup...
+        if (initializing) {
+          $('body.home nav').fadeIn('slow');
+          initializing = false;
+        }
+
+        // Initialize settings...
+        loadSettings();
+        saveSettings();
+
+        robopaint.api.bindCreateEndpoints();
+      },
+      disconnect: function() {
+        setModal(true);
+        $stat.show();
+        setMessage('Bot Disconnected!', 'error');
+        $options.slideDown();
       }
-
-      // Initialize settings...
-      loadSettings();
-      saveSettings();
-
-    },
-    disconnect: function() {
-      setModal(true);
-      $stat.show();
-      setMessage('Bot Disconnected!', 'error');
-      $options.slideDown();
-    }
-  });
+    });
+  } catch(e) {
+   $('body.home h1').attr('class', 'error').text('Error During Serial Start:')
+     .append($('<span>').addClass('message').text(e.message));
+   console.log(e);
+ }
 }
 
 /**
