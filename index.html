@@ -3,6 +3,7 @@
   <head>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <script type="text/javascript" src="resources/scripts/lib/jquery.js"></script>
+    <script type="text/javascript" src="resources/scripts/lib/i18next.js"></script>
     <script type="text/javascript" src="resources/main.js"></script>
     <script type="text/javascript" src="resources/scripts/cncserver.client.api.js"></script>
     <script type="text/javascript" src="resources/scripts/main.settings.js"></script>
@@ -18,21 +19,21 @@
 <div id="bar">
   <img class="logo" src ="resources/images/robopaint_logo.svg"/><span class="version">(v0.0.0)</span>
   <span class="left">
-    <a id="bar-home" class="icon-home selected mode tipped" href="/" title="Home screen">&nbsp;</a>
-    <a id="bar-edit" class="icon-edit mode tipped" href="resources/method-editor/editor/index.html" title="Open, resize, and edit existing vector artwork.">&nbsp;</a>
-    <a id="bar-print" class="icon-brush mode tipped" href="resources/print-auto.html" title="Painting Mode: Print your drawing!">&nbsp;</a>
-    <a id="bar-manual" class="icon-params mode tipped hidden" href="resources/print-manual.html" title="Manual Mode: Customize your print">&nbsp;</a>
+    <a id="bar-home" class="icon-home selected mode tipped" href="/" data-i18n="[title]nav.toolbar.home">&nbsp;</a>
+    <a id="bar-edit" class="icon-edit mode tipped" href="resources/method-editor/editor/index.html" data-i18n="[title]nav.toolbar.edit">&nbsp;</a>
+    <a id="bar-print" class="icon-brush mode tipped" href="resources/print-auto.html" data-i18n="[title]nav.toolbar.printauto">&nbsp;</a>
+    <a id="bar-manual" class="icon-params mode tipped hidden" href="resources/print-manual.html" data-i18n="[title]nav.toolbar.printmanual">&nbsp;</a>
     <span class="separator">&nbsp;</span>
-    <a id="bar-load" class="icon-picture tipped" href="#" title="Open an example image">&nbsp;</a>
+    <a id="bar-load" class="icon-picture tipped" href="#" data-i18n="[title]nav.toolbar.open">&nbsp;</a>
     <ul id="loadlist" style="display:none">
       <li>No files. Add *.SVG to ./resources/svgs</li>
     </ul>
   </span>
 
   <span class="right">
-    <a id="bar-remoteprint" class="modal tipped hidden icon-print" href="#" title="Remote Paint: Enable Painting files from external programs">&nbsp;</a>
-    <a id="bar-help" title="Help! (Open web docs)" class="tipped" href="http://wiki.evilmadscientist.com/RoboPaint">?</a>
-    <a id="bar-settings" class="modal icon-cog-alt tipped" href="#" title="Settings">&nbsp;</a>
+    <a id="bar-remoteprint" class="modal tipped hidden icon-print" href="#" data-i18n="[title]nav.toolbar.remoteprint" title="Remote Paint: Enable Painting files from external programs">&nbsp;</a>
+    <a id="bar-help" data-i18n="[title]nav.toolbar.help" class="tipped" href="http://wiki.evilmadscientist.com/RoboPaint">?</a>
+    <a id="bar-settings" class="modal icon-cog-alt tipped" href="#" data-i18n="[title]nav.toolbar.settings">&nbsp;</a>
   </span>
 </div>
 
@@ -40,24 +41,24 @@
 <div id="settings">Loaded via jQuery...</div>
 
 <div id="remoteprint-window" class="hidden print">
-  <h3>Remote Paint Mode</h3>
+  <h3 data-i18n>remoteprint.title</h3>
   <!-- Silly grouped icon thing... -->
   <div class="icons">
-    <span class="icon-cloud-thunder" title="From the Client Application">&nbsp;</span>
-    <span class="icon-shuffle" title="Through the Interwebs or your local network">&nbsp;</span>
-    <span class="icon-print" title="To your very own bot!">&nbsp;</span>
+    <span class="icon-cloud-thunder" data-i18n="[title]remoteprint.icontitle.from">&nbsp;</span>
+    <span class="icon-shuffle" data-i18n="[title]remoteprint.icontitle.through">&nbsp;</span>
+    <span class="icon-print" data-i18n="[title]remoteprint.icontitle.to">&nbsp;</span>
   </div>
 
   <div id="preview-scale-container">
-    <svg title="Image preview, if any" id="preview" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">
+    <svg id="preview" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">
       <g id="cncserversvg" transform="translate(48,48)"></g>
     </svg>
     <fieldset id="details">
-      <legend>Details / Controls:</legend>
-      <button class="" disabled="disabled" id="pause">Pause</button>
+      <legend data-i18n>remoteprint.details.title</legend>
+      <button disabled="disabled" id="pause" data-i18n>common.pause</button>
       <div id="statusmessage"></div>
       <progress title="Current progress" max="100" value="0"></progress>
-      <button class="normal cancel" title="Cancel current operations and exit this mode.">Exit Remote Paint Mode</button>
+      <button class="normal cancel" data-i18n="[title]remoteprint.details.exit.title;remoteprint.details.exit.text">remoteprint.details.exit.text</button>
     </fieldset>
   </div>
 
@@ -68,20 +69,24 @@
 <img id="logo" src="resources/images/watercolorbot_icon.png"/>
 
 <h1 class="loading">
-  <b>Starting up...</b>
+  <b data-i18n>status.start</b>
   <div class="options hidden">
-    What do you want to do?
+    <span data-i18n>status.question</span>
     <div>
-      <button class="continue normal">Continue in Simulation mode</button>
-      <button class="reconnect normal">Try to Reconnect</button>
+      <button class="continue normal" data-i18n>status.button.continue</button>
+      <button class="reconnect normal" data-i18n>status.button.retry</button>
     </div>
   </div>
 </h1>
 <nav class="hidden">
-  <a href="resources/edit/index.html" id="edit" title="Open, resize, and edit existing vector artwork.">Create</a>
-  <a href="resources/print-auto.html" id="print" title="Painting Mode: Print your drawing!">Print</a>
-  <a href="resources/print-manual.html" id="manual" class="hidden" title="Manual Mode: Customize a print">Manual</a>
+  <a href="resources/edit/index.html" id="edit" data-i18n="[title]nav.toolbar.edit;nav.bubble.edit">nav.bubble.edit</a>
+  <a href="resources/print-auto.html" id="print" data-i18n="[title]nav.toolbar.printauto;nav.bubble.printauto">nav.bubble.printauto</a>
+  <a href="resources/print-manual.html" id="manual" class="hidden" data-i18n="[title]nav.toolbar.printmanual;nav.bubble.printmanual">nav.bubble.printmanual</a>
 </nav>
+
+<script type="text/javascript">
+  translatePage();
+</script>
 
 </body>
 </html>

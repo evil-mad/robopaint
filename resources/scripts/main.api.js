@@ -26,15 +26,15 @@ robopaint.api.print = {
   ]
 }
 
-// Establish high-level print endpoint ========================================
 
-var printDisabledMessage = 'The SVG import API is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.';
 
 // Trigger to create all endpoints when endpoint creation is ready
 robopaint.api.endpointsBound = false
 robopaint.api.bindCreateEndpoints = function(){
   if (robopaint.api.endpointsBound) return; // Only bind endpoints ONCE
   robopaint.api.endpointsBound = true;
+
+  // Establish high-level print endpoints ======================================
 
   /**
    * `robopaint/v1/print` endpoint
@@ -46,7 +46,7 @@ robopaint.api.bindCreateEndpoints = function(){
 
     // Forbid change commands until printMode is enabled
     if (!robopaint.api.print.enabled && req.route.method != 'get') {
-      return [403, printDisabledMessage];
+      return [403, robopaint.t('remoteprint.api.disabled')];
     }
 
     // Are we busy? Fill a quick var for reuse...
@@ -94,7 +94,7 @@ robopaint.api.bindCreateEndpoints = function(){
       // Can't add queue items while one is printing! A "temporary" restriction
       // till I get SVG verification packaged up and separated from method-draw
       if (busy) {
-        return [503, 'Cannot add to queue during ongoing print job.'];
+        return [503, robopaint.t('remoteprint.api.busy')];
       }
 
       // Setup the load Callback that will be checked for on the subWindow pages
@@ -115,7 +115,7 @@ robopaint.api.bindCreateEndpoints = function(){
             endTime: null,
             secondsTaken: null,
             svg: localStorage['svgedit-default'],
-            printingStatus: "Queued for printing..."
+            printingStatus: robopaint.t('remoteprint.api.queued')
           });
 
           // Return response to client application finally
@@ -166,7 +166,7 @@ robopaint.api.bindCreateEndpoints = function(){
 
     // Forbid change commands until printMode is enabled
     if (!robopaint.api.print.enabled && req.route.method != 'get') {
-      return [403, printDisabledMessage];
+      return [403, robopaint.t('remoteprint.api.disabled')];
     }
 
     if (!item){
@@ -355,16 +355,11 @@ function setRemotePrintWindow(tryOpen, force) {
   }
 
   var toggle = false;
-  var msg = "Hey there, welcome to Remote Paint mode! This mode will turn RoboPaint into a graphics 'print server', ready to take an image from another application and print it immediately!";
-  msg+= "\n\n* Images sent will only be received while this mode is on";
-  msg+= "\n\n* Once an image is finished, this mode will exit";
-  msg+= "\n\n* Before clicking OK, make sure your bot is completely setup and ready to go!";
-  msg+= "\n\n* Click cancel if you're not quite ready to go. You can also exit anytime while in Remote Paint mode";
+  var msg = robopaint.t('remoteprint.confirms.welcome');
 
   if (!tryOpen) {
     if (!force) {
-      msg = "Are you sure you want to leave Remote Paint mode?";
-      msg+= "\n\n Any print processes and client applications will be cancelled/disconnected.";
+      msg = robopaint.t('remoteprint.confirms.exit');
       toggle = !confirm(msg);
     }
   } else {
@@ -379,8 +374,8 @@ function setRemotePrintWindow(tryOpen, force) {
   if (toggle) {
     // Reset inputs
     $('#remoteprint-window progress').val(0);
-    $('#remoteprint-window button#pause').prop('disabled', true).text('Pause');
-    $('#remoteprint-window #statusmessage').text('Waiting for drawing from client...');
+    $('#remoteprint-window button#pause').prop('disabled', true).text(robopaint.t('common.pause'));
+    $('#remoteprint-window #statusmessage').text(robopaint.t('remoteprint.api.wait'));
 
     $('#remoteprint-window').fadeIn('slow');
   } else {
