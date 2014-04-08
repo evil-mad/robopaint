@@ -1,6 +1,6 @@
 {
   "name": "robopaint",
-  "version": "0.7.5",
+  "version": "0.8.0",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "index.html",
   "author": "techninja",
