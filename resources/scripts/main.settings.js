@@ -36,7 +36,7 @@ function loadSettings() {
     penmode: robopaint.currentBot.type == "watercolorbot" ? 0 : 3, // TODO: Pull this from toolset
     openlast: 0,
     showcolortext: 0,
-    colorset: 'crayola_classic',
+    colorset: 'generic-standard',
     maxpaintdistance: 8040,
     fillspacing: 10,
     fillprecision: 14,

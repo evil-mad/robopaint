@@ -1,0 +1,33 @@
+#colors.sargent-secondary #color0 {
+  background-color: #ffbe2c; /* Yellow Orange */
+  color: black;
+}
+
+.sargent-secondary #color1 {
+  background-color: #ff451f; /* Vermilion */
+}
+
+.sargent-secondary #color2 {
+  background-color: #c02987; /* Red Violet */
+}
+
+.sargent-secondary #color3 {
+  background-color: #212aa9; /* Blue Violet */
+}
+
+.sargent-secondary #color4 {
+  background-color: #a3d130; /* Green */
+}
+
+.sargent-secondary #color5 {
+  background-color: #00a6b8; /* Teal */
+}
+
+.sargent-secondary #color6 {
+  background-color: #00a6b8; /* Teal */
+}
+
+#colors.sargent-secondary #color7 {
+  background-color: #eee; /* White */
+  color: black;
+}

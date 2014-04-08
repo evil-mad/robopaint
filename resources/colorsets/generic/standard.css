@@ -1,32 +1,32 @@
-.crayola-classic #color0 {
+.generic-standard #color0 {
   background-color: black; /* Black */
 }
 
-.crayola-classic #color1 {
+.generic-standard #color1 {
   background-color: red; /* Red */
 }
 
-.crayola-classic #color2 {
+.generic-standard #color2 {
   background-color: orange; /* Orange */
 }
 
-#colors.crayola-classic #color3 {
+#colors.generic-standard #color3 {
   background-color: yellow; /* Yellow */
   color: black;
 }
 
-.crayola-classic #color4 {
+.generic-standard #color4 {
   background-color: green; /* Green */
 }
 
-.crayola-classic #color5 {
+.generic-standard #color5 {
   background-color: blue; /* Blue */
 }
 
-.crayola-classic #color6 {
+.generic-standard #color6 {
   background-color: purple; /* Violet */
 }
 
-.crayola-classic #color7 {
+.generic-standard #color7 {
   background-color: SaddleBrown; /* Brown */
 }

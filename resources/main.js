@@ -490,46 +490,77 @@ function getColorsets() {
     }
   }
 
-  robopaint.statedata.colorsets = {'ALL': sets};
+  robopaint.statedata.colorsets = {};
 
-  $.each(sets, function(i, set){
+  // Move through each colorset JSON definition file...
+  for(var i in sets) {
+    var set = sets[i];
     var setDir = colorsetDir + set + '/';
-    var c = JSON.parse(fs.readFileSync(setDir + set + '.json'));
-
-    $('#colorset').append(
-      $('<option>')
-        .attr('value', set)
-        .text(c.name)
-        .prop('selected', set == robopaint.settings.colorset)
-    );
-
-    // Add pure white to the end of the color set for auto-color
-    c.colors.push({'White': '#FFFFFF'});
-
-    // Process Colors to avoid re-processing later
-    var colorsOut = [];
-    for (var i in c.colors){
-      var name = Object.keys(c.colors[i])[0];
-      var h = c.colors[i][name];
-      var r = robopaint.utils.colorStringToArray(h);
-      colorsOut.push({
-        name: name,
-        color: {
-          HEX: h,
-          RGB: r,
-          HSL: robopaint.utils.rgbToHSL(r),
-          YUV: robopaint.utils.rgbToYUV(r)
-        }
-      });
+    try {
+      var fileSets = JSON.parse(fs.readFileSync(setDir + set + '.json'));
+    } catch(e) {
+      // Silently fail on bad parse!
+      continue;
     }
 
-    robopaint.statedata.colorsets[set] = {
-      name: c.name,
-      baseClass: c.styles.baseClass,
-      colors: colorsOut,
-      stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src})
-    };
+    // Move through all colorsets in file
+    for(var s in fileSets) {
+      var c = fileSets[s];
+
+      try {
+        // Add pure white to the end of the color set for auto-color
+        c.colors.push({'White': '#FFFFFF'});
+
+        // Process Colors to avoid re-processing later
+        var colorsOut = [];
+        for (var i in c.colors){
+          var name = Object.keys(c.colors[i])[0];
+          var h = c.colors[i][name];
+          var r = robopaint.utils.colorStringToArray(h);
+          colorsOut.push({
+            name: name,
+            color: {
+              HEX: h,
+              RGB: r,
+              HSL: robopaint.utils.rgbToHSL(r),
+              YUV: robopaint.utils.rgbToYUV(r)
+            }
+          });
+        }
+      } catch(e) {
+        // Silently fail on bad parse!
+        continue;
+      }
+
+      robopaint.statedata.colorsets[c.styles.baseClass] = {
+        name: c.name,
+        type: c.type,
+        weight: parseInt(c.weight),
+        description: c.description,
+        media: c.media,
+        baseClass: c.styles.baseClass,
+        colors: colorsOut,
+        stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}),
+        styleSrc: setDir + c.styles.src
+      };
+    }
+  }
+
+
+  var order = Object.keys(robopaint.statedata.colorsets).sort(function(a, b) {
+    return (robopaint.statedata.colorsets[a].weight - robopaint.statedata.colorsets[b].weight)
   });
+
+  // Actually add the colorsets in the correct weighted order to the dropdown
+  for(var i in order) {
+    var c = robopaint.statedata.colorsets[order[i]];
+    $('#colorset').append(
+      $('<option>')
+        .attr('value', order[i])
+        .text(c.type + ' - ' + c.name)
+        .prop('selected', order[i] == robopaint.settings.colorset)
+    );
+  }
 }
 
 /**
