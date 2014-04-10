@@ -10,7 +10,6 @@ var gui = require('nw.gui');
 
 // Global Keypress catch for debug
 $(document).keypress(function(e){
-  console.log(e);
   if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
     gui.Window.get().showDevTools();
   }
@@ -19,7 +18,6 @@ $(document).keypress(function(e){
 
 var fs = require('fs');
 var cncserver = require('cncserver');
-
 var barHeight = 40;
 var isModal = false;
 var initializing = false;
@@ -103,8 +101,8 @@ $(function() {
   bindMainControls(); // Bind all the controls for the main interface
  } catch(e) {
    $('body.home h1').attr('class', 'error').text('Error During Initialization:')
-     .append($('<span>').addClass('message').text(e.message));
-   console.log(e);
+     .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
+   console.error(e.stack);
  }
 })
 
@@ -319,8 +317,8 @@ function startSerial(){
     });
   } catch(e) {
    $('body.home h1').attr('class', 'error').text('Error During Serial Start:')
-     .append($('<span>').addClass('message').text(e.message));
-   console.log(e);
+     .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
+   console.log(e.stack);
  }
 }
 
