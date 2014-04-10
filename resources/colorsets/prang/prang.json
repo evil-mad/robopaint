@@ -1,7 +1,7 @@
 [{
   "type": "Prang",
   "name": "Glitter",
-  "medium": "watercolor",
+  "media": "watercolor",
   "weight": 11,
   "description": "Prang Glitter 8 Semi-Moist Watercolors, 8-color set",
   "styles" : {
@@ -22,7 +22,7 @@
 {
   "type": "Prang",
   "name": "Metallic",
-  "medium": "watercolor",
+  "media": "watercolor",
   "weight": 12,
   "description": "Prang Metallic 8 Semi-Moist Watercolors, 8-color set",
   "styles" : {
@@ -43,7 +43,7 @@
 {
   "type": "Prang",
   "name": "Secondary",
-  "medium": "watercolor",
+  "media": "watercolor",
   "weight": 10,
   "description": "Prang Oval 16 Semi-Moist Watercolors, 16-color set (secondary grouping). Use generic standard setting for primary and move pans to correct positions.",
   "styles" : {

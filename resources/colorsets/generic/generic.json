@@ -1,7 +1,7 @@
 [{
   "type": "Generic",
   "name": "Standard",
-  "medium": "watercolor",
+  "media": "watercolor",
   "weight": -10,
   "description": "Set of primary colors in standard order. Use for stock Crayola, store brand or movable primary color pans.",
   "styles" : {

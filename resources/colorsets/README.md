@@ -39,7 +39,7 @@ dashes. EG:
 [{
   "type": "Custom",
   "name": "My Colorset",
-  "medium": "watercolor",
+  "media": "watercolor",
   "weight" : 10,
   "description": "My custom color set! Isn't it great?"
   "styles" : {

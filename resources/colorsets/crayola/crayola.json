@@ -1,7 +1,7 @@
 [{
   "type" : "Crayola",
   "name": "Secondary",
-  "medium": "watercolor",
+  "media": "watercolor",
   "weight": 1,
   "description": "Crayola Washable Watercolors, 16/24-color set (secondary grouping).",
   "styles" : {
@@ -22,7 +22,7 @@
 {
   "type" : "Crayola",
   "name": "Tertiary",
-  "medium": "watercolor",
+  "media": "watercolor",
   "weight": 5,
   "description": "Crayola Washable Watercolors, 24-color set (tertiary grouping).",
   "styles" : {
