@@ -474,7 +474,7 @@ function fadeInWindow() {
 
 
 /**
- * Fetches all watercolor sets available from the colorsets dir
+ * Fetches all colorsets available from the colorsets dir
  */
 function getColorsets() {
   var colorsetDir = 'resources/colorsets/';
@@ -559,6 +559,22 @@ function getColorsets() {
         .prop('selected', order[i] == robopaint.settings.colorset)
     );
   }
+
+  // Menu separator
+  $('#colorset').append($('<optgroup>').attr('label', ' ').addClass('sep'));
+
+  // TODO: Add "in memory" custom sets
+
+  // Add "Create new" item
+  $('#colorset').append(
+    $('<option>')
+      .attr('value', '_new')
+      .text(robopaint.t('settings.output.colorsets.add'))
+      .addClass('add')
+  );
+
+  // Initial run to populate settings window
+  updateColorSetSettings();
 }
 
 /**

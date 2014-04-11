@@ -297,6 +297,7 @@ function bindSettingsControls() {
 
     // Update paint sets when changes made that would effect them
     if (this.id == 'colorset' || this.id == 'showcolortext') {
+      updateColorSetSettings();
       if ($subwindow[0]) {
         if ($subwindow[0].contentWindow.updateColorSet) {
           $subwindow[0].contentWindow.updateColorSet();
@@ -469,4 +470,36 @@ function addSettingsRangeValues() {
 
     $r.addClass('processed').after($l);
   })
+}
+
+/**
+ * Update/render currently selected colorset in settings window
+ */
+function updateColorSetSettings() {
+  if (!robopaint.statedata.colorsets) return; // Don't run too early
+
+  var set = robopaint.statedata.colorsets[robopaint.settings.colorset];
+  if (!set) return; // Don't run if the set is invalid
+
+  var $colors = $('#colorsets .colors');
+
+  // Add Sortable color names/colors
+  $colors.empty();
+  for (var i in set.colors) {
+    if (i == set.colors.length-1) break; // Ignore the last value
+    $('<li>')
+      .append(
+        $('<span>')
+          .addClass('color')
+          .css('background-color', set.colors[i].color['HEX'])
+          .text(' '),
+        $('<label>').text(set.colors[i].name)
+      ).appendTo($colors);
+  }
+
+  // Add metadata
+  var meta = 'type name description media'.split(' ');
+  for (var i in meta) {
+    $('#colorsets .' + meta[i]).text(set[meta[i]]);
+  }
 }

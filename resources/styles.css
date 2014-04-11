@@ -876,6 +876,63 @@ body.home #settings .disabled label {
   color: #888;
 }
 
+/* Colorset/custom color management interface */
+body.home #colorsets {
+  position: relative;
+}
+
+body.home #colorsets optgroup {
+  border-top: 1px solid black;
+}
+
+body.home #colorsets #colorset {
+  position: absolute;
+  top: 0;
+  left: 170px;
+}
+
+body.home #colorsets ul {
+  list-style: none;
+}
+
+body.home #colorsets li label {
+  top: -0.5em;
+  position: relative;
+}
+
+body.home #colorsets span.color {
+  display: inline-block;
+  width: 45px;
+  height: 25px;
+  margin-right: 10px;
+  border-radius: 10px;
+}
+
+body.home #colorsets .left {
+  float: left;
+  width: 40%;
+}
+
+body.home #colorsets .right {
+  float: right;
+  width: 60%;
+}
+
+body.home #colorsets .meta {
+  margin-bottom: 0.5em;
+}
+
+body.home #colorsets .meta label {
+  font-weight: bold;
+  font-size: 14px;
+  font-style: italic;
+}
+
+body.home #colorsets .meta span {
+  font-size: 13px;
+  color: #444;
+}
+
 /* Print Mode Modal dialog */
 body.home #remoteprint-mask,
 body.home #remoteprint-mask:before {

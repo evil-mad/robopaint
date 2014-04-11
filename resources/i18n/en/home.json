@@ -112,7 +112,14 @@
         "title": "Show color names:",
         "detail": "When checked, color names will display on the paint palette for print colors, otherwise they will only be visible on hover."
       },
-      "colorset": "Installed Paint Set:",
+      "colorsets": {
+        "title": "Installed Color Set:",
+        "media": "Media:",
+        "name": "Name:",
+        "desc": "Description:",
+        "type": "Type/Manufacturer:",
+        "add": "+ Add Custom Set"
+      },
       "maxpaintdistance": {
         "title": "Refill Distance:",
         "hint": "Move left to get paint more often, right to get paint less often.",

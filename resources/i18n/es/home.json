@@ -118,7 +118,14 @@
         "title": "Mostrar nombres de colores:",
         "detail": "Cuando se marca, nombres de los colores se muestran en la paleta de colores para los colores de impresión, de lo contrario, sólo serán visibles en vuelo estacionario."
       },
-      "colorset": "Instalado conjunto de la pintura:",
+      "colorsets": {
+        "title": "Instalado conjunto de la colores:",
+        "media": "Medios",
+        "name": "Nombre:",
+        "desc": "Descripción:",
+        "type": "Tipo/Fabricante:",
+        "add": "+ Crear Personaliz"
+      },
       "maxpaintdistance": {
         "title": "Vuelva a llenar Distancia:",
         "hint": "Mover a la izquierda para conseguir pintar más a menudo, derecho a conseguir la pintura con menos frecuencia.",

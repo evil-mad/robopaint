@@ -73,10 +73,34 @@
       <aside data-i18n>settings.output.showcolortext.detail</aside>
     </div>
 
-    <div>
-      <label for="colorset" data-i18n>settings.output.colorset</label>
+    <fieldset id="colorsets">
+      <legend data-i18n>settings.output.colorsets.title</legend>
       <select id="colorset"></select>
-    </div>
+
+      <div class="left column">
+        <ul class="colors"></ul>
+      </div>
+
+      <div class="right column">
+        <div class="meta">
+          <label data-i18n>settings.output.colorsets.type</label>
+          <span class="type"></span>
+        </div>
+        <div class="meta">
+          <label data-i18n>settings.output.colorsets.name</label>
+          <span class="name"></span>
+        </div>
+        <div class="meta">
+          <label data-i18n>settings.output.colorsets.media</label>
+          <span class="media"></span>
+        </div>
+        <div class="meta">
+          <label data-i18n>settings.output.colorsets.desc</label>
+          <span class="description"></span>
+        </div>
+      </div>
+
+    </fieldset>
 
     <hr>
 
