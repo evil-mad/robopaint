@@ -11,6 +11,10 @@ $(function() {
 
   // Add in a callback for when loading is complete
   cncserver.canvas.loadSVGCallback = function(){
+
+    // Initialize the record buffer
+    cncserver.state.recordBuffer = [];
+
     // Bind SVG path elements click for $path select/deselect
     $svg.click(function(e){
       var selected = false;
@@ -27,7 +31,7 @@ $(function() {
 
         $path = $(e.target);
         robopaint.utils.addShortcuts($path);
-        $path.addClass('selected');
+        $path.addClass('selected').addClass('ants');
         cncserver.path = $path;
       }
 
@@ -51,9 +55,9 @@ $(function() {
   updateColorSet();
 
   // Add all the colorsets CSS files
-  for(var i in robopaint.statedata.colorsets['ALL']) {
-    var set = robopaint.statedata.colorsets[robopaint.statedata.colorsets['ALL'][i]];
-    $('head').append(set.stylesheet);
+  for(var i in robopaint.statedata.colorsets) {
+    var set = robopaint.statedata.colorsets[i];
+    $('<link>').attr({rel: 'stylesheet', href: set.styleSrc.replace("resources/",'')}).appendTo('head');
   }
 
 
@@ -66,8 +70,20 @@ $(function() {
     $('.color, .water').removeClass('selected');
     $('#' + cncserver.state.media).addClass('selected');
 
+    // Cancel Print
+    $('#cancel').click(function(){
+      var cancelPrint = confirm("Are you sure you want to cancel the current print job and reset (for example, to start a new print job)?");
+      if (cancelPrint) {
+        unBindEvents(function(){
+          robopaint.switchMode('home', function(){
+            robopaint.switchMode('manual');
+          });
+        });
+      }
+    });
+
     // Pause management
-    var pauseText = 'Click to stop current operations';
+    var pauseText = 'Click to pause buffer running to bot';
     var resumeText = 'Click to resume operations';
     var pausePenState = 0;
     $('#pause').click(function(){
@@ -91,7 +107,7 @@ $(function() {
           }
         });
 
-        $('#pause').removeClass('active').attr('title', pauseText).text('STOP');
+        $('#pause').removeClass('active').attr('title', pauseText).text('PAUSE');
         if (cncserver.state.buffer.length) {
           cncserver.wcb.status('Drawing resumed...', true);
         }
@@ -104,7 +120,7 @@ $(function() {
       // Remember the state, and then make sure it's up
       pausePenState = cncserver.state.pen.state;
       if (pausePenState == 1) {
-        cncserver.api.pen.up(_pauseDone);
+        robopaint.cncserver.api.pen.up(_pauseDone);
       } else {
         _pauseDone();
       }
@@ -124,21 +140,63 @@ $(function() {
       }
     });
 
+    // Setup settings group tabs
+    $('ul.tabs').each(function(){
+      var $links = $(this).find('a');
+
+      var $active = $($links[0]);
+      $active.addClass('active');
+      var $content = $($active.attr('href'));
+
+      // Hide the remaining content
+      $links.not($active).each(function () {
+        $($(this).attr('href')).hide();
+      });
+
+      // Bind the click event handler for tabs
+      $(this).on('click', 'a', function(e){
+        // Make the old tab inactive.
+        $active.removeClass('active');
+        $content.hide();
+
+        // Update the variables with the new link and content
+        $active = $(this);
+        $content = $($(this).attr('href'));
+
+        // Make the tab active.
+        $active.addClass('active');
+        $content.show();
+
+        // Prevent the anchor's default click action
+        e.preventDefault();
+      });
+    });
+
+
     // Bind to control buttons
     $('#park').click(function(){
-      cncserver.wcb.status('Parking brush...');
-      cncserver.api.pen.park(function(d){
-        cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
-      });
+      // If we're paused, run it directly, otherwise add to buffer
+      if (cncserver.state.process.paused) {
+        cncserver.wcb.status('Parking brush...');
+        robopaint.cncserver.api.pen.park(function(d){
+          cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
+        });
+      } else {
+        cncserver.cmd.run('park');
+      }
     });
 
     $('#draw').click(function(){
       $('#draw').prop('disabled', true);
       cncserver.cmd.run([['status', 'Painting along selected path...']]);
+      $path.removeClass('ants'); // Can't stroke with ants! Screws up visibility
+
       cncserver.paths.runOutline($path, function(){
         if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
         $('#draw').prop('disabled', false);
+        $path.addClass('ants');
         cncserver.cmd.run([['status', 'Painting complete', true]]);
+
         if (cncserver.config.canvasDebug) {
           $('canvas#debug').show();
         }
@@ -147,30 +205,36 @@ $(function() {
     });
 
     $('#pen').click(function(){
-      cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
+      robopaint.cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
     });
 
     $('#calibrate').click(function(){
-      cncserver.api.pen.move({x: 0, y:0});
+      robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord({x: 0, y:0}));
     });
 
     $('#disable').click(function(){
       cncserver.wcb.status('Unlocking motors...');
-      cncserver.api.motors.unlock(function(d){
-        cncserver.wcb.status(['Motors unlocked! Will re-lock at next move'], d);
+      robopaint.cncserver.api.pen.up();
+      robopaint.cncserver.api.pen.zero();
+      robopaint.cncserver.api.motors.unlock(function(d){
+        cncserver.wcb.status(['Motors unlocked! Place in home corner when done'], d);
       });
     });
     $('#zero').click(function(){
       cncserver.wcb.status('Absolute position reset', true);
-      cncserver.api.pen.zero();
+      robopaint.cncserver.api.pen.zero();
     });
 
     $('#auto-paint').click(function(){
       // Momentarily hide selection
-      if ($path.length) $path.toggleClass('selected');
+      if ($path.length) $path.toggleClass('selected').removeClass('ants');
 
       $('#auto-paint, #fill, #draw').prop('disabled', true);
       cncserver.wcb.autoPaint($('#cncserversvg'), function(){
+        if (cncserver.config.canvasDebug) {
+          $('canvas#debug').show();
+        }
+        if ($path.length) $path.toggleClass('selected').addClass('ants');
         $('#auto-paint, #fill, #draw').prop('disabled', false);
       });
 
@@ -205,39 +269,89 @@ $(function() {
       });
     });
 
+    // Bind to Recording Buttons
+    $('fieldset.recording button').click(function(e){
+      if (this.id == 'record-toggle') {
+        cncserver.state.isRecording = !cncserver.state.isRecording;
+        if (cncserver.state.isRecording) {
+          $(this).text('Stop Recording');
+        } else {
+          $(this).text('Start Recording');
+          if (cncserver.state.recordBuffer.length) {
+            $('#record-play, #record-clear').prop('disabled', false);
+          }
+        }
+      } else if (this.id == 'record-play') {
+        $.merge(cncserver.state.buffer, cncserver.state.recordBuffer);
+      } else if (this.id == 'record-clear') {
+        cncserver.state.recordBuffer = [];
+        $('#record-play, #record-clear').prop('disabled', true);
+      }
+    });
+
     // Move the visible draw position indicator
-    cncserver.moveDrawPoint = function(p) {
+    robopaint.$(robopaint.cncserver.api).bind('movePoint', function(e, p) {
       // Move visible drawpoint
       var $d = $('#drawpoint');
 
       $d.show().attr('fill', cncserver.state.pen.state ? '#FF0000' : '#00FF00');
 
       // Add 48 to each side for 1/2in offset
+      p = cncserver.wcb.getAbsCoord(p);
       $d.attr('transform', 'translate(' + (p.x + 48) + ',' + (p.y + 48) + ')');
-    }
+    });
 
-    cncserver.hideDrawPoint = function() {
+    robopaint.$(robopaint.cncserver.api).bind('offCanvas', function() {
       $('#drawpoint').hide();
-    }
+    });
+
+    // Add extra dom to allow for specific sub-selection of dip/full paint & water
+    $('nav#tools a').each(function(){
+      var $t = $(this);
+
+      $('<a>')
+        .text('Full')
+        .attr('title', 'Full dip and wiggle')
+        .addClass('sub-option full')
+        .appendTo($t);
+      $('<a>')
+        .text('Dip')
+        .attr('title', 'Single momentary dip')
+        .addClass('sub-option dip')
+        .appendTo($t);
+    });
+
 
     // Bind to Tool Change nav items
-    $('nav#tools a').click(function(e){
+    $('nav#tools a a').click(function(e){
+      var $p = $(this).parent();
+      var isDip = $(this).is('.dip'); // Full or dip?
+      var toolExt = isDip ? 'dip' : '';
 
-      if ($(this).is('.color, .water')) {
-        $('nav#tools a.selected').removeClass('selected');
-        $(this).addClass('selected');
+      if ($p.is('.color, .water')) {
+        // If we're paused, run it directly, otherwise add to buffer
+        if (cncserver.state.process.paused) {
+          cncserver.wcb.setMedia($p.attr('id') + toolExt);
+          $('nav#tools a.selected').removeClass('selected');
+          $p.addClass('selected');
+        } else {
+          cncserver.cmd.run([['tool', $p.attr('id') + toolExt]]);
+        }
       }
 
       // X clicked: Do a full brush wash
-      if ($(this).is('#colorx')) {
-        cncserver.wcb.fullWash();
-        $('nav#tools a.selected').removeClass('selected');
-        $('#water0').addClass('selected');
-        return false;
+      if ($p.is('#colorx')) {
+        // If we're paused, run it directly, otherwise add to buffer
+        if (cncserver.state.process.paused) {
+          cncserver.wcb.fullWash(function(){
+            robopaint.cncserver.api.pen.park();
+          }, isDip);
+          $('nav#tools a.selected').removeClass('selected');
+          $('#water0').addClass('selected');
+        } else {
+          cncserver.cmd.run([['wash', isDip], 'park']);
+        }
       }
-
-      // Manual media set
-      cncserver.wcb.setMedia(this.id);
 
       return false;
     });
@@ -285,6 +399,14 @@ $(function() {
     $tools.css('-webkit-transform', 'scale(' + toolScale + ')');
     var toolWidth = $tools.width() * toolScale;
 
+    // Nothing shown? Don't take up any room
+    if (mode == 3) {
+      toolWidth = 0;
+      $svg.add('#shadow').css('left', 0);
+    } else {
+      $svg.add('#shadow').css('left', 256);
+    }
+
     // Calculate scale for both width and height...
     var scale = {
       x: (w - ($('#control').width() + controlLeftMargin)) / (cncserver.canvas.width + toolWidth + toolRightMargin),
@@ -299,7 +421,7 @@ $(function() {
 
     // TODO: Find out where these inconsistencies in size/position come from
     cncserver.canvas.offset.left = mainOffset.left + ((toolWidth + toolRightMargin) * cncserver.canvas.scale);
-    cncserver.canvas.offset.top = mainOffset.top;
+    cncserver.canvas.offset.top = mainOffset.top + 1;
   }
 
 });

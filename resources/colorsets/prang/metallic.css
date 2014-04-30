@@ -1,0 +1,40 @@
+#colors.prang-metallic .color {
+  background-image: url('images/metallic.png');
+  color: white;
+  font-weight: bold;
+}
+
+.prang-metallic #color0 {
+  background-color: #d9bf81; /* Gold */
+  color: black !important;
+}
+
+.prang-metallic #color1 {
+  background-color: #569aaa; /* Silver */
+}
+
+.prang-metallic #color2 {
+  background-color: #a74837; /* Copper */
+}
+
+#colors.prang-metallic #color3 {
+  background-color: #0082ad; /* Blue */
+}
+
+.prang-metallic #color4 {
+  background-color: #00ae4d; /* Green */
+}
+
+.prang-metallic #color5 {
+  background-color: #ffe30c; /* Yellow */
+  color: black !important;
+}
+
+.prang-metallic #color6 {
+  background-color: #f35400; /* Orange */
+  color: black !important;
+}
+
+.prang-metallic #color7 {
+  background-color: #c0080b; /* Red */
+}

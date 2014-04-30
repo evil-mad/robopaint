@@ -8,13 +8,7 @@
 $('<link>').attr({rel: 'stylesheet', href: "../../robopaint.method-draw.css"}).appendTo('head');
 
 // Set the global scope object for any robopaint level details
-var robopaint = {
-  settings: window.parent.settings,
-  statedata: window.parent.statedata
-};
-
-// Only for using the color conversion utilities
-$('<script>').attr({type: 'text/javascript', src: "../../scripts/robopaint.utils.js"}).appendTo('head');
+var robopaint = window.parent.robopaint;
 
 // Page load complete...
 $(function() {
@@ -42,7 +36,7 @@ $(function() {
     // Drawing has been opened =================================================
     methodDraw.openCallback = function() {
       // Force the resolution to match what's expected
-      methodDraw.canvas.setResolution(1056,768);
+      methodDraw.canvas.setResolution(robopaint.canvas.width - 48*2, robopaint.canvas.height - 48*2);
 
       // Set zoom to fit canvas at load
       methodDraw.zoomChanged(window, 'canvas');
@@ -52,7 +46,25 @@ $(function() {
 
     // Load last drawing
     if (localStorage["svgedit-default"]) {
-      methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+      var loadResult = methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+
+      // If there's a remote print external callback waiting, trigger it =======
+      if (typeof robopaint.api.print.loadCallback === "function") {
+        if (loadResult === true) {
+          if (!robopaint.api.print.requestOptions.noresize) {
+            autoSizeContent(); // Autosize content
+          }
+
+          // Pass on the requirement to call the loadCallback to AutoPaint
+          robopaint.switchMode('print'); // Load autopaint
+        } else {
+          robopaint.api.print.loadCallback({
+            status: 'failure',
+            error: loadResult
+          });
+        }
+      }
+
     } else {
       methodDraw.canvas.undoMgr.resetUndoStack();
       // Set zoom to fit empty canvas at init
@@ -73,30 +85,43 @@ $(function() {
 
   // Method Draw Closing / Switching ===========================================
   window.onbeforeunload = function (){
+    try {
+      // Remove unwanted elements~~~~~~~~~~~~
+      $('#svgcontent title').remove() // Get rid of titles!
 
-    // Remove unwanted elements~~~~~~~~~~~~
-    $('#svgcontent title').remove() // Get rid of titles!
+      // Save the top level group objects before moving elements...
+      var $topGroups = $('#svgcontent>g');
 
-    // Save the top level group objects before moving elements...
-    var $topGroups = $('#svgcontent>g');
+      // Move all SVG child elements to SVG root
+      $('#svgcontent>g:last').children().appendTo('#svgcontent');
+      $topGroups.remove(); // Remove editor groupings
 
-    // Move all SVG child elements to SVG root
-    $('#svgcontent>g:last').children().appendTo('#svgcontent');
-    $topGroups.remove(); // Remove editor groupings
+      // Convert elements that don't play well with robopaint's handlers
+      var $elems = $('circle, ellipse, line, polyline', '#svgcontent');
+      console.log('Converting ' + $elems.length + ' elements into paths for printing...');
+      $elems.each(function(){
+        methodDraw.canvas.convertToPath(this);
+      });
 
-    // Convert elements that don't play well with robopaint's handlers
-    var $elems = $('circle, ellipse', '#svgcontent');
-    console.log('Converting ' + $elems.length + ' elements into paths for printing...');
-    $elems.each(function(){
-      methodDraw.canvas.convertToPath(this);
-    });
+      // Reset orientation so paths have a more accessible BBox
+      $elems = $('path','#svgcontent');
+      console.log('Resetting path orientation for ' + $elems.length + ' paths for printing...');
+      $elems.each(function(){
+        methodDraw.canvas.pathActions.resetOrientation(this)
+      });
+    } catch(e) {
+      console.log(e);
 
-    // Reset orientation so paths have a more accessible BBox
-    $elems = $('path','#svgcontent');
-    console.log('Resetting path orientation for ' + $elems.length + ' paths for printing...');
-    $elems.each(function(){
-      methodDraw.canvas.pathActions.resetOrientation(this)
-    });
+      // If there's an external callback waiting, trigger the error
+      if (typeof robopaint.api.print.loadCallback === "function") {
+        robopaint.api.print.loadCallback({
+          status: 'failure',
+          error: e
+        });
+      } else {
+        return("Oops! Looks like there are some errors in your SVG that RoboPaint couldn't automatically fix. \n\n We suggest you open the SVG in Inkscape or another SVG editor, simplify the document or just resave it. \n\n You can continue and try to print this, but you may have issues. Error given below: \n\n\n" + e.message);
+      }
+    }
 
     window.localStorage.setItem('svgedit-default', methodDraw.canvas.svgCanvasToString());
   };
@@ -109,13 +134,74 @@ function removeElements() {
   $('#tool_snap, #view_grid, #rect_panel label, #path_panel label').remove();
   $('#g_panel label, #ellipse_panel label, #line label').remove();
   $('#text_panel label').remove();
-  $('#tool_save, #tool_export').remove(); // Save and export, they shall return!
+  $('#tool_export').remove();
   $('#palette').hide();
 }
 
 
 // Add in extra Method Draw elements
 function addElements() {
+  if (!robopaint.statedata.lastFile) robopaint.statedata.lastFile = '';
+
+  // Add NW integrated save functionality
+  var fileSave = $('<input>').attr({
+    type: 'file',
+    nwsaveas: robopaint.statedata.lastFile
+  });
+
+  methodDraw.setCustomHandlers({
+    save: function(win, svg) {
+      fileSave.change(function(e) {
+        var path = this.value;
+
+        if (!path) return; // Cancelled!
+
+        // Verify .svg extension
+        if (path.split('.').pop().toLowerCase() !== 'svg') {
+          path += '.svg';
+        }
+
+        // Clean out lines 2-6 (& 8) (if existing)
+        var lines = svg.split("\n");
+        var backTitle = "  <title>background</title>";
+        if (lines[4] == backTitle || lines[3] == backTitle) {
+
+          var offset = lines[4] == backTitle ? 1 : 0;
+          var out = [];
+          for(var i in lines) {
+            var skip = false;
+
+            var skipRules = [
+              i < 6 + offset && i > 0,
+              i == 7 + offset
+            ];
+
+            for (var s in skipRules) {
+              skip = skip ? skip : skipRules[s];
+            }
+
+            if (!skip) {
+              out.push(lines[i]);
+            }
+          }
+          svg = out.join("\n");
+        }
+
+        try {
+          window.parent.fs.writeFileSync(path, svg);
+          robopaint.statedata.lastFile = path;
+          $(this).attr('nwsaveas', path);
+        } catch(e) {
+          window.alert('There was an error writing the file. \n\n Check your permissions or file name and try again. \n\n ERR# ' + err.errno + ',  Code: ' + err.code);
+          console.log('Error saving file:', err);
+        }
+      }).click();
+    }
+  });
+
+
+
+
   // Add and bind Auto Zoom Button / Menu item
   $('#zoom_panel').before(
     $('<button>').addClass('zoomfit zoomfitcanvas')
@@ -222,9 +308,9 @@ function buildPalette(){
 
 // Load in the colorset data
 function loadColorsets() {
-  for(var i in robopaint.statedata.colorsets['ALL']) {
-    var set = robopaint.statedata.colorsets['ALL'][i];
-    $('<link>').attr({rel: 'stylesheet', href: '../../colorsets/' + set + '/' + set + '.css'}).appendTo('head');
+  for(var i in robopaint.statedata.colorsets) {
+    var set = robopaint.statedata.colorsets[i];
+    $('<link>').attr({rel: 'stylesheet', href: '../../' + set.styleSrc.replace("resources/",'')}).appendTo('head');
   }
 
   updateColorSet();

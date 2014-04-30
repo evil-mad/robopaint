@@ -1,0 +1,63 @@
+[{
+  "type": "Prang",
+  "name": "Glitter",
+  "media": "watercolor",
+  "weight": 11,
+  "description": "Prang Glitter 8 Semi-Moist Watercolors, 8-color set",
+  "styles" : {
+    "src" : "glitter.css",
+    "baseClass": "prang-glitter"
+  },
+  "colors": [
+    {"Gold": "#aba66d"},
+    {"Silver": "#b1bcac"},
+    {"Lilac": "#cdb2d0"},
+    {"Sapphire": "#32c0c4"},
+    {"Emerald": "#2ca440"},
+    {"Canary": "#dede5d"},
+    {"Tangerine": "#efa038"},
+    {"Ruby": "#f0846c"}
+  ]
+},
+{
+  "type": "Prang",
+  "name": "Metallic",
+  "media": "watercolor",
+  "weight": 12,
+  "description": "Prang Metallic 8 Semi-Moist Watercolors, 8-color set",
+  "styles" : {
+    "src" : "metallic.css",
+    "baseClass": "prang-metallic"
+  },
+  "colors": [
+    {"Gold": "#d9bf81"},
+    {"Silver": "#569aaa"},
+    {"Copper": "#a74837"},
+    {"Blue": "#0082ad"},
+    {"Green": "#00ae4d"},
+    {"Yellow": "#ffe30c"},
+    {"Orange": "#f35400"},
+    {"Red": "#c0080b"}
+  ]
+},
+{
+  "type": "Prang",
+  "name": "Secondary",
+  "media": "watercolor",
+  "weight": 10,
+  "description": "Prang Oval 16 Semi-Moist Watercolors, 16-color set (secondary grouping). Use generic standard setting for primary and move pans to correct positions.",
+  "styles" : {
+    "src" : "secondary.css",
+    "baseClass": "prang-secondary"
+  },
+  "colors": [
+    {"Vermillion": "#ff5a59"},
+    {"Yellow Orange": "#ffa300"},
+    {"Yellow Green": "#9aea24"},
+    {"Blue Green": "#009aa6"},
+    {"Turquoise Blue": "#00aadf"},
+    {"Blue Violet": "#00aadf"},
+    {"Red Violet": "#d842ce"},
+    {"White": "#eee"}
+  ]
+}]

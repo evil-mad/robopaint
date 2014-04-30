@@ -40,11 +40,9 @@ cncserver.cmd = {
 
       // Check for paint refill
       if (!cncserver.state.process.paused) {
-        if (cncserver.state.pen.distanceCounter > robopaint.settings.maxpaintdistance) {
+        if (cncserver.state.pen.distanceCounter > robopaint.settings.maxpaintdistance && cncserver.state.buffer.length) {
           var returnPoint = returnPoints[returnPoints.length-1] ? returnPoints[returnPoints.length-1] : lastPoint;
-          cncserver.wcb.getMorePaint(returnPoint, function(){
-            cncserver.api.pen.down(cncserver.cmd.executeNext);
-          });
+          cncserver.wcb.getMorePaint(returnPoint, cncserver.cmd.executeNext);
         } else {
           // Execute next command
           cncserver.cmd.executeNext();
@@ -56,6 +54,19 @@ cncserver.cmd = {
   },
 
   executeNext: function(executeCallback) {
+    // Because we're interacting with an object in the parent scope, this file
+    // stays loaded even after its parent window instance dies. An easy way
+    // to see if it's dead, is if console is null (evaluates false)
+    if (!console) {
+      // At this point the parent window is gone and we don't need to do anything
+      // but a bit of cleanup
+      delete cncserver.wcb;
+      delete cncserver.config;
+      delete cncserver.paths;
+      delete cncserver.state;
+      return;
+    }
+
     if (!cncserver.state.buffer.length) {
       cncserver.cmd.cb();
       return;
@@ -76,31 +87,27 @@ cncserver.cmd = {
           returnPoints.pop();
         }
         lastPoint = next[1];
-        cncserver.api.pen.move(next[1], cncserver.cmd.cb);
+        robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord(next[1]), cncserver.cmd.cb);
         break;
       case "tool":
-        // Reflect color selection
-        $('#tools .selected').removeClass('selected');
-        $('#' + next[1]).addClass('selected');
-
         cncserver.wcb.setMedia(next[1], cncserver.cmd.cb);
         break;
       case "up":
         returnPoints = [];
-        cncserver.api.pen.up(cncserver.cmd.cb);
+        robopaint.cncserver.api.pen.up(cncserver.cmd.cb);
         break;
       case "down":
-        cncserver.api.pen.down(cncserver.cmd.cb);
+        robopaint.cncserver.api.pen.down(cncserver.cmd.cb);
         break;
       case "status":
         cncserver.wcb.status(next[1], next[2]);
         cncserver.cmd.cb(true);
         break;
       case "wash":
-        cncserver.wcb.fullWash(cncserver.cmd.cb);
+        cncserver.wcb.fullWash(cncserver.cmd.cb, next[1]);
         break;
       case "park":
-        cncserver.api.pen.park(cncserver.cmd.cb);
+        robopaint.cncserver.api.pen.park(cncserver.cmd.cb);
         break;
       case "custom":
         cncserver.cmd.cb();
@@ -118,10 +125,12 @@ cncserver.cmd = {
       cncserver.state.process.max+= arguments.length;
       $.each(arguments[0], function(i, args){
         cncserver.state.buffer.unshift(args);
+        if (cncserver.state.isRecording) cncserver.state.recordBuffer.unshift(args);
       });
     } else {
       cncserver.state.process.max++;
       cncserver.state.buffer.unshift(arguments);
+      if (cncserver.state.isRecording) cncserver.state.recordBuffer.unshift(arguments);
     }
 
   }

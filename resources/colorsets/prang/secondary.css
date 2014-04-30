@@ -1,0 +1,36 @@
+#colors.prang-secondary .color {
+  color: black;
+}
+
+.prang-secondary #color0 {
+  background-color: #ff5a59; /* Vermillion */
+}
+
+.prang-secondary #color1 {
+  background-color: #ffa300; /* Yellow Orange */
+}
+
+.prang-secondary #color2 {
+  background-color: #9aea24; /* Yellow Green */
+}
+
+#colors.prang-secondary #color3 {
+  background-color: #009aa6; /* Blue Green */
+  color: white;
+}
+
+.prang-secondary #color4 {
+  background-color: #00aadf; /* Turquoise Blue */
+}
+
+.prang-secondary #color5 {
+  background-color: #00aadf; /* Blue Violet */
+}
+
+.prang-secondary #color6 {
+  background-color: #d842ce; /* Red Violet */
+}
+
+.prang-secondary #color7 {
+  background-color: #eee; /* White */
+}

@@ -5087,6 +5087,10 @@ var pathActions = canvas.pathActions = function() {
     // Convert a path to one with only absolute or relative values
     convertPath: function(path, toRel) {
       var segList = path.pathSegList;
+      if (!segList) { // Fail out if this isn't an actual path
+        return false;
+      }
+
       var len = segList.numberOfItems;
       var curx = 0, cury = 0;
       var d = "";
@@ -5975,7 +5979,7 @@ var convertToGroup = this.convertToGroup = function(elem) {
 // xmlString - The SVG as XML text.
 //
 // Returns:
-// This function returns false if the set was unsuccessful, true otherwise.
+// This function returns an error if the set was unsuccessful, true otherwise.
 this.setSvgString = function(xmlString) {
   canvas.clearSelection();
   try {
@@ -6150,7 +6154,7 @@ this.setSvgString = function(xmlString) {
     call("changed", [svgcontent]);
   } catch(e) {
     console.log(e);
-    return false;
+    return e;
   }
 
   if (methodDraw.openCallback) {
@@ -7888,16 +7892,18 @@ this.convertToPath = function(elem, getBBox) {
     var batchCmd = new BatchCommand("Convert element to Path");
   }
 
+  var $elem = $(elem);
+
   var attrs = getBBox?{}:{
-    "fill": cur_shape.fill,
-    "fill-opacity": cur_shape.fill_opacity,
-    "stroke": cur_shape.stroke,
-    "stroke-width": cur_shape.stroke_width,
-    "stroke-dasharray": cur_shape.stroke_dasharray,
-    "stroke-linejoin": cur_shape.stroke_linejoin,
-    "stroke-linecap": cur_shape.stroke_linecap,
-    "stroke-opacity": cur_shape.stroke_opacity,
-    "opacity": cur_shape.opacity,
+    "fill": $elem.attr('fill'),
+    "fill-opacity": $elem.attr('fill-opacity'),
+    "stroke": $elem.attr('stroke'),
+    "stroke-width": $elem.attr('stroke-width'),
+    "stroke-dasharray": $elem.attr('stroke-dasharray'),
+    "stroke-linejoin": $elem.attr('stroke-linejoin'),
+    "stroke-linecap": $elem.attr('stroke-linecap'),
+    "stroke-opacity": $elem.attr('stroke-opacity'),
+    "opacity": $elem.attr('opacity'),
     "visibility":"hidden"
   };
 

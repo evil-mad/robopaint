@@ -35,9 +35,13 @@ a JSON file before. Just use the existing file, and swap out the name, css file
 name, and a simplified version for the baseClass with underscores replaced with
 dashes. EG:
 
-```
-{
+```javascript
+[{
+  "type": "Custom",
   "name": "My Colorset",
+  "media": "watercolor",
+  "weight" : 10,
+  "description": "My custom color set! Isn't it great?"
   "styles" : {
     "src" : "my_colorset.css",
     "baseClass": "my-colorset"
@@ -52,13 +56,14 @@ dashes. EG:
     {"Piquent Panda": "#444"},
     {"Pumpkin": "#aabbcc"}
   ]
-}
+}]
 ```
 
-Make sure you have *only* 8 colors listed, with everything surrounded by double
-quotes. Once complete, be sure and run your finished JSON text through
-[JSON Lint](http://jsonlint.org) to make sure it's valid, otherwise the app will
-silently fail.
+You can include as many colorsets as you want by adding another object to the
+enclosing array. Make sure you have *only* 8 colors listed, with everything
+surrounded by double quotes. Once complete, be sure and run your finished JSON
+text through [JSON Lint](http://jsonlint.org) to make sure it's valid, otherwise
+the app will silently fail.
 
 ## File Format: CSS
 Following

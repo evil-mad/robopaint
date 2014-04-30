@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="styles.css">
 
     <script src="scripts/cncserver.client.js"></script>
-    <script src="scripts/robopaint.utils.js"></script>
-    <script src="scripts/cncserver.client.api.js"></script>
     <script src="scripts/cncserver.client.wcb.js"></script>
     <script src="scripts/cncserver.client.commander.js"></script>
     <script src="scripts/cncserver.client.paths.js"></script>
@@ -23,16 +21,13 @@
   </head>
 <body class="print print-auto">
 
-  <script type="text/javascript">
-    $(function() { parent.fadeInWindow(); })
-  </script>
-
 <fieldset id="control">
   <legend>Auto-paint</legend>
 
   <fieldset id="buttons">
     <legend>Control</legend>
     <button id="pause" class="ready" title="Click to start painting your picture!">Start</button>
+    <button id="cancel" disabled="disabled" title="Cancel current print job.">Cancel Print</button>
     <button id="pen" class="normal">Brush</button>
     <button id="park" class="normal" title="Move the carriage back to the home position">Park Home</button>
     <button id="disable" class="normal" title="Raise brush and Unlock (disable) stepper motors, so that you can move the carriage by hand.">Unlock Motors</button>

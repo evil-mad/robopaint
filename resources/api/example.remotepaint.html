@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RoboPaint Remote Example App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  </head>
+  <body>
+
+    <script type="text/javascript">
+      // Select from image list
+      // Click to print
+      // Handle Errors
+      // Keep updated with progress
+      // Allow for cancel
+
+      // Super simple API wrapper
+      var api = {
+        path: '/robopaint/v1/print/',
+        status: function(cb) {
+          $.get(api.path, function(data){
+            cb(data.status);
+          });
+        }
+      }
+
+    </script>
+  </body>
+</html>
