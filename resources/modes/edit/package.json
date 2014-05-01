@@ -7,7 +7,7 @@
   "word": "Create",
   "core": true,
   "description": "Open, resize, and edit existing vector artwork.",
-  "main": "../../method-editor/editor/index.html",
+  "main": "method-editor/editor/index.html",
   "author": "techninja",
   "license": "MIT"
 }

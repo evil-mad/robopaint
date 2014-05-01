@@ -5,7 +5,7 @@
  */
 
 // Add in the robopaint specific Method Draw css override file
-$('<link>').attr({rel: 'stylesheet', href: "../../robopaint.method-draw.css"}).appendTo('head');
+$('<link>').attr({rel: 'stylesheet', href: "../../edit.method-draw.css"}).appendTo('head');
 
 // Set the global scope object for any robopaint level details
 var robopaint = window.parent.robopaint;
