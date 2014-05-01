@@ -7,7 +7,7 @@
   "word": "Print",
   "core": true,
   "description": "Painting Mode: Print your drawing!",
-  "main": "print-auto.html",
+  "main": "print.html",
   "author": "techninja",
   "license": "MIT"
 }
