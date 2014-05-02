@@ -7,7 +7,7 @@
   "word": "Realtime",
   "core": true,
   "description": "Paint directly to the bot with your mouse!",
-  "main": "print-realtime.html",
+  "main": "realtime.html",
   "author": "techninja",
   "license": "MIT"
 }
