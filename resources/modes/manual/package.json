@@ -7,7 +7,7 @@
   "word": "Manual",
   "core": false,
   "description": "Manual Mode: Customize your print",
-  "main": "print-manual.html",
+  "main": "manual.html",
   "author": "techninja",
   "license": "MIT"
 }
