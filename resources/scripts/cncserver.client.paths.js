@@ -142,6 +142,63 @@ cncserver.paths = {
     });
   },
 
+ /**
+   *  Helper function to run the outline of a linear path into the buffer.
+   *  Takes over path running when occlusions aren't an issue and the path
+   *  only contains M and L type segments.
+   *
+   *  @param {SVGpath object} path
+   *    DOM object for the path
+   *  @returns {boolean}
+   *    True on success, false on failure
+   */
+  _runLinearOutline: function(path) {
+    if (!robopaint.utils.pathIsLinear(path)) return false;
+    var run = cncserver.cmd.run;
+    var lastPoint = {x: 0, y: 0};
+
+    if (!path.transformMatrix) {
+      path.transformMatrix = path.getTransformToElement(path.ownerSVGElement);
+      path.transPoint = function(point){ // Handy helper function for gPAL
+        var svgPoint = this.ownerSVGElement.createSVGPoint();
+        svgPoint.x = point.x; svgPoint.y = point.y;
+        svgPoint = svgPoint.matrixTransform(this.transformMatrix);
+        return {x: svgPoint.x + 48, y: svgPoint.y + 48};
+      };
+    }
+
+    // Move through each segment
+    for (var i = 0; i < path.pathSegList.numberOfItems; i++) {
+      var seg = path.pathSegList.getItem(i);
+      var letter = seg.pathSegTypeAsLetter;
+
+      var point = {x: seg.x, y: seg.y};
+
+      if (letter == 'm' || letter == 'l') { // Relative point offset (convert to ABS)
+        point.x = lastPoint.x + point.x;
+        point.y = lastPoint.y + point.y;
+        letter = letter.toUpperCase(); // We're all friends now :)
+      }
+
+      lastPoint.x = point.x; lastPoint.y = point.y;
+
+      point = path.transPoint(point);
+
+      // TODO: Add overshoot at end movements
+      if (letter == 'M') { // Move to pos
+        run('up');
+        run('move', {x: point.x, y: point.y});
+        run('down');
+
+      } else if (letter == 'L' || letter == 'l') { // Draw Line
+        run('move', {x: point.x, y: point.y});
+      }
+
+    }
+
+    return true;
+  },
+
   /**
    *  Run a the outline of a given path into the buffer
    *
@@ -165,6 +222,16 @@ cncserver.paths = {
 
     // Start with brush up
     run('up');
+
+    // If we don't care about occlusions, and it's linear, run it the "easy" way!
+    if (cncserver.config.checkVisibility === false && robopaint.utils.pathIsLinear($path[0])) {
+      if (cncserver.paths._runLinearOutline($path[0])) {
+        run('up');
+        console.info($path[0].id + ' linear path outline run done!');
+        if (callback) callback();
+        return;
+      }
+    }
 
     // We can think of the very first brush down as waiting till we should paint
     cncserver.state.process.waiting = true;

@@ -236,6 +236,29 @@ robopaint.utils = {
   },
 
   /**
+   * Find out if a path contains only simple line segments (not arcs or quads)
+   *
+   * @param {SVGpath object} path
+   *   Direct from the DOM.
+   * @returns {boolean}
+   *   True if linear, false if not
+   */
+  pathIsLinear: function(path) {
+    if (!path.pathSegList) return false;
+
+    for (var i = 0; i < path.pathSegList.numberOfItems; i++) {
+      var letter = path.pathSegList.getItem(i).pathSegTypeAsLetter.toUpperCase();
+      if (letter != 'M' && letter != 'L') {
+        // Non-linear path segment! We're done here...
+        return false;
+      }
+    }
+
+    // Still here? Then we're certainly linear!
+    return true;
+  },
+
+  /**
    * Move through every path element inside a given context and match its
    * stroke and fill color to a given colorset.
    *
