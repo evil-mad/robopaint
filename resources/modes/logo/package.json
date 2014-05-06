@@ -2,7 +2,7 @@
   "name": "logo",
   "version": "0.1.0",
   "type": "robopaint_mode",
-  "icon": "icon-brush",
+  "icon": "icon-gamepad",
   "weight": 0,
   "word": "TMNL",
   "core": false,
