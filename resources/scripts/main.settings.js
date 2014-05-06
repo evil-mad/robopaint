@@ -43,7 +43,7 @@ function loadSettings() {
     strokeovershoot: 5,
     tsprunnertype: 'OPT',
     strokeprecision: 6,
-    manualpaintenable: 0,
+    enabledmodes: {},
     remoteprint: 0,
     gapconnect: 1
   };
@@ -62,6 +62,13 @@ function loadSettings() {
   for (var key in robopaint.settings) {
     var $input = $('#' + key);
     switch (key) {
+      case 'enabledmodes':
+        for (var i in robopaint.settings.enabledmodes) {
+          $('#' + i + 'modeenable')
+            .prop('checked', robopaint.settings.enabledmodes[i])
+            .change();
+        }
+        break;
       default:
         if ($input.attr('type') == 'checkbox') {
           $input.prop('checked', robopaint.settings[key]);
@@ -201,6 +208,18 @@ function bindSettingsControls() {
     var pushKey = [];
     var pushVal = '';
 
+    // Do this first as switch case can't use indexOf
+    // Update available modes
+    if (this.id.indexOf('modeenable') !== -1) {
+      var name = this.id.replace('modeenable', '');
+      robopaint.settings.enabledmodes[name] = $input.is(':checked');
+      $('#' + name + ', #bar-' + name).toggle(robopaint.settings.enabledmodes[name]);
+      responsiveResize();
+      if (!initializing) saveSettings();
+      return;
+    }
+
+
     switch (this.id) {
       case 'servoup':
       case 'servopaint':
@@ -282,12 +301,6 @@ function bindSettingsControls() {
         } else {
           robopaint.settings[this.id] = $input.val();
         }
-    }
-
-    // Update available modes
-    if (this.id == 'manualpaintenable') {
-      $('#manual, #bar-manual').toggle(robopaint.settings[this.id]);
-      responsiveResize();
     }
 
     // Remoteprint mode click

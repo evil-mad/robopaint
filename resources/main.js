@@ -55,6 +55,9 @@ $(function() {
   var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
   $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
 
+  // Load the modes (adds to settings content)
+  loadAllModes();
+
   // Bind settings controls & Load up initial settings!
   // @see scripts/main.settings.js
   bindSettingsControls();
@@ -75,9 +78,6 @@ $(function() {
 
   // Load the quickload list
   initQuickload();
-
-  // Load the modes
-  loadAllModes();
 
   // Bind the tooltips
   initToolTips();
@@ -624,24 +624,35 @@ function loadAllModes(){
   // Move through all approved modes based on mode weight and add DOM
   for(var i in order) {
     var m = modes[order[i]];
-    // Add the elements
+    // Add the nav bubble
     $('nav').prepend(
       $('<a>')
         .attr('href', m.main)
         .attr('id', m.name)
         .attr('title', m.description)
+        .addClass((m.core ? '' : ' hidden'))
         .text(m.word)
     );
 
+    // Add the toolbar link icon
     $('#bar-home').after(
       $('<a>')
         .attr('href', m.main)
         .attr('id', 'bar-' + m.name)
          // TODO: Add support for better icons
-        .addClass('mode tipped ' + m.icon)
+        .addClass('mode tipped ' + m.icon + (m.core ? '' : ' hidden') )
         .attr('title', m.description)
         .html('&nbsp;')
     );
+
+    // Add the non-core settings checkbox for enabling
+    if (!m.core) {
+      $('fieldset.advanced-modes aside:first').after($('<div>').append(
+        $('<label>').attr('for', m.name + 'modeenable').text(m.title),
+        $('<input>').attr({type: 'checkbox', id: m.name + 'modeenable'}),
+        $('<aside>').text(m.detail)
+      ));
+    }
   }
 
 }
