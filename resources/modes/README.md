@@ -19,7 +19,7 @@ Modes have **two** minimum required files: `package.json` and some root
 That's it! Everything else about how the page works is dealt with inside the
 `package.json` and your html file.
 
-```
+```javascript
  modes/
  |- mymode/
  |-- package.json
