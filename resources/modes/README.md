@@ -47,6 +47,8 @@ comments below for explanation on the non-obvious keys.
   "word": "MyMode",  // The word to be placed in the bubble navigation
   "core": false, // If true, will be available by default
   "description": "My mode!", // Text will show on mode hover
+  "title": "My Mode Title",  // If not core, will show in settings with checkbox to enable
+  "detail": "Lots of detail text", // If not core, will show in settings below title
   "main": "mymode-index.html", // The path to the HTML file to open relative to this folder
   "author": "makersylvia",
   "license": "MIT"

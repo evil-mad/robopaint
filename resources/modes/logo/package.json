@@ -7,6 +7,8 @@
   "word": "TMNL",
   "core": false,
   "description": "Teenage Mutant Ninja Logo: Paint with a robot turtle who listens!",
+  "title": "Teenage Mutant Ninja Logo",
+  "detail": "Allows for simple programmatic painting via a simple LOGO style command programming interface.",
   "main": "print-logo.html",
   "author": "techninja",
   "license": "MIT"

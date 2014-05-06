@@ -7,6 +7,8 @@
   "word": "Print",
   "core": true,
   "description": "Painting Mode: Print your drawing!",
+  "title": "Automatic Paint",
+  "detail": "Automatically paint a given well formed SVG file.",
   "main": "print.html",
   "author": "techninja",
   "license": "MIT"
