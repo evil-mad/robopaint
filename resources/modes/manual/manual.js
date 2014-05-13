@@ -2,7 +2,11 @@
  * @file Holds all RoboPaint manual painting mode specific code
  */
 
+// Trigger common mode config
+robopaintModeRequireJSCommonConfig();
 
+requirejs(['jquery', 'jquery.svg', 'jquery.svgdom', 'tspsolver',
+  'client', 'utils', 'api', 'wcb', 'commander', 'paths'], function ($) {
 $(function() {
   var $path = {};
   var $svg = $('svg#main');
@@ -426,6 +430,8 @@ $(function() {
 
 });
 
+}); // End RequireJS init
+
 /**
  * Update the rendering of the colorset
  *
@@ -442,3 +448,4 @@ function updateColorSet(){
       .attr('title', robopaint.settings.showcolortext ? "" : set.colors[i].name);
   }
 }
+

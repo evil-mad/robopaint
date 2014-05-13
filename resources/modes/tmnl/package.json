@@ -1,5 +1,5 @@
 {
-  "name": "logo",
+  "name": "tmnl",
   "version": "0.1.0",
   "type": "robopaint_mode",
   "icon": "icon-gamepad",
@@ -9,7 +9,7 @@
   "description": "Teenage Mutant Ninja Logo: Paint with a robot turtle who listens!",
   "title": "Teenage Mutant Ninja Logo",
   "detail": "Allows for simple programmatic painting via a simple LOGO style command programming interface.",
-  "main": "print-logo.html",
+  "main": "tmnl.html",
   "author": "techninja",
   "license": "MIT"
 }
