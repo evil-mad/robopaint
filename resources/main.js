@@ -641,17 +641,29 @@ function translatePage() {
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
 
-
   // Load "all" resources via filesync to avoid any waiting
- 
   //Get all available language packs from folder  
   fs.readdirSync("resources/i18n/").forEach(function(file) {
         var stat = fs.statSync("resources/i18n/"+file);
         if (stat && stat.isDirectory()) 
-            languageTypes.push(file)
+            languageTypes.push(file);
     });
-        
-         
+    
+    
+  //Load names of languages into menu list
+  
+  for (var i = 0; i < languageTypes.length; i++) {
+
+      var pathToLanguage = "resources/i18n/"+languageTypes[i]+"/home.json";
+      var data = JSON.parse(fs.readFileSync(pathToLanguage, 'utf8'));
+
+      var newOption = document.createElement("option");
+      newOption.value=i;
+      newOption.innerHTML = data.settings.lang.name; 
+      
+      $("#lang").append(newOption);
+      
+  };        
   var pathToLanguage = "resources/i18n/"+languageTypes[languagePointer]+"/home.json";
   var data = JSON.parse(fs.readFileSync(pathToLanguage, 'utf8'));
 

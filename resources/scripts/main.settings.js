@@ -361,6 +361,10 @@ function bindSettingsControls() {
   $('#settings-reset').click(function(e) {
     if (confirm(robopaint.t('settings.buttons.reset.confirm'))) {
       delete localStorage[settingsStorageKey()];
+      
+      document.getElementById('lang').selectedIndex = 0;
+      reloadLang();
+      
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
       loadSettings();
