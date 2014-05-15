@@ -637,24 +637,41 @@ function getCurrentBot() {
  * strings.
  */
 function translatePage() {
+    
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
 
-
   // Load "all" resources via filesync to avoid any waiting
- 
-  //Get all available language packs from folder  
+  //Get all available language JSON files from folders
+  
   fs.readdirSync("resources/i18n/").forEach(function(file) {
+        //test if the file is a directory
         var stat = fs.statSync("resources/i18n/"+file);
         if (stat && stat.isDirectory()) 
-            languageTypes.push(file)
+            //if it is, append it to the list of language types
+            languageTypes.push(file);
     });
-        
-         
+    
+    
+  //Load names of languages into menu list
+  
+  for (var i = 0; i < languageTypes.length; i++) {
+      //get contents of the language file
+      var data = JSON.parse(fs.readFileSync("resources/i18n/"+languageTypes[i]+"/home.json", 'utf8'));
+      //create new option, with an index value the same as the loop iteration, and the text being the language name
+      var newOption = document.createElement("option");
+      newOption.value=i;
+      newOption.innerHTML = data.settings.lang.name; 
+      //Add the new option to the list
+      $("#lang").append(newOption);
+      
+  }; 
+  //load the selected language
   var pathToLanguage = "resources/i18n/"+languageTypes[languagePointer]+"/home.json";
   var data = JSON.parse(fs.readFileSync(pathToLanguage, 'utf8'));
 
+  //Some stuff to load the JSON file and i18n
   var resources = {
     en: { translation: data }
   };
@@ -675,16 +692,19 @@ function translatePage() {
  * Should be called after changing the language (languagePointer)
  */
 function reloadLang() {
-    
+  
+  //TODO: Get language system working with global config system 
+  // 
   //get the selected language (using index value)
    languagePointer = document.getElementById("lang").value;
    
-  //Set the path to the languge file
+  //Set the path to the languge file based on the pointer
   var pathToLanguage = "resources/i18n/"+languageTypes[languagePointer]+"/home.json";
   
-  // Load "all" resources via filesync to avoid any waiting
+  //Load "all" resources via filesync to avoid any waiting
   var data = JSON.parse(fs.readFileSync(pathToLanguage, 'utf8'));
   
+  //Some stuff to load the JSON file and i18n
   var resources = {
     en: { translation: data }
   };
