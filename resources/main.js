@@ -15,6 +15,9 @@ $(document).keypress(function(e){
   }
 });
 
+var languageTypes = []; //Stores the different language packs available. Will be completed based on files in path
+var languagePointer = 0; //Points to a language in LanguageTypes, this is set when you want to switch languages
+
 
 var fs = require('fs');
 var cncserver = require('cncserver');
@@ -640,9 +643,48 @@ function translatePage() {
 
 
   // Load "all" resources via filesync to avoid any waiting
-  // TODO: Add support for multiple language loading and switching
-  var data = JSON.parse(fs.readFileSync("resources/i18n/en/home.json", 'utf8'));
+ 
+  //Get all available language packs from folder  
+  fs.readdirSync("resources/i18n/").forEach(function(file) {
+        var stat = fs.statSync("resources/i18n/"+file);
+        if (stat && stat.isDirectory()) 
+            languageTypes.push(file)
+    });
+        
+         
+  var pathToLanguage = "resources/i18n/"+languageTypes[languagePointer]+"/home.json";
+  var data = JSON.parse(fs.readFileSync(pathToLanguage, 'utf8'));
 
+  var resources = {
+    en: { translation: data }
+  };
+
+  i18n.init({
+    resStore: resources,
+    ns: 'translation'
+  }, function(t) {
+    robopaint.t = t;
+
+    $('[data-i18n]').i18n();
+  });
+}
+
+
+/**
+ * Reloads language file and updates any changes to it
+ * Should be called after changing the language (languagePointer)
+ */
+function reloadLang() {
+    
+  //get the selected language (using index value)
+   languagePointer = document.getElementById("lang").value;
+   
+  //Set the path to the languge file
+  var pathToLanguage = "resources/i18n/"+languageTypes[languagePointer]+"/home.json";
+  
+  // Load "all" resources via filesync to avoid any waiting
+  var data = JSON.parse(fs.readFileSync(pathToLanguage, 'utf8'));
+  
   var resources = {
     en: { translation: data }
   };
