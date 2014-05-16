@@ -45,7 +45,9 @@ function loadSettings() {
     strokeprecision: 6,
     manualpaintenable: 0,
     remoteprint: 0,
-    gapconnect: 1
+    gapconnect: 1,
+    defLang: 'en', //default language, in string format
+    lang: 0 //integer pointer to language selected
   };
 
   // Are there existing settings from a previous run? Mesh them into the defaults

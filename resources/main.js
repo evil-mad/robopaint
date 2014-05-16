@@ -16,7 +16,6 @@ $(document).keypress(function(e){
 });
 
 var languageTypes = []; //Stores the different language packs available. Will be completed based on files in path
-var languagePointer = 0; //Points to a language in LanguageTypes, this is set when you want to switch languages
 
 
 var fs = require('fs');
@@ -53,7 +52,7 @@ $(function() {
   // Bind and run inital resize first thing
   $(window).resize(responsiveResize);
   responsiveResize();
-
+  
   // Set visible version from manifest (with appended bot type if not WCB)
   var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
   $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
@@ -62,7 +61,7 @@ $(function() {
   // @see scripts/main.settings.js
   bindSettingsControls();
   loadSettings();
-
+  
   // Set base CNC Server API wrapper access location
   if (!robopaint.cncserver.api) robopaint.cncserver.api = {};
   robopaint.cncserver.api.server = {
@@ -641,49 +640,38 @@ function translatePage() {
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
-
-  // Load "all" resources via filesync to avoid any waiting
-  //Get all available language JSON files from folders
   
+  var resources = {};
+  
+  //Get all available language JSON files from folders, add to the dropdown list, and add to the rescources available.
+  var i = 0
   fs.readdirSync("resources/i18n/").forEach(function(file) {
         //test if the file is a directory
         var stat = fs.statSync("resources/i18n/"+file);
         if (stat && stat.isDirectory()) 
-            //if it is, append it to the list of language types
+            //get contents of the language file
             languageTypes.push(file);
+            var data = JSON.parse(fs.readFileSync("resources/i18n/"+languageTypes[i]+"/home.json", 'utf8'));
+            //create new option, with an index value the same as the loop iteration, and the text being the language name
+            var newOption = document.createElement("option");
+            newOption.value=i;
+            newOption.innerHTML = data.settings.lang.name; 
+            //Add the new option to the list
+            $("#lang").append(newOption);
+            
+            resources[file] = { translation: data};
+        i += 1;    
     });
     
-    
-  //Load names of languages into menu list
-  
-  for (var i = 0; i < languageTypes.length; i++) {
-      //get contents of the language file
-      var data = JSON.parse(fs.readFileSync("resources/i18n/"+languageTypes[i]+"/home.json", 'utf8'));
-      //create new option, with an index value the same as the loop iteration, and the text being the language name
-      var newOption = document.createElement("option");
-      newOption.value=i;
-      newOption.innerHTML = data.settings.lang.name; 
-      //Add the new option to the list
-      $("#lang").append(newOption);
-      
-  }; 
-  //load the selected language
-  var pathToLanguage = "resources/i18n/"+languageTypes[languagePointer]+"/home.json";
-  var data = JSON.parse(fs.readFileSync(pathToLanguage, 'utf8'));
-
-  //Some stuff to load the JSON file and i18n
-  var resources = {
-    en: { translation: data }
-  };
-
   i18n.init({
     resStore: resources,
     ns: 'translation'
   }, function(t) {
     robopaint.t = t;
-
     $('[data-i18n]').i18n();
   });
+  
+
 }
 
 
@@ -691,30 +679,9 @@ function translatePage() {
  * Reloads language file and updates any changes to it
  * Should be called after changing the language (languagePointer)
  */
-function reloadLang() {
-  
-  //TODO: Get language system working with global config system 
-  // 
-  //get the selected language (using index value)
-   languagePointer = document.getElementById("lang").value;
-   
-  //Set the path to the languge file based on the pointer
-  var pathToLanguage = "resources/i18n/"+languageTypes[languagePointer]+"/home.json";
-  
-  //Load "all" resources via filesync to avoid any waiting
-  var data = JSON.parse(fs.readFileSync(pathToLanguage, 'utf8'));
-  
-  //Some stuff to load the JSON file and i18n
-  var resources = {
-    en: { translation: data }
-  };
+function updateLang() {
+    robopaint.settings.lang = document.getElementById("lang").value;
+    i18n.setLng(languageTypes[robopaint.settings.lang], function(t) {robopaint.t = t;$('[data-i18n]').i18n();});
 
-  i18n.init({
-    resStore: resources,
-    ns: 'translation'
-  }, function(t) {
-    robopaint.t = t;
-
-    $('[data-i18n]').i18n();
-  });
+  
 }
