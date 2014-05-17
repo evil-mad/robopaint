@@ -649,20 +649,21 @@ function translatePage() {
         //test if the file is a directory
         var stat = fs.statSync("resources/i18n/"+file);
         if (stat && stat.isDirectory()) 
-            //get contents of the language file
+               //get contents of the language file
             languageTypes.push(file);
             var data = JSON.parse(fs.readFileSync("resources/i18n/"+languageTypes[i]+"/home.json", 'utf8'));
-            //create new option, with an index value the same as the loop iteration, and the text being the language name
+               //create new option, with an index value the same as the loop iteration, and the text being the language name
             var newOption = document.createElement("option");
+            console.log("Found Directory: resources/i18n/"+file+" with language type: "+data.settings.lang.name);
             newOption.value=i;
             newOption.innerHTML = data.settings.lang.name; 
-            //Add the new option to the list
+               //Add the new option to the list
             $("#lang").append(newOption);
-            
+               //Add the language to the rescource list. 
             resources[file] = { translation: data};
         i += 1;    
     });
-    
+  console.log("Found a total of "+(i)+" language files.");  
   i18n.init({
     resStore: resources,
     ns: 'translation'
@@ -670,18 +671,16 @@ function translatePage() {
     robopaint.t = t;
     $('[data-i18n]').i18n();
   });
-  
-
 }
-
 
 /**
  * Reloads language file and updates any changes to it
- * Should be called after changing the language (languagePointer)
+ * Called when the language is changed in the menu list
  */
 function updateLang() {
     robopaint.settings.lang = document.getElementById("lang").value;
     i18n.setLng(languageTypes[robopaint.settings.lang], function(t) {robopaint.t = t;$('[data-i18n]').i18n();});
+    console.log("Language Switched to: "+languageTypes[robopaint.settings.lang]);
 
   
 }

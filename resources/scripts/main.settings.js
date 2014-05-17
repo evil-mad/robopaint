@@ -46,8 +46,8 @@ function loadSettings() {
     manualpaintenable: 0,
     remoteprint: 0,
     gapconnect: 1,
-    defLang: 'en', //default language, in string format
-    lang: 0 //integer pointer to language selected
+    lang: 0, //integer pointer to language selected
+    defLang: 'en'
   };
 
   // Are there existing settings from a previous run? Mesh them into the defaults
@@ -365,7 +365,7 @@ function bindSettingsControls() {
       delete localStorage[settingsStorageKey()];
       
       document.getElementById('lang').selectedIndex = 0;
-      reloadLang();
+      updateLang();
       
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
