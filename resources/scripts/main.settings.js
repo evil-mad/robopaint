@@ -46,8 +46,7 @@ function loadSettings() {
     manualpaintenable: 0,
     remoteprint: 0,
     gapconnect: 1,
-    lang: 0, //integer pointer to language selected
-    defLang: 'en'
+    lang: 0 //integer pointer to language selected
   };
 
   // Are there existing settings from a previous run? Mesh them into the defaults
