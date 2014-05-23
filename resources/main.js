@@ -15,7 +15,6 @@ $(document).keypress(function(e){
   }
 });
 
-var languageTypes = []; //Stores the different language packs available. Will be completed based on files in path
 
 
 var fs = require('fs');
@@ -639,31 +638,49 @@ function translatePage() {
     
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
-$('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
+  $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
   
   var resources = {};
   
-  //Get all available language JSON files from folders, add to the dropdown list, and add to the rescources available.
-  var i = 0;
+  // Get all available language JSON files from folders, add to the dropdown 
+  // list, and add to the rescources available.
+  var i = 0; 
   fs.readdirSync("resources/i18n/").forEach(function(file) {
-        //test if the file is a directory
-        var stat = fs.statSync("resources/i18n/"+file);
-        if (stat && stat.isDirectory()) 
-               //get contents of the language file
-            languageTypes.push(file);
-            var data = JSON.parse(fs.readFileSync("resources/i18n/"+languageTypes[i]+"/home.json", 'utf8'));
-               //create new option, with an index value the same as the loop iteration, and the text being the language name
-            var newOption = document.createElement("option");
-            console.log("Found Directory: resources/i18n/"+file+" with language type: "+data.settings.lang.name);
-            newOption.value=i;
-            newOption.innerHTML = data.settings.lang.name; 
-               //Add the new option to the list
-            $("#lang").append(newOption);
-               //Add the language to the resource list. 
-            resources[file] = { translation: data};
-        i += 1;    
+    // Test if the file is a directory.
+    var stat = fs.statSync("resources/i18n/"+file);
+    if (stat && stat.isDirectory()) 
+        
+      // Get contents of the language file.
+      var data = JSON.parse(fs.readFileSync(
+              "resources/i18n/" + file + "/home.json", 'utf8'
+              ));
+
+      // Create new option in the pulldown language list, with the text being 
+      // the language's name (gotten from the parsed JSON language file, and the
+      // value is the two letter language code.     
+      $("#lang").append(
+        $("<option>") 
+          .text(data.settings.lang.name)
+          .attr('value', file)         
+      );
+      // Add the language to the resource list. 
+      resources[file] = { translation: data};
+      i += 1;
     });
-  console.log("Found a total of "+i+" language files.");  
+  console.debug("Found a total of " + i + " language files.");  
+  delete i;
+  
+  // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
+  $('[data-i18n]=""').each(function() {
+    // "this" in every $.each() function, is a reference to each selected DOM object from the query.
+    // Note we have to use $() on it to get a jQuery object for it. Do that only once and save it in a var
+    // to keep your code from having to instantiate it more than once.
+    var $node = $(this); 
+    $node.attr('data-i18n', $node.text());
+    // This leaves the text value of the node intact just in case it doesn't translate and someone is debugging,
+    // they'll be able to see the exact translation key that is a problem in the UI.
+  });
+  
   i18n.init({
     resStore: resources,
     ns: 'translation'
@@ -674,14 +691,20 @@ $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString
 }
 
 /**
- * Reloads language file and updates any changes to it
- * Called when the language is changed in the menu list
+ * Reloads language file and updates any changes to it.
+ * Called when the language is changed in the menu list.
  */
 function updateLang() {
-    robopaint.settings.lang = document.getElementById("lang").value;
-    i18n.setLng(languageTypes[robopaint.settings.lang], function(t) {robopaint.t = t;$('[data-i18n]').i18n();});
-    i18n.init();
-    console.log("Language Switched to: "+languageTypes[robopaint.settings.lang]);
-
+  // Get the index pointer from the dropdown menu. 
+  robopaint.settings.lang = document.getElementById('lang').value;
+  // Change the language on i18n, and reload the translation variable. 
+  i18n.setLng(
+    robopaint.settings.lang, 
+    function(t) {
+      robopaint.t = t;
+      $('[data-i18n]').i18n();
+    });
   
+  // Send debug info to console
+  console.debug("Language Switched to: " + robopaint.settings.lang);
 }
