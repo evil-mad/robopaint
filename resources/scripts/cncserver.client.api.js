@@ -12,10 +12,12 @@
  * }
  */
 
+// Initialize wrapper object is this library is being used elsewhere
+if (typeof cncserver === 'undefined') var cncserver = {};
+
 /**
  * Restful API wrappers
  */
-if (!cncserver) cncserver = {};
 
 cncserver.api = {
   pen: {
