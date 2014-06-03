@@ -71,8 +71,8 @@
       "wait": "A la espera de la elaboración de cliente..."
     },
     "confirms": {
-      "welcome": "Hola, bienvenidos a modo de pintura remoto! Este modo se convertirá en un RoboPaint gráficos \"servidor de impresión\", listo para tomar una imagen desde otra aplicación e imprimirla inmediatamente! * Las imágenes enviadas solo serán recibidos mientras este modo está activado * Una vez que una imagen se terminó, este modo se cerrará * Antes de hacer clic en Aceptar, asegúrese de que el bot está completamente configurado y listo para ir! * haga clic en Cancelar si no estás listo para ir. También puede salir en cualquier momento, mientras que en el modo de pintura remoto.",
-      "exit": "¿Está seguro de que desea salir del modo de pintura remoto? Cualquier proceso de impresión y aplicaciones de cliente se cancelarán / desconectado."
+      "welcome": "Hola, bienvenidos a modo de pintura remoto! Este modo se convertirá en un RoboPaint gráficos \"servidor de impresión\", listo para tomar una imagen desde otra aplicación e imprimirla inmediatamente! \n\n* Las imágenes enviadas solo serán recibidos mientras este modo está activado\n\n* Una vez que una imagen se terminó, este modo se cerrará \n\n* Antes de hacer clic en Aceptar, asegúrese de que el bot está completamente configurado y listo para ir! \n\n* haga clic en Cancelar si no estás listo para ir. También puede salir en cualquier momento, mientras que en el modo de pintura remoto.",
+      "exit": "¿Está seguro de que desea salir del modo de pintura remoto?\n\nCualquier proceso de impresión y aplicaciones de cliente se cancelarán / desconectado."
     }
   },
   "settings": {
