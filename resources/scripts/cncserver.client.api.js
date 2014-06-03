@@ -178,6 +178,20 @@ cncserver.api = {
 
   tools: {
    /**
+    * List the available tools for the current bot type
+    * @param {function} callback
+    *   Function to callback when done, including data from response body
+    */
+    list: function(callback){
+      _get('tools', {
+        success: callback,
+        error: function(e) {
+          if (callback) callback(false);
+        }
+      });
+    },
+
+   /**
     * Change to a given tool
     * @param {string} toolName
     *   Machine name of tool to switch to
