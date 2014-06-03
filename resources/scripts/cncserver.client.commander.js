@@ -8,6 +8,12 @@
  */
 
 // TODO: DO this better!
+// Because these are outside of any function they're polluting the global scope,
+// and that's just bad pudding. Not to mention, if you think you have to use
+// globals for something, then you're probbaly doing it wrong. These are likely
+// one of the last vestiges of the far simpler code. Just need to root out where
+// they're used and possibly attach them directly to the cncserver.cmd object,
+// or refactor them out completely.
 var returnPoints = [];
 var lastPoint = {};
 
@@ -25,7 +31,11 @@ cncserver.cmd = {
 
   // CMD specific callback handler
   cb: function(d) {
-    // TODO: check for errors
+    // TODO: Check for errors in callback return values
+    // This is nitpicky at best, as the only errors to be returned on any
+    // API callback don't really have a clear path of action, other than perhaps
+    // stopping and alerting the user. This should probably wait until we have
+    // a proper non-blocking alert/message system before attempting to fix.
 
     if (!cncserver.state.buffer.length) {
       cncserver.state.process.busy = false;

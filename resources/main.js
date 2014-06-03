@@ -36,7 +36,10 @@ var robopaint = {
 };
 
 // Option buttons for connections
-// TODO: Redo this is a message management window system!!!
+// TODO: Redo this is as a message management window system.
+// Needs approximately same look, obvious, modal, sub-buttons. jQuery UI may
+// not be quite enough. Requires some research (and good understanding of
+// what this is currently used for, and what/if the other modes may make use of it).
 var $options;
 var $stat;
 
@@ -413,6 +416,11 @@ function initQuickload() {
   var paths = ['resources/svgs'];
 
   // TODO: Support user directories off executable
+  // This is imagined as secondary dropdown folder to list SVG files from a
+  // "RoboPaint" directory in the user's operating system documents or pictures
+  // folder, allowing for easy customizing of their quickload images. (This
+  // could also be a good default location to save files to!). How do we get
+  // that folder? No idea.
   var svgs = fs.readdirSync(paths[0]);
 
   // Bind Quick Load Hover
@@ -563,7 +571,9 @@ function getColorsets() {
   // Menu separator
   $('#colorset').append($('<optgroup>').attr('label', ' ').addClass('sep'));
 
-  // TODO: Add "in memory" custom sets
+  // TODO: Append "in memory" custom sets here
+  // These are new custom colorsets created by the new feature (not yet
+  // completed), saved in new localStorage variable to avoid tainting settings.
 
   // Add "Create new" item
   $('#colorset').append(

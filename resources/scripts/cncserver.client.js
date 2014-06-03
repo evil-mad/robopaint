@@ -59,8 +59,6 @@ $(function() {
     robopaint.cncserver.api.buffer.resume();
 
     // Setup general pen status update callback, called from cncserver.api.js
-    // TODO: This handily works for both manual and auto as they have the same
-    // named buttons, but should probably be generalized
     robopaint.$(robopaint.cncserver.api).bind('updatePen', function(e, d) {
       cncserver.state.pen = d;
 
@@ -71,6 +69,14 @@ $(function() {
         toState = 'down';
       }
 
+      // TODO: This handily works for both manual and auto as they have the same
+      // #pen button, but should probably be generalized. cncserver.client.js
+      // is meant to hold "shared" code between auto and manual paint mode,
+      // originally called "cncnserver client". Maybe this one can slide and
+      // these two modes can remain siamese twins for now, I imagine there's
+      // more "bad" code like this between them that would probably be better
+      // off abstracted into their parent code, or into a better shared library
+      // for future modes.
       $('#pen').attr('class','normal ' + toState);
     });
 
@@ -149,6 +155,12 @@ Exiting print mode while printing will cancel all your jobs. Click OK to leave."
 
 // When closing, make sure to tidy up bound events
 // TODO: Namespace this to ensure only the ones we set are cleaned up
+// jQuery namespacing for custom bind events (http://api.jquery.com/bind/)
+// allows for unbinding of only namespaced bound events, instead of ALL events
+// bound to things like "updatePen". Currently there's nothing globally using
+// any of these bind events, but there could be in the future. Exactly what
+// they'd be namespaced to is unclear, as this is used by both Auto and manual
+// paint modes. Maybe "updatePen.paint".. etc?
 function unBindEvents(callback) {
   robopaint.$(robopaint.cncserver.api).unbind('updatePen');
   robopaint.$(robopaint.cncserver.api).unbind('toolChange');

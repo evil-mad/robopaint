@@ -33,7 +33,7 @@ function loadSettings() {
     // Robopaint specific defaults
     filltype: 'line-straight',
     fillangle: 0,
-    penmode: robopaint.currentBot.type == "watercolorbot" ? 0 : 3, // TODO: Pull this from toolset
+    penmode: robopaint.currentBot.type == "watercolorbot" ? 0 : 3, // TODO: Pull this from toolset *(see note below)
     openlast: 0,
     showcolortext: 0,
     colorset: 'generic-standard',
@@ -47,6 +47,11 @@ function loadSettings() {
     remoteprint: 0,
     gapconnect: 1
   };
+
+  // * We can't assume that anything that isn't a WaterColorBot doesn't have
+  // colors. We should add some kind of logic that checks to see if they have
+  // the known standard toolset for colors (color0-7), then allow them to have
+  // access to modes other than pen.
 
   // Are there existing settings from a previous run? Mesh them into the defaults
   if (localStorage[settingsStorageKey()]) {
@@ -217,6 +222,11 @@ function bindSettingsControls() {
         break;
 
       // TODO: Make the following pull from master pushkey list
+      // This would mean a total change in the way this switch is being used,
+      // and would remove all the code duplication below, of course it would
+      // complicate the simple settings variable structure. Considering that
+      // this currently works reasonably well has put it pretty low on the
+      // priority list.
       case 'invertx':
         pushKey = ['g', 'invertAxis:x'];
         pushVal = $input.is(':checked');
