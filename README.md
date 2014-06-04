@@ -55,7 +55,7 @@ your own thing? Here's a rough and tumble guide to getting set up:
 ### Pre-requisites
 #### Node-webkit (v0.8.x)
 RoboPaint is an HTML5/Node.js application that runs in
-[node-webkit](https://github.com/rogerwang/node-webkit). Though the index.html
+[node-webkit](https://github.com/rogerwang/node-webkit). Do not get v0.9.x as you will get problems with building the serialport module. Though the index.html
 code may somewhat render in a regular browser window, it's still a node.js
 application that requires its low level file access and other APIs. Download a
 release from their main page above,
@@ -63,7 +63,7 @@ extract the files from the zip to a good working folder. For windows, I use
 `C:\nw\`, which you can then add to your PATH environment variable. For linux,
 I use `~\.nw\`, with an alias in my ~\.bashrc file like `alias nw='~/.nw/nw'`.
 
-#### Node.js & npm (v0.9+)
+#### Node.js & npm (v0.10+)
 Required for automated builds and installation content. See
 [nodejs.org](http://nodejs.org) for installation for your operating system. Node
 Package Manager is usually installed along with it.
@@ -106,7 +106,7 @@ them to the best of its ability. Technically we don't need/want the node built
 version of serialport, but it doesn't matter.
 3. Once that's completed successfully, navigate to the new
 `node_modules/cncserver/node_modules/serialport` folder, and run
-`nw-gyp configure --target=0.8.0`, substituting your target node-webkit version.
+`nw-gyp configure --target=0.8.6`, substituting your target node-webkit version.
 4. If that worked, now run `nw-gyp build`. If there are build issues here, the
 problems may be many and varied, and almost always have to do with either the
 [node-serialport](https://github.com/voodootikigod/node-serialport) or
@@ -120,6 +120,7 @@ the latest master.
 piped to the terminal as the main program window opens.
 * On Windows, in the command window from `C:\nw`, I just run `nw C:\robopaint`,
 or just drag the folder to the executable.
+* On Mac put `/Applications/node-webkit.app/Contents/MacOS` or the directory to node-webkit in your path. Then run `node-webkit ./` from the RoboPaint root directory.
 * I also highly recommend setting the `package.json` toolbar flag to `true` for
 far easier debugging.
 
