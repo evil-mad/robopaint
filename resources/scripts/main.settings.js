@@ -277,6 +277,10 @@ function bindSettingsControls() {
           name: $('#bottype option:selected').text()
         });
         return;
+      case 'lang': 
+        // robopaint.settings.lang set in updateLang() [main.js]
+        updateLang();
+        break;
       default: // Nothing special to set, just change the settings object value
         if ($input.attr('type') == 'checkbox') {
           robopaint.settings[this.id] = $input.is(':checked');

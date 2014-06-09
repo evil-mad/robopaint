@@ -1,20 +1,17 @@
 <button id="settings-done" class="normal" data-i18n="[title]settings.buttons.done.hover;settings.buttons.done.title">settings.buttons.done.title</button>
 <button id="settings-reset" class="normal" data-i18n="[title]settings.buttons.reset.hover;settings.buttons.reset.title">settings.buttons.reset.title</button>
+<img id="langIcon" src="resources/images/icon_lang.png"/>
+<select id="lang"> </select>
+     
+
 <h2 data-i18n>nav.toolbar.settings</h2>
 <ul class="tabs">
   <li><a href="#settings-output" data-i18n>settings.tabs.output</a></li>
   <li><a href="#settings-common" data-i18n>settings.tabs.common</a></li>
   <li><a href="#settings-advanced" data-i18n>settings.tabs.advanced</a></li>
 </ul>
-
+ 
 <div id="settings-common" class="settings-content">
-  <fieldset>
-    <legend data-i18n>settings.lang.title</legend>
-    <div>
-        <select id="lang" onchange="updateLang()">
-     </select>
-    </div>
-  </fieldset>
     
   <fieldset>
     <legend data-i18n=>settings.common.servo.title</legend>
