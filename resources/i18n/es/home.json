@@ -129,7 +129,7 @@
       "maxpaintdistance": {
         "title": "Vuelva a llenar Distancia:",
         "hint": "Mover a la izquierda para conseguir pintar más a menudo, derecho a conseguir la pintura con menos frecuencia.",
-        "detail": "La distancia para el pincel para pintar sobre el papel antes de que se debe ir a buscar más agua / pintura en el pincel. El valor predeterminado es **48cm / 19pulg.**"
+        "detail": "La distancia para el pincel para pintar sobre el papel antes de que se debe ir a buscar más agua / pintura en el pincel. El valor predeterminado es **48.2cm / 19pulg.**"
       },
       "strokeprecision": {
         "title": "Precisión del esquema:",
