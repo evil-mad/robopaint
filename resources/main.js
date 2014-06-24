@@ -51,7 +51,7 @@ $(function() {
   // Bind and run inital resize first thing
   $(window).resize(responsiveResize);
   responsiveResize();
-  
+
   // Set visible version from manifest (with appended bot type if not WCB)
   var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
   $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
@@ -60,7 +60,7 @@ $(function() {
   // @see scripts/main.settings.js
   bindSettingsControls();
   loadSettings();
-
+  
   // Set base CNC Server API wrapper access location
   if (!robopaint.cncserver.api) robopaint.cncserver.api = {};
   robopaint.cncserver.api.server = {
@@ -365,7 +365,7 @@ function initToolTips() {
     // Destroy existing ToolTips before recreating them
     $('#bar a.tipped, nav a').qtip("destroy");
   };
-  
+
   $('#bar a.tipped, nav a').qtip({
     style: {
       border: {
@@ -637,47 +637,47 @@ function getCurrentBot() {
  * strings.
  */
 function translatePage() {
-    
+
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
-  
+
   var resources = {};
-  
-  // Get all available language JSON files from folders, add to the dropdown 
+
+  // Get all available language JSON files from folders, add to the dropdown
   // list, and add to the rescources available.
-  var i = 0; 
+  var i = 0;
   fs.readdirSync("resources/i18n/").forEach(function(file) {
     // Test if the file is a directory.
     var stat = fs.statSync("resources/i18n/"+file);
-    if (stat && stat.isDirectory()) 
-        
+    if (stat && stat.isDirectory())
+
       // Get contents of the language file.
       var data = JSON.parse(fs.readFileSync(
               "resources/i18n/" + file + "/home.json", 'utf8'
               ));
 
-      // Create new option in the pulldown language list, with the text being 
+      // Create new option in the pulldown language list, with the text being
       // the language's name (gotten from the parsed JSON language file, and the
-      // value is the two letter language code.     
+      // value is the two letter language code.
       $("#lang").append(
-        $("<option>") 
+        $("<option>")
           .text(data.settings.lang.name)
-          .attr('value', file)         
+          .attr('value', file)
       );
-      // Add the language to the resource list. 
+      // Add the language to the resource list.
       resources[file] = { translation: data};
       i += 1;
     });
-  console.debug("Found a total of " + i + " language files.");  
-  
+  console.debug("Found a total of " + i + " language files.");
+
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
   $('[data-i18n]=""').each(function() {
     // "this" in every $.each() function, is a reference to each selected DOM object from the query.
     // Note we have to use $() on it to get a jQuery object for it. Do that only once and save it in a var
     // to keep your code from having to instantiate it more than once.
     var $node = $(this);
-    // Check if the text contains a dot (will prevent it from accidentally 
+    // Check if the text contains a dot (will prevent it from accidentally
     // overwriitng existing data in i18n attribute) and if the existing
     // i18n attribute is empty
     if ($node.text().indexOf('.') > -1 && $node.attr('data-i18n') == "") {
@@ -686,7 +686,7 @@ function translatePage() {
       // they'll be able to see the exact translation key that is a problem in the UI.
     }
   });
-  
+
   i18n.init({
     resStore: resources,
     ns: 'translation'
@@ -702,27 +702,27 @@ function translatePage() {
  */
 
 function updateLang() {
-  // Get the index pointer from the dropdown menu. 
+  // Get the index pointer from the dropdown menu.
   robopaint.settings.lang = $('#lang').val();
-  
+
   // Abort the subroutine if the language has not changed (or on first load)
   if (currentLang == robopaint.settings.lang) {
       return;
   }
-  
+
   currentLang = robopaint.settings.lang;
 
-  // Change the language on i18n, and reload the translation variable. 
+  // Change the language on i18n, and reload the translation variable.
   i18n.setLng(
-    robopaint.settings.lang, 
+    robopaint.settings.lang,
     function(t) {
       robopaint.t = t;
       $('[data-i18n]').i18n();
     });
-   
+
   // Initalize/reset Tooltips
   initToolTips();
-  
+
   // Report language switch to the console
   console.info("Language Switched to: " + robopaint.settings.lang);
 }
