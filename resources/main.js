@@ -60,7 +60,7 @@ $(function() {
   // @see scripts/main.settings.js
   bindSettingsControls();
   loadSettings();
-  
+
   // Set base CNC Server API wrapper access location
   if (!robopaint.cncserver.api) robopaint.cncserver.api = {};
   robopaint.cncserver.api.server = {
