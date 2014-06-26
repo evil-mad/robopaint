@@ -4,9 +4,10 @@
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "index.html",
   "author": "techninja",
+  "stage": "development",
   "license": "MIT",
   "window": {
-    "toolbar": false,
+    "toolbar": true,
     "position": "center",
     "min_width": 600,
     "min_height": 420,

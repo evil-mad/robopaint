@@ -421,7 +421,6 @@ $(function() {
     $('#scale-container') // Actually do the scaling
       .css('-webkit-transform', 'scale(' + cncserver.canvas.scale + ')');
 
-    // TODO: Find out where these inconsistencies in size/position come from
     cncserver.canvas.offset.left = mainOffset.left + ((toolWidth + toolRightMargin) * cncserver.canvas.scale);
     cncserver.canvas.offset.top = mainOffset.top + 1;
   }

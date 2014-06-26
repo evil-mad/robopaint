@@ -1,7 +1,7 @@
 {
   "_meta": {
     "creator": "techninja",
-    "target": "en-us",
+    "target": "en-US",
     "release": "0.7.5"
   },
   "common": {
@@ -66,10 +66,22 @@
     },
     "api": {
       "disabled": "The SVG import API is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.",
-      "busy": "Cannot add to queue during ongoing print job."
+      "busy": "Cannot add to queue during ongoing print job.",
+      "queued": "Queued for printing...",
+      "wait": "Waiting for drawing from client..."
+    },
+    "confirms": {
+      "welcome": "Hey there, welcome to Remote Paint mode! This mode will turn RoboPaint into a graphics 'print server', ready to take an image from another application and print it immediately!\n\n* Images sent will only be received while this mode is on\n\n* Once an image is finished, this mode will exit\n\n* Before clicking OK, make sure your bot is completely setup and ready to go!\n\n* Click cancel if you're not quite ready to go. You can also exit anytime while in Remote Paint mode",
+      "exit": "Are you sure you want to leave Remote Paint mode?\n\n Any print processes and client applications will be cancelled/disconnected."
     }
   },
   "settings": {
+
+    "lang": {
+      "title": "Select a Language:",
+      "name": "English"
+    },
+
     "tabs": {
       "output": "Painting Style",
       "common": "Basic Setup",

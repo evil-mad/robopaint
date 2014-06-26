@@ -5,7 +5,11 @@
 cncserver.paths = {
   // Find out what DOM object is directly below the point given
   // Will NOT work if point is outside visible screen range!
+
   // TODO: maybe this can be replaced by polygonal collision detection? :P
+  // Wait, no, on second thought this is a terrible idea. We should just
+  // boolean difference all the paths into each other!
+  // https://github.com/Delapouite/JsClipper
   getPointPathCollide: function(point) {
 
     // Add 48 to each side for 96dpi 1/2in offset
@@ -185,6 +189,7 @@ cncserver.paths = {
       point = path.transPoint(point);
 
       // TODO: Add overshoot at end movements
+      // Code can probably be copied from runOutline below using lastPoint, etc
       if (letter == 'M') { // Move to pos
         run('up');
         run('move', {x: point.x, y: point.y});

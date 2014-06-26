@@ -145,8 +145,6 @@ robopaint.api.bindCreateEndpoints = function(){
       // Switch modes (this eventually triggers the above callback)
       robopaint.switchMode('edit');
 
-      // TODO: Manage queue, send to print page with options
-
       return true; // Tell the server endpoint we'll handle the response from here...
 
     } else {
