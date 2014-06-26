@@ -1046,6 +1046,18 @@ body.home div.options button.normal {
   margin-top: -6px;
 }
 
+#langIcon {
+  position: absolute;
+  right: 11em;
+  top: 1.5em;
+}
+
+#lang {
+  position: absolute;
+  right: 14.7em;
+  top: 1.6em;
+}
+
 #settings-done {
   position: absolute;
   right: 1em;
