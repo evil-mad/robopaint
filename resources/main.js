@@ -647,38 +647,36 @@ function getCurrentBot() {
  * strings.
  */
 function translatePage() {
-
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
-
   var resources = {};
 
   // Get all available language JSON files from folders, add to the dropdown
   // list, and add to the rescources available.
   var i = 0;
-  fs.readdirSync("resources/i18n/").forEach(function(file) {
-    // Test if the file is a directory.
-    var stat = fs.statSync("resources/i18n/"+file);
-    if (stat && stat.isDirectory())
-
-      // Get contents of the language file.
-      var data = JSON.parse(fs.readFileSync(
-              "resources/i18n/" + file + "/home.json", 'utf8'
-              ));
+  var i18nPath = 'resources/i18n/';
+  fs.readdirSync(i18nPath).forEach(function(file) {
+    // Get contents of the language file.
+    try {
+      var data = JSON.parse(fs.readFileSync(i18nPath + file , 'utf8'));
 
       // Create new option in the pulldown language list, with the text being
-      // the language's name (gotten from the parsed JSON language file, and the
-      // value is the two letter language code.
+      // the language's name value is the two letter language code.
       $("#lang").append(
         $("<option>")
           .text(data.settings.lang.name)
-          .attr('value', file)
+          .attr('value', data['_meta'].target)
       );
+
+
       // Add the language to the resource list.
-      resources[file] = { translation: data};
+      resources[data['_meta'].target] = { translation: data};
       i += 1;
-    });
+    } catch(e) {
+      console.error('Bad language file:' + file, e);
+    }
+  });
   console.debug("Found a total of " + i + " language files.");
 
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
