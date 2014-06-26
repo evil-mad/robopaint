@@ -8,6 +8,14 @@
 global.$ = $;
 var gui = require('nw.gui');
 
+// BugSnag NODE Initialization
+var bugsnag = require("bugsnag");
+bugsnag.register("e3704afa045597498ab11c74f032f755",{
+  releaseStage: gui.App.manifest.stage,
+  appVersion: gui.App.manifest.version
+});
+
+
 // Global Keypress catch for debug
 $(document).keypress(function(e){
   if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
