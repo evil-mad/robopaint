@@ -45,7 +45,8 @@ function loadSettings() {
     strokeprecision: 6,
     manualpaintenable: 0,
     remoteprint: 0,
-    gapconnect: 1
+    gapconnect: 1,
+    lang: '' // String storing the two digit code for the language. 
   };
 
   // * We can't assume that anything that isn't a WaterColorBot doesn't have
@@ -286,6 +287,10 @@ function bindSettingsControls() {
           name: $('#bottype option:selected').text()
         });
         return;
+      case 'lang': 
+        // robopaint.settings.lang set in updateLang() [main.js]
+        updateLang();
+        break;
       default: // Nothing special to set, just change the settings object value
         if ($input.attr('type') == 'checkbox') {
           robopaint.settings[this.id] = $input.is(':checked');
@@ -371,9 +376,11 @@ function bindSettingsControls() {
   $('#settings-reset').click(function(e) {
     if (confirm(robopaint.t('settings.buttons.reset.confirm'))) {
       delete localStorage[settingsStorageKey()];
+          
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
       loadSettings();
+      loadDefaultLang();
     }
   });
 
@@ -512,4 +519,31 @@ function updateColorSetSettings() {
   for (var i in meta) {
     $('#colorsets .' + meta[i]).text(set[meta[i]]);
   }
+}
+
+/**
+ * Get default OS language and look if it is in the list of available languages,
+ * if not, set default to i18n's defualt languge (English).
+ * Called AFTER initial settings reload to 
+ */
+function loadDefaultLang() {
+    // Iterate through list of files in language directory
+    fs.readdirSync("resources/i18n/").forEach(function(file) {
+      // Test if the file is a directory.
+      var stat = fs.statSync("resources/i18n/"+file);
+      if (stat && stat.isDirectory())  
+            
+        // Do a RegEx search for the filename in the default system language (this
+        // returns an index position or -1 if not found, so we use a conditional
+        // to change this to a boolean of whether or not it is in the string).
+        var isDefLang = navigator.language.search(file) !== -1;
+    
+        // If the language we are iterating is the OS's default language.
+        if(isDefLang) {
+          // Set the selected language to be the default language
+          $("#lang").value = file;
+          console.info('Language Reset to:' + file);
+        };
+    });
+    
 }

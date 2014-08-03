@@ -76,6 +76,12 @@
     }
   },
   "settings": {
+      
+    "lang": {
+      "title": "Seleziona una lingua:",
+      "name": "Español"
+    }, 
+      
     "tabs": {
       "output": "Pintura Estilo",
       "common": "Configuración básica",

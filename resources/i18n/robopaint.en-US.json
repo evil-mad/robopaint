@@ -1,7 +1,7 @@
 {
   "_meta": {
     "creator": "techninja",
-    "target": "en-us",
+    "target": "en-US",
     "release": "0.7.5"
   },
   "common": {
@@ -76,6 +76,12 @@
     }
   },
   "settings": {
+
+    "lang": {
+      "title": "Select a Language:",
+      "name": "English"
+    },
+
     "tabs": {
       "output": "Painting Style",
       "common": "Basic Setup",
