@@ -37,7 +37,7 @@ format for `package.json` to hold all top level mode configuration. See the
 comments below for explanation on the non-obvious keys.
 
 
-```json
+```javascript
 {
   "name": "mymode", // The machine name of the mode. Lowercase, no spaces, same as folder.
   "version": "1.0",
