@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /*
-  @file Holds ALL styles for Manual Mode
+  @file Holds ALL styles for Automatic Print Mode
 */
 
 canvas#debug {
@@ -43,16 +43,13 @@ body.home {
   display: none;
 }
 
-body.print-manual {
-  background-image:url('images/seamless-wood_blue.jpg');
-}
-
-body.print-manual #status {
-  margin-top: -10px;
+body.print {
+  background-image:url('images/seamless-wood.jpg');
+  background-color: #E3BC83;
 }
 
 /* Attempt some kind of button standardization */
-button.normal, body.print-manual ul.tabs li a {
+button.normal {
   text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
   border-radius: 7px;
   font-size: 1em;
@@ -60,45 +57,6 @@ button.normal, body.print-manual ul.tabs li a {
   margin-top: 0.3em;
   padding: 0.2em 0.4em;
   background: linear-gradient(to bottom, #3093c7, #1c5a85);
-}
-
-/* Button Tabs! Sorta... */
-body.print-manual ul.tabs {
-  margin-left: 5px;
-}
-
-body.print-manual ul.tabs li a {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  padding-bottom: 2px;
-  position: relative;
-  top: 2px;
-}
-
-body.print-manual ul.tabs li a.active {
-  color: black;
-  background: #F6F7FA;
-  border: 1px solid #555;
-  border-bottom: none;
-  padding-bottom: 4px;
-  top: 0;
-}
-
-body.print-manual ul.tabs {
-  margin-left: 5px;
-  padding: 0;
-  margin-bottom: 0;
-}
-
-body.print-manual #tab-content {
-  padding: 0.2em 0;
-  border-radius: 7px;
-  background-color: rgba(255,255,255,0.7);
-  border-top: 1px solid #C9A165;
-}
-
-body.print-manual #tab-content fieldset {
-  border: none;
 }
 
 button.normal:focus {
@@ -123,7 +81,7 @@ button.normal:focus {
 }
 
 svg#main {
-  background-image: url('../print/images/paper_texture.png');
+  background-image: url('images/paper_texture.png');
   border: 1px solid #ddd;
   position: absolute;
   box-shadow: 0 0 38px -2px rgba(0,0,0,0.3);
@@ -139,6 +97,12 @@ body.print #shadow {
   top: 0;
 }
 
+body.print-auto svg#main,
+body.print-auto #sim,
+body.print-auto #shadow {
+  left: 0;
+}
+
 svg#main * {
   stroke-width: 8 !important;
 }
@@ -147,29 +111,6 @@ svg#main #cncserversvg path.selected {
   stroke: blue !important;
   stroke-width: 10 !important;
   stroke-opacity: 1 !important;
-}
-
-@-webkit-keyframes ants  {
-  to {
-    stroke-dashoffset: 100%;
-  }
-}
-
-body.print-manual svg#main #cncserversvg path.selected.ants {
-  stroke: blue !important;
-  stroke-width: 10 !important;
-  stroke-opacity: 0.8 !important;
-  stroke-dasharray: 4,4;
-  -webkit-animation: ants 50s linear infinite;
-  -webkit-animation-fill-mode: forwards;
-}
-
-body.print-manual svg#main g path:hover {
-  stroke: red !important;
-  stroke-opacity: 0.8 !important;
-  stroke-dasharray: 5,5;
-  -webkit-animation: ants 70s linear infinite;
-  -webkit-animation-fill-mode: forwards;
 }
 
 #shadow {
@@ -208,118 +149,6 @@ canvas#sim {
   top: 20px;
   z-index: 5;
   display: none;
-}
-
-/* Directionality */
-#paint-angle {
-  background-image: url('images/rotation_grid.png');
-  background-size: 200px;
-  background-repeat: no-repeat;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-}
-
-#paint-angle img {
-  width: 200px;
-}
-
-/* Nav Tools */
-
-nav#control h3 {
-  margin-top: 0;
-}
-
-nav#tools {
-  left: -45px;
-  position: absolute;
-  top: 25px;
-  -webkit-transform-origin: top left;
-}
-
-nav#tools #waters {
-  left: -96px;
-  overflow: hidden;
-  padding: 1em;
-  position: absolute;
-  top: 19px;
-}
-
-nav#tools .water {
-  border: 2px solid #EEE;
-  border-radius: 150px 150px 150px 150px;
-  height: 150px;
-  margin-bottom: 51px;
-  width: 150px;
-  position: relative;
-
-  background: #c5deea; /* Old browsers */
-  background: radial-gradient(ellipse at center, #c5deea 0%,#b1c9d6 44%,#a6e3f4 100%); /* W3C */
-}
-
-nav#tools a a:hover, nav#tools a a:focus {
-  -webkit-animation-name: hover-pulse;
-  -webkit-animation-duration: 1000ms;
-  -webkit-animation-iteration-count: infinite;
-}
-
-/* Tools Sub options */
-nav#tools a:hover a.sub-option {
-  display: block;
-}
-
-nav#tools a.sub-option {
-  display: none;
-}
-
-nav#tools #colors a.sub-option {
-  width: 43px;
-  height: 58px;
-  position: absolute;
-  background-color: rgba(0,0,0,0.2);
-}
-
-  nav#tools #colors a.sub-option.full {
-    border-top-left-radius: 150px;
-    border-bottom-left-radius: 150px;
-  }
-
-  nav#tools #colors a.sub-option.dip {
-    right: 8px;
-    border-top-right-radius: 150px;
-    border-bottom-right-radius: 150px;
-  }
-
-
-nav#tools #waters a.sub-option {
-  width: 72px;
-  height: 75px;
-  right: 0;
-  position: absolute;
-  background-color: rgba(0,0,0,0.2);
-  line-height: 4.5em;
-  text-align: center;
-}
-
-  nav#tools #waters a.sub-option.full {
-    border-top-right-radius: 72px;
-  }
-
-  nav#tools #waters a.sub-option.dip {
-    bottom: 0;
-    line-height: 3.5em;
-    border-bottom-right-radius: 72px;
-  }
-
-
-nav#tools div.static a#colorx a.sub-option {
-  top: 5px;
-  display: none;
-  font-size: 16px;
-}
-
-nav#tools div.static a#colorx:hover a.sub-option {
-  display: block;
 }
 
 /* Animation Keyframes */
@@ -458,6 +287,36 @@ fieldset#control {
   margin-bottom: 0.25em;
 }
 
+/* Auto print specific */
+body.print-auto fieldset#control {
+  top: 20px;
+}
+
+body.print-auto #control>legend {
+  width: 49%;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.2em;
+  position: absolute;
+  top: -26px;
+  right: 54px;
+}
+
+body.print-auto #buttons {
+  margin-top: -9px;
+  padding-top: 5px;
+  margin-bottom: 6px;
+}
+
+/* Control panel specific button adjustments */
+body.print-auto #buttons button.normal {
+  font-size: 1.1em;
+  float: none;
+  margin: 0.2em auto;
+  display: block;
+  width: 190px;
+}
+
 /* Handle simple button text changes via class, tricksy CSS hobbits! */
 #pen.up:before {
   content: "Raise ";
@@ -527,10 +386,6 @@ fieldset#control {
   font-weight: bold;
 }
 
-.print-manual #cancel {
-  margin-bottom: 0;
-}
-
 .print #cancel:disabled {
   color: #777;
   cursor: default;
@@ -544,6 +399,7 @@ fieldset#control {
   line-height: 1em;
   margin-bottom: 0.6em;
 }
+
 
 #control button:disabled, #control button:disabled:hover {
   opacity: 0.5;
@@ -597,21 +453,3 @@ fieldset#control {
 .icon-print:before { content: '\e806'; } /* '' */
 .icon-download-cloud:before { content: '\e80e'; } /* '' */
 .icon-home:before { content: '\e801'; } /* '' */
-
-ul.tabs li {
-  list-style:none;
-  display:inline;
-}
-
-ul.tabs a {
-  padding:5px 10px;
-  display:inline-block;
-  background:#666;
-  color:#fff;
-  text-decoration:none;
-}
-
-ul.tabs a.active {
-  background:#fff;
-  color:#000;
-}

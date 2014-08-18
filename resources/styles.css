@@ -1,7 +1,6 @@
 @charset "UTF-8";
 /*
-  @file Holds ALL styles for all modes and windows for RoboPaint (except method-draw).
-  TODO: Really should be cleaned up and segregated into a base file and mode files
+  @file Holds styles for RoboPaint central application home & settings.
 */
 
 canvas#debug {
@@ -11,17 +10,6 @@ canvas#debug {
   z-index: 1;
   left: 0;
   top: 0;
-}
-
-body.print:before {
-  content: "";
-  position: fixed;
-  top: -10px;
-  left: 0;
-  width: 100%;
-  height: 10px;
-  z-index: 100;
-  box-shadow: 0px 0px 10px rgba(0,0,0,.8);
 }
 
 body {
@@ -44,19 +32,6 @@ body.home {
   display: none;
 }
 
-body.print {
-  background-image:url('images/seamless-wood.jpg');
-  background-color: #E3BC83;
-}
-
-body.print-manual {
-  background-image:url('images/seamless-wood_blue.jpg');
-}
-
-body.print-manual #status {
-  margin-top: -10px;
-}
-
 img.logo {
   margin-left: -100px;
   height: 37px;
@@ -76,7 +51,7 @@ span.version {
 }
 
 /* Attempt some kind of button standardization */
-button.normal, body.print-manual ul.tabs li a {
+button.normal {
   text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
   border-radius: 7px;
   font-size: 1em;
@@ -84,43 +59,6 @@ button.normal, body.print-manual ul.tabs li a {
   margin-top: 0.3em;
   padding: 0.2em 0.4em;
   background: linear-gradient(to bottom, #3093c7, #1c5a85);
-}
-
-/* Button Tabs! Sorta... */
-body.print-manual ul.tabs {
-  margin-left: 5px;
-}
-
-body.print-manual ul.tabs li a {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  padding-bottom: 2px;
-  position: relative;
-  top: 2px;
-}
-
-body.print-manual ul.tabs li a.active {
-  color: black;
-  background: #F6F7FA;
-  border: 1px solid #555;
-  border-bottom: none;
-  padding-bottom: 4px;
-  top: 0;
-}
-
-body.print-manual ul.tabs {
-  margin-left: 5px;
-}
-
-body.print-manual #tab-content {
-  padding: 0.2em 0;
-  border-radius: 7px;
-  background-color: rgba(255,255,255,0.7);
-  border-top: 1px solid #C9A165;
-}
-
-body.print-manual #tab-content fieldset {
-  border: none;
 }
 
 button.normal:focus {
@@ -133,221 +71,6 @@ button.normal:focus {
     width: 126px;
     margin-left: -32px;
   }
-}
-
-/* Drawing Area */
-
-#scale-container {
-  position: absolute;
-  top: 30px;
-  left: 20px;
-  -webkit-transform-origin: 0 0 0;
-}
-
-svg#main {
-  background-image: url('images/paper_texture.png');
-  border: 1px solid #ddd;
-  position: absolute;
-  box-shadow: 0 0 38px -2px rgba(0,0,0,0.3);
-}
-
-svg#main, #sim, #shadow {
-  left: 256px;
-}
-
-body.print svg#main,
-body.print #sim,
-body.print #shadow {
-  top: 0;
-}
-
-body.print-auto svg#main,
-body.print-auto #sim,
-body.print-auto #shadow {
-  left: 0;
-}
-
-svg#main * {
-  stroke-width: 8 !important;
-}
-
-svg#main #cncserversvg path.selected {
-  stroke: blue !important;
-  stroke-width: 10 !important;
-  stroke-opacity: 1 !important;
-}
-
-@-webkit-keyframes ants  {
-  to {
-    stroke-dashoffset: 100%;
-  }
-}
-
-body.print-manual svg#main #cncserversvg path.selected.ants {
-  stroke: blue !important;
-  stroke-width: 10 !important;
-  stroke-opacity: 0.8 !important;
-  stroke-dasharray: 4,4;
-  -webkit-animation: ants 50s linear infinite;
-  -webkit-animation-fill-mode: forwards;
-}
-
-body.print-manual svg#main g path:hover {
-  stroke: red !important;
-  stroke-opacity: 0.8 !important;
-  stroke-dasharray: 5,5;
-  -webkit-animation: ants 70s linear infinite;
-  -webkit-animation-fill-mode: forwards;
-}
-
-#shadow {
-  position: absolute;
-  top: 20px;
-  height: 864px;
-  width: 1152px;
-  z-index: -5;
-  margin: 2px auto;
-}
-
-#shadow:before, #shadow:after {
-  z-index: -1;
-  position: absolute;
-  content: "";
-  bottom: 15px;
-  left: 10px;
-  width: 50%;
-  top: 80%;
-  max-width:485px;
-  background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 15px 10px rgba(0, 0, 0, 0.6);
-  -webkit-transform: rotate(-3deg);
-}
-
-#shadow:after {
-  -webkit-transform: rotate(3deg);
-  right: 10px;
-  left: auto;
-}
-
-/* Drawing Simulation Canvas */
-canvas#sim {
-  position: absolute;
-  background-color: rgba(255,255,255,0.8);
-  top: 20px;
-  z-index: 5;
-  display: none;
-}
-
-/* Directionality */
-#paint-angle {
-  background-image: url('images/rotation_grid.png');
-  background-size: 200px;
-  background-repeat: no-repeat;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-}
-
-#paint-angle img {
-  width: 200px;
-}
-
-/* Nav Tools */
-
-nav#control h3 {
-  margin-top: 0;
-}
-
-nav#tools {
-  left: -45px;
-  position: absolute;
-  top: 25px;
-  -webkit-transform-origin: top left;
-}
-
-nav#tools #waters {
-  left: -96px;
-  overflow: hidden;
-  padding: 1em;
-  position: absolute;
-  top: 19px;
-}
-
-nav#tools .water {
-  border: 2px solid #EEE;
-  border-radius: 150px 150px 150px 150px;
-  height: 150px;
-  margin-bottom: 51px;
-  width: 150px;
-  position: relative;
-
-  background: #c5deea; /* Old browsers */
-  background: radial-gradient(ellipse at center, #c5deea 0%,#b1c9d6 44%,#a6e3f4 100%); /* W3C */
-}
-
-nav#tools a a:hover, nav#tools a a:focus {
-  -webkit-animation-name: hover-pulse;
-  -webkit-animation-duration: 1000ms;
-  -webkit-animation-iteration-count: infinite;
-}
-
-/* Tools Sub options */
-nav#tools a:hover a.sub-option {
-  display: block;
-}
-
-nav#tools a.sub-option {
-  display: none;
-}
-
-nav#tools #colors a.sub-option {
-  width: 43px;
-  height: 58px;
-  position: absolute;
-  background-color: rgba(0,0,0,0.2);
-}
-
-  nav#tools #colors a.sub-option.full {
-    border-top-left-radius: 150px;
-    border-bottom-left-radius: 150px;
-  }
-
-  nav#tools #colors a.sub-option.dip {
-    right: 8px;
-    border-top-right-radius: 150px;
-    border-bottom-right-radius: 150px;
-  }
-
-
-nav#tools #waters a.sub-option {
-  width: 72px;
-  height: 75px;
-  right: 0;
-  position: absolute;
-  background-color: rgba(0,0,0,0.2);
-  line-height: 4.5em;
-  text-align: center;
-}
-
-  nav#tools #waters a.sub-option.full {
-    border-top-right-radius: 72px;
-  }
-
-  nav#tools #waters a.sub-option.dip {
-    bottom: 0;
-    line-height: 3.5em;
-    border-bottom-right-radius: 72px;
-  }
-
-
-nav#tools div.static a#colorx a.sub-option {
-  top: 5px;
-  display: none;
-  font-size: 16px;
-}
-
-nav#tools div.static a#colorx:hover a.sub-option {
-  display: block;
 }
 
 /* Animation Keyframes */
@@ -375,64 +98,6 @@ nav#tools div.static a#colorx:hover a.sub-option {
   0%   { box-shadow: 0 0 10px 10px #04aa1e; }
   50%  { box-shadow: 0 0 10px 5px #04aa1e; }
   100%  { box-shadow: 0 0 10px 10px #04aa1e; }
-}
-
-nav#tools div.static {
-  background-color: #CCCCCC;
-  border-radius: 15px 15px 15px 15px;
-  margin: 13px -7px -13px;
-  padding: 7px;
-  overflow: hidden;
-  border-top: 3px solid #000000;
-  position: relative;
-}
-
-nav#tools div.static a {
-  display: block;
-  width: 40%;
-  height: 50px;
-  text-align: center;
-  border-radius: 15px;
-}
-
-nav#tools div.static a#colorx {
-  color: red;
-  float: left;
-  font-size: 3.5em;
-  line-height: 0.9em;
-  width: 99%;
-}
-
-nav#tools a, nav#tools a:link  {
-  display: block;
-  color: white;
-  text-decoration: none;
-}
-
-nav#tools #colors {
-  background-color: #FFFFFF;
-  border-radius: 13px 13px 13px 13px;
-  box-shadow: 0 0 2px 8px #CCCCCC, 0 0 0 9px #777777;
-  margin-left: 91px;
-  padding: 1px 7px 9px;
-  position: relative;
-}
-
-nav#tools .color {
-  border: 2px solid #999;
-  border-radius: 135px 135px 135px 135px / 95px 95px 95px 95px;
-  height: 58px;
-  line-height: 55px;
-  margin-top: 10px;
-  text-align: center;
-  width: 85px;
-}
-
-nav#tools .color.selected,
-nav#tools .water.selected {
-  -webkit-animation-name: hover-pulse-selected;
-  -webkit-animation-duration: 3000ms;
-  -webkit-animation-iteration-count: infinite;
 }
 
 /* Nav Controls & Button Graphics */
@@ -484,45 +149,6 @@ fieldset#control {
   float: left;
   margin-bottom: 0.6em;
   margin-bottom: 0.25em;
-}
-
-/* Auto print specific */
-body.print-auto fieldset#control {
-  top: 20px;
-}
-
-body.print-auto #control>legend {
-  width: 49%;
-  font-weight: bold;
-  text-align: center;
-  font-size: 1.2em;
-  position: absolute;
-  top: -26px;
-  right: 54px;
-}
-
-body.print-auto #buttons {
-  margin-top: -9px;
-  padding-top: 5px;
-  margin-bottom: 6px;
-}
-
-/* Control panel specific button adjustments */
-body.print-auto #buttons button.normal {
-  font-size: 1.1em;
-  float: none;
-  margin: 0.2em auto;
-  display: block;
-  width: 190px;
-}
-
-/* Handle simple button text changes via class, tricksy CSS hobbits! */
-#pen.up:before {
-  content: "Raise ";
-}
-
-#pen.down:before {
-  content: "Lower ";
 }
 
 /* Status Specific */
