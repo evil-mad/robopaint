@@ -1,8 +1,9 @@
 /**
  * @file Holds all Robopaint watercolorbot specific configuration and utility
- * functions.
+ * functions in AMD Module format for inclusion via RequireJS.
  */
 
+define(function(){return function($, robopaint, cncserver){
 cncserver.wcb = {
   // Set the current status message
   status: function(msg, st) {
@@ -411,3 +412,4 @@ cncserver.wcb = {
     }
   }
 };
+}});

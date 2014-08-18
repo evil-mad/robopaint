@@ -2,6 +2,7 @@
  * @file Holds all CNC Server path management and tracing functions
  */
 
+define(function(){return function($, robopaint, cncserver){
 cncserver.paths = {
   // Find out what DOM object is directly below the point given
   // Will NOT work if point is outside visible screen range!
@@ -830,3 +831,4 @@ cncserver.paths = {
 
   }
 };
+}});
