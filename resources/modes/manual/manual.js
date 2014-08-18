@@ -2,11 +2,31 @@
  * @file Holds all RoboPaint manual painting mode specific code
  */
 
-// Trigger common mode config
-robopaintModeRequireJSCommonConfig();
+robopaintRequire(['jquery.svg', 'jquery.svgdom', 'client', 'wcb', 'commander', 'paths'],
+function($, robopaint, cncserver) {
 
-requirejs(['jquery', 'jquery.svg', 'jquery.svgdom', 'tspsolver',
-  'client', 'utils', 'api', 'wcb', 'commander', 'paths'], function ($) {
+
+  /**
+   * Update the rendering of the colorset
+   *
+   * This is "outside of the main "global" so robopaint's main.js knows where to
+   * find it. Same format for robopaint.method-draw.js
+   */
+  window.updateColorSet = function(){
+    var set = robopaint.statedata.colorsets[robopaint.settings.colorset];
+    cncserver.config.colors = set.colors;
+    $('#colors').attr('class', '').addClass(set.baseClass);
+    for (var i in set.colors) {
+      $('#color' + i)
+        .text(robopaint.settings.showcolortext ? set.colors[i].name : "")
+        .attr('title', robopaint.settings.showcolortext ? "" : set.colors[i].name);
+    }
+  }
+
+  // Give cncserver semi-global scope so it can easily be checked outside the module
+  // TODO: Maybe this can be done with some kind of fancy inter-mode API? :P
+  window.cncserver = cncserver;
+
 $(function() {
   var $path = {};
   var $svg = $('svg#main');
@@ -56,7 +76,7 @@ $(function() {
 
 
   // Initial run to render existing colorsets ---
-  updateColorSet();
+  window.updateColorSet();
 
   // Add all the colorsets CSS files
   for(var i in robopaint.statedata.colorsets) {
@@ -431,21 +451,3 @@ $(function() {
 });
 
 }); // End RequireJS init
-
-/**
- * Update the rendering of the colorset
- *
- * This is "outside of the main "global" so robopaint's main.js knows where to
- * find it. Same format for robopaint.method-draw.js
- */
-function updateColorSet(){
-  var set = robopaint.statedata.colorsets[robopaint.settings.colorset];
-  cncserver.config.colors = set.colors;
-  $('#colors').attr('class', '').addClass(set.baseClass);
-  for (var i in set.colors) {
-    $('#color' + i)
-      .text(robopaint.settings.showcolortext ? set.colors[i].name : "")
-      .attr('title', robopaint.settings.showcolortext ? "" : set.colors[i].name);
-  }
-}
-
