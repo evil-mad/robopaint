@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="example.css">
+    <script data-main="example" src="../require.js"></script>
+  </head>
+<body>
+
+<fieldset id="control">
+  <fieldset id="status">
+    <legend>Status</legend>
+    <div id="statusmessage"></div>
+    <div class="progress-wrapper">
+      <progress title="Current progress" max="100" value="0"></progress>
+      <button id="pause" title="Click to pause buffer running to bot">PAUSE</button>
+      <button id="cancel" title="Cancel current print job.">Cancel Print</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Machine</legend>
+    <nav>
+      <button class="normal" id="park" title="Move the carriage back to the home position">Park</button>
+      <button class="normal" id="disable" title="Raise brush and Unlock (disable) stepper motors, so that you can move the carriage by hand.">Unlock & Zero</button>
+    </nav>
+  </fieldset>
+
+  <fieldset>
+    <legend>Font</legend>
+    <nav>
+      <input id="fonttext" type="text" value="Hello World!">
+      <select id="fontselect"></select>
+      <div>
+        <label for="charwidth">Char spacing:</label>
+        <input type="range" id="charwidth" min="1" value="8" max="30"/>
+      </div>
+      <div>
+        <label for="scale">Scale:</label>
+        <input type="range" id="scale" min="50" value="200" max="600"/>
+      </div>
+      <div>
+        <label for="hcenter">H Center:</label>
+        <input type="range" id="hcenter" min="10" value="200" max="1152"/>
+      </div>
+      <div>
+        <label for="vcenter">V Center:</label>
+        <input type="range" id="vcenter" min="10" value="200" max="1152"/>
+      </div>
+      <div>
+        <label for="wrap">Wrap Width:</label>
+        <input type="range" id="wrap" min="1" value="70" max="1152"/>
+      </div>
+    </nav>
+  </fieldset>
+</fieldset>
+
+<div id="scale-container">
+  <svg id="main" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">
+    <g id="target" transform="translate(48,48)"></g>
+
+    <path id="drawpoint" style="fill:red;" d="M17.25-0.833H7.482C7.037-4.199,4.426-6.865,1.083-7.381V-17h-2v9.579c-3.495,0.385-6.273,3.11-6.732,6.588h-9.435v2h9.435
+    c0.459,3.478,3.237,6.204,6.732,6.59v9.577h2V7.715c3.343-0.517,5.953-3.184,6.398-6.549h9.769V-0.833z M1.083,5.709V2.667h-2v3.092
+    c-2.397-0.357-4.307-2.214-4.732-4.592h3.232v-2h-3.232c0.426-2.376,2.335-4.233,4.732-4.591v3.091h2v-3.042
+    c2.243,0.472,3.991,2.276,4.397,4.542H2.583v2h2.898C5.075,3.433,3.327,5.238,1.083,5.709z"/>
+  </svg>
+
+  <div id="shadow"></div>
+</div>
+
+</body>
+</html>

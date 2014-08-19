@@ -15,6 +15,7 @@ function robopaintModeRequireJSCommonConfig(){
       'jquery.svg': 'lib/jquery.svg',
       'jquery.svgdom': 'lib/jquery.svgdom',
       tspsolver: 'lib/tspsolver',
+      hersheytext: 'lib/hersheytext',
       utils: 'robopaint.utils',
       client: 'cncserver.client',
       wcb: 'cncserver.client.wcb',
