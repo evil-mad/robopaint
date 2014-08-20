@@ -68,7 +68,7 @@ cncserver.renderText = function(s, options) {
           charOffset = font[index].o;
 
           // Add the char to the DOM
-          $groupLine.prepend(
+          $groupLine.append(
             $('<path>').attr({
               d: font[index].d,
               style: 'stroke:#000000; fill:none;',
@@ -96,7 +96,7 @@ cncserver.renderText = function(s, options) {
            // New Line container
            lineCount++;
            $groupLine = $('<g>').attr('id', options.id + '-line-' + lineCount);
-           $group.prepend($groupLine);
+           $group.append($groupLine);
          } else {
            offset.left+= options.charWidth*2; // Add regular space
          }
