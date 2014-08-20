@@ -138,7 +138,20 @@ fieldset#control {
 
 #control button {
   display: block;
-  float: left;
+}
+
+#buttons {
+  margin-top: -9px;
+  padding-top: 5px;
+  margin-bottom: 6px;
+}
+
+#buttons button.normal {
+  font-size: 1.1em;
+  float: none;
+  margin: 0.2em auto;
+  display: block;
+  width: 190px;
 }
 
 #control h2 {

@@ -1,5 +1,5 @@
 /**
- * @file Holds all RoboPaint example mode initialization code
+ * @file Holds all RoboPaint example mode text renderer initialization code
  */
 
 robopaintRequire(['hersheytext', 'wcb', 'commander', 'paths'],
@@ -41,8 +41,6 @@ function($, robopaint, cncserver) {
 $(function() {
   parent.fadeInWindow(); // Actually show the mode window
 
-  var $svg = $('svg#main');
-
   $('#drawpoint').hide(); // Hide the drawpoint
 
   // Fit the canvas and other controls to the screen size
@@ -67,7 +65,7 @@ $(function() {
       wrapWidth: parseInt($('#wrap').val()),
       centerWidth: parseInt($('#hcenter').val()),
       centerHeight: parseInt($('#vcenter').val()),
-      target: '#main',
+      target: '#target',
       id: 'textexample'
     });
 
@@ -83,47 +81,76 @@ $(function() {
 
   // Cancel Print
   $('#cancel').click(function(){
-    var cancelPrint = confirm("Are you sure you want to cancel the current print job and reset (for example, to start a new print job)?");
+    var cancelPrint = confirm("Are you sure you want to cancel the current print job?");
     if (cancelPrint) {
-      unBindEvents(function(){
+      window.unBindEvents(function(){
         robopaint.switchMode('home', function(){
-          robopaint.switchMode('manual');
+          robopaint.switchMode('example');
         });
       });
     }
   });
 
   // Pause management
-  var pauseText = 'Click to pause buffer running to bot';
-  var resumeText = 'Click to resume operations';
+  var stateText = {
+    ready: 'Click to start painting',
+    pause: 'Click to stop current operations',
+    resume: 'Click to resume operations',
+    wait: 'Please wait while executed processes complete...'
+  }
+
   var pausePenState = 0;
   $('#pause').click(function(){
 
-    if (!cncserver.state.process.paused) {
-      // Only attempt to status pause if something is going on, but always allow pause
-      if (cncserver.state.buffer.length) {
-        cncserver.wcb.status('Pausing current process...');
-      } else {
-        $('#pause').addClass('active').attr('title', resumeText).text('Resume');
-      }
-      cncserver.state.process.paused = true;
-    } else {
-      cncserver.state.process.paused = false;
+    // With nothing in the queue, start painting the text
+    if (cncserver.state.buffer.length == 0) {
+      $('#pause').removeClass('ready').attr('title', stateText.pause).text('Pause');
+      $('#buttons button.normal').prop('disabled', true); // Disable options
+      $('#cancel').prop('disabled', false); // Enable the cancel print button
 
-      // Execute next should put us where we need to be
-      cncserver.cmd.executeNext(function(){
-        // If the pen was down before, put it down now after the resuming command.
-        if (pausePenState) {
-          cncserver.state.buffer.push('down'); // Add to END of queue
-        }
+      // Run all paths into run buffer for drawing
+      var run = cncserver.cmd.run;
+      //run(['wash', ['tool', 'color1']]);
+      $('#textexample path').each(function(){
+        run('status', 'Drawing letter "' + $(this).attr('letter') + '"');
+        cncserver.paths.runOutline($(this));
       });
 
-      $('#pause').removeClass('active').attr('title', pauseText).text('PAUSE');
-      if (cncserver.state.buffer.length) {
+      // Add custom callback to buffer once everythign else is done
+      run('custom', function(){
+        run('status', 'All done!');
+        $('#pause').attr('class', 'ready').attr('title', stateText.ready).text('Start');
+        $('#buttons button.normal').prop('disabled', false); // Enable options
+        $('#cancel').prop('disabled', true); // Disable the cancel print button
+      });
+
+    } else {
+      // With something in the queue... we're either pausing, or resuming
+      if (!cncserver.state.process.paused) {
+        // Starting Pause =========
+        $('#pause').prop('disabled', true).attr('title', stateText.wait);
+        cncserver.wcb.status('Pausing current process...');
+        cncserver.state.process.paused = true;
+      } else {
+        // Resuming ===============
+        cncserver.state.process.paused = false;
+
+        $('#buttons button.normal').prop('disabled', true); // Disable options
+
+        // Execute next should put us where we need to be
+        cncserver.cmd.executeNext(function(){
+          // If the pen was down before, put it down now after the resuming command.
+          if (pausePenState) {
+            cncserver.state.buffer.push('down'); // Add to END of queue
+          }
+        });
+
+        $('#pause').removeClass('active').attr('title', stateText.pause).text('Pause');
         cncserver.wcb.status('Drawing resumed...', true);
+        pausePenState = 0;
       }
-      pausePenState = 0;
     }
+
   });
 
   // Pause callback
@@ -138,49 +165,28 @@ $(function() {
 
     function _pauseDone() {
       cncserver.wcb.status('Paused. Click resume to continue.', 'complete');
-      $('#pause').addClass('active').attr('title', resumeText).text('Resume');
+      $('#buttons button.normal').prop('disabled', false); // Enable options
+      $('#pause').addClass('active').attr('title', stateText.resume).text('Resume');
+      $('#pause').prop('disabled', false);
     }
   }
 
+
   // Bind to control buttons
   $('#park').click(function(){
-    // If we're paused, run it directly, otherwise add to buffer
-    if (cncserver.state.process.paused) {
-      cncserver.wcb.status('Parking brush...');
-      robopaint.cncserver.api.pen.park(function(d){
-        cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
-      });
-    } else {
-      cncserver.cmd.run('park');
-    }
-  });
-
-  $('#draw').click(function(){
-    $('#draw').prop('disabled', true);
-    cncserver.cmd.run([['status', 'Painting along selected path...']]);
-    $path.removeClass('ants'); // Can't stroke with ants! Screws up visibility
-
-    cncserver.paths.runOutline($path, function(){
-      if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
-      $('#draw').prop('disabled', false);
-      $path.addClass('ants');
-      cncserver.cmd.run([['status', 'Painting complete', true]]);
-
-      if (cncserver.config.canvasDebug) {
-        $('canvas#debug').show();
-      }
-
+    cncserver.wcb.status('Parking brush...');
+    robopaint.cncserver.api.pen.park(function(d){
+      cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
     });
   });
+
 
   $('#pen').click(function(){
     robopaint.cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
   });
 
-  $('#calibrate').click(function(){
-    robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord({x: 0, y:0}));
-  });
 
+  // Motor unlock: Also lifts pen and zeros out.
   $('#disable').click(function(){
     cncserver.wcb.status('Unlocking motors...');
     robopaint.cncserver.api.pen.up();
@@ -190,24 +196,20 @@ $(function() {
     });
   });
 
-  $('#zero').click(function(){
-    cncserver.wcb.status('Absolute position reset', true);
-    robopaint.cncserver.api.pen.zero();
-  });
-
   // Move the visible draw position indicator
-  var $drawpoint = $('#drawpoint');
   robopaint.$(robopaint.cncserver.api).bind('movePoint', function(e, p) {
     // Move visible drawpoint
-    $drawpoint.show().attr('fill', cncserver.state.pen.state ? '#FF0000' : '#00FF00');
+    var $d = $('#drawpoint');
+
+    $d.show().attr('fill', cncserver.state.pen.state ? '#FF0000' : '#00FF00');
 
     // Add 48 to each side for 1/2in offset
     p = cncserver.wcb.getAbsCoord(p);
-    $drawpoint.attr('transform', 'translate(' + (p.x + 48) + ',' + (p.y + 48) + ')');
+    $d.attr('transform', 'translate(' + (p.x - 48) + ',' + (p.y - 48) + ')');
   });
 
   robopaint.$(robopaint.cncserver.api).bind('offCanvas', function() {
-    $drawpoint.hide();
+    $('#drawpoint').hide();
   });
 
   // Externalize for remote triggering

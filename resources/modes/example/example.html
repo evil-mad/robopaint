@@ -9,26 +9,8 @@
 <body>
 
 <fieldset id="control">
-  <fieldset id="status">
-    <legend>Status</legend>
-    <div id="statusmessage"></div>
-    <div class="progress-wrapper">
-      <progress title="Current progress" max="100" value="0"></progress>
-      <button id="pause" title="Click to pause buffer running to bot">PAUSE</button>
-      <button id="cancel" title="Cancel current print job.">Cancel Print</button>
-    </div>
-  </fieldset>
-
   <fieldset>
-    <legend>Machine</legend>
-    <nav>
-      <button class="normal" id="park" title="Move the carriage back to the home position">Park</button>
-      <button class="normal" id="disable" title="Raise brush and Unlock (disable) stepper motors, so that you can move the carriage by hand.">Unlock & Zero</button>
-    </nav>
-  </fieldset>
-
-  <fieldset>
-    <legend>Font</legend>
+    <legend>Text Renderer</legend>
     <nav>
       <input id="fonttext" type="text" value="Hello World!">
       <select id="fontselect"></select>
@@ -38,7 +20,7 @@
       </div>
       <div>
         <label for="scale">Scale:</label>
-        <input type="range" id="scale" min="50" value="200" max="600"/>
+        <input type="range" id="scale" min="50" value="500" max="1000"/>
       </div>
       <div>
         <label for="hcenter">H Center:</label>
@@ -53,6 +35,23 @@
         <input type="range" id="wrap" min="1" value="70" max="1152"/>
       </div>
     </nav>
+  </fieldset>
+
+  <fieldset id="buttons">
+    <legend>Control</legend>
+    <button id="pause" class="ready" title="Click to start painting">Start</button>
+    <button id="cancel" disabled="disabled" title="Cancel current print job.">Cancel Print</button>
+    <button id="pen" class="normal">Brush</button>
+    <button id="park" class="normal" title="Move the carriage back to the home position">Park Home</button>
+    <button id="disable" class="normal" title="Raise brush and Unlock (disable) stepper motors, so that you can move the carriage by hand.">Unlock Motors</button>
+  </fieldset>
+
+  <fieldset id="status">
+    <legend>Status</legend>
+    <div id="statusmessage"></div>
+    <div class="progress-wrapper">
+      <progress title="Current progress" max="100" value="0"></progress>
+    </div>
   </fieldset>
 </fieldset>
 
