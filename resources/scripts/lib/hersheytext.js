@@ -73,7 +73,8 @@ cncserver.renderText = function(s, options) {
               d: font[index].d,
               style: 'stroke:#000000; fill:none;',
               fill: 'none',
-              transform: 'translate(' + offset.left + ', ' + offset.top + ')'
+              transform: 'translate(' + offset.left + ', ' + offset.top + ')',
+              letter: word[i]
             })
           );
         }
