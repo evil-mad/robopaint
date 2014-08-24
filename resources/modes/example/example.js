@@ -2,7 +2,7 @@
  * @file Holds all RoboPaint example mode text renderer initialization code
  */
 
-robopaintRequire(['hersheytext', 'wcb', 'commander', 'paths'],
+robopaintRequire(['hersheytext', 'svgshared', 'wcb', 'commander', 'paths'],
 function($, robopaint, cncserver) {
   // Give cncserver semi-global scope so it can easily be checked outside the module
   window.cncserver = cncserver;

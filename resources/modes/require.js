@@ -17,7 +17,7 @@ function robopaintModeRequireJSCommonConfig(){
       tspsolver: 'lib/tspsolver',
       hersheytext: 'lib/hersheytext',
       utils: 'robopaint.utils',
-      client: 'cncserver.client',
+      svgshared: 'robopaint.mode.svg',
       wcb: 'cncserver.client.wcb',
       commander: 'cncserver.client.commander',
       paths: 'cncserver.client.paths',
