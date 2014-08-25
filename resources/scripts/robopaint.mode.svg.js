@@ -1,13 +1,17 @@
 /**
  * @file Holds central controller objects and DOM management code for RoboPaint
- * modes "Auto Print" and "Manual Print" in AMD Module format for inclusion via
- * RequireJS.
+ * modes that leverage SVG and path tracing functions.
  *
- * @TODO: Should probably be abstracted for more use cases for other modes.
+ * AMD Module format for inclusion via RequireJS.
  */
 
 define(function(){return function($, robopaint, cncserver){
-// Set the "global" scope objects for any robopaint level details
+
+// Give cncserver semi-global scope so it can easily be checked outside the mode
+window.cncserver = cncserver;
+
+// Set the "global" scope objects for any robopaint level details.
+// These are used for positioning and tracing SVG via a central SVG object
 cncserver.canvas = {
   height: robopaint.canvas.height,
   width: robopaint.canvas.width,
@@ -18,6 +22,8 @@ cncserver.canvas = {
   }
 };
 
+// TODO: How much of this is helpful for just SVG tracing modes/vs helpful for
+// ALL modes??
 cncserver.state = {
   pen: {},
   buffer: [], // Hold commands to be interpreted as free operations come
@@ -39,7 +45,6 @@ cncserver.config = {
 };
 
 $(function() {
-  var $path = {};
   var $svg = $('svg#main');
 
   serverConnect(); // "Connect", and get the initial pen state

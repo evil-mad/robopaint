@@ -4,38 +4,10 @@
 
 robopaintRequire(['hersheytext', 'svgshared', 'wcb', 'commander', 'paths'],
 function($, robopaint, cncserver) {
-  // Give cncserver semi-global scope so it can easily be checked outside the module
-  window.cncserver = cncserver;
 
-  // Set the "global" scope objects for any robopaint level details
-  cncserver.canvas = {
-    height: robopaint.canvas.height,
-    width: robopaint.canvas.width,
-    scale: 1,
-    offset: {
-      top: 20,
-      left: 20
-    }
-  };
-
-  cncserver.state = {
-    pen: {},
-    buffer: [], // Hold commands to be interpreted as free operations come
-    media: '', // What we think is currently on the brush
-    mediaTarget: '', // What we "want" to paint with
-    process: {
-      name: 'idle',
-      waiting: false,
-      busy: false,
-      paused: false,
-      max: 0
-    }
-  };
-
-  // We don't ever check visibility/overlap for this mode
-  cncserver.config = {
-    checkVisibility: false
-  };
+  // We don't ever check visibility/overlap for this mode because the
+  // text output is fully linear and only lines
+  cncserver.config.checkVisibility = false;
 
 // On page load complete...
 $(function() {
@@ -53,6 +25,7 @@ $(function() {
     $('<option>').text(cncserver.fonts[id].name).val(id).appendTo('#fontselect');
   }
 
+  // Bind trigger for font selection
   $('#fontselect').change(function(){
     $('#textexample').remove(); // Kill the old one (if any)
 
@@ -118,7 +91,7 @@ $(function() {
 
       // Add custom callback to buffer once everythign else is done
       run('custom', function(){
-        run('status', 'All done!');
+        run([['park'], ['status', 'All done!']]);
         $('#pause').attr('class', 'ready').attr('title', stateText.ready).text('Start');
         $('#buttons button.normal').prop('disabled', false); // Enable options
         $('#cancel').prop('disabled', true); // Disable the cancel print button
@@ -180,11 +153,10 @@ $(function() {
     });
   });
 
-
+  // Pen/Brush up & down
   $('#pen').click(function(){
     robopaint.cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1);
   });
-
 
   // Motor unlock: Also lifts pen and zeros out.
   $('#disable').click(function(){
@@ -242,6 +214,6 @@ $(function() {
     cncserver.canvas.offset.top = mainOffset.top+1;
   }
 
-});
+}); // End Page load complete
 
 }); // End RequireJS init
