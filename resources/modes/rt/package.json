@@ -1,7 +1,7 @@
 {
   "name": "rt",
   "version": "0.1.0",
-  "type": "robopaint_mode",
+  "type": "robopaint_modeDISABLED",
   "icon": "icon-flight",
   "weight": 0,
   "word": "Realtime",
