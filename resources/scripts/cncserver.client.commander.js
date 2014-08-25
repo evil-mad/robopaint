@@ -17,6 +17,7 @@
 var returnPoints = [];
 var lastPoint = {};
 
+define(function(){return function($, robopaint, cncserver){
 cncserver.cmd = {
   // Easy set for progress!
   progress: function(options){
@@ -153,3 +154,4 @@ setInterval(function(){
     cncserver.cmd.executeNext();
   }
 }, 10);
+}});

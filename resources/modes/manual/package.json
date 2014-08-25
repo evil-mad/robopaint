@@ -1,0 +1,15 @@
+{
+  "name": "manual",
+  "version": "0.1.0",
+  "type": "robopaint_mode",
+  "icon": "icon-picture-1",
+  "weight": 1,
+  "word": "Manual",
+  "core": false,
+  "description": "Manual Mode: Customize your print",
+  "title": "Manual Paint",
+  "detail": "Like Auto-paint, but allows for more control over what elements are painted, and a number of other options.",
+  "main": "manual.html",
+  "author": "techninja",
+  "license": "MIT"
+}

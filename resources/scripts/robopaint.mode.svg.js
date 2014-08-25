@@ -1,46 +1,50 @@
 /**
- * @file Holds all CNC Server central controller objects and DOM management code
- * This is currently manifested as a shared "library" between the two drawing
- * SVG drawing modes, and might need to be abstracted out to be more supportive
- * for other modes.
+ * @file Holds central controller objects and DOM management code for RoboPaint
+ * modes that leverage SVG and path tracing functions.
+ *
+ * AMD Module format for inclusion via RequireJS.
  */
 
-// Set the global scope object for any robopaint level details
-var robopaint = window.parent.robopaint;
+define(function(){return function($, robopaint, cncserver){
 
-var cncserver = {
-  canvas: {
-    height: robopaint.canvas.height,
-    width: robopaint.canvas.width,
-    scale: 1,
-    offset: {
-      top: 20,
-      left: 235
-    }
-  },
-  state: {
-    pen: {},
-    buffer: [], // Hold commands to be interpreted as free operations come
-    media: '', // What we think is currently on the brush
-    mediaTarget: '', // What we "want" to paint with
-    process: {
-      name: 'idle',
-      waiting: false,
-      busy: false,
-      paused: false,
-      max: 0
-    }
-  },
-  config: {
-    colors: robopaint.statedata.colorsets[robopaint.settings.colorset].colors,
-    canvasDebug: false, // Debug mode for helping find canvas offsets
-    checkVisibility: true
+// Give cncserver semi-global scope so it can easily be checked outside the mode
+window.cncserver = cncserver;
+
+// Set the "global" scope objects for any robopaint level details.
+// These are used for positioning and tracing SVG via a central SVG object
+cncserver.canvas = {
+  height: robopaint.canvas.height,
+  width: robopaint.canvas.width,
+  scale: 1,
+  offset: {
+    top: 20,
+    left: 235
   }
 };
 
+// TODO: How much of this is helpful for just SVG tracing modes/vs helpful for
+// ALL modes??
+cncserver.state = {
+  pen: {},
+  buffer: [], // Hold commands to be interpreted as free operations come
+  media: '', // What we think is currently on the brush
+  mediaTarget: '', // What we "want" to paint with
+  process: {
+    name: 'idle',
+    waiting: false,
+    busy: false,
+    paused: false,
+    max: 0
+  }
+};
+
+cncserver.config = {
+  colors: robopaint.statedata.colorsets[robopaint.settings.colorset].colors,
+  canvasDebug: false, // Debug mode for helping find canvas offsets
+  checkVisibility: true
+};
 
 $(function() {
-  var $path = {};
   var $svg = $('svg#main');
 
   serverConnect(); // "Connect", and get the initial pen state
@@ -52,7 +56,7 @@ $(function() {
   // Initial server connection handler
   function serverConnect() {
     // Get initial pen data from server
-    cncserver.wcb.status('Connecting to bot...');
+    if (cncserver.wcb) cncserver.wcb.status('Connecting to bot...');
 
     // Ensure bot is cleared and ready to receive commands at startup
     robopaint.cncserver.api.buffer.clear();
@@ -141,7 +145,7 @@ $(function() {
 });
 
 // Triggered on before close or switch mode, call callback to complete operation
-function onClose(callback, isGlobal) {
+window.onClose = function(callback, isGlobal) {
   if (cncserver.state.buffer.length) {
     var r = confirm("Are you sure you want to go?\n\
 Exiting print mode while printing will cancel all your jobs. Click OK to leave.");
@@ -161,7 +165,7 @@ Exiting print mode while printing will cancel all your jobs. Click OK to leave."
 // any of these bind events, but there could be in the future. Exactly what
 // they'd be namespaced to is unclear, as this is used by both Auto and manual
 // paint modes. Maybe "updatePen.paint".. etc?
-function unBindEvents(callback) {
+window.unBindEvents = function (callback) {
   robopaint.$(robopaint.cncserver.api).unbind('updatePen');
   robopaint.$(robopaint.cncserver.api).unbind('toolChange');
   robopaint.$(robopaint.cncserver.api).unbind('offCanvas');
@@ -178,3 +182,4 @@ function unBindEvents(callback) {
   });
 
 }
+}});

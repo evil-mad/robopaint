@@ -2,6 +2,24 @@
  * @file Holds all RoboPaint automatic painting mode specific code
  */
 
+robopaintRequire(['jquery.svg', 'jquery.svgdom', 'svgshared', 'wcb', 'commander', 'paths'],
+function($, robopaint, cncserver) {
+
+  /**
+   * Update the colorset shortcut! (don't need to render as auto doesn't display
+   * the colorset rendering)
+   *
+   * This is "outside of the main "global" so robopaint's main.js knows where to
+   * find it. Same format for robopaint.method-draw.js
+   */
+  window.updateColorSet = function (){
+    cncserver.config.colors = robopaint.statedata.colorsets[robopaint.settings.colorset].colors;
+  }
+
+  // Give cncserver semi-global scope so it can easily be checked outside the module
+  // TODO: Maybe this can be done with some kind of fancy inter-mode API? :P
+  window.cncserver = cncserver;
+
 $(function() {
   var $svg = $('svg#main');
 
@@ -189,13 +207,4 @@ $(function() {
 
 });
 
-/**
- * Update the colorset shortcut! (don't need to render as auto doesn't display
- * the colorset rendering)
- *
- * This is "outside of the main "global" so robopaint's main.js knows where to
- * find it. Same format for robopaint.method-draw.js
- */
-function updateColorSet(){
-  cncserver.config.colors = robopaint.statedata.colorsets[robopaint.settings.colorset].colors;
-}
+}); // End RequireJS init
