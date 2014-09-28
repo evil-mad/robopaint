@@ -165,6 +165,7 @@ function bindSettingsControls() {
 
   // Set robopaint global aspect ratio
   var b = botTypes[robopaint.currentBot.type].data;
+  robopaint.currentBot.data = b;
   var aspect = (b.maxArea.height - b.workArea.top) / (b.maxArea.width - b.workArea.left);
   robopaint.canvas = {
     width: 1152, // "Trusted" width to base transformations off of
