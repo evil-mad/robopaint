@@ -132,6 +132,10 @@ function bindMainControls() {
       // Initialize settings...
       loadSettings();
       saveSettings();
+
+      // Init sockets for data stream
+      initSocketIO();
+
       $('body.home nav').fadeIn('slow');
       initializing = false;
     }
@@ -288,6 +292,17 @@ function responsiveResize() {
 };
 
 /**
+ * Initialize the Socket.IO websocket connection
+ */
+function initSocketIO(){
+  // Add Socket.IO include now that we know where from and the server is running
+  var path = robopaint.cncserver.api.server.protocol +
+    '://' + robopaint.cncserver.api.server.domain + ':' +
+    robopaint.cncserver.api.server.port;
+  robopaint.socket = io(path);
+}
+
+/**
  * Binds all the callbacks functions for controlling CNC Server via its Node API
  */
 function startSerial(){
@@ -319,6 +334,9 @@ function startSerial(){
         saveSettings();
 
         robopaint.api.bindCreateEndpoints();
+
+        // Init sockets for data stream
+        initSocketIO();
       },
       disconnect: function() {
         setModal(true);
