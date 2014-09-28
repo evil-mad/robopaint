@@ -45,7 +45,7 @@ $(function() {
     // REQUIRED: Refresh DOM to reinstate node status with XML namespaces
     // TODO: There must be a better way to do this! :P
     $('#scale-container').html($('#scale-container').html());
-  }).change(); // Trigger initial run
+  }).val('futural').change(); // Trigger initial run (and default font)
 
   // Re-render on keypress
   $('input').on('input', function(e){
