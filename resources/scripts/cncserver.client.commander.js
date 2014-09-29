@@ -1,23 +1,116 @@
 /**
  * @file Holds all CNC Server command abstractions for API shortcuts. The API
  * Makes the actual commands to the server, but this manages their execution and
- * buffering to avoid collisions.
+ * buffering to keep things executed in the correct order.
  *
  * Only applies to specific API functions that require waiting for the bot to
  * finish, handles all API callbacks internally.
  */
 
-// TODO: DO this better!
-// Because these are outside of any function they're polluting the global scope,
-// and that's just bad pudding. Not to mention, if you think you have to use
-// globals for something, then you're probbaly doing it wrong. These are likely
-// one of the last vestiges of the far simpler code. Just need to root out where
-// they're used and possibly attach them directly to the cncserver.cmd object,
-// or refactor them out completely.
-var returnPoints = [];
-var lastPoint = {};
 
 define(function(){return function($, robopaint, cncserver){
+
+// Buffer of commands to send out: This is just a localized buffer to ensure
+// That commands sent very quickly get sent out in the correct order.
+var sendBuffer = [];
+var running = false;
+var lastPoint = {};
+
+// Command iterator (sends the next command to be timed/queued by CNCserver)
+function sendNext() {
+  if (!sendBuffer.length) {
+    running = false;
+    return;
+  } else {
+    running = true;
+  }
+
+  // Because we're interacting with an object in the parent scope, this file
+  // stays loaded even after its parent window instance dies. An easy way
+  // to see if it's dead, is if console is null (evaluates false)
+  if (!console) {
+    // At this point the parent window is gone and we don't need to do anything
+    // but a bit of cleanup
+    delete cncserver.wcb;
+    delete cncserver.config;
+    delete cncserver.paths;
+    delete cncserver.state;
+    return;
+  }
+
+  // Pop the next command off the array
+  var cmd = sendBuffer.pop();
+  if (typeof cmd == "string"){
+    cmd = [cmd];
+  }
+
+  var api = robopaint.cncserver.api;
+
+  // TODO: any conglomerate commands that spawn other run processes and require
+  // things to wait before their items are added (tool, wash) need to be done a
+  // little differently to avoid out of order command errors.
+
+  switch (cmd[0]) {
+    case "move":
+      var point = cncserver.wcb.getPercentCoord(cmd[1]);
+      point.ignoreTimeout = '1';
+      api.pen.move(point, function(p) {
+        // Refill paint rules!
+        if (p.distanceCounter > robopaint.settings.maxpaintdistance) {
+          cncserver.wcb.getMorePaint(cmd[1], sendNext);
+        } else {
+          // Trigger next item to get flushed out
+          sendNext();
+        }
+      });
+
+      lastPoint = cncserver.wcb.getPercentCoord(cmd[1]);
+      break;
+    case "tool": // TODO: Change this to media elsehwere it's used
+      cncserver.wcb.setMedia(cmd[1], sendNext, cmd[2]);
+      break;
+    case "actualtool":
+      api.tools.change(cmd[1], sendNext, {ignoreTimeout: '1'});
+      break;
+    case "up":
+      api.pen.up(sendNext, {ignoreTimeout: '1'});
+      break;
+    case "down":
+      api.pen.down(sendNext, {ignoreTimeout: '1'});
+      break;
+    case "status":
+      api.buffer.message(cmd[1], sendNext);
+      break;
+    case "callbackname":
+      api.buffer.callbackname(cmd[1], sendNext);
+      break;
+    case "pause":
+      api.buffer.pause(sendNext);
+      break;
+    case "resume":
+      api.buffer.resume(sendNext);
+      break;
+    case "clear":
+      api.buffer.clear(sendNext);
+      break;
+    case "localclear":
+      sendBuffer = [];
+      break;
+    case "resetdistance":
+      api.pen.resetCounter(sendNext);
+      break;
+    case "wash":
+      cncserver.wcb.fullWash(sendNext, cmd[1]);
+      break;
+    case "park":
+      api.pen.park(sendNext, {ignoreTimeout: '1'});
+      break;
+    default:
+      console.debug('Queue shortcut not found:' + cmd);
+      sendNext();
+  }
+}
+
 cncserver.cmd = {
   // Easy set for progress!
   progress: function(options){
@@ -30,128 +123,47 @@ cncserver.cmd = {
     }
   },
 
-  // CMD specific callback handler
-  cb: function(d) {
-    // TODO: Check for errors in callback return values
-    // This is nitpicky at best, as the only errors to be returned on any
-    // API callback don't really have a clear path of action, other than perhaps
-    // stopping and alerting the user. This should probably wait until we have
-    // a proper non-blocking alert/message system before attempting to fix.
-
-    if (!cncserver.state.buffer.length) {
-      cncserver.state.process.busy = false;
-      cncserver.state.process.max = 0;
-      cncserver.cmd.progress({val: 0, max: 0});
-    } else {
-      // Update the progress bar
-      cncserver.cmd.progress({
-        val: cncserver.state.process.max - cncserver.state.buffer.length,
-        max: cncserver.state.process.max
-      });
-
-      // Check for paint refill
-      if (!cncserver.state.process.paused) {
-        if (cncserver.state.pen.distanceCounter > robopaint.settings.maxpaintdistance && cncserver.state.buffer.length) {
-          var returnPoint = returnPoints[returnPoints.length-1] ? returnPoints[returnPoints.length-1] : lastPoint;
-          cncserver.wcb.getMorePaint(returnPoint, cncserver.cmd.executeNext);
-        } else {
-          // Execute next command
-          cncserver.cmd.executeNext();
-        }
-      } else {
-        cncserver.state.process.pauseCallback();
-      }
-    }
-  },
-
-  executeNext: function(executeCallback) {
-    // Because we're interacting with an object in the parent scope, this file
-    // stays loaded even after its parent window instance dies. An easy way
-    // to see if it's dead, is if console is null (evaluates false)
-    if (!console) {
-      // At this point the parent window is gone and we don't need to do anything
-      // but a bit of cleanup
-      delete cncserver.wcb;
-      delete cncserver.config;
-      delete cncserver.paths;
-      delete cncserver.state;
-      return;
-    }
-
-    if (!cncserver.state.buffer.length) {
-      cncserver.cmd.cb();
-      return;
-    } else {
-      cncserver.state.process.busy = true;
-    };
-
-    var next = cncserver.state.buffer.pop();
-
-    if (typeof next == "string"){
-      next = [next];
-    }
-
-    switch (next[0]) {
-      case "move":
-        returnPoints.unshift(next[1]);
-        if (returnPoints.length > 4) {
-          returnPoints.pop();
-        }
-        lastPoint = next[1];
-        robopaint.cncserver.api.pen.move(cncserver.wcb.getPercentCoord(next[1]), cncserver.cmd.cb);
-        break;
-      case "tool":
-        cncserver.wcb.setMedia(next[1], cncserver.cmd.cb);
-        break;
-      case "up":
-        returnPoints = [];
-        robopaint.cncserver.api.pen.up(cncserver.cmd.cb);
-        break;
-      case "down":
-        robopaint.cncserver.api.pen.down(cncserver.cmd.cb);
-        break;
-      case "status":
-        cncserver.wcb.status(next[1], next[2]);
-        cncserver.cmd.cb(true);
-        break;
-      case "wash":
-        cncserver.wcb.fullWash(cncserver.cmd.cb, next[1]);
-        break;
-      case "park":
-        robopaint.cncserver.api.pen.park(cncserver.cmd.cb);
-        break;
-      case "custom":
-        cncserver.cmd.cb();
-        if (next[1]) next[1](); // Run custom passed callback
-        break;
-      default:
-        console.debug('Queue shortcut not found:' + next[0]);
-    }
-    if (typeof executeCallback == "function") executeCallback();
-  },
-
-  // Add a command to the queue! format is cmd short name, arguments
-  run: function(){
+  // Add a command to the queue! format is cmd short name, arguments, or
+  // An array based multiple set. Pass "true" as second arg for adding to start
+  // of the queue.
+  run: function() {
     if (typeof arguments[0] == "object") {
-      cncserver.state.process.max+= arguments.length;
+      var reverse = (arguments[1] === true);
+
+      // Reverse the order of items added to the wrong end of the buffer
+      if (reverse) arguments[0].reverse();
       $.each(arguments[0], function(i, args){
-        cncserver.state.buffer.unshift(args);
+        if (!reverse) {
+          sendBuffer.unshift(args);
+        } else {
+          sendBuffer.push(args);
+        }
         if (cncserver.state.isRecording) cncserver.state.recordBuffer.unshift(args);
       });
     } else {
-      cncserver.state.process.max++;
-      cncserver.state.buffer.unshift(arguments);
+      // No reverse buffer add support for native argument runs
+      sendBuffer.unshift(arguments);
       if (cncserver.state.isRecording) cncserver.state.recordBuffer.unshift(arguments);
     }
+  },
 
+  // Run callback once the sendBuffer is empty
+  sendComplete: function(callback) {
+    var timer = setInterval(function(){
+      if (sendBuffer.length === 0) {
+        callback();
+        clearInterval(timer);
+      }
+    }, 20);
   }
 };
 
 // Wait around for the buffer to contain elements, and for us to not be
 // currently processing the buffer queue
 setInterval(function(){
-  if (!cncserver.state.process.busy && cncserver.state.buffer.length && !cncserver.state.process.paused) {
-    cncserver.cmd.executeNext();
+  if (sendBuffer.length && !running ) {
+    sendNext();
   }
 }, 10);
+
 }});
