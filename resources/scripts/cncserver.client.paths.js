@@ -285,10 +285,12 @@ cncserver.paths = {
                 var seg = $path[0].pathSegList.getItem(checkSeg);
                 if (seg.pathSegTypeAsLetter.toLowerCase() === "m") {
                   subPathCount++;
-                  run('status', 'Drawing subpath #' + subPathCount);
-                  run('up');
-                  run('move', p);
-                  run('down');
+                  run([
+                    ['status', 'Drawing subpath #' + subPathCount],
+                    'up',
+                    ['move', p],
+                    'down'
+                  ]);
                   break;
                 }
               }
@@ -303,9 +305,12 @@ cncserver.paths = {
             run('move', p);
           }
 
-          // If we were waiting, pen goes down
+          // If we were waiting, move to point then pen goes down
           if (cncserver.state.process.waiting) {
-            run('down');
+            run([
+              ['move', p],
+              'down'
+            ]);
             cncserver.state.process.waiting = false;
           }
         } else { // Path is invisible, lift the brush if we're not already waiting
