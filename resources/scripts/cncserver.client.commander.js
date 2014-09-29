@@ -54,7 +54,15 @@ function sendNext() {
     case "move":
       var point = cncserver.wcb.getPercentCoord(cmd[1]);
       point.ignoreTimeout = '1';
-      api.pen.move(point, function(p) {
+
+      // Short-circuit API call for a direct localized NODE API call
+      if (robopaint.cncserver.api.server.domain == "localhost") {
+        robopaint.cncserver.setPen(point, moveCallback);
+      } else {
+        api.pen.move(point, moveCallback);
+      }
+
+      function moveCallback(p) {
         // Refill paint rules!
         if (p.distanceCounter > robopaint.settings.maxpaintdistance) {
           cncserver.wcb.getMorePaint(cmd[1], sendNext);
@@ -62,9 +70,7 @@ function sendNext() {
           // Trigger next item to get flushed out
           sendNext();
         }
-      });
-
-      lastPoint = cncserver.wcb.getPercentCoord(cmd[1]);
+      }
       break;
     case "tool": // TODO: Change this to media elsehwere it's used
       cncserver.wcb.setMedia(cmd[1], sendNext, cmd[2]);
@@ -73,10 +79,14 @@ function sendNext() {
       api.tools.change(cmd[1], sendNext, {ignoreTimeout: '1'});
       break;
     case "up":
-      api.pen.up(sendNext, {ignoreTimeout: '1'});
-      break;
     case "down":
-      api.pen.down(sendNext, {ignoreTimeout: '1'});
+      var h = (cmd[0] === 'down') ? 1 : 0;
+
+      if (robopaint.cncserver.api.server.domain == "localhost") {
+        robopaint.cncserver.setPen({state: h}, sendNext);
+      } else {
+        api.pen.height(h, sendNext, {ignoreTimeout: '1'});
+      }
       break;
     case "status":
       api.buffer.message(cmd[1], sendNext);
