@@ -7,8 +7,11 @@
 
 define(function(){return function($, robopaint, cncserver){
 
-// Give cncserver semi-global scope so it can easily be checked outside the mode
+// Give cncserver semi-global scope so it can easily be checked elsewhere
+// TODO: Maybe this can be done with some kind of fancy inter-mode API? :P
+// Or is this even needed?
 window.cncserver = cncserver;
+
 
 // Set the "global" scope objects for any robopaint level details.
 // These are used for positioning and tracing SVG via a central SVG object
@@ -25,8 +28,9 @@ cncserver.canvas = {
 // TODO: How much of this is helpful for just SVG tracing modes/vs helpful for
 // ALL modes??
 cncserver.state = {
-  pen: {},
-  buffer: [], // Hold commands to be interpreted as free operations come
+  pen: {}, // The state of the pen/machine at the end of the buffer
+  actualPen: {}, // The current state of the pen/machine
+  buffer: [], // Holds a copy of cncserver's internal command buffer
   media: '', // What we think is currently on the brush
   mediaTarget: '', // What we "want" to paint with
   process: {
@@ -48,7 +52,87 @@ $(function() {
   var $svg = $('svg#main');
 
   serverConnect(); // "Connect", and get the initial pen state
-  $('#drawpoint').hide(); // Hide the drawpoint
+
+  // Bind the Stream event callbacks ===========================================
+  var lastPen = {};
+  robopaint.socket.on('pen update', function(actualPen){
+    var animPen = {};
+    cncserver.state.actualPen = $.extend({}, actualPen);
+
+    // TODO: Add animation between points
+    /*if (pen.lastDuration > 250) {
+      animPen = $.extend({}, lastPen);
+      $(lastPen).animate({ x:pen.x, y: pen.y  }, {
+        duration: pen.lastDuration - 5,
+        easing: 'linear',
+        step: function(val, fx) {
+          animPen[fx.prop] = val;
+          moveDrawPoint(animPen);
+        }
+      });
+
+    } else {*/
+      //$(lastPen).stop();
+      moveDrawPoint(actualPen);
+      lastPen = $.extend({}, cncserver.state.actualPen);
+    //}
+
+    // Update button text/state
+    var toState = 'up';
+    if (cncserver.state.actualPen.state == "up" || cncserver.state.actualPen.state == 0){
+      toState = 'down';
+    }
+    $('#pen').attr('class','normal ' + toState);
+  });
+
+  // CNCServer Buffer Change events (for pause, update, or resume)
+  var bufferLen = 0;
+  robopaint.socket.on('buffer update', function(b){
+    // Break out important buffer states into something with wider scope
+    cncserver.state.process.busy = b.bufferRunning;
+    cncserver.state.buffer = b.buffer;
+    cncserver.state.process.paused = b.bufferPaused;
+
+    // Empty buffer?
+    if (!b.buffer.length) {
+      cncserver.state.process.max = 0;
+      bufferLen = 0;
+      cncserver.cmd.progress({val: 0, max: 0});
+    } else { // At least one item in buffer
+      // Update the progress bar
+
+      // Did the buffer go up? up the max
+      if (b.buffer.length > bufferLen) {
+        cncserver.state.process.max++;
+      }
+      bufferLen = b.buffer.length;
+
+      cncserver.cmd.progress({
+        val: cncserver.state.process.max - bufferLen,
+        max: cncserver.state.process.max
+      });
+    }
+  });
+
+  // Handle buffer status messages
+  robopaint.socket.on('message update', function(data){
+    cncserver.wcb.status(data.message);
+  });
+
+
+  /**
+   * Move the point that the bot should be drawing
+   *
+   * @param {{x: Number, y: Number}} p
+   *   Coordinate of the total bot maxArea (to be converted)
+   */
+  function moveDrawPoint(p) {
+    // Move visible drawpoint
+    $('#drawpoint').show().attr('fill', cncserver.state.pen.state ? '#FF0000' : '#00FF00');
+
+    p = cncserver.wcb.getStepstoAbsCoord(p);
+    $('#drawpoint').attr('transform', 'translate(' + p.x + ',' + p.y + ')');
+  }
 
   // Set the height based on set aspect ratio / global width
   $svg.add('#shadow').height(robopaint.canvas.height);
@@ -61,28 +145,6 @@ $(function() {
     // Ensure bot is cleared and ready to receive commands at startup
     robopaint.cncserver.api.buffer.clear();
     robopaint.cncserver.api.buffer.resume();
-
-    // Setup general pen status update callback, called from cncserver.api.js
-    robopaint.$(robopaint.cncserver.api).bind('updatePen', function(e, d) {
-      cncserver.state.pen = d;
-
-      // Update button text
-      var toState = 'up';
-
-      if (cncserver.state.pen.state == "up" || cncserver.state.pen.state == 0){
-        toState = 'down';
-      }
-
-      // TODO: This handily works for both manual and auto as they have the same
-      // #pen button, but should probably be generalized. cncserver.client.js
-      // is meant to hold "shared" code between auto and manual paint mode,
-      // originally called "cncnserver client". Maybe this one can slide and
-      // these two modes can remain siamese twins for now, I imagine there's
-      // more "bad" code like this between them that would probably be better
-      // off abstracted into their parent code, or into a better shared library
-      // for future modes.
-      $('#pen').attr('class','normal ' + toState);
-    });
 
     // Bind to API toolChange
     robopaint.$(robopaint.cncserver.api).bind('toolChange', function(toolName){
