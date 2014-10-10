@@ -54,8 +54,55 @@ $(function() {
   serverConnect(); // "Connect", and get the initial pen state
 
   // Bind the Stream event callbacks ===========================================
+
+  // Use direct buffer if local, otherwise rely on socket.io
+  if (robopaint.cncserver.api.server.domain == 'localhost') {
+    robopaint.cncserver.penUpdateTrigger = penUpdateEvent;
+    robopaint.cncserver.bufferUpdateTrigger = bufferUpdateEvent;
+  } else {
+    robopaint.socket.on('buffer update', bufferUpdateEvent);
+    robopaint.socket.on('pen update', penUpdateEvent);
+  }
+
+  // CNCServer Buffer Change events (for pause, update, or resume)
+  var bufferLen = 0;
+  function bufferUpdateEvent(b){
+    // Because this is connected to code outside its window, need to kill it
+    // if we're still running once it's been closed.
+    if (!console) {window.removeListeners(); return;}
+
+    // Break out important buffer states into something with wider scope
+    cncserver.state.process.busy = b.bufferRunning;
+    cncserver.state.buffer = b.buffer;
+    cncserver.state.process.paused = b.bufferPaused;
+
+    // Empty buffer?
+    if (!b.buffer.length) {
+      cncserver.state.process.max = 0;
+      bufferLen = 0;
+      cncserver.cmd.progress({val: 0, max: 0});
+    } else { // At least one item in buffer
+      // Update the progress bar
+
+      // Did the buffer go up? up the max
+      if (b.buffer.length > bufferLen) {
+        cncserver.state.process.max++;
+      }
+      bufferLen = b.buffer.length;
+
+      cncserver.cmd.progress({
+        val: cncserver.state.process.max - bufferLen,
+        max: cncserver.state.process.max
+      });
+    }
+  }
+
   var lastPen = {};
-  robopaint.socket.on('pen update', function(actualPen){
+  function penUpdateEvent(actualPen){
+    // Because this is connected to code outside its window, need to kill it
+    // if we're still running once it's been closed.
+    if (!console) {window.removeListeners(); return;}
+
     var animPen = {};
     cncserver.state.actualPen = $.extend({}, actualPen);
 
@@ -83,42 +130,26 @@ $(function() {
       toState = 'down';
     }
     $('#pen').attr('class','normal ' + toState);
-  });
-
-  // CNCServer Buffer Change events (for pause, update, or resume)
-  var bufferLen = 0;
-  robopaint.socket.on('buffer update', function(b){
-    // Break out important buffer states into something with wider scope
-    cncserver.state.process.busy = b.bufferRunning;
-    cncserver.state.buffer = b.buffer;
-    cncserver.state.process.paused = b.bufferPaused;
-
-    // Empty buffer?
-    if (!b.buffer.length) {
-      cncserver.state.process.max = 0;
-      bufferLen = 0;
-      cncserver.cmd.progress({val: 0, max: 0});
-    } else { // At least one item in buffer
-      // Update the progress bar
-
-      // Did the buffer go up? up the max
-      if (b.buffer.length > bufferLen) {
-        cncserver.state.process.max++;
-      }
-      bufferLen = b.buffer.length;
-
-      cncserver.cmd.progress({
-        val: cncserver.state.process.max - bufferLen,
-        max: cncserver.state.process.max
-      });
-    }
-  });
+  }
 
   // Handle buffer status messages
-  robopaint.socket.on('message update', function(data){
+  robopaint.socket.on('message update', messageUpdateEvent);
+  function messageUpdateEvent(data){
     cncserver.wcb.status(data.message);
-  });
+  }
 
+  // Remove globalized listeners from this local container/window
+  window.removeListeners = function() {
+    if (robopaint.cncserver.api.server.domain == 'localhost') {
+      robopaint.cncserver.penUpdateTrigger = null;
+      robopaint.cncserver.bufferUpdateTrigger = null;
+    } else {
+       robopaint.socket.removeListener('buffer update', bufferUpdateEvent);
+       robopaint.socket.removeListener('pen update', penUpdateEvent);
+    }
+
+    robopaint.socket.removeListener('message update', messageUpdateEvent);
+  }
 
   /**
    * Move the point that the bot should be drawing
@@ -228,6 +259,7 @@ Exiting print mode while printing will cancel all your jobs. Click OK to leave."
 // they'd be namespaced to is unclear, as this is used by both Auto and manual
 // paint modes. Maybe "updatePen.paint".. etc?
 window.unBindEvents = function (callback) {
+  window.removeListeners();
   robopaint.$(robopaint.cncserver.api).unbind('updatePen');
   robopaint.$(robopaint.cncserver.api).unbind('toolChange');
   robopaint.$(robopaint.cncserver.api).unbind('offCanvas');
