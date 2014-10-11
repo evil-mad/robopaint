@@ -8,6 +8,17 @@
 global.$ = $;
 var gui = require('nw.gui');
 
+
+// Setup and hide extraneous menu items for Mac Menu
+if (process.platform === "darwin") {
+  var mb = new gui.Menu({type: 'menubar'});
+  mb.createMacBuiltin('RoboPaint', {
+    hideEdit: true,
+    hideWindow: true
+  });
+  gui.Window.get().menu = mb;
+}
+
 // BugSnag NODE Initialization
 var bugsnag = require("bugsnag");
 bugsnag.register("e3704afa045597498ab11c74f032f755",{
