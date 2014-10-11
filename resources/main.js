@@ -20,11 +20,18 @@ if (process.platform === "darwin") {
 }
 
 // BugSnag NODE Initialization
-var bugsnag = require("bugsnag");
+//
+// TODO: This needs lots more testing, near as I can tell, for node, this is
+// just dandy, but here in node-webkit, it simply throws the app on its ass
+// leaving the user wondering what the hell happened, and nothing to show for
+// it. Yes, we do get a report in the management system, but it's not nice to
+// people. Need to configure this to fail less deadly, or rely solely on the
+// clientside plugin :/
+/*var bugsnag = require("bugsnag");
 bugsnag.register("e3704afa045597498ab11c74f032f755",{
   releaseStage: gui.App.manifest.stage,
   appVersion: gui.App.manifest.version
-});
+});*/
 
 
 // Global Keypress catch for debug
