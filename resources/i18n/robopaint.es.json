@@ -223,10 +223,6 @@
       "modes": {
         "title": "Modos",
         "detail": "Activar o desactivar los modos RoboPaint experimentales",
-        "manual": {
-          "title": "Pintura personalizada:",
-          "detail": "Al igual que la pintura automática, pero permite un mayor control sobre qué elementos están pintados, y un número de otras opciones."
-        },
         "remoteprint": {
           "title": "Pintura remoto:",
           "detail": "Permite que las aplicaciones remotas configuradas correctamente para enviar gráficos para RoboPaint para automáticamente pintaron / dibujado. Para que esto funcione, fuera de esta computadora, la casilla \"Permitir sólo las conexiones desde este equipo\" a continuación deben ser **sin control.**"

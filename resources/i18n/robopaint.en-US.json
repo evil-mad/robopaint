@@ -224,10 +224,6 @@
       "modes": {
         "title": "Modes",
         "detail": "Enable or disable experimental RoboPaint modes",
-        "manual": {
-          "title": "Manual paint:",
-          "detail": "Like Auto-paint, but allows for more control over what elements are painted, and a number of other options."
-        },
         "remoteprint": {
           "title": "Remote paint:",
           "detail": "Allows properly configured remote applications to send graphics to RoboPaint to automatically be painted/drawn. For this to function outside this computer, the checkbox for \"Only allow connections from this computer\" below must be **unchecked**."

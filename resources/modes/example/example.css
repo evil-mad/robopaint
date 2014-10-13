@@ -1,0 +1,273 @@
+@charset "UTF-8";
+/*
+  @file Holds ALL styles for Example Mode
+*/
+
+body:before {
+  content: "";
+  position: fixed;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  z-index: 100;
+  box-shadow: 0px 0px 10px rgba(0,0,0,.8);
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #EEE;
+}
+
+/* Prevent selectability of text or other elements */
+* {
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.hidden {
+  display: none;
+}
+
+#status {
+  margin-top: -10px;
+}
+
+/* Attempt some kind of button standardization */
+button.normal {
+  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  font-size: 1em;
+  color: #FFF;
+  margin-top: 0.3em;
+  padding: 0.2em 0.4em;
+  background: linear-gradient(to bottom, #3093c7, #1c5a85);
+}
+
+body.print-manual #tab-content fieldset {
+  border: none;
+}
+
+button.normal:focus {
+  outline: none;
+}
+
+@media (max-width: 690px) {
+  img.logo {
+    top: 7px;
+    width: 126px;
+    margin-left: -32px;
+  }
+}
+
+/* Drawing Area */
+
+#scale-container {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  -webkit-transform-origin: 0 0 0;
+}
+
+svg#main {
+  background-image: url('../print/images/paper_texture.png');
+  border: 1px solid #ddd;
+  position: absolute;
+  box-shadow: 0 0 38px -2px rgba(0,0,0,0.3);
+  top: 0;
+}
+
+#shadow {
+  position: absolute;
+  top: 3px;
+  height: 864px;
+  width: 1152px;
+  z-index: -5;
+  margin: 2px auto;
+}
+
+#shadow:before, #shadow:after {
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 15px;
+  left: 10px;
+  width: 50%;
+  top: 80%;
+  max-width:485px;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 15px 10px rgba(0, 0, 0, 0.6);
+  -webkit-transform: rotate(-3deg);
+}
+
+#shadow:after {
+  -webkit-transform: rotate(3deg);
+  right: 10px;
+  left: auto;
+}
+
+/* Nav Controls */
+#control fieldset nav div label {
+  display: block;
+  font-size: 11px;
+}
+
+#control fieldset nav div input {
+  width: 100%;
+}
+
+nav#control h3 {
+  margin-top: 0;
+}
+
+/* Nav Controls & Button Graphics */
+fieldset#control {
+  background-color: rgba(255,255,255,0.6);
+  border: 1px solid #C9A165;
+  border-radius: 0.5em 0.5em 0.5em 0.5em;
+  box-shadow: 0 0 8px 2px #EBC089 inset, 1px 1px 3px rgba(0, 0, 0, 0.2);
+  padding: 0.75em 0;
+  position: absolute;
+  right: 1em;
+  width: 14em;
+  margin-top: 1em;
+  -webkit-transform-origin: right top;
+  padding-bottom: 0;
+}
+
+#control button {
+  display: block;
+}
+
+#buttons {
+  margin-top: -9px;
+  padding-top: 5px;
+  margin-bottom: 6px;
+}
+
+#buttons button.normal {
+  font-size: 1.1em;
+  float: none;
+  margin: 0.2em auto;
+  display: block;
+  width: 190px;
+}
+
+#control h2 {
+  font-size: 1em;
+  margin: 0 0 0.5em;
+  text-shadow: 0 2px 1px #EEEEEE;
+}
+
+#control fieldset {
+  padding: 0 7px 7px;
+  border: 0;
+  border-top: 1px solid #C9A165;
+  margin: 0.5em 0;
+}
+
+#control fieldset legend {
+  font-size: 0.9em;
+  text-align: left;
+  font-weight: bold;
+}
+
+#control div.check-control {
+  float: left;
+  margin-bottom: 0.6em;
+  margin-bottom: 0.25em;
+}
+
+/* Handle simple button text changes via class, tricksy CSS hobbits! */
+#pen.up:before {
+  content: "Raise ";
+}
+
+#pen.down:before {
+  content: "Lower ";
+}
+
+/* Status Specific */
+#status {
+  text-align: center;
+}
+
+#status progress {
+  width: 100%;
+}
+
+#pause {
+  background: linear-gradient(to bottom, #eff7f9 0%,rgb(249, 234, 239) 50%,rgb(242, 218, 230) 51%,rgb(249, 229, 231) 100%);
+  border-radius: 11px;
+  box-shadow: 0 0 14px 6px rgba(255,0,0,0.5);
+  float: none;
+  margin: 0.5em auto;
+  display: block;
+  height: 1.9em;
+  width: 5em;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#pause.ready {
+  box-shadow: 0 0 14px 6px rgba(0,255,0,0.5);
+  background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
+}
+
+#pause:disabled {
+  box-shadow: 0 0 14px 6px rgba(155, 155, 155, 0.5);
+  background: linear-gradient(to bottom, #ECECEC 0%,rgb(238, 238, 238) 50%,rgb(236, 236, 236) 51%,rgb(173, 173, 173) 100%);
+}
+
+#pause:hover {
+  box-shadow: 0 0 14px 10px rgba(255,0,0,1);
+  -webkit-animation: none;
+}
+
+#pause.active {
+  background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
+  box-shadow: 0 0 14px 6px #04aa1e;
+
+  -webkit-animation-name: pause-active;
+  -webkit-animation-duration: 1500ms;
+  -webkit-animation-iteration-count: infinite;
+}
+
+#cancel {
+  border: none;
+  font-size: 17px;
+  border-radius: 11px;
+  margin: 1.1em auto;
+  margin-bottom: 0.5em;
+  float: none;
+  background-color: transparent;
+  text-decoration: underline;
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#cancel {
+  margin-bottom: 0;
+}
+
+#cancel:disabled {
+  color: #777;
+  cursor: default;
+  font-style: italic;
+}
+
+#statusmessage {
+  font-size: 0.9em;
+  height: 2em;
+  margin-top: 0.5em;
+  line-height: 1em;
+  margin-bottom: 0.6em;
+}
+
+#control button:disabled, #control button:disabled:hover {
+  opacity: 0.5;
+  animation: none;
+  -webkit-animation: none;
+}

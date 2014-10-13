@@ -1,9 +1,13 @@
 ﻿/* http://keith-wood.name/svg.html
    jQuery DOM compatibility for jQuery SVG v1.4.5.
    Written by Keith Wood (kbwood{at}iinet.com.au) April 2009.
-   Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
-   MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses. 
+   Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and
+   MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses.
    Please attribute the author if you use it. */
+
+// Define this code in AMD Module format for Require.js
+define(function(){return function(jQuery){
+
 
 (function($) { // Hide scope, no $ conflict
 
@@ -171,7 +175,7 @@ if ($.cssProps) {
 		};
 	}($.css);
 }
-  
+
 /* Determine if any nodes are SVG nodes. */
 function anySVG(checkSet) {
 	for (var i = 0; i < checkSet.length; i++) {
@@ -404,3 +408,4 @@ $.expr.filter.ATTR = function(origFilterAttr) {
 */
 
 })(jQuery);
+}});

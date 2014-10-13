@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "version": "0.8.0",
+  "type": "robopaint_mode",
+  "icon": "icon-font",
+  "weight": 2,
+  "word": "Text",
+  "core": false,
+  "description": "An example mode for rendering text that you can print directly",
+  "title": "Example Text Rendering Mode",
+  "detail": "A simple example RoboPaint mode to show how to build your own mode.",
+  "main": "example.html",
+  "author": "techninja",
+  "license": "MIT"
+}

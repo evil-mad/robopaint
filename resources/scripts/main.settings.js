@@ -43,10 +43,10 @@ function loadSettings() {
     strokeovershoot: 5,
     tsprunnertype: 'OPT',
     strokeprecision: 6,
-    manualpaintenable: 0,
+    enabledmodes: {},
     remoteprint: 0,
     gapconnect: 1,
-    lang: '' // String storing the two digit code for the language. 
+    lang: '' // String storing the two digit code for the language.
   };
 
   // * We can't assume that anything that isn't a WaterColorBot doesn't have
@@ -68,6 +68,13 @@ function loadSettings() {
   for (var key in robopaint.settings) {
     var $input = $('#' + key);
     switch (key) {
+      case 'enabledmodes':
+        for (var i in robopaint.settings.enabledmodes) {
+          $('#' + i + 'modeenable')
+            .prop('checked', robopaint.settings.enabledmodes[i])
+            .change();
+        }
+        break;
       default:
         if ($input.attr('type') == 'checkbox') {
           $input.prop('checked', robopaint.settings[key]);
@@ -158,6 +165,7 @@ function bindSettingsControls() {
 
   // Set robopaint global aspect ratio
   var b = botTypes[robopaint.currentBot.type].data;
+  robopaint.currentBot.data = b;
   var aspect = (b.maxArea.height - b.workArea.top) / (b.maxArea.width - b.workArea.left);
   robopaint.canvas = {
     width: 1152, // "Trusted" width to base transformations off of
@@ -206,6 +214,18 @@ function bindSettingsControls() {
     var $input = $(this);
     var pushKey = [];
     var pushVal = '';
+
+    // Do this first as switch case can't use indexOf
+    // Update available modes
+    if (this.id.indexOf('modeenable') !== -1) {
+      var name = this.id.replace('modeenable', '');
+      robopaint.settings.enabledmodes[name] = $input.is(':checked');
+      $('#' + name + ', #bar-' + name).toggle(robopaint.settings.enabledmodes[name]);
+      responsiveResize();
+      if (!initializing) saveSettings();
+      return;
+    }
+
 
     switch (this.id) {
       case 'servoup':
@@ -287,7 +307,7 @@ function bindSettingsControls() {
           name: $('#bottype option:selected').text()
         });
         return;
-      case 'lang': 
+      case 'lang':
         // robopaint.settings.lang set in updateLang() [main.js]
         updateLang();
         break;
@@ -297,12 +317,6 @@ function bindSettingsControls() {
         } else {
           robopaint.settings[this.id] = $input.val();
         }
-    }
-
-    // Update available modes
-    if (this.id == 'manualpaintenable') {
-      $('#manual, #bar-manual').toggle(robopaint.settings[this.id]);
-      responsiveResize();
     }
 
     // Remoteprint mode click
@@ -376,7 +390,7 @@ function bindSettingsControls() {
   $('#settings-reset').click(function(e) {
     if (confirm(robopaint.t('settings.buttons.reset.confirm'))) {
       delete localStorage[settingsStorageKey()];
-          
+
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
       loadSettings();
@@ -524,20 +538,20 @@ function updateColorSetSettings() {
 /**
  * Get default OS language and look if it is in the list of available languages,
  * if not, set default to i18n's defualt languge (English).
- * Called AFTER initial settings reload to 
+ * Called AFTER initial settings reload to
  */
 function loadDefaultLang() {
     // Iterate through list of files in language directory
     fs.readdirSync("resources/i18n/").forEach(function(file) {
       // Test if the file is a directory.
       var stat = fs.statSync("resources/i18n/"+file);
-      if (stat && stat.isDirectory())  
-            
+      if (stat && stat.isDirectory())
+
         // Do a RegEx search for the filename in the default system language (this
         // returns an index position or -1 if not found, so we use a conditional
         // to change this to a boolean of whether or not it is in the string).
         var isDefLang = navigator.language.search(file) !== -1;
-    
+
         // If the language we are iterating is the OS's default language.
         if(isDefLang) {
           // Set the selected language to be the default language
@@ -545,5 +559,5 @@ function loadDefaultLang() {
           console.info('Language Reset to:' + file);
         };
     });
-    
+
 }

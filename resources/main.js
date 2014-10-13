@@ -8,12 +8,30 @@
 global.$ = $;
 var gui = require('nw.gui');
 
+
+// Setup and hide extraneous menu items for Mac Menu
+if (process.platform === "darwin") {
+  var mb = new gui.Menu({type: 'menubar'});
+  mb.createMacBuiltin('RoboPaint', {
+    hideEdit: true,
+    hideWindow: true
+  });
+  gui.Window.get().menu = mb;
+}
+
 // BugSnag NODE Initialization
-var bugsnag = require("bugsnag");
+//
+// TODO: This needs lots more testing, near as I can tell, for node, this is
+// just dandy, but here in node-webkit, it simply throws the app on its ass
+// leaving the user wondering what the hell happened, and nothing to show for
+// it. Yes, we do get a report in the management system, but it's not nice to
+// people. Need to configure this to fail less deadly, or rely solely on the
+// clientside plugin :/
+/*var bugsnag = require("bugsnag");
 bugsnag.register("e3704afa045597498ab11c74f032f755",{
   releaseStage: gui.App.manifest.stage,
   appVersion: gui.App.manifest.version
-});
+});*/
 
 
 // Global Keypress catch for debug
@@ -66,6 +84,9 @@ $(function() {
   // Set visible version from manifest (with appended bot type if not WCB)
   var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
   $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
+
+  // Load the modes (adds to settings content)
+  loadAllModes();
 
   // Bind settings controls & Load up initial settings!
   // @see scripts/main.settings.js
@@ -129,6 +150,10 @@ function bindMainControls() {
       // Initialize settings...
       loadSettings();
       saveSettings();
+
+      // Init sockets for data stream
+      initSocketIO();
+
       $('body.home nav').fadeIn('slow');
       initializing = false;
     }
@@ -285,6 +310,17 @@ function responsiveResize() {
 };
 
 /**
+ * Initialize the Socket.IO websocket connection
+ */
+function initSocketIO(){
+  // Add Socket.IO include now that we know where from and the server is running
+  var path = robopaint.cncserver.api.server.protocol +
+    '://' + robopaint.cncserver.api.server.domain + ':' +
+    robopaint.cncserver.api.server.port;
+  robopaint.socket = io(path);
+}
+
+/**
  * Binds all the callbacks functions for controlling CNC Server via its Node API
  */
 function startSerial(){
@@ -316,6 +352,9 @@ function startSerial(){
         saveSettings();
 
         robopaint.api.bindCreateEndpoints();
+
+        // Init sockets for data stream
+        initSocketIO();
       },
       disconnect: function() {
         setModal(true);
@@ -597,6 +636,84 @@ function getColorsets() {
   // Initial run to populate settings window
   updateColorSetSettings();
 }
+
+/**
+ * Load all modes within the application
+ */
+function loadAllModes(){
+  var modesDir = 'resources/modes/';
+  var files = fs.readdirSync(modesDir);
+  var modes = [];
+  var modeDirs = [];
+
+  // List all files, only add directories
+  for(var i in files) {
+    if (fs.statSync(modesDir + files[i]).isDirectory()) {
+      modeDirs.push(files[i]);
+    }
+  }
+
+  // Move through each mode package JSON file...
+  for(var i in modeDirs) {
+    var modeDir = modesDir + modeDirs[i] + '/';
+    var package = {};
+
+    try {
+      package = JSON.parse(fs.readFileSync(modeDir + 'package.json'));
+    } catch(e) {
+      // Silently fail on bad parse!
+      continue;
+    }
+
+    // This a good file? if so, lets make it ala mode!
+    if (package.type == "robopaint_mode" && package.main !== '') {
+      // TODO: Add FS checks to see if its main file actually exists
+      package.main = modeDir + package.main;
+      modes.push(package);
+    }
+  }
+
+  // Calculate correct order for modes based on package weight (reverse)
+  var order = Object.keys(modes).sort(function(a, b) {
+    return (modes[b].weight - modes[a].weight)
+  });
+
+  // Move through all approved modes based on mode weight and add DOM
+  for(var i in order) {
+    var m = modes[order[i]];
+    // Add the nav bubble
+    $('nav').prepend(
+      $('<a>')
+        .attr('href', m.main)
+        .attr('id', m.name)
+        .attr('title', m.description)
+        .addClass((m.core ? '' : ' hidden'))
+        .text(m.word)
+    );
+
+    // Add the toolbar link icon
+    $('#bar-home').after(
+      $('<a>')
+        .attr('href', m.main)
+        .attr('id', 'bar-' + m.name)
+         // TODO: Add support for better icons
+        .addClass('mode tipped ' + m.icon + (m.core ? '' : ' hidden') )
+        .attr('title', m.description)
+        .html('&nbsp;')
+    );
+
+    // Add the non-core settings checkbox for enabling
+    if (!m.core) {
+      $('fieldset.advanced-modes aside:first').after($('<div>').append(
+        $('<label>').attr('for', m.name + 'modeenable').text(m.title),
+        $('<input>').attr({type: 'checkbox', id: m.name + 'modeenable'}),
+        $('<aside>').text(m.detail)
+      ));
+    }
+  }
+
+}
+
 
 /**
  * Set modal message
