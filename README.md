@@ -102,7 +102,7 @@ will require administrator rights, so run with a `sudo` prefix for Linux/Mac.
 ### Project installation
 1. Pull down/clone your fork of the RoboPaint repository with git (or just
 download a zip of the files).
-2. In your terminal/command line interface, go to that folder and run `npm install` followed by `npm install bugsnag`
+2. In your terminal/command line interface, go to that folder and run `npm install`
  * This will run through all the required module dependencies and install/build
 them to the best of its ability. This will by default build `serialport` for
 node, but we actually need it built for node-webkit. Next, we'll fix that!
@@ -125,7 +125,6 @@ almost always have to do with either the
 4. That's it! You should now be installed and ready to hack. To update CNC server
 just run `npm install cncserver` from the project root and it should pull from
 the latest master.
- * You will need to complete steps 3 and 4 again if you run `npm install` again. `npm install` will compile the `serialport` module for node and not node-webkit.
 
 ### Running RoboPaint from source
 * On Linux from RoboPaint root, I simply run `nw ./`, and console output is
