@@ -424,7 +424,7 @@ function toggleDisableSetting(selector, toggle, message) {
  * Fade in/out settings modal window
  *
  * @param {Boolean} toggle
- *   True ro show window, false to hide.
+ *   True to show window, false to hide.
  */
 function setSettingsWindow(toggle) {
   if (toggle) {

@@ -37,7 +37,7 @@
     "toolbar": {
       "home": "Home Screen",
       "edit": "Open, resize, and edit existing vector artwork.",
-      "open": "Open an example image",
+      "open": "Open an example drawing",
       "printauto": "Painting Mode: Print your drawing!",
       "printmanual": "Manual Mode: Customize your print",
       "help": "Help! (Open web docs)",
@@ -135,7 +135,7 @@
       "maxpaintdistance": {
         "title": "Refill Distance:",
         "hint": "Move left to get paint more often, right to get paint less often.",
-        "detail": " The distance for the brush to paint on the paper before it should go get more water/paint on the brush. Default is **48cm / 19in**."
+        "detail": " The distance for the brush to paint on the paper before it should go get more water/paint on the brush. Default is **48.2cm / 19in**."
       },
       "strokeprecision": {
         "title": "Stroke Precision:",
@@ -229,7 +229,7 @@
           "detail": "Allows properly configured remote applications to send graphics to RoboPaint to automatically be painted/drawn. For this to function outside this computer, the checkbox for \"Only allow connections from this computer\" below must be **unchecked**."
         }
       },
-      "openlast": "Open last image on startup:",
+      "openlast": "Open last drawing on startup:",
       "bottype": {
         "title": "Type of drawing bot connected:",
         "hover": "Supported Bot List",
