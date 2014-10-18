@@ -121,9 +121,10 @@ cncserver.wcb = {
   // Convert a screen coord to one in the correct format for the API
   getPercentCoord: function(point) {
     return {
-      // Remove 1/2in (96dpi / 2) from total width for right/bottom offset
-      x: (point.x / (cncserver.canvas.width - 48)) * 100,
-      y: (point.y / (cncserver.canvas.height - 48)) * 100
+      // Remove 1in (96dpi) from total width for WCB margin offsets
+      // TODO: Base this off BOT specific margin setting
+      x: (point.x / (cncserver.canvas.width - 96)) * 100,
+      y: (point.y / (cncserver.canvas.height - 96)) * 100
     };
   },
 
