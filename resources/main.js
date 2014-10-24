@@ -668,7 +668,7 @@ function loadAllModes(){
     // This a good file? if so, lets make it ala mode!
     if (package.type == "robopaint_mode" && package.main !== '') {
       // TODO: Add FS checks to see if its main file actually exists
-      package.main = modeDir + package.main;
+      package.main = 'modes/' + modeDirs[i] + '/' + package.main;
       modes.push(package);
     }
   }
