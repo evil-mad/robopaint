@@ -103,10 +103,6 @@ body.print-auto #shadow {
   left: 0;
 }
 
-svg#main * {
-  stroke-width: 8 !important;
-}
-
 svg#main #cncserversvg path.selected {
   stroke: blue !important;
   stroke-width: 10 !important;
