@@ -72,10 +72,10 @@ function sendNext() {
         }
       }
       break;
-    case "tool": // TODO: Change this to media elsehwere it's used
+    case "media":
       cncserver.wcb.setMedia(cmd[1], sendNext, cmd[2]);
       break;
-    case "actualtool":
+    case "tool":
       api.tools.change(cmd[1], sendNext, {ignoreTimeout: '1'});
       break;
     case "up":

@@ -50,9 +50,9 @@ cncserver.wcb = {
         cncserver.cmd.run([
           ['status', 'Doing a full brush wash...'],
           'resetdistance',
-          ['actualtool', 'water0' + toolExt],
-          ['actualtool', 'water1' + toolExt],
-          ['actualtool', 'water2' + toolExt],
+          ['tool', 'water0' + toolExt],
+          ['tool', 'water1' + toolExt],
+          ['tool', 'water2' + toolExt],
           ['status', 'Brush should be clean'],
         ]);
 
@@ -111,7 +111,7 @@ cncserver.wcb = {
     cncserver.cmd.run([
       ['status', 'Putting some ' + name + ' on the brush...'],
       'resetdistance',
-      ['actualtool', toolName],
+      ['tool', toolName],
       ['status', 'There is now ' + name + ' on the brush']
     ], reverseBuffer);
 
@@ -170,7 +170,7 @@ cncserver.wcb = {
         cncserver.cmd.run([
           ['status', 'Going to get some more water...'],
           'resetdistance',
-          ['tool', 'water0', true],
+          ['media', 'water0', true],
           'up',
           ['move', point],
           ['status', 'Continuing to paint with water'],
@@ -183,7 +183,7 @@ cncserver.wcb = {
         cncserver.cmd.run([
           ['status', 'Going to get some more ' + name + ', no water...'],
           'resetdistance',
-          ['tool', cncserver.state.mediaTarget, true],
+          ['media', cncserver.state.mediaTarget, true],
           'up',
           ['move', point],
           ['status', 'Continuing to paint with ' + name],
@@ -201,8 +201,8 @@ cncserver.wcb = {
         cncserver.cmd.run([
           ['status', 'Going to get some more ' + name + '...'],
           'resetdistance',
-          ['tool', 'water0dip', true],
-          ['tool', cncserver.state.mediaTarget, true],
+          ['media', 'water0dip', true],
+          ['media', cncserver.state.mediaTarget, true],
           'up',
           ['move', point],
           ['status', 'Continuing to paint with ' + name],
@@ -335,7 +335,7 @@ cncserver.wcb = {
       if (job) {
         // Make sure the color matches, full wash and switch colors!
         if (runColor != job.c) {
-          run(['wash', ['tool', job.c]]);
+          run(['wash', ['media', job.c]]);
           runColor = job.c;
           cncserver.cmd.sendComplete(readyStartJob);
         } else {

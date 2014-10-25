@@ -318,7 +318,7 @@ $(function() {
       var toolExt = isDip ? 'dip' : '';
 
       if ($p.is('.color, .water')) {
-        cncserver.cmd.run('tool', $p.attr('id') + toolExt);
+        cncserver.cmd.run('media', $p.attr('id') + toolExt);
       }
 
       // X clicked: Do a full brush wash
