@@ -41,7 +41,8 @@ cncserver.renderText = function(s, options) {
     // Create central group
     var $group = $('<g>').attr({
       id: options.id,
-      style: 'stroke:#000000; fill:none;',
+      stroke: 'black',
+      fill: 'none',
       transform:
         'scale(' + options.scale + ') ' +
         'translate(' + options.pos.x + ',' + options.pos.y + ')'
@@ -71,7 +72,8 @@ cncserver.renderText = function(s, options) {
           $groupLine.append(
             $('<path>').attr({
               d: font[index].d,
-              style: 'stroke:#000000; fill:none;',
+              stroke: 'black',
+              'stroke-width': 2,
               fill: 'none',
               transform: 'translate(' + offset.left + ', ' + offset.top + ')',
               letter: word[i]
