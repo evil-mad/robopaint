@@ -135,7 +135,7 @@ $(function() {
   // Handle buffer status messages
   robopaint.socket.on('message update', messageUpdateEvent);
   function messageUpdateEvent(data){
-    cncserver.wcb.status(data.message);
+    if (cncserver.wcb) cncserver.wcb.status(data.message);
   }
 
   // Remove globalized listeners from this local container/window
@@ -183,7 +183,7 @@ $(function() {
     });
 
     robopaint.cncserver.api.pen.stat(function(d){
-      cncserver.wcb.status(['Connected Successfully!'], d);
+      if (cncserver.wcb) cncserver.wcb.status(['Connected Successfully!'], d);
       cncserver.state.pen.state = 1; // Assume down
       robopaint.cncserver.api.pen.up(); // Send to put up
       cncserver.state.pen.state = 0; // Assume it's up (doesn't return til later)
@@ -234,6 +234,11 @@ $(function() {
       cncserver.canvas.loadSVGCallback();
     }
   }
+
+  // Public function to save SVG to the global localStorage area
+  cncserver.canvas.saveSVG = function(svgText) {
+    window.localStorage.setItem('svgedit-default', svgText);
+  };
 
 });
 
