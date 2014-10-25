@@ -73,7 +73,7 @@ function sendNext() {
       }
       break;
     case "media":
-      cncserver.wcb.setMedia(cmd[1], sendNext, cmd[2]);
+      cncserver.wcb.setMedia(cmd[1], sendNext, true);
       break;
     case "tool":
       api.tools.change(cmd[1], sendNext, {ignoreTimeout: '1'});
@@ -110,7 +110,7 @@ function sendNext() {
       api.pen.resetCounter(sendNext);
       break;
     case "wash":
-      cncserver.wcb.fullWash(sendNext, cmd[1]);
+      cncserver.wcb.fullWash(sendNext, cmd[1], true);
       break;
     case "park":
       api.pen.park(sendNext, {ignoreTimeout: '1'});
