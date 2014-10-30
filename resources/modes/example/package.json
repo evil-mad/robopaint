@@ -6,7 +6,7 @@
   "weight": 2,
   "word": "Text",
   "core": false,
-  "description": "An example mode for rendering text that you can print directly",
+  "description": "An example mode for rendering text that can be sent to other modes.",
   "title": "Example Text Rendering Mode",
   "detail": "A simple example RoboPaint mode to show how to build your own mode.",
   "main": "example.html",

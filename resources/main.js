@@ -81,9 +81,7 @@ $(function() {
   $(window).resize(responsiveResize);
   responsiveResize();
 
-  // Set visible version from manifest (with appended bot type if not WCB)
-  var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
-  $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
+
 
   // Load the modes (adds to settings content)
   loadAllModes();
@@ -668,7 +666,7 @@ function loadAllModes(){
     // This a good file? if so, lets make it ala mode!
     if (package.type == "robopaint_mode" && package.main !== '') {
       // TODO: Add FS checks to see if its main file actually exists
-      package.main = modeDir + package.main;
+      package.main = 'modes/' + modeDirs[i] + '/' + package.main;
       modes.push(package);
     }
   }
@@ -851,6 +849,11 @@ function updateLang() {
     function(t) {
       robopaint.t = t;
       $('[data-i18n]').i18n();
+
+      // Set visible version from manifest (with appended bot type if not WCB)
+      // This has to be done here because it's one of the few out of phase translations
+      var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
+      $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
     });
 
   // Initalize/reset Tooltips

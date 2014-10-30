@@ -37,7 +37,7 @@ cncserver.wcb = {
   },
 
   // Grouping function to do a full wash of the brush
-  fullWash: function(callback, useDip) {
+  fullWash: function(callback, useDip, fromSendBuffer) {
     var toolExt = useDip ? 'dip' : '';
 
     switch(parseInt(robopaint.settings.penmode)) {
@@ -50,11 +50,22 @@ cncserver.wcb = {
         cncserver.cmd.run([
           ['status', 'Doing a full brush wash...'],
           'resetdistance',
-          ['actualtool', 'water0' + toolExt],
-          ['actualtool', 'water1' + toolExt],
-          ['actualtool', 'water2' + toolExt],
+          ['tool', 'water0' + toolExt],
+          ['tool', 'water1' + toolExt],
+          ['tool', 'water2' + toolExt],
           ['status', 'Brush should be clean'],
-        ]);
+        ], fromSendBuffer);
+        /**
+         * The 'fromSendBuffer' at the end here will run this set of commands
+         * into the TOP of the send buffer IF the fullwash command came from a
+         * run command, because otherwise these new run commands might be added
+         * to the bottom AFTER some other commands. This in effect simply
+         * replaces the one "wash" command with the 6 commands above :)
+         *
+         * We use the passed variable "fromSendBuffer", so that implementors can
+         * still call the function directly and have the immediate effect of
+         * simply adding these commands to the sendBuffer.
+         */
 
         if (callback) callback(true);
 
@@ -75,7 +86,7 @@ cncserver.wcb = {
   },
 
   // Wrapper for toolchange to manage pen mode logic
-  setMedia: function(toolName, callback, reverseBuffer){
+  setMedia: function(toolName, callback, fromSendBuffer){
     var name = cncserver.wcb.getMediaName(toolName).toLowerCase();
     var mode = parseInt(robopaint.settings.penmode);
 
@@ -111,9 +122,9 @@ cncserver.wcb = {
     cncserver.cmd.run([
       ['status', 'Putting some ' + name + ' on the brush...'],
       'resetdistance',
-      ['actualtool', toolName],
+      ['tool', toolName],
       ['status', 'There is now ' + name + ' on the brush']
-    ], reverseBuffer);
+    ], fromSendBuffer);
 
     if (callback) callback();
   },
@@ -121,9 +132,10 @@ cncserver.wcb = {
   // Convert a screen coord to one in the correct format for the API
   getPercentCoord: function(point) {
     return {
-      // Remove 1/2in (96dpi / 2) from total width for right/bottom offset
-      x: (point.x / (cncserver.canvas.width - 48)) * 100,
-      y: (point.y / (cncserver.canvas.height - 48)) * 100
+      // Remove 1in (96dpi) from total width for WCB margin offsets
+      // TODO: Base this off BOT specific margin setting
+      x: (point.x / (cncserver.canvas.width - 96)) * 100,
+      y: (point.y / (cncserver.canvas.height - 96)) * 100
     };
   },
 
@@ -169,7 +181,7 @@ cncserver.wcb = {
         cncserver.cmd.run([
           ['status', 'Going to get some more water...'],
           'resetdistance',
-          ['tool', 'water0', true],
+          ['media', 'water0'],
           'up',
           ['move', point],
           ['status', 'Continuing to paint with water'],
@@ -182,7 +194,7 @@ cncserver.wcb = {
         cncserver.cmd.run([
           ['status', 'Going to get some more ' + name + ', no water...'],
           'resetdistance',
-          ['tool', cncserver.state.mediaTarget, true],
+          ['media', cncserver.state.mediaTarget],
           'up',
           ['move', point],
           ['status', 'Continuing to paint with ' + name],
@@ -200,8 +212,8 @@ cncserver.wcb = {
         cncserver.cmd.run([
           ['status', 'Going to get some more ' + name + '...'],
           'resetdistance',
-          ['tool', 'water0dip', true],
-          ['tool', cncserver.state.mediaTarget, true],
+          ['media', 'water0dip'],
+          ['media', cncserver.state.mediaTarget],
           'up',
           ['move', point],
           ['status', 'Continuing to paint with ' + name],
@@ -334,7 +346,7 @@ cncserver.wcb = {
       if (job) {
         // Make sure the color matches, full wash and switch colors!
         if (runColor != job.c) {
-          run(['wash', ['tool', job.c]]);
+          run(['wash', ['media', job.c]]);
           runColor = job.c;
           cncserver.cmd.sendComplete(readyStartJob);
         } else {

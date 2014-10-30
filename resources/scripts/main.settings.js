@@ -443,7 +443,7 @@ function addSettingsRangeValues() {
     var $r = $(this);
     var $l = $('<label>').addClass('rangeval');
 
-    $r.change(function(){
+    $r.bind('change input', function(){
       var num = parseInt($r.val());
       var post = "";
       var wrap = ['(', ')'];
