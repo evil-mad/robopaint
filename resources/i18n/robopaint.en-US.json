@@ -164,7 +164,7 @@
         "opt1": "Triangle line",
         "opt2": "Sine line",
         "opt3": "Center spiral",
-        "opt3": "TSP Squiggle"
+        "opt4": "TSP Squiggle"
       },
       "linefilltitle": "Line/Hatch Fills",
       "fillangle": {
