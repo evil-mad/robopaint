@@ -2,7 +2,7 @@
   "_meta": {
     "creator": "techninja/google",
     "target": "es",
-    "release": "0.7.5"
+    "release": "0.9.1"
   },
   "common": {
     "pause": "Pausa",
@@ -163,7 +163,8 @@
         "opt0": "Línea Recta",
         "opt1": "Línea Triángulo",
         "opt2": "Línea Sine",
-        "opt3": "Garabato TSP"
+        "opt3": "Centro Espiral"
+        "opt4": "Garabato TSP"
       },
       "linefilltitle": "Rellenos Línea / sombreado",
       "fillangle": {
