@@ -5,12 +5,12 @@ Software for drawing robots, and your
 [friendly painting robot kit, the WaterColorBot](http://watercolorbot.com)!
 
 ## Downloads / Install
-Go to the [releases page](https://github.com/evil-mad/robopaint/releases) and
-pick out the latest release, then choose the package for your system by clicking
-the green download button for Windows, Linux or Mac.
+[Click here](https://github.com/evil-mad/robopaint/releases/latest) for the
+latest release, then click the green button below the release notes that matches
+your operating system to download the install package.
 
-*Linux users: Simply copy folder from zip file to
-Desktop or other folder, then run executable.
+*Linux users: Simply copy folder from zip file to your desktop or other folder,
+then run the executable inside.
 [System installer in the works](https://github.com/evil-mad/robopaint/issues/73)!*
 
 
