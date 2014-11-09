@@ -40,6 +40,11 @@ button.zoomfit {
   }
 }
 
+/* Fix Cursor offset position for pencil */
+#workarea.fhpath {
+  cursor: url(images/pencil_cursor.cur), crosshair
+}
+
 /* Hide Zoom button to keep it from underlapping autopaint button */
 @media (max-width: 655px) {
   button.zoomfit {
