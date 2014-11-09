@@ -762,7 +762,8 @@ body.home div.options button.normal {
   font-weight: bold;
   color: rgb(209, 24, 24);
   position: absolute;
-  right: 6em;
+  right: 1em;
+  top: 2.8em;
   text-decoration: underline;
   background: none;
   border: none;
