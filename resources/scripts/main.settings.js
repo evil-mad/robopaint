@@ -158,10 +158,7 @@ function bindSettingsControls() {
   }
   $('select#bottype').val(robopaint.currentBot.type);
 
-  // Apply bolding to details text
-  $('aside').each(function(){
-    $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));
-  });
+
 
   // Set robopaint global aspect ratio
   var b = botTypes[robopaint.currentBot.type].data;
