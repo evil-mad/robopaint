@@ -207,7 +207,7 @@ function bindSettingsControls() {
   });
 
   // Catch all settings input changes
-  $('#settings input, #settings select').change(function(){
+  $('#settings input, #settings select').bind('change input', function(){
     var $input = $(this);
     var pushKey = [];
     var pushVal = '';
