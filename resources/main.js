@@ -861,4 +861,9 @@ function updateLang() {
 
   // Report language switch to the console
   console.info("Language Switched to: " + robopaint.settings.lang);
+  
+  // Apply bolding to details text
+  $('aside').each(function(){
+    $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));
+  });
 }
