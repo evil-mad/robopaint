@@ -104,17 +104,16 @@ will require administrator rights, so run with a `sudo` prefix for Linux/Mac.
 download a zip of the files).
 2. In your terminal/command line interface, go to that folder and run `npm install`
  * This will run through all the required module dependencies and install/build
-them to the best of its ability. This will by default build `serialport` for
-node, but we actually need it built for node-webkit. Next, we'll fix that!
-3. Once that's completed successfully, navigate to the new
+them to the best of its ability.
+ * This will also run a script to rebuild `serialport` for node-webkit. This script only works on Linux / Mac / Unix. The script will prompt you for you archetcture, select `1` for a 32 bit system or `2` for a 64 bit system. If the script has errors file an issue.
+* If the script fails or you are running Windows, navigate to the new
 `node_modules/cncserver/node_modules/serialport` folder, and run
 `node-pre-gyp build --runtime=node-webkit --target=0.10.5 --target_arch=ia32`,
-substituting your target node-webkit version. Currently not supporting x64
-builds.
- * For Windows, if you have multiple versions of Visual Studio, use the flag
+for a 32 bit system or `node-pre-gyp build --runtime=node-webkit --target=0.10.5 --target_arch=x64` for a 64 bit system, substituting your target node-webkit version.
+   * For Windows, if you have multiple versions of Visual Studio, use the flag
 `--msvs_version=2012`, substituting the version of Visual Studio you'd like to
 build with.
- * For the moment, the default build is put into the wrong folder. Rename/move the
+   * For the moment, the default build is put into the wrong folder. Rename/move the
 folder from `serialport/build/v1.4.6/Release/node-webkit-v0.10.5-darwin-x64` to
 where it claims to be looking for it (usually replacing `v0.10.5` with `v14`).
 This should be fixed soon.
