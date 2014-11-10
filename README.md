@@ -5,12 +5,12 @@ Software for drawing robots, and your
 [friendly painting robot kit, the WaterColorBot](http://watercolorbot.com)!
 
 ## Downloads / Install
-[Click here](https://github.com/evil-mad/robopaint/releases/latest) for the
-latest release, then click the green button below the release notes that matches
-your operating system to download the install package.
+Go to the [releases page](https://github.com/evil-mad/robopaint/releases) and
+pick out the latest release, then choose the package for your system by clicking
+the green download button for Windows, Linux or Mac.
 
-*Linux users: Simply copy folder from zip file to your desktop or other folder,
-then run the executable inside.
+*Linux users: Simply copy folder from zip file to
+Desktop or other folder, then run executable.
 [System installer in the works](https://github.com/evil-mad/robopaint/issues/73)!*
 
 
@@ -22,8 +22,8 @@ paint automatically!
 creative path based crosshatches.
  * Built-in SVG editor and importer from the open-source project
 [Method-Draw](https://github.com/duopixel/Method-Draw)
- * Optional visual path position checking, ensuring that overlapping or invisible
-portions of paths aren't drawn.
+ * Optional visual path position checking, ensuring that overlapping or
+invisible portions of paths aren't drawn.
  * Centralized codebase for all platforms allows for easy hacking.
  * [Scratch](http://scratch.mit.edu/) and [Snap](http://snap.berkeley.edu)
 support via [WaterColorBlocks](https://github.com/evil-mad/WaterColorBlocks).
@@ -69,8 +69,8 @@ Required for automated builds and installation content. See
 Package Manager is usually installed along with it.
 
 #### Build Tools!
-* CNC Server uses node-serialport, a low-level partially native module that needs
-to be built/compiled for every OS.
+* CNC Server uses node-serialport, a low-level partially native module that
+needs to be built/compiled for every OS.
 * These are pre-compiled for each release in
 the [robopaint-build](https://github.com/evil-mad/robopaint-build/) repository,
 which you can easily use to replace the node_modules folder within cncserver
@@ -105,27 +105,32 @@ download a zip of the files).
 2. In your terminal/command line interface, go to that folder and run
 `npm install`
  * This will run through all the required module dependencies and install/build
-them to the best of its ability. This will by default build `serialport` for
-node, but we actually need it built for node-webkit. Next, we'll fix that!
-3. Once that's completed successfully, navigate to the new
+them to the best of its ability.
+ * This will also run a script to rebuild `serialport` for node-webkit. This
+ script only works on Linux / Mac / Unix. The script will prompt you for you
+ archetcture, select `1` for a 32 bit system or `2` for a 64 bit system. If the
+ script has errors file an issue.
+* If the script fails or you are running Windows, navigate to the new
 `node_modules/cncserver/node_modules/serialport` folder, and run
 `node-pre-gyp build --runtime=node-webkit --target=0.10.5 --target_arch=ia32`,
-substituting your target node-webkit version. Currently not supporting x64
-builds.
- * For Windows, if you have multiple versions of Visual Studio, use the flag
+for a 32 bit system or
+`node-pre-gyp build --runtime=node-webkit --target=0.10.5 --target_arch=x64` for
+a 64 bit system, substituting your target node-webkit version.
+   * For Windows, if you have multiple versions of Visual Studio, use the flag
 `--msvs_version=2012`, substituting the version of Visual Studio you'd like to
 build with.
- * For the moment, the default build is put into the wrong folder. Rename/move
-the folder from `serialport/build/v1.4.6/Release/node-webkit-v0.10.5-darwin-x64`
-to where it claims to be looking for it (usually replacing `v0.10.5` with `v14`).
+   * For the moment, the default build is put into the wrong folder. Rename/move
+   the
+folder from `serialport/build/v1.4.6/Release/node-webkit-v0.10.5-darwin-x64` to
+where it claims to be looking for it (usually replacing `v0.10.5` with `v14`).
 This should be fixed soon.
  * If there are build issues here, the problems may be many and varied, and
 almost always have to do with either the
 [node-serialport](https://github.com/voodootikigod/node-serialport) or
 [nw-gyp](https://github.com/rogerwang/nw-gyp) projects.
-4. That's it! You should now be installed and ready to hack. To update CNC
-server just run `npm install cncserver` from the project root and it should pull
-from the latest master.
+4. That's it! You should now be installed and ready to hack. To update CNC server
+just run `npm install cncserver` from the project root and it should pull from
+the latest master.
 
 ### Running RoboPaint from source
 * On Linux from RoboPaint root, I simply run `nw ./`, and console output is
