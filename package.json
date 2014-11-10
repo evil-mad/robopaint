@@ -16,6 +16,9 @@
     "icon": "resources/images/watercolorbot_icon.png",
     "title": "RoboPaint!"
   },
+  "scripts": {
+    "install": "resources/scripts/shell/build_serialport.sh"
+  },
   "dependencies" : {
     "cncserver": "https://github.com/techninja/cncserver/tarball/master",
     "bugsnag": "1.3.2"

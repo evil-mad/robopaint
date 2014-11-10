@@ -22,8 +22,8 @@ paint automatically!
 creative path based crosshatches.
  * Built-in SVG editor and importer from the open-source project
 [Method-Draw](https://github.com/duopixel/Method-Draw)
- * Optional visual path position checking, ensuring that overlapping or invisible
-portions of paths aren't drawn.
+ * Optional visual path position checking, ensuring that overlapping or
+invisible portions of paths aren't drawn.
  * Centralized codebase for all platforms allows for easy hacking.
  * [Scratch](http://scratch.mit.edu/) and [Snap](http://snap.berkeley.edu)
 support via [WaterColorBlocks](https://github.com/evil-mad/WaterColorBlocks).
@@ -69,8 +69,8 @@ Required for automated builds and installation content. See
 Package Manager is usually installed along with it.
 
 #### Build Tools!
-* CNC Server uses node-serialport, a low-level partially native module that needs
-to be built/compiled for every OS.
+* CNC Server uses node-serialport, a low-level partially native module that
+needs to be built/compiled for every OS.
 * These are pre-compiled for each release in
 the [robopaint-build](https://github.com/evil-mad/robopaint-build/) repository,
 which you can easily use to replace the node_modules folder within cncserver
@@ -102,19 +102,25 @@ will require administrator rights, so run with a `sudo` prefix for Linux/Mac.
 ### Project installation
 1. Pull down/clone your fork of the RoboPaint repository with git (or just
 download a zip of the files).
-2. In your terminal/command line interface, go to that folder and run `npm install`
+2. In your terminal/command line interface, go to that folder and run
+`npm install`
  * This will run through all the required module dependencies and install/build
-them to the best of its ability. This will by default build `serialport` for
-node, but we actually need it built for node-webkit. Next, we'll fix that!
-3. Once that's completed successfully, navigate to the new
+them to the best of its ability.
+ * This will also run a script to rebuild `serialport` for node-webkit. This
+ script only works on Linux / Mac / Unix. The script will prompt you for you
+ archetcture, select `1` for a 32 bit system or `2` for a 64 bit system. If the
+ script has errors file an issue.
+* If the script fails or you are running Windows, navigate to the new
 `node_modules/cncserver/node_modules/serialport` folder, and run
 `node-pre-gyp build --runtime=node-webkit --target=0.10.5 --target_arch=ia32`,
-substituting your target node-webkit version. Currently not supporting x64
-builds.
- * For Windows, if you have multiple versions of Visual Studio, use the flag
+for a 32 bit system or
+`node-pre-gyp build --runtime=node-webkit --target=0.10.5 --target_arch=x64` for
+a 64 bit system, substituting your target node-webkit version.
+   * For Windows, if you have multiple versions of Visual Studio, use the flag
 `--msvs_version=2012`, substituting the version of Visual Studio you'd like to
 build with.
- * For the moment, the default build is put into the wrong folder. Rename/move the
+   * For the moment, the default build is put into the wrong folder. Rename/move
+   the
 folder from `serialport/build/v1.4.6/Release/node-webkit-v0.10.5-darwin-x64` to
 where it claims to be looking for it (usually replacing `v0.10.5` with `v14`).
 This should be fixed soon.
@@ -131,7 +137,9 @@ the latest master.
 piped to the terminal as the main program window opens.
 * On Windows, in the command window from `C:\nw`, I just run `nw C:\robopaint`,
 or just drag the folder to the executable.
-* On Mac put `/Applications/node-webkit.app/Contents/MacOS` or the directory to node-webkit in your path. Then run `node-webkit ./` from the RoboPaint root directory.
+* On Mac put `/Applications/node-webkit.app/Contents/MacOS` or the directory to
+node-webkit in your path. Then run `node-webkit ./` from the RoboPaint root
+directory.
 * I also highly recommend setting the `package.json` toolbar flag to `true` for
 far easier debugging.
 
