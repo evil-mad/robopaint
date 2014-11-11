@@ -112,13 +112,13 @@
         "speed4": "Stupid Fast!"
       },
       "penmode": {
-        "title": "Printing/Painting Mode:",
+        "title": "Printing Mode:",
         "opt0": "Default (Brush, Water & Paint)",
         "opt1": "Water Only (No Paint: Buddha Board)",
         "opt2": "Paint Only (No Water: Non-watercolors)",
         "opt3": "No Water or Paint (Pen/Pencil mode)",
-        "warningPaint": "Paint required. Printing/Painting Mode incompatible with this setting.",
-        "warningAll": "Water/Paint required. Printing/Painting Mode incompatible with this setting."
+        "warningPaint": "Paint required. Printing Mode incompatible with this setting.",
+        "warningAll": "Water/Paint required. Printing Mode incompatible with this setting."
       },
       "showcolortext": {
         "title": "Show color names:",
@@ -214,7 +214,7 @@
         "invertdetail": "In case one of your motors moves backwards.",
         "buffer": {
           "title": "Buffer Smoothing:",
-          "detail": "Removes time from API callback duration, forces buffering and smoothing out subsequent position calls. Default is **20 ms**. Negative values add extra delay. Only increase if painting is jittery.",
+          "detail": "Removes time from API callback duration, forces buffering and smoothing out subsequent position calls. Default is **20 ms**. Negative values add extra delay. Only increase if printing is jittery.",
           "hover": "Move right for more offset (smooth), left for negative offset (jerky)"
         },
         "swap": "Swap X for Y:",
