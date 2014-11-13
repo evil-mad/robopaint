@@ -9,13 +9,13 @@
     "baseClass": "generic-standard"
   },
   "colors": [
-    {"Black": "#000000"},
-    {"Red": "#FF0000"},
-    {"Orange": "#FFA500"},
-    {"Yellow": "#FFFF00"},
-    {"Green": "#008000"},
-    {"Blue": "#0000FF"},
-    {"Purple": "#800080"},
-    {"Brown": "#8B4513"}
+    {"generic.colors.color0": "#000000"},
+    {"generic.colors.color1": "#FF0000"},
+    {"generic.colors.color2": "#FFA500"},
+    {"generic.colors.color3": "#FFFF00"},
+    {"generic.colors.color4": "#008000"},
+    {"generic.colors.color5": "#0000FF"},
+    {"generic.colors.color6": "#800080"},
+    {"generic.colors.color7": "#8B4513"}
   ]
 }]

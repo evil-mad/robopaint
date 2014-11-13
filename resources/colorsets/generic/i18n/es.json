@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "creator": "TEST",
+    "target": "es",
+    "release": "42.42.24.potato",
+    "basetype": "colorset"
+  },
+  "info": {
+    "type": "Generic",
+    "name": "Standard",
+    "description": "English text describing this colorset"
+  },
+  
+  "colors": {
+    "color0": "negro",
+    "color1": "rojo",
+    "color2": "naranja",
+    "color3": "amarillo",
+    "color4": "verde",
+    "color5": "azul",
+    "color6": "violeta",
+    "color7": "marron"
+  }
+}
