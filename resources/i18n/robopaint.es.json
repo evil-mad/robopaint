@@ -76,12 +76,12 @@
     }
   },
   "settings": {
-      
+
     "lang": {
       "title": "Seleziona una lingua:",
       "name": "Español"
-    }, 
-      
+    },
+
     "tabs": {
       "output": "Pintura Estilo",
       "common": "Configuración básica",
@@ -163,7 +163,7 @@
         "opt0": "Línea Recta",
         "opt1": "Línea Triángulo",
         "opt2": "Línea Sine",
-        "opt3": "Centro Espiral"
+        "opt3": "Centro Espiral",
         "opt4": "Garabato TSP"
       },
       "linefilltitle": "Rellenos Línea / sombreado",
