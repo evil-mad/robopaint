@@ -48,8 +48,9 @@ cncserver.paths = {
       var path = document.createElementNS(svgNS, 'path');
 
       $(path).attr({
-        fill: $elem.attr('fill'),
-        stroke: $elem.attr('stroke'),
+        fill: $elem.attr('fill') == 'rgba(0, 0, 0, 0)' ? 'none' : $elem.attr('fill'),
+        stroke: $elem.attr('stroke') == 'rgba(0, 0, 0, 0)' ? 'none' : $elem.attr('stroke'),
+        'stroke-width': parseInt($elem.attr('stroke-width')) == 0 ? 10 : parseInt($elem.attr('stroke-width')),
         id: $elem.attr('id')
       })[0];
 
