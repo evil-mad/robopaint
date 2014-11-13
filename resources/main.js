@@ -564,6 +564,7 @@ function getColorsets() {
           var name = Object.keys(c.colors[i])[0];
           var h = c.colors[i][name];
           var r = robopaint.utils.colorStringToArray(h);
+          name = robopaint.t(name); //Translate name if it is part of i18n
           colorsOut.push({
             name: name,
             color: {
@@ -597,6 +598,9 @@ function getColorsets() {
   var order = Object.keys(robopaint.statedata.colorsets).sort(function(a, b) {
     return (robopaint.statedata.colorsets[a].weight - robopaint.statedata.colorsets[b].weight)
   });
+
+  //Clear the menu (prevents multiple copies appearing on language switch
+  $('#colorset').empty()
 
   // Actually add the colorsets in the correct weighted order to the dropdown
   for(var i in order) {
@@ -798,6 +802,25 @@ function translatePage() {
   });
   console.debug("Found a total of " + i + " language files.");
 
+  fs.readdirSync('resources/colorsets/').forEach(function(folder) {
+    //console.debug(folder);
+    try {
+      //File is assumed a directory if it doesn't contain an extention
+      if (folder.indexOf(".") == -1) {
+          //Path to i18n folder
+          var fullPath = 'resources/colorsets/' + folder + '/i18n/';
+
+          //iter over languages in colorset's i18n folder
+          fs.readdirSync(fullPath).forEach(function(file) {
+              var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
+              //Add the data to the global i18n translation set
+              resources[data['_meta'].target]['translation'][folder] = {colors:data['colors']};
+      });
+      }
+    } catch(e) {
+     console.error('Bad or missing Colorset translation file for: ' + folder, e); }
+  });
+
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
   $('[data-i18n]=""').each(function() {
     // "this" in every $.each() function, is a reference to each selected DOM object from the query.
@@ -854,6 +877,9 @@ function updateLang() {
 
   // Initalize/reset Tooltips
   initToolTips();
+
+  // Reload colorsets
+  getColorsets();
 
   // Report language switch to the console
   console.info("Language Switched to: " + robopaint.settings.lang);
