@@ -588,11 +588,11 @@ function getColorsets() {
       }
 
       robopaint.statedata.colorsets[c.styles.baseClass] = {
-        name: c.name,
-        type: c.type,
+        name: robopaint.t(c.name),
+        type: robopaint.t(c.type),
         weight: parseInt(c.weight),
-        description: c.description,
-        media: c.media,
+        description: robopaint.t(c.description),
+        media: robopaint.t(c.media),
         baseClass: c.styles.baseClass,
         colors: colorsOut,
         stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}),
@@ -818,7 +818,7 @@ function translatePage() {
           fs.readdirSync(fullPath).forEach(function(file) {
               var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
               //Add the data to the global i18n translation set
-              resources[data['_meta'].target]['translation'][folder] = {colors:data['colors']};
+              resources[data['_meta'].target]['translation'][folder] = data;
       });
       }
     } catch(e) {
