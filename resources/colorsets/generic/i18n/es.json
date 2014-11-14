@@ -1,14 +1,14 @@
 {
   "_meta": {
-    "creator": "TEST",
+    "creator": "rogerfachini",
     "target": "es",
-    "release": "42.42.24.potato",
+    "release": "9.0.1",
     "basetype": "colorset"
   },
   "info": {
-    "type": "Generic",
-    "name": "Standard",
-    "description": "English text describing this colorset"
+    "type": "genérico",
+    "name": "estándar",
+    "description": "Conjunto de colores primarios en orden estándar. Utilice para la acción de Crayola, marca de la tienda o sartenes primarias móviles de color."
   },
   
   "colors": {

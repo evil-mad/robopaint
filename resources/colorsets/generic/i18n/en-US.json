@@ -1,14 +1,14 @@
 {
   "_meta": {
-    "creator": "TEST",
+    "creator": "rogerfachini",
     "target": "en-US",
-    "release": "42.42.24.potato",
+    "release": "9.0.1",
     "basetype": "colorset"
   },
   "info": {
     "type": "Generic",
     "name": "Standard",
-    "description": "English text describing this colorset"
+    "description": "Set of primary colors in standard order. Use for stock Crayola, store brand or movable primary color pans."
   },
   
   "colors": {
