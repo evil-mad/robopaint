@@ -274,13 +274,6 @@ function responsiveResize() {
   // Set height for inner settings content window, just remove tab and H2 height
   $s.find('.settings-content').height($s.height() - 80);
 
-  // Position window
-  size = $('nav').width();
-  $('nav').css({
-    left: (win[0]/2) - (size/2),
-    top: '70%'
-  });
-
   // Set subwindow height
   if ($subwindow.height) {
     $subwindow.height($(window).height() - barHeight);
@@ -677,16 +670,19 @@ function loadAllModes(){
   });
 
   // Move through all approved modes based on mode weight and add DOM
+  $('nav').append($('<table>').append($('<tr>')));
   for(var i in order) {
     var m = modes[order[i]];
     // Add the nav bubble
-    $('nav').prepend(
-      $('<a>')
-        .attr('href', m.main)
-        .attr('id', m.name)
-        .attr('title', m.description)
-        .addClass((m.core ? '' : ' hidden'))
-        .text(m.word)
+    $('nav table tr').prepend(
+      $('<td>').append(
+        $('<a>')
+          .attr('href', m.main)
+          .attr('id', m.name)
+          .attr('title', m.description)
+          .css('display', (m.core ? 'block' : 'none'))
+          .text(m.word)
+      )
     );
 
     // Add the toolbar link icon
@@ -861,7 +857,7 @@ function updateLang() {
 
   // Report language switch to the console
   console.info("Language Switched to: " + robopaint.settings.lang);
-  
+
   // Apply bolding to details text
   $('aside').each(function(){
     $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));

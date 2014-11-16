@@ -472,10 +472,14 @@ body.home h1 span.message {
 
 body.home nav {
   position: absolute;
-  top: -150%;
-  left: 250px;
-  margin-top: -70px;
-  overflow: hidden;
+  top: 73%;
+  -webkit-transform: translate(-50%,-50%);
+  left: 50%;
+  width: 75%;
+}
+
+body.home nav table {
+  width: 100%;
 }
 
 body.home nav a {
@@ -484,8 +488,8 @@ body.home nav a {
   border-radius: 74px;
   text-align: center;
   border: 4px solid #aaa;
-  float: left;
-  margin: 25px;
+  display: block;
+  margin: 0 auto;
   color: black;
   background-color: cornsilk;
   text-decoration: none;
