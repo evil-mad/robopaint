@@ -386,12 +386,16 @@ function bindSettingsControls() {
   // Reset button
   $('#settings-reset').click(function(e) {
     if (confirm(robopaint.t('settings.buttons.reset.confirm'))) {
+      // Disable any non-core modes
+      $('.advanced-modes input').prop('checked', false).change();
+
       delete localStorage[settingsStorageKey()];
 
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
       loadSettings();
       loadDefaultLang();
+
     }
   });
 
