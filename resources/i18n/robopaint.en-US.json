@@ -225,7 +225,7 @@
         "title": "Modes",
         "detail": "Enable or disable experimental RoboPaint modes",
         "remoteprint": {
-          "title": "Remote peing:",
+          "title": "Remote paint:",
           "detail": "Allows properly configured remote applications to send graphics to RoboPaint to automatically be printed. For this to function outside this computer, the checkbox for \"Only allow connections from this computer\" below must be **unchecked**."
         }
       },
