@@ -65,33 +65,37 @@ $(function() {
   }
 
   // CNCServer Buffer Change events (for pause, update, or resume)
-  var bufferLen = 0;
   function bufferUpdateEvent(b){
     // Because this is connected to code outside its window, need to kill it
     // if we're still running once it's been closed.
     if (!console) {window.removeListeners(); return;}
 
-    // Break out important buffer states into something with wider scope
-    cncserver.state.process.busy = b.bufferRunning;
-    cncserver.state.buffer = b.buffer;
-    cncserver.state.process.paused = b.bufferPaused;
+    // What KIND of buffer update is this?
+    switch (b.type) {
+      case 'complete':
+        cncserver.state.buffer = b.buffer;
+      case 'vars':
+        // Break out important buffer states into something with wider scope
+        cncserver.state.process.busy = b.bufferRunning;
+        cncserver.state.process.paused = b.bufferPaused;
+        break;
+      case 'add':
+        cncserver.state.buffer.unshift(b.item);
+        cncserver.state.process.max++
+        break;
+      case 'remove':
+        cncserver.state.buffer.pop();
+        break;
+    }
 
     // Empty buffer?
-    if (!b.buffer.length) {
+    if (!cncserver.state.buffer.length) {
       cncserver.state.process.max = 0;
-      bufferLen = 0;
       cncserver.cmd.progress({val: 0, max: 0});
     } else { // At least one item in buffer
       // Update the progress bar
-
-      // Did the buffer go up? up the max
-      if (b.buffer.length > bufferLen) {
-        cncserver.state.process.max++;
-      }
-      bufferLen = b.buffer.length;
-
       cncserver.cmd.progress({
-        val: cncserver.state.process.max - bufferLen,
+        val: cncserver.state.process.max - cncserver.state.buffer.length,
         max: cncserver.state.process.max
       });
     }
