@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "creator": "R10",
+    "target": "fr",
+    "release": "9.0.1",
+    "basetype": "colorset"
+  },
+  "info": {
+    "type": "Générique",
+    "name": "Standard",
+    "description": "Utilisez ce modèle avec les aquarelles inclus avec votre WaterColorBot."
+  },
+
+  "colors": {
+    "color0": "Noir",
+    "color1": "Rouge",
+    "color2": "Orange",
+    "color3": "Jaune",
+    "color4": "Vert",
+    "color5": "Bleu",
+    "color6": "Violet",
+    "color7": "Marron"
+}
+}
