@@ -27,7 +27,7 @@
     "question": "¿Qué quieres hacer?",
     "error": "¡No se pudo conectar!",
     "success": "¡Conectado!",
-    "disconnect": "Bot desconectado",
+    "disconnect": "Robot desconectado",
     "button": {
       "continue": "Continuar en el modo de simulación",
       "retry": "Intente volver a conectar"
@@ -38,24 +38,24 @@
       "home": "Pantalla de Inicio",
       "edit": "Abrir, cambiar el tamaño y editar material gráfico vectorial existente.",
       "open": "Abra una imagen de ejemplo",
-      "printauto": "Modo de Pintura: Imprimir el dibujo!",
-      "printmanual": "Modo Manual: Personaliza tu impresión",
+      "printauto": "Modo de Pintura: ¡Imprimir el dibujo!",
+      "printmanual": "Modo Manual: Avanzado su impresión",
       "help": "¡Ayuda! (Web de documentación abierto)",
       "settings": "Configuración",
       "version": "v"
     },
     "bubble": {
       "edit": "Crear",
-      "printauto": "Impresión",
-      "printmanual": "Personaliza"
+      "printauto": "Imprimir",
+      "printmanual": "Avanzado"
     }
   },
   "remoteprint": {
-    "title": "Modo de impresión remota",
+    "title": "Modo de pintura remota",
     "icontitle": {
       "from": "Desde la aplicación cliente",
-      "through": "A través de la Interwebs o su red local",
-      "to": "Para su propio robot!"
+      "through": "A través de la internet o su red local",
+      "to": "¡Para su propio robot!"
     },
     "details": {
       "title": " Detalles / Controles:",
@@ -68,20 +68,18 @@
       "disabled": "La API de importación SVG está actualmente deshabilitado. Habilite en la configuración y luego haga clic en el botón en la interfaz gráfica de usuario RoboPaint.",
       "busy": "No se puede agregar a la cola durante el trabajo de impresión en curso.",
       "queued": "En cola para la impresión...",
-      "wait": "A la espera de la elaboración de cliente..."
+      "wait": "A la espera de la dibujo de cliente..."
     },
     "confirms": {
-      "welcome": "Hola, bienvenidos a modo de pintura remoto! Este modo se convertirá en un RoboPaint gráficos \"servidor de impresión\", listo para tomar una imagen desde otra aplicación e imprimirla inmediatamente! \n\n* Las imágenes enviadas solo serán recibidos mientras este modo está activado\n\n* Una vez que una imagen se terminó, este modo se cerrará \n\n* Antes de hacer clic en Aceptar, asegúrese de que el bot está completamente configurado y listo para ir! \n\n* haga clic en Cancelar si no estás listo para ir. También puede salir en cualquier momento, mientras que en el modo de pintura remoto.",
+      "welcome": "¡Hola, bienvenidos a modo de pintura remota! ¡Este modo se convertirá en un RoboPaint gráficos \"servidor de impresión\", listo para tomar una imagen desde otra aplicación e imprimirla inmediatamente! * Las imágenes enviadas solo serán recibidos mientras este modo está activado* Una vez que una imagen se terminó, este modo se cerrará * ¡Antes de hacer clic en Aceptar, asegúrese de que el bot está completamente configurado y listo para ir! * haga clic en Cancelar si no estás listo para ir. También puede salir en cualquier momento, mientras que en el modo de pintura remoto.",
       "exit": "¿Está seguro de que desea salir del modo de pintura remoto?\n\nCualquier proceso de impresión y aplicaciones de cliente se cancelarán / desconectado."
     }
   },
   "settings": {
-
     "lang": {
       "title": "Seleziona una lingua:",
       "name": "Español"
     },
-
     "tabs": {
       "output": "Pintura Estilo",
       "common": "Configuración básica",
@@ -91,7 +89,7 @@
       "reset": {
         "title": "Reinicializar",
         "hover": "Revertir todos los ajustes a los valores predeterminados",
-        "confirm": "Restablecer todos los ajustes a los valores de fábrica?"
+        "confirm": "¿Restablecer todos los ajustes a los valores de fábrica?"
       },
       "done": {
         "title": "Completar",
@@ -109,7 +107,7 @@
         "speed1": "Dolorosamente Lento",
         "speed2": "Medio",
         "speed3": "Rápido (predeterminado)",
-        "speed4": "Rápido estúpido!"
+        "speed4": "¡Rápido estúpido!"
       },
       "penmode": {
         "title": "Modo Pintura/Diseño:",
@@ -233,7 +231,7 @@
       "bottype": {
         "title": "Tipo de dibujo bot conectados:",
         "hover": "Lista Bot Apoyado",
-        "detail": "RoboPaint fue hecho para el WaterColorBot, pero debido a que está basado en CNC de servidor que puede hablar con cualquier bot que apoya! **El cambio requiere reiniciar la aplicación.**",
+        "detail": "¡RoboPaint fue hecho para el WaterColorBot, pero debido a que está basado en CNC de servidor que puede hablar con cualquier bot que apoya! **El cambio requiere reiniciar la aplicación.**",
         "warning": "Bot incompatible con herramientas de pintura seleccionado."
       },
       "api": {
