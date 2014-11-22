@@ -56,15 +56,19 @@ $(function() {
   // Bind the Stream event callbacks ===========================================
 
   // Use direct buffer if local, otherwise rely on socket.io
+  var isLocal;
   if (robopaint.cncserver.api.server.domain == 'localhost') {
+    isLocal = true;
     robopaint.cncserver.penUpdateTrigger = penUpdateEvent;
     robopaint.cncserver.bufferUpdateTrigger = bufferUpdateEvent;
   } else {
+    isLocal = false;
     robopaint.socket.on('buffer update', bufferUpdateEvent);
     robopaint.socket.on('pen update', penUpdateEvent);
   }
 
   // CNCServer Buffer Change events (for pause, update, or resume)
+  var localBuffer = [];
   function bufferUpdateEvent(b){
     // Because this is connected to code outside its window, need to kill it
     // if we're still running once it's been closed.
@@ -73,6 +77,9 @@ $(function() {
     // What KIND of buffer update is this?
     switch (b.type) {
       case 'complete':
+        // When local, this attaches cncserver.state.buffer to the actual in use
+        // cncserver buffer object. When external, this is a reference instance
+        // inside the Socket.io callback data object.
         cncserver.state.buffer = b.buffer;
       case 'vars':
         // Break out important buffer states into something with wider scope
@@ -80,11 +87,14 @@ $(function() {
         cncserver.state.process.paused = b.bufferPaused;
         break;
       case 'add':
-        cncserver.state.buffer.unshift(b.item);
+        // No need to actually edit the buffer when local as we have access to
+        // the exact same buffer object in memory.
+        if (!isLocal) cncserver.state.buffer.unshift(b.item);
         cncserver.state.process.max++
         break;
       case 'remove':
-        cncserver.state.buffer.pop();
+        // Again, when local, we don't need to do anything to the object we have
+        if (!isLocal) cncserver.state.buffer.pop();
         break;
     }
 
