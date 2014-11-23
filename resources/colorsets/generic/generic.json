@@ -1,21 +1,17 @@
 [{
-  "type": "generic.info.type",
-  "name": "generic.info.name",
-  "media": "watercolor",
   "weight": -10,
-  "description": "generic.info.description",
   "styles" : {
     "src" : "standard.css",
     "baseClass": "generic-standard"
   },
   "colors": [
-    {"generic.colors.color0": "#000000"},
-    {"generic.colors.color1": "#FF0000"},
-    {"generic.colors.color2": "#FFA500"},
-    {"generic.colors.color3": "#FFFF00"},
-    {"generic.colors.color4": "#008000"},
-    {"generic.colors.color5": "#0000FF"},
-    {"generic.colors.color6": "#800080"},
-    {"generic.colors.color7": "#8B4513"}
+    "#000000",
+    "#FF0000",
+    "#FFA500",
+    "#FFFF00",
+    "#008000",
+    "#0000FF",
+    "#800080",
+    "#8B4513"
   ]
 }]
