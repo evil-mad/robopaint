@@ -151,7 +151,16 @@ function addElements() {
 
   methodDraw.setCustomHandlers({
     save: function(win, svg) {
+      var ignoreChange = false;
       fileSave.change(function(e) {
+        // If there was a failure is saving, we need to ignore the next change
+        // to ensure we catch the same save error next time
+        if (ignoreChange) {
+          console.log('CHANGEIGNORED');
+          ignoreChange = false;
+          return;
+        }
+
         var path = this.value;
 
         if (!path) return; // Cancelled!
@@ -191,7 +200,9 @@ function addElements() {
           window.parent.fs.writeFileSync(path, svg);
           robopaint.statedata.lastFile = path;
           $(this).attr('nwsaveas', path);
-        } catch(e) {
+        } catch(err) {
+          ignoreChange = true;
+          $(this).val('');
           window.alert('There was an error writing the file. \n\n Check your permissions or file name and try again. \n\n ERR# ' + err.errno + ',  Code: ' + err.code);
           console.log('Error saving file:', err);
         }
