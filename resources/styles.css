@@ -743,16 +743,18 @@ body.home div.options button.normal {
   margin-top: -6px;
 }
 
-#langIcon {
+#lang-wrapper {
   position: absolute;
-  right: 11em;
-  top: 1.5em;
+  right: 8.4em;
+  top: 1.6em;
+  background-image: url('images/icon_lang.png');
+  background-repeat: no-repeat;
+  padding-left: 1.7em;
+  background-position: left center;
+  height: 20px;
 }
 
 #lang {
-  position: absolute;
-  right: 14.7em;
-  top: 1.6em;
 }
 
 #settings-done {
