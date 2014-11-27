@@ -557,19 +557,24 @@ function getColorsets() {
       continue;
     }
 
-    // Move through all colorsets in file
+     // Move through all colorsets in file
     for(var s in fileSets) {
       var c = fileSets[s];
 
       try {
         // Add pure white to the end of the color set for auto-color
-        c.colors.push({'White': '#FFFFFF'});
+        //TODO: Figure out if commenting this out breaks anything!
+        //EDIT: Yes, it does.
+        //TODO: Fix the broken thing!
+        c.colors.push('#FFFFFF');
 
         // Process Colors to avoid re-processing later
         var colorsOut = [];
+        var iMod = 8*s
         for (var i in c.colors){
-          var name = Object.keys(c.colors[i])[0];
-          var h = c.colors[i][name];
+          var idx = parseInt(i)+iMod;
+          var name = "colorsets." + set + ".color" + idx;
+          var h = c.colors[i];
           var r = robopaint.utils.colorStringToArray(h);
           name = robopaint.t(name); //Translate name if it is part of i18n
           colorsOut.push({
@@ -580,19 +585,20 @@ function getColorsets() {
               HSL: robopaint.utils.rgbToHSL(r),
               YUV: robopaint.utils.rgbToYUV(r)
             }
+
           });
         }
       } catch(e) {
-        // Silently fail on bad parse!
+        console.error("Parse error on colorset: " + s, e);
         continue;
       }
 
       robopaint.statedata.colorsets[c.styles.baseClass] = {
-        name: robopaint.t(c.name),
-        type: robopaint.t(c.type),
+        name: robopaint.t("colorsets." + set + ".info" + s + ".name"),
+        type: robopaint.t("colorsets." + set + ".info" + s + ".type"),
         weight: parseInt(c.weight),
-        description: robopaint.t(c.description),
-        media: robopaint.t(c.media),
+        description: robopaint.t("colorsets." + set + ".info" + s + ".description"),
+        media: robopaint.t("colorsets." + set + ".info" + s + ".media"),
         baseClass: c.styles.baseClass,
         colors: colorsOut,
         stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}),
@@ -799,6 +805,9 @@ function translatePage() {
 
       // Add the language to the resource list.
       resources[data['_meta'].target] = { translation: data};
+      //Create empty colorset key
+      resources[data['_meta'].target].translation['colorsets'] = {};
+
       i += 1;
     } catch(e) {
       console.error('Bad language file:' + file, e);
@@ -818,7 +827,7 @@ function translatePage() {
           fs.readdirSync(fullPath).forEach(function(file) {
               var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
               //Add the data to the global i18n translation set
-              resources[data['_meta'].target]['translation'][folder] = data;
+              resources[data['_meta'].target].translation['colorsets'][folder] = data;
       });
       }
     } catch(e) {
@@ -878,6 +887,8 @@ function updateLang() {
       var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
       $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
     });
+  // Report language switch to the console
+  console.info("Language Switched to: " + robopaint.settings.lang);
 
   // Initalize/reset Tooltips
   initToolTips();
@@ -885,8 +896,7 @@ function updateLang() {
   // Reload colorsets
   getColorsets();
 
-  // Report language switch to the console
-  console.info("Language Switched to: " + robopaint.settings.lang);
+
 
   // Apply bolding to details text
   $('aside').each(function(){

@@ -1,0 +1,56 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "9.0.1",
+    "basetype": "colorset"
+  },
+  "info0": {
+    "media": "watercolor",
+    "type": "Prang",
+    "name": "Glitter",
+    "description": "Prang Glitter 8 Semi-Moist Watercolors, 8-color set"
+  },
+  
+  "info1": {
+    "media": "watercolor",
+    "type": "Prang",
+    "name": "Metallic",
+    "description": "Prang Metallic 8 Semi-Moist Watercolors, 8-color set"
+  },
+  
+  "info2": {
+    "media": "watercolor",
+    "type": "Prang",
+    "name": "Secondary",
+    "description": "Prang Oval 16 Semi-Moist Watercolors, 16-color set (secondary grouping). Use generic standard setting for primary and move pans to correct positions."
+  },
+  
+  "color0": "Gold",
+  "color1": "Silver",
+  "color2": "Lilac",
+  "color3": "Sapphire",
+  "color4": "Emerald",
+  "color5": "Canary",
+  "color6": "Tangerine",
+  "color7": "Ruby",
+  
+  "color8": "Gold",
+  "color9": "Silver",
+  "color10": "Copper",
+  "color11": "Blue",
+  "color12": "Green",
+  "color13": "Yellow",
+  "color14": "Orange",
+  "color15": "Red",
+  
+  "color16": "Vermillion",
+  "color17": "Yellow Orange",
+  "color18": "Yellow Green",
+  "color19": "Blue Green",
+  "color20": "Turquoise Blue",
+  "color21": "Blue Violet",
+  "color22": "Red Violet",
+  "color23": "White"
+  
+}

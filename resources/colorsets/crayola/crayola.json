@@ -1,42 +1,34 @@
 [{
-  "type" : "Crayola",
-  "name": "Secondary",
-  "media": "watercolor",
   "weight": 1,
-  "description": "Crayola Washable Watercolors, 16/24-color set (secondary grouping).",
   "styles" : {
     "src" : "secondary.css",
     "baseClass": "crayola-secondary"
   },
   "colors": [
-    {"Maroon": "#bb39b9"},
-    {"Orangered": "#e14a35"},
-    {"Tangerine": "#f3e730"},
-    {"Yellow Green": "#b5d02e"},
-    {"Teal": "#2ed07e"},
-    {"Sky Blue": "#53bee7"},
-    {"Indigo": "#535ee7"},
-    {"White": "#EEE"}
+    "#bb39b9",
+    "#e14a35",
+    "#f3e730",
+    "#b5d02e",
+    "#2ed07e",
+    "#53bee7",
+    "#535ee7",
+    "#EEE"
   ]
 },
 {
-  "type" : "Crayola",
-  "name": "Tertiary",
-  "media": "watercolor",
   "weight": 5,
-  "description": "Crayola Washable Watercolors, 24-color set (tertiary grouping).",
   "styles" : {
     "src" : "tertiary.css",
     "baseClass": "crayola-tertiary"
   },
   "colors": [
-    {"Grey": "#716d78"},
-    {"Pink": "#ff61bc"},
-    {"Salmon": "#ffb260"},
-    {"Lemon": "#ffff30"},
-    {"Lime": "#b2f743"},
-    {"Turquoise": "#00c0a3"},
-    {"Fuchsia": "#d55ce9"},
-    {"Beige": "#de896d"}
+    "#716d78",
+    "#ff61bc",
+    "#ffb260",
+    "#ffff30",
+    "#b2f743",
+    "#00c0a3",
+    "#d55ce9",
+    "#de896d"
   ]
 }]
