@@ -1,21 +1,17 @@
 [{
-  "type": "Sargent",
-  "name": "Secondary",
-  "media": "watercolor",
   "weight": 20,
-  "description": "16ct Oval Pan Semi-Moist Premium Watercolors & Brush (secondary grouping). Use generic standard setting for primary and move pans to correct positions.",
   "styles" : {
     "src" : "secondary.css",
     "baseClass": "sargent-secondary"
   },
   "colors": [
-    {"Yellow Orange": "#ffbe2c"},
-    {"Vermilion": "#ff451f"},
-    {"Red Violet": "#c02987"},
-    {"Blue Violet": "#212aa9"},
-    {"Green": "#a3d130"},
-    {"Teal": "#00a6b8"},
-    {"Teal": "#00a6b8"},
-    {"White": "#eee"}
+    "#ffbe2c",
+    "#ff451f",
+    "#c02987",
+    "#212aa9",
+    "#a3d130",
+    "#00a6b8",
+    "#00a6b8",
+    "#eee"
   ]
 }]

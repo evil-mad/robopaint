@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "9.0.1",
+    "basetype": "colorset"
+  },
+  "info0": {
+    "media": "watercolor",
+    "type": "Crayola",
+    "name": "Secondary",
+    "description": "Crayola Washable Watercolors, 16/24-color set (secondary grouping)."
+  },
+  
+  "info1": {
+    "media": "watercolor",
+    "type": "Crayola",
+    "name": "Tertiary",
+    "description": "Crayola Washable Watercolors, 24-color set (tertiary grouping)."
+  },
+  
+  "color0": "Maroon",
+  "color1": "Orangered",
+  "color2": "Tangerine",
+  "color3": "Yellow Green",
+  "color4": "Teal",
+  "color5": "Sky Blue",
+  "color6": "Indigo",
+  "color7": "White",
+  
+  "color8": "Grey",
+  "color9": "Pink",
+  "color10": "Salmon",
+  "color11": "Lemon",
+  "color12": "Lime",
+  "color13": "Turquoise",
+  "color14": "Fuchsia",
+  "color15": "Beige"
+  
+}

@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "9.0.1",
+    "basetype": "colorset"
+  },
+  "info0": {
+    "media": "watercolor",
+    "type": "Sargent",
+    "name": "Secondary",
+    "description": "16ct Oval Pan Semi-Moist Premium Watercolors & Brush (secondary grouping). Use generic standard setting for primary and move pans to correct positions."
+  },
+  
+  
+  "color0": "Yellow Orange",
+  "color1": "Vermilion",
+  "color2": "Red Violet",
+  "color3": "Blue Violet",
+  "color4": "Green",
+  "color5": "Teal",
+  "color6": "Teal",
+  "color7": "White"
+}
