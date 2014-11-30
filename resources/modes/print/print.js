@@ -59,9 +59,6 @@ $(function() {
     }
   }
 
-  cncserver.canvas.loadSVG(); // Load the default SVG
-
-
   // Externally accessible bind controlls trigger for robopaint.mode.svg to call
   window.bindControls = function() {
 
@@ -144,6 +141,8 @@ $(function() {
         cncserver.wcb.status(['Motors unlocked! Place in home corner when done'], d);
       });
     });
+
+    cncserver.canvas.loadSVG(); // Load the default SVG after controls are bound
   }
 
   function responsiveResize(){
