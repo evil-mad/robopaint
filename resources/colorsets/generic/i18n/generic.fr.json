@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "creator": "R10",
+    "target": "fr",
+    "release": "9.0.5",
+    "basetype": "colorset"
+  },
+  "generic": {
+    "manufacturer": "Générique",
+    "name": "Standard",
+    "description": "Utilisez ce modèle avec les aquarelles inclus avec votre WaterColorBot."
+  }
+}
