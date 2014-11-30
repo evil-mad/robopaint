@@ -100,8 +100,8 @@ $(function() {
 
     // Empty buffer?
     if (!cncserver.state.buffer.length) {
-      cncserver.state.process.max = 0;
-      cncserver.cmd.progress({val: 0, max: 0});
+      cncserver.state.process.max = 1;
+      cncserver.cmd.progress({val: 0, max: 1});
     } else { // At least one item in buffer
       // Update the progress bar
       cncserver.cmd.progress({
