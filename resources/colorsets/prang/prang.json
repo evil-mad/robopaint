@@ -1,6 +1,6 @@
 [{
-  "media":"watercolor",
-  "machineName":"glitter",
+  "media": "watercolor",
+  "machineName": "glitter",
   "weight": 11,
   "styles" : {
     "src" : "glitter.css",
@@ -18,8 +18,8 @@
   ]
 },
 {
-  "media":"watercolor",
-  "machineName":"metallic",
+  "media": "watercolor",
+  "machineName": "metallic",
   "weight": 12,
   "styles" : {
     "src" : "metallic.css",
@@ -37,8 +37,8 @@
   ]
 },
 {
-  "media":"watercolor",
-  "machineName":"secondary",
+  "media": "watercolor",
+  "machineName": "secondary",
   "weight": 10,
   "styles" : {
     "src" : "secondary.css",
