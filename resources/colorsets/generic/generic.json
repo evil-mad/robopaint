@@ -1,17 +1,19 @@
 [{
+  "media": "watercolor",
+  "machineName": "generic",
   "weight": -10,
   "styles" : {
     "src" : "standard.css",
     "baseClass": "generic-standard"
   },
   "colors": [
-    "#000000",
-    "#FF0000",
-    "#FFA500",
-    "#FFFF00",
-    "#008000",
-    "#0000FF",
-    "#800080",
-    "#8B4513"
+    {"black":"#000000"},
+    {"red":"#FF0000"},
+    {"orange":"#FFA500"},
+    {"yellow":"#FFFF00"},
+    {"green":"#008000"},
+    {"blue":"#0000FF"},
+    {"purple":"#800080"},
+    {"brown":"#8B4513"}
   ]
 }]
