@@ -543,6 +543,8 @@ function getColorsets() {
   for(var i in sets) {
     var set = sets[i];
     var setDir = colorsetDir + set + '/';
+
+
     try {
       var fileSets = JSON.parse(fs.readFileSync(setDir + set + '.json'));
     } catch(e) {
@@ -553,25 +555,20 @@ function getColorsets() {
      // Move through all colorsets in file
     for(var s in fileSets) {
       var c = fileSets[s];
-
+      var machineName = c.machineName
       try {
         // Add pure white to the end of the color set for auto-color
-        //TODO: Figure out if commenting this out breaks anything!
-        //EDIT: Yes, it does.
-        //TODO: Fix the broken thing!
-        c.colors.push('#FFFFFF');
+        c.colors.push({'white': '#FFFFFF'});
 
         // Process Colors to avoid re-processing later
         var colorsOut = [];
-        var iMod = 8*s
         for (var i in c.colors){
-          var idx = parseInt(i)+iMod;
-          var name = "colorsets." + set + ".color" + idx;
-          var h = c.colors[i];
+          var color = c.colors[i];
+          var name = Object.keys(color)[0];
+          var h = c.colors[i][name];
           var r = robopaint.utils.colorStringToArray(h);
-          name = robopaint.t(name); //Translate name if it is part of i18n
           colorsOut.push({
-            name: name,
+            name: robopaint.t("colorsets.colors." + name),
             color: {
               HEX: h,
               RGB: r,
@@ -585,13 +582,15 @@ function getColorsets() {
         console.error("Parse error on colorset: " + s, e);
         continue;
       }
-
+      var name = "colorsets." + set + "." + machineName + ".name";
+      var manu = "colorsets." + set + "." + machineName + ".manufacturer";
+      var desc = "colorsets." + set + "." + machineName + ".description";
       robopaint.statedata.colorsets[c.styles.baseClass] = {
-        name: robopaint.t("colorsets." + set + ".info" + s + ".name"),
-        type: robopaint.t("colorsets." + set + ".info" + s + ".type"),
+        name: robopaint.t(name),
+        type: robopaint.t(manu),
         weight: parseInt(c.weight),
-        description: robopaint.t("colorsets." + set + ".info" + s + ".description"),
-        media: robopaint.t("colorsets." + set + ".info" + s + ".media"),
+        description: robopaint.t(desc),
+        media: c.media,
         baseClass: c.styles.baseClass,
         colors: colorsOut,
         stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}),
@@ -811,23 +810,34 @@ function translatePage() {
   });
   console.debug("Found a total of " + i + " language files.");
 
+  //iter over colorset global i18n file
+  try {
+    fs.readdirSync('resources/colorsets/i18n').forEach(function(file) {
+      //add translate data to the main array
+      var data = JSON.parse(fs.readFileSync('resources/colorsets/i18n/' + file , 'utf8'));
+      resources[data['_meta'].target].translation['colorsets'] = data;
+    });
+  }catch(e) {
+      console.error('Error parsing global colorset translation file: ' + file, e); }
+
   fs.readdirSync('resources/colorsets/').forEach(function(folder) {
-    //console.debug(folder);
     try {
       //File is assumed a directory if it doesn't contain an extention
-      if (folder.indexOf(".") == -1) {
-          //Path to i18n folder
-          var fullPath = 'resources/colorsets/' + folder + '/i18n/';
+      //Ignore i18n folder as it is not a colorset
+      if (folder.indexOf(".") == -1 && !(folder == "i18n")) {
+        //Path to i18n folder
 
-          //iter over languages in colorset's i18n folder
-          fs.readdirSync(fullPath).forEach(function(file) {
-              var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
-              //Add the data to the global i18n translation set
-              resources[data['_meta'].target].translation['colorsets'][folder] = data;
-      });
-      }
-    } catch(e) {
-     console.error('Bad or missing Colorset translation file for: ' + folder, e); }
+        var fullPath = 'resources/colorsets/' + folder + '/i18n/';
+
+        //iter over languages in colorset's i18n folder
+        fs.readdirSync(fullPath).forEach(function(file) {
+          var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
+          //Add the data to the global i18n translation set
+          resources[data['_meta'].target].translation['colorsets'][folder] = data;
+        });
+       }
+  } catch(e) {
+      console.error('Bad or missing Colorset translation file for: ' + folder, e); }
   });
 
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
