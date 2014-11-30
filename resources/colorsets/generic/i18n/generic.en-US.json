@@ -5,20 +5,9 @@
     "release": "9.0.1",
     "basetype": "colorset"
   },
-  "info0": {
-    "media": "watercolor",
-    "type": "Generic",
+  "generic": {
+    "manufacturer": "Generic",
     "name": "Standard",
     "description": "Set of primary colors in standard order. Use for stock Crayola, store brand or movable primary color pans."
-  },
-  
-  "color0": "Black",
-  "color1": "Red",
-  "color2": "Orange",
-  "color3": "Yellow",
-  "color4": "Green",
-  "color5": "Blue",
-  "color6": "Purple",
-  "color7": "Brown"
-  
+  }
 }

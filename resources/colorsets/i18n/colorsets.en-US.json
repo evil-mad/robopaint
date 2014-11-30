@@ -29,7 +29,15 @@
     "lime": "Lime",
     "turquoise": "Turquoise",
     "fuchsia": "Fuchsia",
-    "beige": "Beige"
+    "beige": "Beige",
+    "black":"#Black",
+    "red":"#Red",
+    "orange":"#Orange",
+    "yellow":"#Yellow",
+    "green":"#Green",
+    "blue":"#Blue",
+    "purple":"#Purple",
+    "brown":"#Brown"
     
   }
 }
