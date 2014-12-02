@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "release": "0.9.1", 
+    "basetype": "colorset", 
+    "target": "fr", 
+    "creator": "rogerfachini"
+  }, 
+  "secondary": {
+    "description": "16ct ovale Pan semi-humides prime Aquarelles & Pinceau (groupement secondaire). Utilisez réglage de norme générique pour le primaire et déplacer des casseroles pour corriger les positions.", 
+    "name": "Secondaire", 
+    "manufacturer": "Sargent"
+  }
+}

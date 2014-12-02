@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "0.9.1",
+    "basetype": "colorset"
+  },
+  "glitter": {
+    "manufacturer": "Prang",
+    "name": "Glitter",
+    "description": "Prang Glitter 8 Semi-Moist Watercolors, 8-color set"
+  },
+  
+  "metallic": {
+    "manufacturer": "Prang",
+    "name": "Metallic",
+    "description": "Prang Metallic 8 Semi-Moist Watercolors, 8-color set"
+  },
+  
+  "secondary": {
+    "manufacturer": "Prang",
+    "name": "Secondary",
+    "description": "Prang Oval 16 Semi-Moist Watercolors, 16-color set (secondary grouping). Use generic standard setting for primary and move pans to correct positions."
+  } 
+}

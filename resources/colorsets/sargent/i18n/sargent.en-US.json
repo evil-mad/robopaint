@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "0.9.1",
+    "basetype": "colorset"
+  },
+  "secondary": {
+    "manufacturer": "Sargent",
+    "name": "Secondary",
+    "description": "16ct Oval Pan Semi-Moist Premium Watercolors & Brush (secondary grouping). Use generic standard setting for primary and move pans to correct positions."
+  }
+}

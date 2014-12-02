@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  
+  "media":{
+    "watercolor": "Watercolor",
+    "pen": "Pen",
+    "engraver": "Diamond Engraver",
+    "wax": "Electro-Kistka"
+  },
+  
+  "colors": {
+    "maroon": "Maroon",
+    "orangered": "Orangered",
+    "tangerine": "Tangerine",
+    "yellowgreen": "Yellow Green",
+    "teal": "Teal",
+    "skyblue": "Sky Blue",
+    "indigo": "Indigo",
+    "white": "White",
+    "grey": "Grey",
+    "pink": "Pink",
+    "salmon": "Salmon",
+    "lemon": "Lemon",
+    "lime": "Lime",
+    "turquoise": "Turquoise",
+    "fuchsia": "Fuchsia",
+    "beige": "Beige",
+    "black": "Black",
+    "red": "Red",
+    "orange": "Orange",
+    "yellow": "Yellow",
+    "green": "Green",
+    "blue": "Blue",
+    "purple": "Purple",
+    "brown": "Brown", 
+    "gold": "Gold",
+    "silver": "Silver",
+    "lilac": "Lilac",
+    "sapphire": "Sapphire",
+    "emerald": "Emerald",
+    "canary": "Canary",
+    "tangerine": "Tangerine",
+    "ruby": "Ruby",
+    "copper": "Copper",
+    "yelloworange": "Yellow Orange",
+    "yellowgreen": "Yellow Green",
+    "bluegreen": "Blue Green",
+    "turquoiseblue": "Turquoise Blue",
+    "blueviolet": "Blue Violet",
+    "redviolet": "Red Violet",
+    "yelloworange": "Yellow Orange",
+    "vermilion": "Vermilion"
+
+  }
+}

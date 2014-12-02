@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "0.9.1",
+    "basetype": "colorset"
+  },
+  "secondary": {
+    "manufacturer": "Crayola",
+    "name": "Secondary",
+    "description": "Crayola Washable Watercolors, 16/24-color set (secondary grouping)."
+  },
+  
+  "tertiary": {
+    "manufacturer": "Crayola",
+    "name": "Tertiary",
+    "description": "Crayola Washable Watercolors, 24-color set (tertiary grouping)."
+  }
+}

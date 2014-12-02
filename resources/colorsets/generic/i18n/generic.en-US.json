@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "0.9.1",
+    "basetype": "colorset"
+  },
+  "generic": {
+    "manufacturer": "Generic",
+    "name": "Standard",
+    "description": "Set of primary colors in standard order. Use for stock Crayola, store brand or movable primary color pans."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "_meta": {
+      "release": "0.9.2", 
+      "basetype": "colorset", 
+      "target": "es", 
+      "creator": "rogerfachini"
+  },
+  
+  "media": {
+    "watercolor": "Acuarela", 
+    "pen": "Pluma", 
+    "engraver": "Diamond grabador", 
+    "wax": "Electro-kistka"
+  }, 
+  "colors": {
+    "copper": "Cobre", 
+    "indigo": "Añil", 
+    "gold": "Oro", 
+    "brown": "Marrón", 
+    "yelloworange": "Naranja Amarillo", 
+    "yellow": "Amarillo", 
+    "yellowgreen": "Verde Amarillo", 
+    "redviolet": "Rojo Violeta", 
+    "orangered": "Rojo Anaranjado", 
+    "lime": "Lima", 
+    "pink": "Rosa", 
+    "lemon": "Limón", 
+    "lilac": "Lila", 
+    "turquoiseblue": "Azul Turquesa", 
+    "purple": "Púrpura", 
+    "fuchsia": "Fucsia", 
+    "black": "Negro", 
+    "orange": "Naranja", 
+    "bluegreen": "Azul Verde", 
+    "white": "Blanco", 
+    "red": "Rojo", 
+    "blue": "Azul", 
+    "turquoise": "Turquesa", 
+    "sapphire": "Zafiro", 
+    "tangerine": "Mandarina", 
+    "salmon": "Salmón", 
+    "maroon": "Granate", 
+    "emerald": "Esmeralda", 
+    "ruby": "Rubí", 
+    "silver": "Plata", 
+    "skyblue": "Blue Sky", 
+    "vermilion": "Bermellón", 
+    "grey": "Gris", 
+    "green": "Verde", 
+    "beige": "Beige", 
+    "teal": "Teal", 
+    "blueviolet": "Azul Violeta", 
+    "canary": "Canario"
+  }
+}

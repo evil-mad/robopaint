@@ -543,6 +543,8 @@ function getColorsets() {
   for(var i in sets) {
     var set = sets[i];
     var setDir = colorsetDir + set + '/';
+
+
     try {
       var fileSets = JSON.parse(fs.readFileSync(setDir + set + '.json'));
     } catch(e) {
@@ -550,41 +552,50 @@ function getColorsets() {
       continue;
     }
 
-    // Move through all colorsets in file
+     // Move through all colorsets in file
     for(var s in fileSets) {
       var c = fileSets[s];
+      var machineName = c.machineName;
 
       try {
         // Add pure white to the end of the color set for auto-color
-        c.colors.push({'White': '#FFFFFF'});
+        c.colors.push({'white': '#FFFFFF'});
 
         // Process Colors to avoid re-processing later
         var colorsOut = [];
         for (var i in c.colors){
-          var name = Object.keys(c.colors[i])[0];
+          var color = c.colors[i];
+          var name = Object.keys(color)[0];
           var h = c.colors[i][name];
           var r = robopaint.utils.colorStringToArray(h);
           colorsOut.push({
-            name: name,
+            name: robopaint.t("colorsets.colors." + name),
             color: {
               HEX: h,
               RGB: r,
               HSL: robopaint.utils.rgbToHSL(r),
               YUV: robopaint.utils.rgbToYUV(r)
             }
+
           });
         }
       } catch(e) {
-        // Silently fail on bad parse!
+        console.error("Parse error on colorset: " + s, e);
         continue;
       }
+      // Use the machine name and set name of the colorset to create translate
+      // strings.
+      var name  = "colorsets." + set + "." + machineName + ".name";
+      var maker = "colorsets." + set + "." + machineName + ".manufacturer";
+      var desc  = "colorsets." + set + "." + machineName + ".description";
+      var media = "colorsets.media." + c.media;
 
       robopaint.statedata.colorsets[c.styles.baseClass] = {
-        name: c.name,
-        type: c.type,
+        name: robopaint.t(name),
+        type: robopaint.t(maker),
         weight: parseInt(c.weight),
-        description: c.description,
-        media: c.media,
+        description: robopaint.t(desc),
+        media: robopaint.t(media),
         baseClass: c.styles.baseClass,
         colors: colorsOut,
         stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}),
@@ -597,6 +608,9 @@ function getColorsets() {
   var order = Object.keys(robopaint.statedata.colorsets).sort(function(a, b) {
     return (robopaint.statedata.colorsets[a].weight - robopaint.statedata.colorsets[b].weight)
   });
+
+  //  Clear the menu (prevents multiple copies appearing on language switch)
+  $('#colorset').empty();
 
   // Actually add the colorsets in the correct weighted order to the dropdown
   for(var i in order) {
@@ -791,12 +805,50 @@ function translatePage() {
 
       // Add the language to the resource list.
       resources[data['_meta'].target] = { translation: data};
+      //Create empty colorset key
+      resources[data['_meta'].target].translation['colorsets'] = {};
+
       i += 1;
     } catch(e) {
       console.error('Bad language file:' + file, e);
     }
   });
   console.debug("Found a total of " + i + " language files.");
+
+  // Parsing for colorset translation strings.
+  try {
+    // Iterate over global colorset i18n directory.
+    fs.readdirSync('resources/colorsets/i18n').forEach(function(file) {
+      // Add each translation file to the global translate array.
+      var data = JSON.parse(fs.readFileSync('resources/colorsets/i18n/' + file , 'utf8'));
+      resources[data['_meta'].target].translation['colorsets'] = data;
+    });
+  }catch(e) {
+    // Catch and report errors to the console.
+    console.error('Error parsing global colorset translation file: ' + file, e); }
+
+  // Iterate over colorset folder, picking out colorset i18n files and adding
+  // them to the translate array.
+  fs.readdirSync('resources/colorsets/').forEach(function(folder) {
+    try {
+      // Ignore files that have extentions (we only want directories).
+      // Ignore the 'i18n' directory (it is not a colorset!).
+      if (folder.indexOf(".") == -1 && !(folder == "i18n")) {
+       // Create a full path to the directory containing this colorset's i18n
+       // files.
+        var fullPath = 'resources/colorsets/' + folder + '/i18n/';
+
+        //  Iterate over language files in colorset's i18n folder
+        fs.readdirSync(fullPath).forEach(function(file) {
+          //  Add the data to the global i18n translation array
+          var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
+          resources[data['_meta'].target].translation['colorsets'][folder] = data;
+        });
+       }
+  } catch(e) {
+    // Catch and report errors to the console
+    console.error('Bad or missing Colorset translation file for: ' + folder, e); }
+  });
 
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
   $('[data-i18n]=""').each(function() {
@@ -851,12 +903,16 @@ function updateLang() {
       var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
       $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
     });
+  // Report language switch to the console
+  console.info("Language Switched to: " + robopaint.settings.lang);
+
+  //Reload individual parts that handle translations uniquely
 
   // Initalize/reset Tooltips
   initToolTips();
 
-  // Report language switch to the console
-  console.info("Language Switched to: " + robopaint.settings.lang);
+  // Reload and reparse colorsets
+  getColorsets();
 
   // Apply bolding to details text
   $('aside').each(function(){

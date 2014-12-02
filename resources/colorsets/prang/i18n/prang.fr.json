@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "release": "0.9.1", 
+    "basetype": "colorset", 
+    "target": "fr", 
+    "creator": "rogerfachini"
+  }, 
+  "secondary": {
+    "description": "Prang Oval 16 semi-humides Aquarelles, jeu de 16 couleurs (groupement secondaire). Utilisez réglage de norme générique pour le primaire et déplacer des casseroles pour corriger les positions.", 
+    "name": "Secondaire", 
+    "manufacturer": "Prang"
+  }, 
+  "glitter": {
+    "description": "Prang Glitter Aquarelles 8 semi-humides, set 8 couleurs", 
+    "name": "Scintillement", 
+    "manufacturer": "Prang"
+  }, 
+  "metallic": {
+    "description": "Prang métalliques Aquarelles 8 semi-humides, set 8 couleurs", 
+    "name": "Métallique", 
+    "manufacturer": "Prang"
+  }
+}

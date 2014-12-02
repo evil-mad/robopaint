@@ -1,0 +1,56 @@
+{
+  "_meta": {
+    "release": "0.9.2", 
+    "basetype": "colorset", 
+    "target": "fr", 
+    "creator": "rogerfachini"
+  },
+  
+  "media": {
+    "watercolor": "Aquarelle", 
+    "pen": "Stylo", 
+    "engraver": "Diamant Graveur", 
+    "wax": "Electro-kistka"
+  }, 
+  "colors": {
+    "copper": "Cuivre", 
+    "indigo": "Indigo", 
+    "gold": "Or", 
+    "brown": "Brun", 
+    "yelloworange": "Jaune Orange", 
+    "yellow": "Jaune", 
+    "yellowgreen": "Jaune Vert", 
+    "redviolet": "Rouge Violet", 
+    "orangered": "Orange Rouge", 
+    "lime": "Citron Vert", 
+    "pink": "Rose", 
+    "lemon": "Citron", 
+    "lilac": "Lilas", 
+    "turquoiseblue": "Bleu Turquoise", 
+    "purple": "Pourpre", 
+    "fuchsia": "Fuchsia", 
+    "black": "Noir", 
+    "orange": "Orange", 
+    "bluegreen": "Blue Green", 
+    "white": "Blanc", 
+    "red": "Rouge", 
+    "blue": "Bleu", 
+    "turquoise": "Turquoise", 
+    "sapphire": "Saphir", 
+    "tangerine": "Mandarine", 
+    "salmon": "Saumon", 
+    "maroon": "Bordeaux", 
+    "emerald": "Émeraude", 
+    "ruby": "Rubis", 
+    "silver": "Argent", 
+    "skyblue": "Blue Sky", 
+    "vermilion": "Vermillon", 
+    "grey": "Gris", 
+    "green": "Vert", 
+    "beige": "Beige", 
+    "teal": "Sarcelle", 
+    "blueviolet": "Bleu Violet", 
+    "canary": "Canari"
+  }
+  
+}

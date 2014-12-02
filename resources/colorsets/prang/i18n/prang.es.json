@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "release": "0.9.1", 
+    "basetype": "colorset", 
+    "target": "es", 
+    "creator": "rogerfachini"
+  }, 
+  
+  "secondary": {
+    "description": "Prang Oval 16 Semi-húmedo Acuarelas, conjunto de 16 colores (agrupación secundaria). Utilice el establecimiento de normas genérico para primaria y mover cacerolas para corregir posiciones.", 
+    "name": "Secundario", 
+    "manufacturer": "Prang"
+  }, 
+  "glitter": {
+    "description": "Prang Glitter 8 semi-húmedos Acuarelas, conjunto de 8 colores", 
+    "name": "Glitter", 
+    "manufacturer": "Prang"
+  }, 
+  
+  "metallic": {
+    "description": "Prang metálicos 8 semi-húmedos Acuarelas, conjunto de 8 colores", 
+    "name": "Metálico", 
+    "manufacturer": "Prang"
+  }
+}
