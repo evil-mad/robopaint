@@ -1,0 +1,55 @@
+{
+  "_meta": {
+      "release": "0.9.2", 
+      "basetype": "colorset", 
+      "target": "es", 
+      "creator": "rogerfachini"
+  },
+  
+  "media": {
+    "watercolor": "Acuarela", 
+    "pen": "Pluma", 
+    "engraver": "Diamond grabador", 
+    "wax": "Electro-kistka"
+  }, 
+  "colors": {
+    "copper": "Cobre", 
+    "indigo": "A\u00f1il", 
+    "gold": "Oro", 
+    "brown": "Marr\u00f3n", 
+    "yelloworange": "Naranja Amarillo", 
+    "yellow": "Amarillo", 
+    "yellowgreen": "Verde Amarillo", 
+    "redviolet": "Rojo Violeta", 
+    "orangered": "Orangered", 
+    "lime": "Lima", 
+    "pink": "Rosa", 
+    "lemon": "Lim\u00f3n", 
+    "lilac": "Lila", 
+    "turquoiseblue": "Azul Turquesa", 
+    "purple": "P\u00farpura", 
+    "fuchsia": "Fucsia", 
+    "black": "Negro", 
+    "orange": "Naranja", 
+    "bluegreen": "Azul Verde", 
+    "white": "Blanco", 
+    "red": "Rojo", 
+    "blue": "Azul", 
+    "turquoise": "Turquesa", 
+    "sapphire": "Zafiro", 
+    "tangerine": "Mandarina", 
+    "salmon": "Salm\u00f3n", 
+    "maroon": "Granate", 
+    "emerald": "Esmeralda", 
+    "ruby": "Rub\u00ed", 
+    "silver": "Plata", 
+    "skyblue": "Blue Sky", 
+    "vermilion": "Bermell\u00f3n", 
+    "grey": "Gris", 
+    "green": "Verde", 
+    "beige": "Beige", 
+    "teal": "Teal", 
+    "blueviolet": "Azul Violeta", 
+    "canary": "Canario"
+  }
+}

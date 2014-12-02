@@ -1,0 +1,23 @@
+{
+  "secondary": {
+    "description": "Prang Oval 16 Semi-h\u00famedo Acuarelas, conjunto de 16 colores (agrupaci\u00f3n secundaria). Utilice el establecimiento de normas gen\u00e9rico para primaria y mover cacerolas para corregir posiciones.", 
+    "name": "Secundario", 
+    "manufacturer": "Estrellarse"
+  }, 
+  "glitter": {
+    "description": "Prang Glitter 8 semi-h\u00famedos Acuarelas, conjunto de 8 colores", 
+    "name": "Glitter", 
+    "manufacturer": "Estrellarse"
+  }, 
+  "_meta": {
+    "release": "0.9.1", 
+    "basetype": "colorset", 
+    "target": "es", 
+    "creator": "rogerfachini"
+  }, 
+  "metallic": {
+    "description": "Prang met\u00e1licos 8 semi-h\u00famedos Acuarelas, conjunto de 8 colores", 
+    "name": "Met\u00e1lico", 
+    "manufacturer": "Estrellarse"
+  }
+}
