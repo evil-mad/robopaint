@@ -9,17 +9,17 @@
   "secondary": {
     "description": "Prang Oval 16 Semi-húmedo Acuarelas, conjunto de 16 colores (agrupación secundaria). Utilice el establecimiento de normas genérico para primaria y mover cacerolas para corregir posiciones.", 
     "name": "Secundario", 
-    "manufacturer": "Estrellarse"
+    "manufacturer": "Prang"
   }, 
   "glitter": {
     "description": "Prang Glitter 8 semi-húmedos Acuarelas, conjunto de 8 colores", 
     "name": "Glitter", 
-    "manufacturer": "Estrellarse"
+    "manufacturer": "Prang"
   }, 
   
   "metallic": {
     "description": "Prang metálicos 8 semi-húmedos Acuarelas, conjunto de 8 colores", 
     "name": "Metálico", 
-    "manufacturer": "Estrellarse"
+    "manufacturer": "Prang"
   }
 }
