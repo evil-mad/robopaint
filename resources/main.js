@@ -555,7 +555,8 @@ function getColorsets() {
      // Move through all colorsets in file
     for(var s in fileSets) {
       var c = fileSets[s];
-      var machineName = c.machineName
+      var machineName = c.machineName;
+
       try {
         // Add pure white to the end of the color set for auto-color
         c.colors.push({'white': '#FFFFFF'});
@@ -582,12 +583,15 @@ function getColorsets() {
         console.error("Parse error on colorset: " + s, e);
         continue;
       }
-      var name = "colorsets." + set + "." + machineName + ".name";
-      var manu = "colorsets." + set + "." + machineName + ".manufacturer";
-      var desc = "colorsets." + set + "." + machineName + ".description";
+      // Use the machine name and set name of the colorset to create translate
+      // strings.
+      var name  = "colorsets." + set + "." + machineName + ".name";
+      var maker = "colorsets." + set + "." + machineName + ".manufacturer";
+      var desc  = "colorsets." + set + "." + machineName + ".description";
+
       robopaint.statedata.colorsets[c.styles.baseClass] = {
         name: robopaint.t(name),
-        type: robopaint.t(manu),
+        type: robopaint.t(maker),
         weight: parseInt(c.weight),
         description: robopaint.t(desc),
         media: c.media,
@@ -604,8 +608,8 @@ function getColorsets() {
     return (robopaint.statedata.colorsets[a].weight - robopaint.statedata.colorsets[b].weight)
   });
 
-  //Clear the menu (prevents multiple copies appearing on language switch
-  $('#colorset').empty()
+  //  Clear the menu (prevents multiple copies appearing on language switch)
+  $('#colorset').empty();
 
   // Actually add the colorsets in the correct weighted order to the dropdown
   for(var i in order) {
@@ -810,34 +814,39 @@ function translatePage() {
   });
   console.debug("Found a total of " + i + " language files.");
 
-  //iter over colorset global i18n file
+  // Parsing for colorset translation strings.
   try {
+    // Iterate over global colorset i18n directory.
     fs.readdirSync('resources/colorsets/i18n').forEach(function(file) {
-      //add translate data to the main array
+      // Add each translation file to the global translate array.
       var data = JSON.parse(fs.readFileSync('resources/colorsets/i18n/' + file , 'utf8'));
       resources[data['_meta'].target].translation['colorsets'] = data;
     });
   }catch(e) {
-      console.error('Error parsing global colorset translation file: ' + file, e); }
+    // Catch and report errors to the console.
+    console.error('Error parsing global colorset translation file: ' + file, e); }
 
+  // Iterate over colorset folder, picking out colorset i18n files and adding
+  // them to the translate array.
   fs.readdirSync('resources/colorsets/').forEach(function(folder) {
     try {
-      //File is assumed a directory if it doesn't contain an extention
-      //Ignore i18n folder as it is not a colorset
+      // Ignore files that have extentions (we only want directories).
+      // Ignore the 'i18n' directory (it is not a colorset!).
       if (folder.indexOf(".") == -1 && !(folder == "i18n")) {
-        //Path to i18n folder
-
+       // Create a full path to the directory containing this colorset's i18n
+       // files.
         var fullPath = 'resources/colorsets/' + folder + '/i18n/';
 
-        //iter over languages in colorset's i18n folder
+        //  Iterate over language files in colorset's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {
+          //  Add the data to the global i18n translation array
           var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
-          //Add the data to the global i18n translation set
           resources[data['_meta'].target].translation['colorsets'][folder] = data;
         });
        }
   } catch(e) {
-      console.error('Bad or missing Colorset translation file for: ' + folder, e); }
+    // Catch and report errors to the console
+    console.error('Bad or missing Colorset translation file for: ' + folder, e); }
   });
 
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
@@ -896,13 +905,13 @@ function updateLang() {
   // Report language switch to the console
   console.info("Language Switched to: " + robopaint.settings.lang);
 
+  //Reload individual parts that handle translations uniquely
+
   // Initalize/reset Tooltips
   initToolTips();
 
-  // Reload colorsets
+  // Reload and reparse colorsets
   getColorsets();
-
-
 
   // Apply bolding to details text
   $('aside').each(function(){
