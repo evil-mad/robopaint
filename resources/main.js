@@ -588,13 +588,14 @@ function getColorsets() {
       var name  = "colorsets." + set + "." + machineName + ".name";
       var maker = "colorsets." + set + "." + machineName + ".manufacturer";
       var desc  = "colorsets." + set + "." + machineName + ".description";
+      var media = "colorsets.media." + c.media;
 
       robopaint.statedata.colorsets[c.styles.baseClass] = {
         name: robopaint.t(name),
         type: robopaint.t(maker),
         weight: parseInt(c.weight),
         description: robopaint.t(desc),
-        media: c.media,
+        media: robopaint.t(media),
         baseClass: c.styles.baseClass,
         colors: colorsOut,
         stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}),
