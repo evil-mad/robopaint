@@ -33,7 +33,7 @@ function loadSettings() {
     // Robopaint specific defaults
     filltype: 'line-straight',
     fillangle: 0,
-    penmode: robopaint.currentBot.type == "watercolorbot" ? 0 : 3, // TODO: Pull this from toolset *(see note below)
+    penmode: 0,
     openlast: 0,
     showcolortext: 0,
     colorset: 'generic-standard',
@@ -49,10 +49,11 @@ function loadSettings() {
     lang: '' // String storing the two digit code for the language.
   };
 
-  // * We can't assume that anything that isn't a WaterColorBot doesn't have
-  // colors. We should add some kind of logic that checks to see if they have
-  // the known standard toolset for colors (color0-7), then allow them to have
-  // access to modes other than pen.
+  // Allow machine specific overrides of initial default settings
+  settingsDefaultAlter(robopaint.settings);
+
+  // Set the visibility/enabled status of color/mediasets
+  verifyColorsetAbilities();
 
   // Are there existing settings from a previous run? Mesh them into the defaults
   if (localStorage[settingsStorageKey()]) {
@@ -86,6 +87,81 @@ function loadSettings() {
   }
 
   afterSettings();
+}
+
+/**
+ * Called after robopaint.settings is initialized with defaults, allows for
+ * machine specific overrides of global settings defaults.
+ */
+function settingsDefaultAlter(settings) {
+  var tools = robopaint.currentBot.data.tools;
+
+  // Bot specific switches
+  switch (robopaint.currentBot.type) {
+    case "eggbot":
+      // TODO: Bot specific things should be less important/useful than tool
+      // specific changes (as new bots should have the ability to be added in
+      // cncserver without needing explicit support in robopaint)
+  }
+
+  // Switch pen modes depending on bot's tool abilities
+  if (!tools.color0) { // No colors...
+    settings.penmode = 1;
+
+    $("#penmode option[value=0]").remove(); // Diable WaterColor Mode
+
+    if (!tools.water0) { // No water or color (Assume Pen only)
+      settings.penmode = 3;
+      settings.strokeovershoot = 0;
+      settings.fillspacing = 1;
+      settings.strokeprecision = 6;
+
+      // Force the hand of settings to disable WCB specific options
+      // (colorset is handled in verifyColorsetAbilities func)
+      $("#penmodes, #overshoot, #maxpaint").hide();
+    }
+  } else if (!tools.water0) { // Has color, no water
+    $("#penmode option[value=0]").remove(); // Diable WaterColor Mode
+    $("#penmode option[value=1]").remove(); // Diable Water Mode
+    settings.penmode = 2;
+  }
+
+}
+
+/**
+ * Verify the abilities for a given bot to access/use a given set of media.
+ * If no media types can be used by the current bot, the colorset pallette
+ * will be completely hidden.
+ */
+function verifyColorsetAbilities() {
+  var tools = robopaint.currentBot.data.tools;
+  var bot = robopaint.currentBot.type;
+
+  // Assume bot allows for all media types
+  var allowedMedia = {
+    watercolor: true,
+    pen: true,
+    engraver: true,
+    wax: true
+  };
+
+  // Only Eggbot supports engraver and wax right now
+  if (bot !== 'eggbot') {
+    allowedMedia.engraver = false;
+    allowedMedia.wax = false;
+  }
+
+  // Without color, no watercolor
+  if (!tools.color0) {
+    allowedMedia.watercolor = false;
+  }
+
+  // Without manual swap/resume, no pen
+  if (!tools.manualswap && !tools.manualresume) {
+    allowedMedia.pen = false;
+  }
+
+  robopaint.statedata.allowedMedia = allowedMedia;
 }
 
 /**
@@ -376,12 +452,6 @@ function bindSettingsControls() {
       }
     }
   });
-
-  // Force the hand of settings to disable WCB specific options for bots without the right tools
-  var tools = botTypes[robopaint.currentBot.type].data.tools;
-  if (!tools.water0 && !tools.color0 && !tools.color7) { // Not a paint bot!
-    toggleDisableSetting('#penmode', false, robopaint.t('settings.advanced.bottype.warning'));
-  }
 
   // Reset button
   $('#settings-reset').click(function(e) {

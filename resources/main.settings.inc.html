@@ -62,7 +62,7 @@
       </div>
     </fieldset>
 
-    <div>
+    <div id="penmodes">
       <label for="penmode" data-i18n>settings.output.penmode.title</label>
       <select id="penmode">
         <option value="0" data-i18n>settings.output.penmode.opt0</option>
@@ -70,12 +70,6 @@
         <option value="2" data-i18n>settings.output.penmode.opt2</option>
         <option value="3" data-i18n>settings.output.penmode.opt3</option>
       </select>
-    </div>
-
-    <div>
-      <label for="showcolortext" data-i18n>settings.output.showcolortext.title</label>
-      <input type="checkbox" id="showcolortext"/>
-      <aside data-i18n>settings.output.showcolortext.detail</aside>
     </div>
 
     <fieldset id="colorsets">
@@ -105,11 +99,16 @@
         </div>
       </div>
 
+      <hr>
+
+      <div>
+        <label for="showcolortext" data-i18n>settings.output.showcolortext.title</label>
+        <input type="checkbox" id="showcolortext"/>
+        <aside data-i18n>settings.output.showcolortext.detail</aside>
+      </div>
     </fieldset>
 
-    <hr>
-
-    <div>
+    <div id="maxpaint">
       <label for="maxpaintdistance" data-i18n>settings.output.maxpaintdistance.title</label>
       <input type="range" data-i18n="[title]settings.output.maxpaintdistance.hint" id="maxpaintdistance" min="500" max="20000" />
       <aside data-i18n>settings.output.maxpaintdistance.detail</aside>
@@ -128,7 +127,7 @@
       <aside data-i18n>settings.output.strokeprecision.detail</aside>
     </div>
 
-    <div>
+    <div id="overshoot">
       <label for="strokeovershoot" data-i18n>settings.output.strokeovershoot.title</label>
       <select id="strokeovershoot">
         <option value="0" data-i18n>settings.output.strokeovershoot.opt0</option>

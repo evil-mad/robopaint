@@ -596,6 +596,7 @@ function getColorsets() {
         weight: parseInt(c.weight),
         description: robopaint.t(desc),
         media: robopaint.t(media),
+        enabled: robopaint.statedata.allowedMedia[c.media],
         baseClass: c.styles.baseClass,
         colors: colorsOut,
         stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}),
@@ -615,13 +616,24 @@ function getColorsets() {
   // Actually add the colorsets in the correct weighted order to the dropdown
   for(var i in order) {
     var c = robopaint.statedata.colorsets[order[i]];
-    $('#colorset').append(
-      $('<option>')
-        .attr('value', order[i])
-        .text(c.type + ' - ' + c.name)
-        .prop('selected', order[i] == robopaint.settings.colorset)
-    );
+    if (c.enabled) { // Only add enabled/allowed color/mediasets
+      $('#colorset').append(
+        $('<option>')
+          .attr('value', order[i])
+          .text(c.type + ' - ' + c.name)
+          .prop('selected', order[i] == robopaint.settings.colorset)
+      );
+    }
   }
+
+  // No options? Disable color/mediasets
+  if (!$('#colorset option').length) {
+    $('#colorsets').hide();
+  }
+
+  /*
+  // TODO: This feature to be able to add custom colorsets has been sitting unfinished for
+  // quite some time and seriously needs a bit of work. see evil-mad/robopaint#70
 
   // Menu separator
   $('#colorset').append($('<optgroup>').attr('label', ' ').addClass('sep'));
@@ -637,6 +649,7 @@ function getColorsets() {
       .text(robopaint.t('settings.output.colorsets.add'))
       .addClass('add')
   );
+  */
 
   // Initial run to populate settings window
   updateColorSetSettings();
