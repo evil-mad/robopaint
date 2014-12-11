@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "zh-CN",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "generic": {
+    "manufacturer": "通用",
+    "name": "标准",
+    "description": "设置原色的标准顺序。使用股票的Crayola，品牌专卖店或可移动原色锅。"
+  }
+}

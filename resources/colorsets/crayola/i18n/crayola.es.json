@@ -1,18 +1,18 @@
 {
   "_meta": {
-    "release": "0.9.1", 
-    "basetype": "colorset", 
-    "target": "es", 
+    "release": "0.9.2", 
+    "basetype": "colorset",
+    "target": "es",
     "creator": "rogerfachini"
-  }, 
+  },
   "tertiary": {
-    "description": "Crayola lavable Acuarelas, set 24 colores (agrupación terciaria).", 
-    "name": "Terciario", 
+    "description": "Crayola lavable Acuarelas, set 24 colores (agrupación terciaria).",
+    "name": "Terciario",
     "manufacturer": "Crayola"
-  }, 
+  },
   "secondary": {
-    "description": "Crayola lavable Acuarelas, set 16/24 colores (agrupación secundaria).", 
-    "name": "Secundario", 
+    "description": "Crayola lavable Acuarelas, set 16/24 colores (agrupación secundaria).",
+    "name": "Secundario",
     "manufacturer": "Crayola"
   }
 }

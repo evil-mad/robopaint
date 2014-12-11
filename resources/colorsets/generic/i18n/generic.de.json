@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "de",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "generic": {
+    "manufacturer": "Generisches",
+    "name": "Standard",
+    "description": "Satz von Primärfarben in Standard-Reihenfolge. Verwenden Sie für Aktien Crayola, Eigenmarke oder bewegliche Primärfarbschälchen."
+  }
+}

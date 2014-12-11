@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "ru",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "secondary": {
+    "manufacturer": "Crayola",
+    "name": "Вторичный",
+    "description": "Crayola Моющиеся акварель, 16/24-набор цветов (вторичный группировка)."
+  },
+  "tertiary": {
+    "manufacturer": "Crayola",
+    "name": "Третичный",
+    "description": "Crayola Моющиеся акварель, 24-набор цветов (третичный группировка)."
+  }
+}

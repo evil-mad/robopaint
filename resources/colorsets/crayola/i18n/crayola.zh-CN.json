@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "zh-CN",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "secondary": {
+    "manufacturer": "CRAYOLA",
+    "name": "次要",
+    "description": "克雷奥拉水洗水彩，24分之16色集（中学组）。"
+  },
+  "tertiary": {
+    "manufacturer": "CRAYOLA",
+    "name": "第三",
+    "description": "克雷奥拉水洗水彩，24色集（第三组）。"
+  }
+}

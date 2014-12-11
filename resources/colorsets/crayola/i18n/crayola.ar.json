@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "ar",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "secondary": {
+    "manufacturer": "كرايولا",
+    "name": "ثانوي",
+    "description": "كرايولا قابل للغسل الألوان المائية، مجموعة 16/24 اللون (التجمع الثانوي)."
+  },
+  "tertiary": {
+    "manufacturer": "كرايولا",
+    "name": "القطاع الثالث",
+    "description": "كرايولا قابل للغسل الألوان المائية، مجموعة 24 لونا (التجمع التعليم العالي)."
+  }
+}

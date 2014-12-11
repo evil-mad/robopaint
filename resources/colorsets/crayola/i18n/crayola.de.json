@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "de",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "secondary": {
+    "manufacturer": "Crayola",
+    "name": "Sekundär-",
+    "description": "Crayola Waschbar Aquarelle, 16/24-Farbsatz (sekundäre Gruppierung)."
+  },
+  "tertiary": {
+    "manufacturer": "Crayola",
+    "name": "Tertiär-",
+    "description": "Crayola Waschbar Aquarelle, 24 Farbsatz (tertiäre Gruppierung)."
+  }
+}

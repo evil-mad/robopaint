@@ -1,18 +1,18 @@
 {
   "_meta": {
-    "release": "0.9.1", 
-    "basetype": "colorset", 
-    "target": "fr", 
+    "release": "0.9.2", 
+    "basetype": "colorset",
+    "target": "fr",
     "creator": "rogerfachini"
-  }, 
+  },
   "tertiary": {
-    "description": "Crayola lavable Aquarelles, jeu 24-couleur (groupement tertiaire).", 
-    "name": "Tertiaire", 
+    "description": "Crayola lavable Aquarelles, jeu 24-couleur (groupement tertiaire).",
+    "name": "Tertiaire",
     "manufacturer": "Crayola"
-  }, 
+  },
   "secondary": {
-    "description": "Crayola lavable Aquarelles, ensemble 16/24 couleur (groupement secondaire).", 
-    "name": "Secondaire", 
+    "description": "Crayola lavable Aquarelles, ensemble 16/24 couleur (groupement secondaire).",
+    "name": "Secondaire",
     "manufacturer": "Crayola"
   }
 }

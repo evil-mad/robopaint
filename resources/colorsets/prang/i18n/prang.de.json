@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "creator": "rogerfachini", 
+    "target": "en-US", 
+    "release": "0.9.1", 
+    "basetype": "colorset"
+  }, 
+  "glitter": {
+    "manufacturer": "Bruchlandung", 
+    "name": "Glanz", 
+    "description": "Prang Glitter 8 Semi-Moist Aquarelle, 8-Farben-Set"
+  }, 
+  "metallic": {
+    "manufacturer": "Bruchlandung", 
+    "name": "Metallisch", 
+    "description": "Prang Metallic 8 Semi-Moist Aquarelle, 8-Farben-Set"
+  }, 
+  "secondary": {
+    "manufacturer": "Bruchlandung", 
+    "name": "Sekund\u00e4r-", 
+    "description": "Prang Oval 16 Semi-Moist Aquarelle, 16-Farben-Set (sekund\u00e4re Gruppierung). Verwenden Sie generische Standard-Einstellung f\u00fcr die prim\u00e4re und bewegen Pfannen, um Positionen zu korrigieren."
+  }
+}

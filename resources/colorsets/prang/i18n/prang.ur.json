@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "ur",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "glitter": {
+    "manufacturer": "سے Prang",
+    "name": "چمک",
+    "description": "سے Prang چمک 8 نیم نم watercolors کے، 8 رنگ کے سیٹ"
+  },
+  "metallic": {
+    "manufacturer": "سے Prang",
+    "name": "دھاتی",
+    "description": "سے Prang داتوئک 8 نیم نم watercolors کے، 8 رنگ کے سیٹ"
+  },
+  "secondary": {
+    "manufacturer": "سے Prang",
+    "name": "ثانوی",
+    "description": "سے Prang اوول 16 نیم نم watercolors کے، 16 رنگ سیٹ (سیکنڈری گروہ بندی). پرائمری کے لئے عام معیار قائم کر استعمال کرتے ہیں اور عہدوں کو درست کرنے کے لئے پین منتقل."
+  }
+}
