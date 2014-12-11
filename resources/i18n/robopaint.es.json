@@ -2,7 +2,7 @@
   "_meta": {
     "creator": "techninja/google",
     "target": "es",
-    "name": "Español",
+    "langname": "Español",
     "release": "0.9.2"
   },
   "common": {
