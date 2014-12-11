@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "hi",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "glitter": {
+    "manufacturer": "नीचे गिराना",
+    "name": "चमक",
+    "description": "Prang ग्लिटर 8 अर्द्ध नम जल रंग, 8 रंग सेट"
+  },
+  "metallic": {
+    "manufacturer": "नीचे गिराना",
+    "name": "धातु का",
+    "description": "Prang धातुई 8 अर्द्ध नम जल रंग, 8 रंग सेट"
+  },
+  "secondary": {
+    "manufacturer": "नीचे गिराना",
+    "name": "माध्यमिक",
+    "description": "Prang ओवल 16 अर्द्ध नम जल रंग, 16-रंग सेट (माध्यमिक समूहीकरण)। प्राथमिक के लिए सामान्य मानक सेटिंग का उपयोग करें और पदों को सही करने के धूपदान चाल है।"
+  }
+}

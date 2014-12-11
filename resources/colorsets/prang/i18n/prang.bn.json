@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "bn",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "glitter": {
+    "manufacturer": "কৃতিত্ব",
+    "name": "চিক্চিক",
+    "description": "কৃতিত্ব চিক্চিক 8 অর্ধ আর্দ্র Watercolors, 8 রঙ সেট"
+  },
+  "metallic": {
+    "manufacturer": "কৃতিত্ব",
+    "name": "ধাতব",
+    "description": "কৃতিত্ব ধাতব 8 অর্ধ আর্দ্র Watercolors, 8 রঙ সেট"
+  },
+  "secondary": {
+    "manufacturer": "কৃতিত্ব",
+    "name": "মাধ্যমিক",
+    "description": "কৃতিত্ব ওভাল 16 অর্ধ আর্দ্র Watercolors, 16 রঙ সেট (মাধ্যমিক গ্রুপ). প্রাথমিক জন্য জেনেরিক মান সেটিং ব্যবহার করুন এবং অবস্থানের সঠিক প্যান সরানো."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "ar",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "glitter": {
+    "manufacturer": "برانغ",
+    "name": "لمعان",
+    "description": "برانغ بريق 8 شبه الرطبة مائية، مجموعة 8 لون"
+  },
+  "metallic": {
+    "manufacturer": "برانغ",
+    "name": "معدني",
+    "description": "برانغ معدنية 8 شبه الرطبة مائية، مجموعة 8 لون"
+  },
+  "secondary": {
+    "manufacturer": "برانغ",
+    "name": "ثانوي",
+    "description": "برانغ البيضاوي 16 شبه الرطبة مائية، مجموعة 16 لون (التجمع الثانوي). استخدام وضع المعايير لعام الابتدائي والانتقال المقالي لتصحيح المواقف."
+  }
+}

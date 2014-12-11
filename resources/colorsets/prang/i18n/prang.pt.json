@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "pt",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "glitter": {
+    "manufacturer": "Acertar em cheio",
+    "name": "Brilho",
+    "description": "Prang Glitter 8 Semi-Úmidas Aquarelas, conjunto de 8 cores"
+  },
+  "metallic": {
+    "manufacturer": "Acertar em cheio",
+    "name": "Metálico",
+    "description": "Prang metálicas 8 Semi-Úmidas Aquarelas, conjunto de 8 cores"
+  },
+  "secondary": {
+    "manufacturer": "Acertar em cheio",
+    "name": "Secundário",
+    "description": "Prang Oval 16 Semi-úmido Aquarelas, conjunto de 16 cores (agrupamento secundário). Use configuração padrão genérico para primária e mover panelas para corrigir posições."
+  }
+}
