@@ -45,8 +45,7 @@ function loadSettings() {
     strokeprecision: 6,
     enabledmodes: {},
     remoteprint: 0,
-    gapconnect: 1,
-    lang: '' // String storing the two digit code for the language.
+    gapconnect: 1
   };
 
   // Allow machine specific overrides of initial default settings
@@ -381,9 +380,9 @@ function bindSettingsControls() {
         });
         return;
       case 'lang':
-        // robopaint.settings.lang set in updateLang() [main.js]
+        // localStorage['robopaint-lang'] set in updateLang() [main.js]
         updateLang();
-        break;
+        return;
       default: // Nothing special to set, just change the settings object value
         if ($input.attr('type') == 'checkbox') {
           robopaint.settings[this.id] = $input.is(':checked');

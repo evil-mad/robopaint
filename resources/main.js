@@ -879,53 +879,91 @@ function translatePage() {
     }
   });
 
+  // Set default language if none set!
+  if (!localStorage['robopaint-lang']) {
+    localStorage['robopaint-lang'] = navigator.language;
+    var navCode = localStorage['robopaint-lang'].split('-')[0].toLowerCase();
+    var langSet = false;
+
+    $('#lang option').each(function(){
+      var code = $(this).val().toLowerCase();
+      var lCode = code.split('-')[0].toLowerCase();
+      if (code == localStorage['robopaint-lang'].toLowerCase()) {
+        $('#lang').val(localStorage['robopaint-lang']);
+        langSet = true;
+        return false; // Best match, loop is done!
+      } else if (lCode == navCode) { // Match best for language code only
+        localStorage['robopaint-lang'] = $(this).val();
+        $('#lang').val($(this).val());
+        langSet = true;
+      }
+    });
+
+    // If we couldn't match the user's language to one we have, default to en-US
+    if (!langSet) {
+      localStorage['robopaint-lang'] = 'en-US';
+      $('#lang').val('en-US');
+    }
+  } else {
+    // Set the language dropdown value (nothing else takes this over)
+    $('#lang').val(localStorage['robopaint-lang']);
+  }
+
   i18n.init({
     resStore: resources,
-    ns: 'translation'
+    ns: 'translation',
+    fallbackLng: 'en-US',
+    lng: localStorage['robopaint-lang']
   }, function(t) {
     robopaint.t = t;
     $('[data-i18n]').i18n();
+    setVersion();
   });
+}
+
+/**
+ * DRY helper function to set the version text
+ */
+function setVersion() {
+  // Set visible version from manifest (with appended bot type if not WCB)
+  // This has to be done here because it's one of the few out of phase translations
+  var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
+  $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
 }
 
 /**
  * Reloads language file and updates any changes to it.
  * Called when the language is changed in the menu list.
  */
-
 function updateLang() {
   // Get the index pointer from the dropdown menu.
-  robopaint.settings.lang = $('#lang').val();
+  localStorage['robopaint-lang'] = $('#lang').val();
 
   // Abort the subroutine if the language has not changed (or on first load)
-  if (currentLang == robopaint.settings.lang) {
+  if (currentLang == localStorage['robopaint-lang']) {
       return;
   }
 
-  currentLang = robopaint.settings.lang;
+  currentLang = localStorage['robopaint-lang'];
 
   // Change the language on i18n, and reload the translation variable.
   i18n.setLng(
-    robopaint.settings.lang,
+    localStorage['robopaint-lang'],
     function(t) {
       robopaint.t = t;
       $('[data-i18n]').i18n();
-
-      // Set visible version from manifest (with appended bot type if not WCB)
-      // This has to be done here because it's one of the few out of phase translations
-      var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
-      $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
+      setVersion();
     });
   // Report language switch to the console
-  console.info("Language Switched to: " + robopaint.settings.lang);
+  console.info("Language Switched to: " + localStorage['robopaint-lang']);
 
-  //Reload individual parts that handle translations uniquely
+  // Reload individual parts that handle translations uniquely
+  // ===========================================================================
+  $('fieldset.speed input[type=range]').change(); // Update speed slider labels
 
-  // Initalize/reset Tooltips
-  initToolTips();
+  initToolTips(); // Initalize/reset Tooltips
 
-  // Reload and reparse colorsets
-  getColorsets();
+  getColorsets(); // Reload and reparse colorsets
 
   // Apply bolding to details text
   $('aside').each(function(){
