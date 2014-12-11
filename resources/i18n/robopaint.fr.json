@@ -2,7 +2,8 @@
   "_meta": {
     "creator": "R10 avec l’aide de Sofia",
     "target": "fr",
-    "release": "0.7.5"
+    "name": "Français",
+    "release": "0.9.2"
   },
   "common": {
     "pause": "Pause",
@@ -24,7 +25,7 @@
   "status": {
     "start": "Mise en marche...",
     "found": "Port trouvé, connexion en cours...",
-    "question": "Que devrions-nous faire?",
+    "question": "Quelle est votre désir?",
     "error": "Je ne peux pas connecter!",
     "success": "Nous sommes connectés!",
     "disconnect": "Bot déconnecté!",
@@ -36,11 +37,11 @@
   "nav": {
     "toolbar": {
       "home": "Écran d'accueil",
-      "edit": "Mode Création: Ouvrir, redimensionner, et modifier des illustrations vectorielles existant",
-      "open": "Ouvrir une image existante",
-      "printauto": "Mode Peinture: RoboPaint votre dessin",
-      "printmanual": "Commande Manuelle: Personnalisez votre création",
-      "help": "Aide (Documentation en anglais)",
+      "edit": "Mode Création: Ouvrir, redimensionner, et modifier des illustrations vectorielles existant.",
+      "open": "Ouvrir une image existante.",
+      "printauto": "Mode Peinture: RoboPaint votre dessin!",
+      "printmanual": "Commande Manuelle: Personnalisez votre création.",
+      "help": "Aide! (Documentation en anglais)",
       "settings": "Paramètres",
       "version": "v"
     },
@@ -78,8 +79,7 @@
   "settings": {
 
     "lang": {
-      "title": "Sélectionner la langue:",
-      "name": "Français"
+      "title": "Sélectionner la langue:"
     },
 
     "tabs": {
@@ -233,17 +233,17 @@
       "bottype": {
         "title": "Catégorie de bot connecté:",
         "hover": "Liste des bots acceptables",
-        "detail": "RoboPaint a été construit pour la WaterColorBot; cela dit, RoboPaint peut peut parler à n'importe quel bot qui peut communiquer avec un serveur CNC. **nota bene: le changement exige un redémarrage.**",
+        "detail": "RoboPaint a été construit pour la WaterColorBot; cela dit, RoboPaint peut peut parler à n'importe quel bot qui peut communiquer avec un serveur CNC. ** nota bene: le changement exige un redémarrage.**",
         "warning": "Attention , le bot sélectionnée est incompatible avec des outils de peinture."
       },
       "api": {
         "title": "API Serveur",
         "server": "Serveur à",
-        "detail": "C'est l'adresse IP et le numero de port du serveur. Entrer les data dans l'app. **nota bene: le changement exige un redémarrage.**"
+        "detail": "C'est l'adresse IP et le numero de port du serveur. Entrer les data dans l'app. ** nota bene: le changement exige un redémarrage.**"
       },
       "httplocalonly": {
         "title": "Autoriser uniquement les connexions à partir de cet ordinateur:",
-        "detail": "Décochez cette option pour connecter d'autres appareils au serveur CNC de RoboPaint. **nota bene: le changement exige un redémarrage.**"
+        "detail": "Décochez cette option pour connecter d'autres appareils au serveur CNC de RoboPaint. ** nota bene: le changement exige un redémarrage.**"
       }
     }
 
