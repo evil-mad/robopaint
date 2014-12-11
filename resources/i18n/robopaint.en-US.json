@@ -2,7 +2,8 @@
   "_meta": {
     "creator": "techninja",
     "target": "en-US",
-    "release": "0.7.5"
+    "langname": "English",
+    "release": "0.9.2"
   },
   "common": {
     "pause": "Pause",
@@ -54,7 +55,7 @@
     "title": "Remote Print Mode",
     "icontitle": {
       "from": "From the Client Application",
-      "through": "Through the Interwebs or your local network",
+      "through": "Through the Internet or your local network",
       "to": "To your very own bot!"
     },
     "details": {
@@ -78,8 +79,7 @@
   "settings": {
 
     "lang": {
-      "title": "Select a Language:",
-      "name": "English"
+      "title": "Select a Language:"
     },
 
     "tabs": {

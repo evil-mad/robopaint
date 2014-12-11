@@ -811,7 +811,7 @@ function translatePage() {
       // the language's name value is the two letter language code.
       $("#lang").append(
         $("<option>")
-          .text(data.settings.lang.name)
+          .text(data['_meta'].langname)
           .attr('value', data['_meta'].target)
       );
 
