@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "pt",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "secondary": {
+    "manufacturer": "Crayola",
+    "name": "Secundário",
+    "description": "Crayola Washable Aquarelas, set 16/24-cores (agrupamento secundário)."
+  },
+  "tertiary": {
+    "manufacturer": "Crayola",
+    "name": "Terciário",
+    "description": "Crayola Washable Aquarelas, conjunto de 24 cores (agrupamento terciário)."
+  }
+}

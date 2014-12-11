@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "hi",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "secondary": {
+    "manufacturer": "CRAYOLA",
+    "name": "माध्यमिक",
+    "description": "CRAYOLA धो जल रंग, 16/24-रंग सेट (माध्यमिक समूहीकरण)।"
+  },
+  "tertiary": {
+    "manufacturer": "CRAYOLA",
+    "name": "तिगुना",
+    "description": "CRAYOLA धो जल रंग, 24 रंग सेट (तृतीयक समूहीकरण)।"
+  }
+}
