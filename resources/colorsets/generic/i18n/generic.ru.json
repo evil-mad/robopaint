@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "creator": "docprofsky from Google Translate",
+    "target": "ru",
+    "release": "0.9.2",
+    "basetype": "colorset"
+  },
+  "generic": {
+    "manufacturer": "Общий",
+    "name": "Стандарт",
+    "description": "Набор основных цветов в стандартном порядке. Используйте для фондового Crayola, фирменный магазин или подвижных основных цветов кастрюли."
+  }
+}
