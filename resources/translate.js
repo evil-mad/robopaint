@@ -35,6 +35,8 @@ function translatePage() {
       resources[data['_meta'].target] = { translation: data};
       //Create empty colorset key
       resources[data['_meta'].target].translation['colorsets'] = {};
+      //Create empty modes key
+      resources[data['_meta'].target].translation['modes'] = {};
 
       i += 1;
     } catch(e) {
@@ -76,6 +78,26 @@ function translatePage() {
   } catch(e) {
     // Catch and report errors to the console
     console.error('Bad or missing Colorset translation file for: ' + folder, e); }
+  });
+
+  //Load all Mode translation files
+  fs.readdirSync('resources/modes/').forEach(function(folder) {
+    try {
+      // Ignore files that have extentions (we only want directories).
+      if (folder.indexOf(".") == -1) {
+       // Create a full path to the directory containing this colorset's i18n
+       // files.
+        var fullPath = 'resources/modes/' + folder + '/i18n/';
+        //  Iterate over language files in mode's i18n folder
+        fs.readdirSync(fullPath).forEach(function(file) {
+          //  Add the data to the global i18n translation array
+          var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
+          resources[data['_meta'].target].translation['modes'][folder] = data;
+        });
+       }
+  } catch(e) {
+    // Catch and report errors to the console
+    console.error('Bad or missing Mode translation file for: ' + folder, e); }
   });
 
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
@@ -185,5 +207,6 @@ function updateLang() {
     $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));
   });
 }
+
 
 

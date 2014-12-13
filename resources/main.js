@@ -697,18 +697,20 @@ function loadAllModes(){
   });
 
   // Move through all approved modes based on mode weight and add DOM
+
   $('nav').append($('<table>').append($('<tr>')));
   for(var i in order) {
     var m = modes[order[i]];
     // Add the nav bubble
+    var i18nStr = "modes." + m.name + ".info.";
     $('nav table tr').prepend(
       $('<td>').append(
         $('<a>')
           .attr('href', m.main)
           .attr('id', m.name)
-          .attr('title', m.description)
+          .attr('title', robopaint.t(i18nStr + 'description'))
           .css('display', (m.core ? 'block' : 'none'))
-          .text(m.word)
+          .text(robopaint.t(i18nStr + 'word'))
       )
     );
 
@@ -719,16 +721,16 @@ function loadAllModes(){
         .attr('id', 'bar-' + m.name)
          // TODO: Add support for better icons
         .addClass('mode tipped ' + m.icon + (m.core ? '' : ' hidden') )
-        .attr('title', m.description)
+        .attr('title', robopaint.t(i18nStr + 'description'))
         .html('&nbsp;')
     );
 
     // Add the non-core settings checkbox for enabling
     if (!m.core) {
       $('fieldset.advanced-modes aside:first').after($('<div>').append(
-        $('<label>').attr('for', m.name + 'modeenable').text(m.title),
+        $('<label>').attr('for', m.name + 'modeenable').text(robopaint.t(i18nStr + 'title')),
         $('<input>').attr({type: 'checkbox', id: m.name + 'modeenable'}),
-        $('<aside>').text(m.detail)
+        $('<aside>').text(robopaint.t(i18nStr + 'detail'))
       ));
     }
   }
