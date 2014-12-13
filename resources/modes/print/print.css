@@ -315,11 +315,11 @@ body.print-auto #buttons button.normal {
 
 /* Handle simple button text changes via class, tricksy CSS hobbits! */
 #pen.up:before {
-  content: "Raise ";
+  content: "modes.print.control.buttons.raise";
 }
 
 #pen.down:before {
-  content: "Lower ";
+  content: "modes.print.control.buttons.lower ";
 }
 
 /* Status Specific */

@@ -4,11 +4,7 @@
   "type": "robopaint_mode",
   "icon": "icon-print",
   "weight": 0,
-  "word": "Print",
   "core": true,
-  "description": "Painting Mode: Print your drawing!",
-  "title": "Automatic Paint",
-  "detail": "Automatically paint a given well formed SVG file.",
   "main": "print.html",
   "author": "techninja",
   "license": "MIT"

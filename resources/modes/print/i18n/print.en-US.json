@@ -1,8 +1,61 @@
 {
   "_meta": {
-    "creator": "techninja",
+    "creator": "rogerfachini",
     "target": "en-us",
-    "release": "0.8.5"
-  }
-
+    "release": "0.9.5"
+  },
+  "info":{
+    "description": "Painting Mode: Print your drawing!",
+    "title": "Automatic Paint",
+    "detail": "Automatically paint a given well formed SVG file.",
+    "word": "Print"
+  },
+  
+ "control":{
+   "title":"Auto-paint",
+   "subtitle":"Control",
+   
+   "buttons":{
+     "pause":"Pause",
+     "start":"Start",
+     "cancel":"Cancel Print",
+     "pen":"Brush",
+     "park":"Park Home",
+     "disable":"Unlock Motors",
+     "resume":"Resume",
+     "raise":"Raise",
+     "lower":"Lower"
+     
+   },
+   
+   "info":{
+     "pause":"Click to start painting your picture!",
+     "cancel":"Cancel current print job.",
+     "park":"Move the carriage back to the home position",
+     "disable":"Raise brush and Unlock (disable) stepper motors, so that you can move the carriage by hand.",
+     "confirm":"Are you sure you want to cancel the current print job and reset (for example, to start a new print job)?"
+   },
+   "status":{
+     "title":"Status",
+     "info":"Current progress",
+     "ready": "Click to start painting your picture!",
+     "pause": "Click to stop current operations",
+     "resume": "Click to resume operations",
+     "wait": "Please wait while executed processes complete...",
+     
+     "cncserver":{
+       "pausing":"Pausing current process...",
+       "paused":"Paused. Click resume to continue.",
+       "resume":"Resuming current process...",
+       "drawResume":"Drawing resumed...",
+       
+       "parkStart":"Parking brush...",
+       "parkSucceed": "Brush parked succesfully",
+       "parkFail": "Can't Park, already parked",
+       "motorUnlock":"Unlocking motors...",
+       "unlockNotice": "'Motors unlocked! Place in home corner when done'"
+     }
+     
+   }
+ }
 }
