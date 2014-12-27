@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "0.9.5"
+  },
+  "info":{
+    "description": "An example mode for rendering text that can be sent to other modes.",
+    "title": "Example Text Rendering Mode",
+    "detail": "A simple example RoboPaint mode to show how to build your own mode.",
+    "word": "Text"
+  }
+}
