@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "0.9.5"
+  },
+  "info":{
+    "description": "Manual Mode: Customize your print",
+    "title": "Manual Paint",
+    "detail": "Like Auto-paint, but allows for more control over what elements are painted, and a number of other options.",
+    "word": "Manual"
+  }
+}
