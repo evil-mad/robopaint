@@ -15,19 +15,6 @@
    "title":"Auto-paint",
    "subtitle":"Control",
    
-   "buttons":{
-     "pause":"Pause",
-     "start":"Start",
-     "cancel":"Cancel Print",
-     "pen":"Brush",
-     "park":"Park Home",
-     "disable":"Unlock Motors",
-     "resume":"Resume",
-     "raise":"Raise",
-     "lower":"Lower"
-     
-   },
-   
    "info":{
      "pause":"Click to start painting your picture!",
      "cancel":"Cancel current print job.",

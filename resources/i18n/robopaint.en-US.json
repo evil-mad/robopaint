@@ -6,9 +6,29 @@
     "release": "0.9.2"
   },
   "common": {
-    "pause": "Pause",
-    "resume": "Resume",
-    "stop": "Stop",
+    "implement": {
+      "brush": "Brush",
+      "pen": "Pen"
+    },
+    "action": {
+      "park":"Park Home",
+      "disable":"Unlock Motors",
+      "pause": "Pause",
+      "resume": "Resume",
+      "stop": "Stop",
+      "start":"Start",
+      "cancel":"Cancel",
+      
+      "brush": {
+        "raise": "Raise Brush",
+        "lower": "Lower Brush",
+        "wash": "Wash Brush"
+      },
+      "pen": {
+        "raise": "Raise Pen",
+        "lower": "Lower Pen"
+      }
+    },
     "time": {
       "ms": "ms",
       "sec": "sec",

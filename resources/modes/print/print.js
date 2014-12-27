@@ -45,7 +45,7 @@ $(function() {
   robopaint.socket.on('callback update', function(callback){
     switch(callback.name) {
       case 'autopaintcomplete': // Should happen when we're completely done
-        $('#pause').attr('class', 'ready').attr('title', bufferStateText.ready).text('modes.print.control.buttons.start');
+        $('#pause').attr('class', 'ready').attr('title', bufferStateText.ready).text('common.action.start');
         $('#buttons button.normal').prop('disabled', false); // Enable options
         $('#cancel').prop('disabled', true); // Disable the cancel print button
         break;
@@ -75,7 +75,7 @@ $(function() {
 
     // Cancel Print
     $('#cancel').click(function(){
-      var cancelPrint = confirm("modes.print.control.info.confirm");
+      var cancelPrint = confirm(robopaint.t("modes.print.control.info.confirm"));
       if (cancelPrint) {
         unBindEvents(function(){
           robopaint.switchMode('home', function(){
@@ -91,7 +91,10 @@ $(function() {
 
       // With nothing in the queue, start autopaint!
       if (cncserver.state.buffer.length === 0) {
-        $('#pause').removeClass('ready').attr('title', bufferStateText.pause).text('conrol.buttons.pause');
+        $('#pause')
+          .removeClass('ready')
+          .attr('title', bufferStateText.pause)
+          .text(robopaint.t('common.action.pause'));
         $('#buttons button.normal').prop('disabled', true); // Disable options
         $('#cancel').prop('disabled', false); // Enable the cancel print button
 
@@ -112,15 +115,21 @@ $(function() {
           robopaint.cncserver.api.buffer.pause(function(){
             cncserver.wcb.status(bufferStateText.paused, 'complete');
             $('#buttons button.normal').prop('disabled', false); // Enable options
-            $('#pause').addClass('active').attr('title', bufferStateText.resume).text('modes.print.control.button.resume');
-            $('#pause').prop('disabled', false);
+            $('#pause')
+              .addClass('active')
+              .attr('title', bufferStateText.resume)
+              .prop('disabled', false)
+              .text(robopaint.t("modes.print.control.button.resume"));
           });
         } else {
           // Resuming ===============
           $('#buttons button.normal').prop('disabled', true); // Disable options
           cncserver.wcb.status(bufferStateText.statusResume);
           robopaint.cncserver.api.buffer.resume(function(){
-            $('#pause').removeClass('active').attr('title', bufferStateText.pause).text('modes.print.control.button.pause');
+            $('#pause')
+              .removeClass('active')
+              .attr('title', bufferStateText.pause)
+              .text(robopaint.t('modes.print.control.button.pause'));
             cncserver.wcb.status(bufferStateText.drawResume, true);
           });
         }

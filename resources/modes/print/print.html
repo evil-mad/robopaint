@@ -9,19 +9,19 @@
 <body class="print print-auto">
 
 <fieldset id="control">
-  <legend>modes.print.control.title</legend>
+  <legend data-i18n>modes.print.control.title</legend>
 
   <fieldset id="buttons">
-    <legend>modes.print.control.subtitle</legend>
-    <button id="pause" class="ready" data-i18n="[title]modes.print.control.info.pause">modes.print.control.buttons.start</button>
-    <button id="cancel" disabled="disabled" data-i18n="[title]modes.print.control.info.cancel">modes.print.control.buttons.cancel</button>
-    <button id="pen" class="normal">modes.print.control.buttons.pen</button>
-    <button id="park" class="normal" data-i18n="[title]modes.print.control.info.park">modes.print.control.buttons.park</button>
-    <button id="disable" class="normal" data-i18n="[title]modes.print.control.info.disable">modes.print.control.buttons.disable</button>
+    <legend data-i18n>modes.print.control.subtitle</legend>
+    <button id="pause" class="ready" data-i18n="[title]modes.print.control.info.pause;common.action.start"></button>
+    <button id="cancel" disabled="disabled" data-i18n="[title]modes.print.control.info.cancel;common.action.cancel"></button>
+    <button id="pen" class="normal" data-i18n="common.action.pen"></button>
+    <button id="park" class="normal" data-i18n="[title]modes.print.control.info.park;common.action.park"></button>
+    <button id="disable" class="normal" data-i18n="[title]modes.print.control.info.disable;common.action.disable"></button>
   </fieldset>
 
   <fieldset id="status">
-    <legend>modes.print.control.status.title</legend>
+    <legend data-i18n>modes.print.control.status.title</legend>
     <div id="statusmessage"></div>
     <div class="progress-wrapper">
       <progress data-i18n="[title]modes.print.control.status.info" max="100" value="0"></progress>
@@ -67,4 +67,5 @@
 
 </body>
 </html>
+
 

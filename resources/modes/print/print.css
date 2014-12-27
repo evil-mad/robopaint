@@ -313,15 +313,6 @@ body.print-auto #buttons button.normal {
   width: 190px;
 }
 
-/* Handle simple button text changes via class, tricksy CSS hobbits! */
-#pen.up:before {
-  content: "modes.print.control.buttons.raise";
-}
-
-#pen.down:before {
-  content: "modes.print.control.buttons.lower ";
-}
-
 /* Status Specific */
 #status {
   text-align: center;

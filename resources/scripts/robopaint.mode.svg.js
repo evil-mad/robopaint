@@ -139,11 +139,12 @@ $(function() {
     //}
 
     // Update button text/state
-    var toState = 'up';
+    // TODO: change implement type <brush> based on actual implement selected!
+    var key = 'common.action.brush.raise';
     if (cncserver.state.actualPen.state == "up" || cncserver.state.actualPen.state == 0){
-      toState = 'down';
+      key = 'common.action.brush.lower';
     }
-    $('#pen').attr('class','normal ' + toState);
+    $('#pen').text(robopaint.t(key));
   }
 
   // Handle buffer status messages
