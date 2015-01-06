@@ -9,6 +9,49 @@
     "title": "",
     "detail": "",
     "word": "Create"
+  },
+  "menu": {
+    "file": {
+      "title": "File",
+      "new": "New Document",
+      "open": "Open SVG...",
+      "import": "Import Image...",
+      "save": "Save Image..."
+    },
+    "edit": {
+      "title": "Edit",
+      "undo": "Undo",
+      "redo": "Redo",
+      "cut": "Cut",
+      "copy": "Copy",
+      "paste": "Paste",
+      "dupe": "Duplicate",
+      "del": "Delete"
+    },
+    "object": {
+      "title": "Object"
+    },
+    "view": {
+      "title": "View"
+    }
+  },
+  
+  "shortcuts": {
+    "ctrls": "Ctrl+S!",
+    "ctrlz": "Ctrl+Z",
+    "ctrly": "Ctrl+Y",
+    "ctrlx": "Ctrl+X",
+    "ctrlc": "Ctrl+C",
+    "ctrlv": "Ctrl+V",
+    "ctrld": "Ctrl+D",
+    
+    "ctrldel": "Ctrl+⌫",
+    "ctrls": "Ctrl+S",
+    "ctrls": "Ctrl+S",
+    "ctrls": "Ctrl+S",
+    "ctrls": "Ctrl+S",
+    "ctrls": "Ctrl+S",
+    "ctrls": "Ctrl+S"
   }
 }
   

@@ -519,7 +519,11 @@ function fadeInWindow() {
     $subwindow.hide().css('top', barHeight).fadeIn('fast');
   }
   subWin = $subwindow[0].contentWindow;
+  if (appMode == 'edit') {
+    translateEditMode();
+  }
   $('[data-i18n]', $subwindow.contents()).i18n();
+
 }
 
 

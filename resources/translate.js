@@ -209,4 +209,36 @@ function updateLang() {
 }
 
 
+/**
+ * Contains specific code to translating the 'Edit' mode, as the majority of that
+ * mode is method-draw, which is not made by us.
+ */
+function translateEditMode() {
+  var domFile = 'resources/modes/edit/translateDOM.json';
+  try {
+      var domData = JSON.parse(fs.readFileSync(domFile , 'utf8'));
+      console.debug(domData);
+      domData = domData['DOM'];
+      for (var i in domData) {
+        var obj = domData[i];
+        var key = Object.keys(obj)[0];
+
+
+        var DOM = $(key, window.$subwindow.contents());
+        console.debug(key + ' had '+ DOM.text());
+        var $children = DOM.children();
+
+        DOM.text(window.robopaint.t(obj[key]));
+        DOM.append($children);
+
+     }
+
+    } catch(e) {
+      console.error('Bad DOM location file (somehow):' + domFile, e);
+    }
+
+
+}
+
+
 

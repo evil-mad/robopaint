@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "release": "0.9.5"
+  },
+  "DOM": [
+    {".menu_title:eq(1)": "modes.edit.menu.file.title"},
+    {".menu_title:eq(2)": "modes.edit.menu.edit.title"},
+    {".menu_title:eq(3)": "modes.edit.menu.object.title"},
+    {".menu_title:eq(4)": "modes.edit.menu.view.title"},
+    
+    {"#tool_clear.menu_item": "modes.edit.menu.file.new"},
+    {"#tool_open.menu_item": "modes.edit.menu.file.open"},
+    {"#tool_import.menu_item": "modes.edit.menu.file.import"},
+    {"#tool_save.menu_item": "modes.edit.menu.file.save"} ,
+    {"#tool_save .shortcut": "modes.edit.shortcuts.ctrls"},
+    
+    {"#tool_undo.menu_item": "modes.edit.menu.edit.undo"},
+    {"#tool_undo .shortcut": "modes.edit.shortcuts.ctrlz"}, 
+    {"#tool_redo.menu_item": "modes.edit.menu.edit.redo"},
+    {"#tool_redo .shortcut": "modes.edit.shortcuts.ctrly"},
+    {"#tool_cut.menu_item": "modes.edit.menu.edit.cut"},
+    {"#tool_cut .shortcut": "modes.edit.shortcuts.ctrlx"},
+    {"#tool_copy.menu_item": "modes.edit.menu.edit.cut"},
+    {"#tool_copy .shortcut": "modes.edit.shortcuts.ctrlc"},
+    {"#tool_paste.menu_item": "modes.edit.menu.edit.cut"},
+    {"#tool_paste .shortcut": "modes.edit.shortcuts.ctrlv"},
+    {"#tool_clone.menu_item": "modes.edit.menu.edit.cut"},
+    {"#tool_clone .shortcut": "modes.edit.shortcuts.ctrld"},
+    {"#tool_delete.menu_item": "modes.edit.menu.edit.cut"},
+    {"#tool_delete .shortcut": "modes.edit.shortcuts.ctrldel"}
+    
+  ]
+                   
+  
+}
