@@ -2,7 +2,8 @@
   "_meta": {
     "creator": "rogerfachini",
     "target": "en-US",
-    "release": "0.9.5"
+    "release": "0.9.5",
+    "basetype": "mode"
   },
   "info":{
     "description": "Painting Mode: Print your drawing!",
@@ -10,11 +11,11 @@
     "detail": "Automatically paint a given well formed SVG file.",
     "word": "Print"
   },
-  
+
  "control":{
    "title":"Auto-paint",
    "subtitle":"Control",
-   
+
    "info":{
      "pause":"Click to start painting your picture!",
      "cancel":"Cancel current print job.",
@@ -29,20 +30,20 @@
      "pause": "Click to stop current operations",
      "resume": "Click to resume operations",
      "wait": "Please wait while executed processes complete...",
-     
+
      "cncserver":{
        "pausing":"Pausing current process...",
        "paused":"Paused. Click resume to continue.",
        "resume":"Resuming current process...",
        "drawResume":"Drawing resumed...",
-       
+
        "parkStart":"Parking brush...",
        "parkSucceed": "Brush parked succesfully",
        "parkFail": "Can't Park, already parked",
        "motorUnlock":"Unlocking motors...",
        "unlockNotice": "'Motors unlocked! Place in home corner when done'"
      }
-     
+
    }
  }
 }
