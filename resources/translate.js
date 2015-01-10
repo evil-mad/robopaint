@@ -232,22 +232,26 @@ function translateMode() {
         var i18nKey = mappings[selector];
         if (typeof i18nKey === 'string') {
           // Can't use .text() as it will replace child nodes!
-          $object
-            .contents()
-            .filter(function(){ return this.nodeType == 3; })
-            .first()
-            .replaceWith(robopaint.t(i18nKey) + debugExtra);
+          $object.each(function(){ // Just in case we select multiple elements.
+            $(this)
+              .contents()
+              .filter(function(){ return this.nodeType == 3; })
+              .first()
+              .replaceWith(robopaint.t(i18nKey) + debugExtra);
+          });
         } else if (typeof i18nKey === 'object') {
           for (var attr in i18nKey) {
-            if (attr === 'text') {
-              $object
-                .contents()
-                .filter(function(){ return this.nodeType == 3; })
-                .first()
-                .replaceWith(robopaint.t(i18nKey['text']) + debugExtra);
-            } else {
-              $object.attr(attr, robopaint.t(i18nKey[attr]) + debugExtra);
-            }
+            $object.each(function(){ // Just in case we select multiple elements.
+              if (attr === 'text') {
+                $(this)
+                  .contents()
+                  .filter(function(){ return this.nodeType == 3; })
+                  .first()
+                  .replaceWith(robopaint.t(i18nKey.text) + debugExtra);
+              } else {
+                $(this).attr(attr, robopaint.t(i18nKey[attr]) + debugExtra);
+              }
+            });
           }
         }
 
