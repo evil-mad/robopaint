@@ -80,19 +80,19 @@ function translatePage() {
     console.error('Bad or missing Colorset translation file for: ' + folder, e); }
   });
 
-  //Load all Mode translation files
+  // Load all mode translation files
   fs.readdirSync('resources/modes/').forEach(function(folder) {
     try {
       // Ignore files that have extentions (we only want directories).
       if (folder.indexOf(".") == -1) {
-       // Create a full path to the directory containing this colorset's i18n
-       // files.
         var fullPath = 'resources/modes/' + folder + '/i18n/';
         //  Iterate over language files in mode's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {
-          //  Add the data to the global i18n translation array
-          var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
-          resources[data['_meta'].target].translation['modes'][folder] = data;
+          if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
+            //  Add the data to the global i18n translation array
+            var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
+            resources[data['_meta'].target].translation['modes'][folder] = data;
+          }
         });
        }
   } catch(e) {
@@ -213,30 +213,52 @@ function updateLang() {
  * Contains specific code to translating the 'Edit' mode, as the majority of that
  * mode is method-draw, which is not made by us.
  */
-function translateEditMode() {
-  var domFile = 'resources/modes/edit/translateDOM.json';
-  try {
-      var domData = JSON.parse(fs.readFileSync(domFile , 'utf8'));
-      console.debug(domData);
-      domData = domData['DOM'];
-      for (var i in domData) {
-        var obj = domData[i];
-        var key = Object.keys(obj)[0];
+function translateMode() {
+  var mode = robopaint.modes[appMode];
 
+  // DOM Map or native parsing?
+  if (mode.i18n == 'dom') {
+    var domFile = 'resources/' + mode.root + 'i18n/' + mode.name + '.map.json';
+    try {
+      var mappings = JSON.parse(fs.readFileSync(domFile , 'utf8'))['map'];
+      for (var selector in mappings) {
+        var $object = $(selector, $subwindow.contents());
 
-        var DOM = $(key, window.$subwindow.contents());
-        console.debug(key + ' had '+ DOM.text());
-        var $children = DOM.children();
+        // When creating DOM map and i18n for non-native modes, it helps to know
+        // which ones are done, and which aren't!
+        var debugExtra = "XXX";
 
-        DOM.text(window.robopaint.t(obj[key]));
-        DOM.append($children);
+        // Replace text or specific attributes?
+        var i18nKey = mappings[selector];
+        if (typeof i18nKey === 'string') {
+          // Can't use .text() as it will replace child nodes!
+          $object
+            .contents()
+            .filter(function(){ return this.nodeType == 3; })
+            .first()
+            .replaceWith(robopaint.t(i18nKey) + debugExtra);
+        } else if (typeof i18nKey === 'object') {
+          for (var attr in i18nKey) {
+            if (attr === 'text') {
+              $object
+                .contents()
+                .filter(function(){ return this.nodeType == 3; })
+                .first()
+                .replaceWith(robopaint.t(i18nKey['text']) + debugExtra);
+            } else {
+              $object.attr(attr, robopaint.t(i18nKey[attr]) + debugExtra);
+            }
+          }
+        }
 
      }
 
     } catch(e) {
-      console.error('Bad DOM location file (somehow):' + domFile, e);
+      console.error('Bad DOM location file:' + domFile, e);
     }
-
+  } else { // Native i18n parsing! (much simpler)
+    $('[data-i18n]', $subwindow.contents()).i18n();
+  }
 
 }
 

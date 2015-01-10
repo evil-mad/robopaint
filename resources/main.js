@@ -519,11 +519,7 @@ function fadeInWindow() {
     $subwindow.hide().css('top', barHeight).fadeIn('fast');
   }
   subWin = $subwindow[0].contentWindow;
-  if (appMode == 'edit') {
-    translateEditMode();
-  }
-  $('[data-i18n]', $subwindow.contents()).i18n();
-
+  translateMode();
 }
 
 
@@ -666,8 +662,11 @@ function getColorsets() {
 function loadAllModes(){
   var modesDir = 'resources/modes/';
   var files = fs.readdirSync(modesDir);
-  var modes = [];
+  var modes = {};
   var modeDirs = [];
+
+  // Externalize mode details for later use.
+  robopaint.modes = modes;
 
   // List all files, only add directories
   for(var i in files) {
@@ -691,8 +690,9 @@ function loadAllModes(){
     // This a good file? if so, lets make it ala mode!
     if (package.type == "robopaint_mode" && package.main !== '') {
       // TODO: Add FS checks to see if its main file actually exists
-      package.main = 'modes/' + modeDirs[i] + '/' + package.main;
-      modes.push(package);
+      package.root = 'modes/' + modeDirs[i] + '/';
+      package.main = package.root + package.main;
+      modes[package.name] = package;
     }
   }
 
@@ -739,7 +739,6 @@ function loadAllModes(){
       ));
     }
   }
-
 }
 
 
