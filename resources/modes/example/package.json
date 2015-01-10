@@ -4,6 +4,7 @@
   "type": "robopaint_mode",
   "icon": "icon-font",
   "weight": 2,
+  "i18n": "native",
   "core": false,
   "main": "example.html",
   "author": "techninja",

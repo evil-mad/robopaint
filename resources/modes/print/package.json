@@ -4,6 +4,7 @@
   "type": "robopaint_mode",
   "icon": "icon-print",
   "weight": 0,
+  "i18n": "native",
   "core": true,
   "main": "print.html",
   "author": "techninja",

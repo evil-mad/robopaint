@@ -4,6 +4,7 @@
   "type": "robopaint_mode",
   "icon": "icon-picture-1",
   "weight": 1,
+  "i18n": "native",
   "core": false,
   "main": "manual.html",
   "author": "techninja",
