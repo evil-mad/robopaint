@@ -65,9 +65,12 @@
     "zoom": "Zoom Tool",
     "shapes": "Shape Library",
     "eyedrop": "Eye Dropper Tool",
+    "opacity": "Opacity",
+    "roundness": "Roundness",
 
     "fitcontent": "Fit Content",
     "fitcontenttitle": "Auto Size Content to fit Canvas",
+    "rotation": "Rotation",
     "rotate": "Rotate Left",
     "rotatetitle": "Rotate left in 90° increments",
 
@@ -81,15 +84,46 @@
       "bottom": "Align Bottom"
     },
 
+    "paths": {
+      "segtype": "Segment Type",
+      "curve": "Curve",
+      "add": "Add Node",
+      "delete": "Delete Node",
+      "open": "Open Path",
+      "straight": "Straight"
+    },
+
     "stroke": {
       "title": "Stroke",
       "width": "Stroke Width",
       "dash": "Stroke Dash"
+    },
+
+    "shapes": {
+      "basic": "Basic",
+      "object": "Objects",
+      "symbol": "Symbols",
+      "arrow": "Arrows",
+      "flowchart": "Flowchart",
+      "nature": "Nature",
+      "game": "Cards & Chess",
+      "dialog": "Dialog balloons",
+      "music": "Music",
+      "weather": "Weather & Time",
+      "ui": "User Interface",
+      "social": "Social Web"
     }
   },
   "buttons": {
     "zoom": "Zoom to Fit",
     "zoomtitle": "Zoom to fit canvas"
+  },
+  "panels": {
+    "global": "Global",
+    "path": "Path",
+    "editpath": "Edit Path",
+    "ellipse": "Ellipse",
+    "rect": "Rectangle"
   }
 }
 

@@ -222,7 +222,11 @@ function translateMode() {
     try {
       var mappings = JSON.parse(fs.readFileSync(domFile , 'utf8'))['map'];
       for (var selector in mappings) {
-        var $object = $(selector, $subwindow.contents());
+        var $elements = $(selector, $subwindow.contents());
+
+        if ($elements.length === 0) {
+          console.debug("TranslationDOM Map selector not found:", selector);
+        }
 
         // When creating DOM map and i18n for non-native modes, it helps to know
         // which ones are done, and which aren't!
@@ -232,7 +236,7 @@ function translateMode() {
         var i18nKey = mappings[selector];
         if (typeof i18nKey === 'string') {
           // Can't use .text() as it will replace child nodes!
-          $object.each(function(){ // Just in case we select multiple elements.
+          $elements.each(function(){ // Just in case we select multiple elements.
             $(this)
               .contents()
               .filter(function(){ return this.nodeType == 3; })
@@ -241,7 +245,7 @@ function translateMode() {
           });
         } else if (typeof i18nKey === 'object') {
           for (var attr in i18nKey) {
-            $object.each(function(){ // Just in case we select multiple elements.
+            $elements.each(function(){ // Just in case we select multiple elements.
               if (attr === 'text') {
                 $(this)
                   .contents()
@@ -265,6 +269,3 @@ function translateMode() {
   }
 
 }
-
-
-

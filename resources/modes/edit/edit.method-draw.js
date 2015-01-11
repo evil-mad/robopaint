@@ -257,7 +257,7 @@ function addElements() {
 
   // Add auto-sizer button
   $('#canvas_panel').append(
-    $('<h4>').addClass('clearfix').text('Global'),
+    $('<h4>').addClass('clearfix').text(robopaint.t('modes.edit.panels.global')),
     $('<label>')
       .attr({id: 'tool_autosize', 'data-title': robopaint.t('modes.edit.tools.fitcontent')})
       .addClass('draginput')
