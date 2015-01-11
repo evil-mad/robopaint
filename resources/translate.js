@@ -230,7 +230,7 @@ function translateMode() {
 
         // When creating DOM map and i18n for non-native modes, it helps to know
         // which ones are done, and which aren't!
-        var debugExtra = "XXX";
+        var debugExtra = ""; //"XXX";
 
         // Replace text or specific attributes?
         var i18nKey = mappings[selector];
