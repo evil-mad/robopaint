@@ -19,12 +19,13 @@
       "resume": "Resume",
       "stop": "Stop",
       "start": "Start",
+      "save": "Save",
+      "print": "Print",
       "cancel": "Cancel",
       "apply": "Apply",
       "done": "Done",
       "autocolor": "Auto Color",
       "autocolortitle": "Pick the closest match for existing colors in the drawing. Click again to UNDO.",
-
       "brush": {
         "raise": "Raise Brush",
         "lower": "Lower Brush",
@@ -46,6 +47,9 @@
     },
     "imperial": {
       "in": "in"
+    },
+    "labels": {
+      "control": "Control"
     }
   },
   "status": {

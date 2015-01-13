@@ -9,5 +9,18 @@
     "title": "Example Text Rendering Mode",
     "detail": "A simple example RoboPaint mode to show how to build your own mode.",
     "word": "Text"
+  },
+  "buttons": {
+    "save": "Click to save this as the current drawing.",
+    "print": "Click to save and move to print mode."
+  },
+  "labels": {
+    "title": "Text Renderer",
+    "spacing": "Char spacing:",
+    "scale": "Scale:",
+    "hcent": "Horizontal Center:",
+    "vcent": "Vertical Center:",
+    "wrap": "Wrap Width:",
+    "text": "Hello World!"
   }
 }
