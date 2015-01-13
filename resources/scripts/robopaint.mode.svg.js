@@ -141,7 +141,7 @@ $(function() {
     // Update button text/state
     // TODO: change implement type <brush> based on actual implement selected!
     var key = 'common.action.brush.raise';
-    if (cncserver.state.actualPen.state == "up" || cncserver.state.actualPen.state == 0){
+    if (cncserver.state.actualPen.state === "up" || cncserver.state.actualPen.state === 0){
       key = 'common.action.brush.lower';
     }
     $('#pen').text(robopaint.t(key));
@@ -213,8 +213,6 @@ $(function() {
       // Default target to "current" media on startup
       cncserver.state.mediaTarget = cncserver.state.media;
 
-      // Set the Pen state button
-      $('#pen').addClass(!cncserver.state.pen.state ? 'down' : 'up');
       if (window.bindControls) window.bindControls();
 
       parent.fadeInWindow(); // Actually show the mode window

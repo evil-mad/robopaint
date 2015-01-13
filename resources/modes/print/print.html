@@ -13,18 +13,18 @@
 
   <fieldset id="buttons">
     <legend data-i18n>modes.print.control.subtitle</legend>
-    <button id="pause" class="ready" data-i18n="[title]modes.print.control.info.pause;common.action.start"></button>
-    <button id="cancel" disabled="disabled" data-i18n="[title]modes.print.control.info.cancel;common.action.cancel"></button>
-    <button id="pen" class="normal" data-i18n="common.action.pen"></button>
-    <button id="park" class="normal" data-i18n="[title]modes.print.control.info.park;common.action.park"></button>
-    <button id="disable" class="normal" data-i18n="[title]modes.print.control.info.disable;common.action.disable"></button>
+    <button id="pause" class="ready" data-i18n="[title]modes.print.status.initial;common.action.start"></button>
+    <button id="cancel" disabled="disabled" data-i18n="[title]common.action.canceltitle;common.action.cancel"></button>
+    <button id="pen" class="normal" data-i18n>common.action.brush.lower</button>
+    <button id="park" class="normal" data-i18n="[title]common.action.parktitle;common.action.park"></button>
+    <button id="disable" class="normal" data-i18n="[title]common.action.disabletitle;common.action.disable"></button>
   </fieldset>
 
   <fieldset id="status">
-    <legend data-i18n>modes.print.control.status.title</legend>
+    <legend data-i18n>common.labels.status</legend>
     <div id="statusmessage"></div>
     <div class="progress-wrapper">
-      <progress data-i18n="[title]modes.print.control.status.info" max="100" value="0"></progress>
+      <progress data-i18n="[title]common.labels.progress" max="100" value="0"></progress>
     </div>
   </fieldset>
 </fieldset>

@@ -13,8 +13,10 @@
       "pen": "Pen"
     },
     "action": {
-      "park":"Park Home",
+      "park": "Park Home",
+      "parktitle": "Move the carriage back to the home position.",
       "disable": "Unlock Motors",
+      "disabletitle": "Raise and unlock stepper motors so that you can move the carriage by hand.",
       "pause": "Pause",
       "resume": "Resume",
       "stop": "Stop",
@@ -22,6 +24,7 @@
       "save": "Save",
       "print": "Print",
       "cancel": "Cancel",
+      "canceltitle": "Cancel current print job.",
       "apply": "Apply",
       "done": "Done",
       "autocolor": "Auto Color",
@@ -49,7 +52,9 @@
       "in": "in"
     },
     "labels": {
-      "control": "Control"
+      "control": "Control",
+      "status": "Status",
+      "progress": "Current progress"
     }
   },
   "status": {

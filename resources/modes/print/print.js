@@ -18,34 +18,16 @@ function($, robopaint, cncserver) {
 
 
 $(function() {
-  var $svg = $('svg#main');
-
-  // All translatable status text used here
-  var bufferStateText = {
-    ready:        robopaint.t('modes.print.control.status.ready'),
-    pause:        robopaint.t('modes.print.control.status.pause'),
-    resume:       robopaint.t('modes.print.control.status.resume'),
-    wait:         robopaint.t('modes.print.control.status.wait'),
-    pausing:      robopaint.t('modes.print.control.status.cncserver.pausing'),
-    paused:       robopaint.t('modes.print.control.status.cncserver.paused'),
-    statusResume: robopaint.t('modes.print.control.status.cncserver.resume'),
-    drawResume:   robopaint.t('modes.print.control.status.cncserver.drawResume'),
-    parkStart:    robopaint.t('modes.print.control.status.cncserver.parkStart'),
-    parkSucceed:  robopaint.t('modes.print.control.status.cncserver.parkSucceed'),
-    parkFail:     robopaint.t('modes.print.control.status.cncserver.parkFail'),
-    motorUnlock:  robopaint.t('modes.print.control.status.cncserver.motorUnlock'),
-    unlockNotice: robopaint.t('modes.print.control.status.cncserver.unlockNotice'),
-
-  }
-
-
-
+  // Shortener function for referencing this modes translation string root :)
+  function t(s) { return robopaint.t("modes.print." + s); }
 
   // Handle buffer triggered callbacks
   robopaint.socket.on('callback update', function(callback){
     switch(callback.name) {
       case 'autopaintcomplete': // Should happen when we're completely done
-        $('#pause').attr('class', 'ready').attr('title', bufferStateText.ready).text('common.action.start');
+        $('#pause').attr('class', 'ready')
+          .attr('title', t('status.ready'))
+          .text(robopaint.t('common.action.start'));
         $('#buttons button.normal').prop('disabled', false); // Enable options
         $('#cancel').prop('disabled', true); // Disable the cancel print button
         break;
@@ -75,7 +57,7 @@ $(function() {
 
     // Cancel Print
     $('#cancel').click(function(){
-      var cancelPrint = confirm(robopaint.t("modes.print.control.info.confirm"));
+      var cancelPrint = confirm(t("status.confirm"));
       if (cancelPrint) {
         unBindEvents(function(){
           robopaint.switchMode('home', function(){
@@ -93,7 +75,7 @@ $(function() {
       if (cncserver.state.buffer.length === 0) {
         $('#pause')
           .removeClass('ready')
-          .attr('title', bufferStateText.pause)
+          .attr('title', t("status.pause"))
           .text(robopaint.t('common.action.pause'));
         $('#buttons button.normal').prop('disabled', true); // Disable options
         $('#cancel').prop('disabled', false); // Enable the cancel print button
@@ -109,28 +91,28 @@ $(function() {
         // With something in the queue... we're either pausing, or resuming
         if (!cncserver.state.process.paused) {
           // Starting Pause =========
-          $('#pause').prop('disabled', true).attr('title', bufferStateText.wait);
-          cncserver.wcb.status(bufferStateText.pausing);
+          $('#pause').prop('disabled', true).attr('title', t("status.wait"));
+          cncserver.wcb.status(t("status.pausing"));
 
           robopaint.cncserver.api.buffer.pause(function(){
-            cncserver.wcb.status(bufferStateText.paused, 'complete');
+            cncserver.wcb.status(t("status.paused"), 'complete');
             $('#buttons button.normal').prop('disabled', false); // Enable options
             $('#pause')
               .addClass('active')
-              .attr('title', bufferStateText.resume)
+              .attr('title', t("status.resume"))
               .prop('disabled', false)
-              .text(robopaint.t("modes.print.control.button.resume"));
+              .text(robopaint.t("common.action.resume"));
           });
         } else {
           // Resuming ===============
           $('#buttons button.normal').prop('disabled', true); // Disable options
-          cncserver.wcb.status(bufferStateText.statusResume);
+          cncserver.wcb.status(t("status.resuming"));
           robopaint.cncserver.api.buffer.resume(function(){
             $('#pause')
               .removeClass('active')
-              .attr('title', bufferStateText.pause)
-              .text(robopaint.t('modes.print.control.button.pause'));
-            cncserver.wcb.status(bufferStateText.drawResume, true);
+              .attr('title', t("status.pause"))
+              .text(robopaint.t('common.action.pause'));
+            cncserver.wcb.status(t("status.resumed"), true);
           });
         }
       }
@@ -138,15 +120,22 @@ $(function() {
 
     // Bind to control buttons
     $('#park').click(function(){
-      cncserver.wcb.status(bufferStateText.parkStart);
+      // If we're paused, skip the buffer
+      cncserver.wcb.status(t("status.parking"));
       robopaint.cncserver.api.pen.park(function(d){
-        cncserver.wcb.status([bufferStateText.parkSucceed, bufferStateText.parkFail], d);
+        cncserver.wcb.status([t("status.parked"), t("status.parkfail")], d);
       }, {skipBuffer: cncserver.state.process.paused ? 1 : ''});
     });
 
 
     $('#pen').click(function(){
-      robopaint.cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1, null, {
+      // Run height pos into the buffer, or skip buffer if paused
+      var newState = 0;
+      if (cncserver.state.actualPen.state === "up" || cncserver.state.actualPen.state === 0) {
+        newState = 1;
+      }
+
+      robopaint.cncserver.api.pen.height(newState, null, {
         skipBuffer: cncserver.state.process.paused ? 1 : ''
       });
     });
@@ -154,11 +143,11 @@ $(function() {
 
     // Motor unlock: Also lifts pen and zeros out.
     $('#disable').click(function(){
-      cncserver.wcb.status(bufferStateText.motorUnlock);
+      cncserver.wcb.status(t("status.unlocking"));
       robopaint.cncserver.api.pen.up();
       robopaint.cncserver.api.pen.zero();
       robopaint.cncserver.api.motors.unlock(function(d){
-        cncserver.wcb.status([bufferStateText.unlockNotice], d);
+        cncserver.wcb.status([t("status.unlocked")], d);
       });
     });
 
