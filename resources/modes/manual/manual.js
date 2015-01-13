@@ -22,6 +22,10 @@ function($, robopaint, cncserver) {
   }
 
 $(function() {
+  // Shortener function for referencing modes translation string roots :)
+  function t(s) { return robopaint.t("modes.print." + s); }   // Print mode
+  function mt(s) { return robopaint.t("modes.manual." + s); } // Manual mode
+
   var $path = {};
   var $svg = $('svg#main');
 
@@ -85,7 +89,7 @@ $(function() {
 
     // Cancel Print
     $('#cancel').click(function(){
-      var cancelPrint = confirm("Are you sure you want to cancel the current print job and reset (for example, to start a new print job)?");
+      var cancelPrint = confirm(t("status.confirm"));
       if (cancelPrint) {
         unBindEvents(function(){
           robopaint.switchMode('home', function(){
@@ -95,14 +99,6 @@ $(function() {
       }
     });
 
-    // Pause management
-    var bufferStateText = {
-      ready: 'Click to start painting',
-      pause: 'Click to stop current operations',
-      resume: 'Click to resume operations',
-      wait: 'Please wait while executed processes complete...'
-    }
-
     // Bind pause click and functionality
     $('#pause').click(function(){
       // Are we paused already?
@@ -110,23 +106,29 @@ $(function() {
         // Only attempt to status pause if something is going on, but always allow pause
 
         if (cncserver.state.buffer.length !== 0) {
-          $('#pause').prop('disabled', true).attr('title', bufferStateText.wait);
+          $('#pause').prop('disabled', true).attr('title', t('status.wait'));
           cncserver.wcb.status('Pausing current process...');
         }
 
         robopaint.cncserver.api.buffer.pause(function(){
           cncserver.wcb.status('Paused. Click resume to continue.', 'complete');
           //$('#buttons button.normal').prop('disabled', false); // Enable options
-          $('#pause').addClass('active').attr('title', bufferStateText.resume).text('Resume');
-          $('#pause').prop('disabled', false);
+          $('#pause')
+            .addClass('active')
+            .attr('title',  t('status.resume'))
+            .prop('disabled', false)
+            .text(robopaint.t("common.action.resume"));
         });
       } else { // We are paused... resume
         // Resuming ===============
         //$('#buttons button.normal').prop('disabled', true); // Disable options
-        cncserver.wcb.status('Resuming current process...');
+        cncserver.wcb.status(t("status.resuming"));
         robopaint.cncserver.api.buffer.resume(function(){
-          $('#pause').removeClass('active').attr('title', bufferStateText.pause).text('Pause');
-          cncserver.wcb.status('Drawing resumed...', true);
+          $('#pause')
+            .removeClass('active')
+            .attr('title', t("status.pause"))
+            .text(robopaint.t('common.action.pause'));
+          cncserver.wcb.status(t("status.resumed"), true);
         });
       }
     });
@@ -176,16 +178,16 @@ $(function() {
     // Bind to control buttons
     $('#park').click(function(){
       // If we're paused, skip the buffer
-      cncserver.wcb.status('Parking brush...');
+      cncserver.wcb.status(t("status.parking"));
       robopaint.cncserver.api.pen.park(function(d){
-        cncserver.wcb.status(['Brush parked succesfully', "Can't Park, already parked"], d);
+        cncserver.wcb.status([t("status.parked"), t("status.parkfail")], d);
       }, {skipBuffer: cncserver.state.process.paused ? 1 : ''});
     });
 
     // Bind stroke selected object button
     $('#draw').click(function(){
       $('#draw').prop('disabled', true);
-      cncserver.cmd.run('status', 'Painting along selected path...');
+      cncserver.cmd.run('status', mt('status.stroke'));
       $path.removeClass('ants'); // Can't stroke with ants! Screws up visibility
 
       cncserver.paths.runOutline($path, function(){
@@ -193,7 +195,7 @@ $(function() {
           if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
           $('#draw').prop('disabled', false);
           $path.addClass('ants');
-          cncserver.cmd.run('status', 'Painting complete');
+          cncserver.cmd.run('status', mt('status.complete'));
 
           if (cncserver.config.canvasDebug) {
             $('canvas#debug').show();
@@ -205,7 +207,12 @@ $(function() {
     // Bind various buttons
     $('#pen').click(function(){
       // Run height pos into the buffer, or skip buffer if paused
-      robopaint.cncserver.api.pen.height($('#pen').is('.up') ? 0 : 1, null, {
+      var newState = 0;
+      if (cncserver.state.actualPen.state === "up" || cncserver.state.actualPen.state === 0) {
+        newState = 1;
+      }
+
+      robopaint.cncserver.api.pen.height(newState, null, {
         skipBuffer: cncserver.state.process.paused ? 1 : ''
       });
     });
@@ -217,17 +224,18 @@ $(function() {
       robopaint.cncserver.api.pen.move(point);
     });
 
+    // Motor unlock: Also lifts pen and zeros out.
     $('#disable').click(function(){
-      cncserver.wcb.status('Unlocking motors...');
+      cncserver.wcb.status(t("status.unlocking"));
       robopaint.cncserver.api.pen.up();
       robopaint.cncserver.api.pen.zero();
       robopaint.cncserver.api.motors.unlock(function(d){
-        cncserver.wcb.status(['Motors unlocked! Place in home corner when done'], d);
+        cncserver.wcb.status([t("status.unlocked")], d);
       });
     });
 
     $('#zero').click(function(){
-      cncserver.wcb.status('Absolute position reset', true);
+      cncserver.wcb.status(mt('status.zero'), true);
       robopaint.cncserver.api.pen.zero();
     });
 
@@ -255,7 +263,6 @@ $(function() {
 
       // Bring back selection
       if ($path.length) $path.toggleClass('selected');
-
     });
 
     // Checkvisibility Checkbox
@@ -266,11 +273,11 @@ $(function() {
     // Bind to fill controls
     $('#fill').click(function(){
       $('#fill').prop('disabled', true);
-      cncserver.cmd.run('status', 'Filling selected path...');
+      cncserver.cmd.run('status', mt('status.fill'));
       cncserver.paths.runFill($path, function(){
         $('#fill').prop('disabled', false);
         if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
-        cncserver.cmd.run('status', 'Painting complete');
+        cncserver.cmd.run('status', mt('status.complete'));
       });
     });
 
@@ -279,9 +286,9 @@ $(function() {
       if (this.id == 'record-toggle') {
         cncserver.state.isRecording = !cncserver.state.isRecording;
         if (cncserver.state.isRecording) {
-          $(this).text('Stop Recording');
+          $(this).text(mt('commands.buffer.stop'));
         } else {
-          $(this).text('Start Recording');
+          $(this).text(mt('commands.buffer.record'));
           if (cncserver.state.recordBuffer.length) {
             $('#record-play, #record-clear').prop('disabled', false);
           }
@@ -300,16 +307,15 @@ $(function() {
 
       $('<a>')
         .text('Full')
-        .attr('title', 'Full dip and wiggle')
+        .attr('title', mt('commands.full'))
         .addClass('sub-option full')
         .appendTo($t);
       $('<a>')
         .text('Dip')
-        .attr('title', 'Single momentary dip')
+        .attr('title', mt('commands.dip'))
         .addClass('sub-option dip')
         .appendTo($t);
     });
-
 
     // Bind to Tool Change nav items
     $('nav#tools a a').click(function(e){

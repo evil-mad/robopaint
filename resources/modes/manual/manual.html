@@ -12,70 +12,70 @@
 
 <fieldset id="control">
   <fieldset id="status">
-    <legend>Status</legend>
+    <legend data-i18n>common.labels.status</legend>
     <div id="statusmessage"></div>
     <div class="progress-wrapper">
-      <progress title="Current progress" max="100" value="0"></progress>
-      <button id="pause" title="Click to pause buffer running to bot">PAUSE</button>
-      <button id="cancel" title="Cancel current print job.">Cancel Print</button>
+      <progress data-i18n="[title]common.labels.progress" max="100" value="0"></progress>
+      <button id="pause" data-i18n="[title]modes.manual.commands.specialpause;common.action.pause"></button>
+      <button id="cancel" data-i18n="[title]common.action.canceltitle;common.action.cancel"></button>
     </div>
   </fieldset>
 
    <fieldset>
-    <legend>Machine</legend>
+    <legend data-i18n>modes.manual.labels.machine</legend>
     <nav>
-      <button class="normal" id="park" title="Move the carriage back to the home position">Park</button>
-      <button class="normal" id="disable" title="Raise brush and Unlock (disable) stepper motors, so that you can move the carriage by hand.">Unlock & Zero</button>
+      <button class="normal" id="park" data-i18n="[title]common.action.parktitle;common.action.park"></button>
+      <button class="normal" id="disable" data-i18n="[title]common.action.disabletitle;common.action.disable"></button>
     </nav>
   </fieldset>
 
   <ul class="tabs">
-    <li><a href="#manual-manual">Manual</a></li>
-    <li><a href="#manual-auto">Auto</a></li>
-    <li><a href="#manual-record">Record</a></li>
-    <li style="display: none;"><a href="#manual-debug">Debug</a></li>
+    <li><a href="#manual-manual" data-i18n>modes.manual.labels.manual</a></li>
+    <li><a href="#manual-auto" data-i18n>modes.manual.labels.auto</a></li>
+    <li><a href="#manual-record" data-i18n>modes.manual.labels.record</a></li>
+    <li style="display: none;"><a href="#manual-debug" data-i18n>modes.manual.labels.debug</a></li>
   </ul>
 
   <div id="tab-content">
     <fieldset id="manual-debug">
-      <legend>Debug</legend>
+      <legend data-i18n>modes.manual.labels.debug</legend>
       <div id="paint-angle"><img src="images/direction_pointer.png"/></div>
-      <button class="normal" id="showsim" title="View the buffer simulation">Buffer Preview</button>
+      <button class="normal" id="showsim" data-i18n="[title]modes.manual.commands.debug.buffertitle;modes.manual.commands.debug.buffer"></button>
     </fieldset>
 
     <fieldset id="manual-auto">
       <nav>
-        <button class="normal" id="auto-paint" title="Paint the entire drawing automatically. Verifies colors by running auto color first.">Auto Paint</button>
-        <button class="normal" id="auto-color" title="Pick the closest match for existing colors in the drawing. Click again to UNDO.">Auto Color</button>
+        <button class="normal" id="auto-paint" data-i18n="[title]modes.manual.commands.auto.painttitle;modes.manual.commands.auto.paint"></button>
+        <button class="normal" id="auto-color" data-i18n="[title]common.action.autocolortitle;common.action.autocolor"></button>
       </nav>
     </fieldset>
 
     <fieldset id="manual-manual">
       <nav>
-        <button class="normal" id="draw" title="Stroke the selected path with an outline">Stroke Path</button>
-        <button class="normal" id="fill" title="Fill the selected path with a given fill style">Fill Path</button>
+        <button class="normal" id="draw" data-i18n="[title]modes.manual.commands.stroketitle;modes.manual.commands.stroke"></button>
+        <button class="normal" id="fill" data-i18n="[title]modes.manual.commands.filltitle;modes.manual.commands.fill"></button>
 
         <div class="check-control">
           <input type="checkbox" checked id="parkafter"/>
-          <label for="parkafter">Park after fill/stroke</label>
+          <label for="parkafter" data-i18n>modes.manual.labels.park</label>
         </div>
 
         <div class="check-control">
           <input type="checkbox" checked id="checkvisibility"/>
-          <label for="checkvisibility" title="If unchecked, tracing will rely on path shape only, ignoring path overlap.">Check stroke visibility</label>
+          <label for="checkvisibility" data-i18n="[title]modes.manual.commands.checktitle;modes.manual.commands.check"></label>
         </div>
 
         <br/>
-        <button class="normal" id="pen">Brush</button>
-        <button class="normal" id="calibrate" title="Position the brush center at the top left corner for calibration">Top Left</button>
+        <button class="normal" id="pen" data-i18n>common.action.brush.lower</button>
+        <button class="normal" id="calibrate" data-i18n="[title]modes.manual.commands.calibratetitle;modes.manual.commands.calibrate"></button>
       </nav>
     </fieldset>
 
     <fieldset id="manual-record" class="recording">
       <nav>
-        <button class="normal" id="record-toggle" title="Starts/stops recording current actions">Start Record</button>
-        <button class="normal" id="record-play" disabled title="Shunts recorded commands into current buffer">Playback Recording</button>
-        <button class="normal" id="record-clear" disabled title="Clears the record buffer">Clear Recording</button>
+        <button class="normal" id="record-toggle" data-i18n="[title]modes.manual.commands.buffer.recordtitle;modes.manual.commands.buffer.record"></button>
+        <button class="normal" id="record-play" disabled data-i18n="[title]modes.manual.commands.buffer.playtitle;modes.manual.commands.buffer.play"></button>
+        <button class="normal" id="record-clear" disabled data-i18n="[title]modes.manual.commands.buffer.cleartitle;modes.manual.commands.buffer.clear"></button>
       </nav>
     </fieldset>
   </div>
@@ -84,9 +84,9 @@
 <div id="scale-container">
   <nav id="tools">
     <nav id="waters">
-      <a id="water0" title="Water 1" class="water" title="Water 1" href="#"></a>
-      <a id="water1" title="Water 2" class="water" title="Water 2" href="#"></a>
-      <a id="water2" title="Water 3" class="water" title="Water 3" href="#"></a>
+      <a id="water0" class="water" href="#" data-i18n="[title]modes.manual.tools.water1"></a>
+      <a id="water1" class="water" href="#" data-i18n="[title]modes.manual.tools.water2"></a>
+      <a id="water2" class="water" href="#" data-i18n="[title]modes.manual.tools.water3"></a>
     </nav>
 
     <nav id="colors">
@@ -99,7 +99,7 @@
       <a id="color6" class="color" href="#"></a>
       <a id="color7" class="color" href="#"></a>
       <div class="static">
-        <a id="colorx" title="Wash Brush" href="#">X</a>
+        <a id="colorx" data-i18n="[title]common.action.brush.wash" href="#">X</a>
       </div>
     </nav>
   </nav>
