@@ -8,6 +8,7 @@
   "common": {
     "transparent": "Transparent",
     "substrate": "White/Paper",
+    "water": "Water",
     "implement": {
       "brush": "Brush",
       "pen": "Pen"
@@ -56,6 +57,24 @@
       "status": "Status",
       "progress": "Current progress"
     }
+  },
+  "libs": {
+    "sub": "Drawing sub-path __num__",
+    "problem": "Connection Problem ☹",
+    "ignorewash": "Full wash command ignored for draw mode __mode__",
+    "ignorewater": "Water ignored for draw mode __mode__",
+    "ignorepaint": "Paint ignored for draw mode __mode__",
+    "washing": "Doing a full brush wash...",
+    "washed": "Brush should be clean",
+    "inking": "Putting some __media__ on the brush...",
+    "inked": "There is now __media__ on the brush",
+    "reinking": "Going to get some more __media__...",
+    "reinkingdry": "Going to get some more __media__, no water...",
+    "reinked": "Continuing to paint with __media__",
+    "autoinit": "Automatic Paint: __pathNum__ paths, __jobsNum__ jobs'",
+    "autofill": "Filling path __id__...",
+    "autostroke": "Stroking path __id__...",
+    "autocomplete": "Automatic Paint Complete!"
   },
   "status": {
     "start": "Starting up...",

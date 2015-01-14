@@ -287,7 +287,7 @@ cncserver.paths = {
                 if (seg.pathSegTypeAsLetter.toLowerCase() === "m") {
                   subPathCount++;
                   run([
-                    ['status', 'Drawing subpath #' + subPathCount],
+                    ['status', robopaint.t("libs.sub", {num: subPathCount})],
                     'up',
                     ['move', p],
                     'down'
