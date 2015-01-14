@@ -26,7 +26,7 @@ That's it! Everything else about how the page works is dealt with inside the
  |-- mymode.html
  |-- mymode.css
  |-- mymode.js
- |-- i18n/
+ |-- _i18n/
  |---- mymode.en-US.json
  |---- mymode.fr.json
  |---- ...
@@ -60,9 +60,9 @@ comments below for explanation on the non-obvious keys.
 A requirement for RP modes is a bare minimum set of translation for its
 informational strings, and at best, a full set of all strings shown to the user
 in the default language of English, with support for other languages optional
-but highly suggested. Just put your JSON translation files in your `mymode/i18n`
-folder and RP will parse and apply translations according to the following two
-methods:
+but highly suggested. Just put your JSON translation files in your
+`mymode/_i18n` folder and RP will parse and apply translations according to the
+following two methods:
 
 The two ways a mode will be translated:
  * **`native`**: Use i18next style attribute tags and translate strings in
@@ -75,7 +75,7 @@ selected, RP will iterate through the given DOM mapping and replace the
 text contents with the translation string given. This is the best method when
 the majority of code is third party and can't be directly edited.
 
-### File Format: Mode translation `i18n/[modename].[languagecode].json`
+### File Format: Mode translation `_i18n/[modename].[languagecode].json`
 These are the minimum entries required for a mode. (Comments are for clarity and
 are not actually allowed in valid JSON.)
 ```javascript
@@ -98,7 +98,7 @@ are not actually allowed in valid JSON.)
 }
 ```
 
-### File Format: Mode DOM translation map `i18n/[modename].map.json`
+### File Format: Mode DOM translation map `_i18n/[modename].map.json`
 Only required if your translation mode is `dom` instead of `native`. Expects one
 key outside of the `_meta` key, an array named `map` with the data pairs in the
 format of key: jQuery selector, value: fully namespaced translation key. See the
