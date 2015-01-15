@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "release": "0.9.3",
+    "target": "fr",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "info": {
+    "title": "Peinture automatique",
+    "description": "Mode Peinture: Imprimez votre dessin!",
+    "word": "Imprimer",
+    "detail": "Peindre automatiquement un fichier SVG bien formé donné."
+  },
+  "control": {
+    "title": "Auto-peinture",
+    "subtitle": "Contrôle"
+  },
+  "status": {
+    "ready": "Cliquez ici pour commencer à peindre votre photo!",
+    "initial": "Cliquez ici pour commencer à peindre votre photo!",
+    "park": "Déplacez le chariot vers la position de la maison",
+    "pause": "Cliquez sur pour arrêter les opérations en cours",
+    "resume": "Cliquez pour reprendre les opérations",
+    "wait": "Se il vous plaît patienter pendant exécuté processus complète ...",
+    "pausing": "Pause processus actuel ...",
+    "paused": "Pause. Cliquez reprendre pour continuer.",
+    "confirm": "Êtes-vous sûr de vouloir annuler la tâche d'impression en cours et reset (par exemple, pour commencer une nouvelle tâche d'impression)?",
+    "parking": "Parking ...",
+    "resumed": "Dessin repris ...",
+    "resuming": "Reprise processus actuel ...",
+    "parked": "Garé succès",
+    "parkfail": "Vous ne pouvez pas Park, déjà stationné",
+    "unlocking": "Déverrouillage des moteurs ...",
+    "unlocked": "Motors déverrouillées! Placer dans la maison coin quand fait",
+    "connecting": "Connexion à bot ...",
+    "connected": "Connexion réussie!"
+  }
+}

@@ -119,7 +119,7 @@ $(function() {
           error: e
         });
       } else {
-        return("Oops! Looks like there are some errors in your SVG that RoboPaint couldn't automatically fix. \n\n We suggest you open the SVG in Inkscape or another SVG editor, simplify the document or just resave it. \n\n You can continue and try to print this, but you may have issues. Error given below: \n\n\n" + e.message);
+        return(robopaint.t('modes.edit.dialogs.error.transfer') + "\n\n\n" + e.message);
       }
     }
 
@@ -203,7 +203,7 @@ function addElements() {
         } catch(err) {
           ignoreChange = true;
           $(this).val('');
-          window.alert('There was an error writing the file. \n\n Check your permissions or file name and try again. \n\n ERR# ' + err.errno + ',  Code: ' + err.code);
+          window.alert(robopaint.t('modes.edit.dialogs.error.save') + '\n\n ERR# ' + err.errno + ',  ' + err.code);
           console.log('Error saving file:', err);
         }
       }).click();
@@ -217,17 +217,17 @@ function addElements() {
   $('#zoom_panel').before(
     $('<button>').addClass('zoomfit zoomfitcanvas')
       .data('zoomtype', 'canvas')
-      .attr('title', 'Zoom to fit canvas')
-      .text('Zoom to Fit')
+      .attr('title', robopaint.t('modes.edit.buttons.zoomtitle'))
+      .text(robopaint.t('modes.edit.buttons.zoom'))
   );
 
   $('#view_menu .separator').after(
     $('<div>').addClass('menu_item zoomfit')
       .data('zoomtype', 'canvas')
-      .text('Fit Canvas in Window'),
+      .text(robopaint.t('modes.edit.menu.view.fitcanvas')),
     $('<div>').addClass('menu_item zoomfit')
       .data('zoomtype', 'content')
-      .text('Fit Content in Window'),
+      .text(robopaint.t('modes.edit.menu.view.fitcontent')),
     $('<div>').addClass('separator')
   );
 
@@ -237,12 +237,12 @@ function addElements() {
 
   // Add in easy rotate button
   $('<label>')
-  .attr({id: 'tool_rotate', 'data-title': "Rotate Left"})
+  .attr({id: 'tool_rotate', 'data-title': robopaint.t('modes.edit.tools.rotate')})
   .addClass('draginput')
   .append(
-    $('<span>').addClass('icon_label').html("Rotate Left"),
+    $('<span>').addClass('icon_label').html(robopaint.t('modes.edit.tools.rotate')),
     $('<div>').addClass('draginput_cell')
-      .attr({id: 'rotate', title: 'Rotate Left'})
+      .attr({id: 'rotate', title: robopaint.t('modes.edit.tools.rotatetitle')})
       .click(function(){
         var a = methodDraw.canvas.getRotationAngle();
 
@@ -257,14 +257,17 @@ function addElements() {
 
   // Add auto-sizer button
   $('#canvas_panel').append(
-    $('<h4>').addClass('clearfix').text('Global'),
+    $('<h4>').addClass('clearfix').text(robopaint.t('modes.edit.panels.global')),
     $('<label>')
-      .attr({id: 'tool_autosize', 'data-title': "Fit Content"})
+      .attr({id: 'tool_autosize', 'data-title': robopaint.t('modes.edit.tools.fitcontent')})
       .addClass('draginput')
       .append(
-        $('<span>').addClass('icon_label').html("Fit Content"),
+        $('<span>').addClass('icon_label').html(robopaint.t('modes.edit.tools.fitcontent')),
         $('<div>').addClass('draginput_cell')
-          .attr({id: 'autosize', title: 'Auto Size content to fit canvas'})
+          .attr({
+            id: 'autosize',
+            title: robopaint.t('modes.edit.tools.fitcontenttitle')
+          })
           .click(function(){
             autoSizeContent();
           })
@@ -283,8 +286,8 @@ function addElements() {
  var types = 'path, rect:not(#canvas_background), circle, ellipse, line, polygon';
  $('#tools_bottom_3').append(
    $('<button>')
-     .attr({id:"auto-color", title:"Pick the closest match for existing colors in the drawing. Click again to UNDO."})
-     .text('Auto Color')
+     .attr({id:"auto-color", title: robopaint.t('common.action.autocolortitle')})
+     .text(robopaint.t('common.action.autocolor'))
      .click(function(){
        robopaint.utils.autoColor($('#svgcontent'), recover, robopaint.colors, types);
        recover = !recover;
@@ -306,10 +309,10 @@ function buildPalette(){
   $main.append(
     $('<div>').addClass('static palette_item').append(
       $('<div>')
-        .attr('title', 'Transparent')
+        .attr('title', robopaint.t('common.transparent'))
         .attr('id', 'colorx').text('X'),
       $('<div>')
-        .attr('title', 'White / Paper')
+        .attr('title', robopaint.t('common.substrate'))
         .attr('id', 'colornone')
     )
   );
@@ -376,8 +379,7 @@ function bindColorSelect() {
 // Triggered on before close or switch mode, call callback to complete operation
 function onClose(callback, isGlobal){
   if (isGlobal && !robopaint.settings.openlast && methodDraw.canvas.undoMgr.getUndoStackSize() > 0) {
-    var r = confirm("Are you sure you want to quit?\n\
-Your changes to this image will not be saved before printing. Click Ok to Quit.");
+    var r = confirm(robopaint.t('modes.edit.dialogs.confirmquit'));
     if (r == true) {
       callback(); // Close/continue
     }

@@ -9,22 +9,22 @@
 <body class="print print-auto">
 
 <fieldset id="control">
-  <legend>Auto-paint</legend>
+  <legend data-i18n>modes.print.control.title</legend>
 
   <fieldset id="buttons">
-    <legend>Control</legend>
-    <button id="pause" class="ready" title="Click to start painting your picture!">Start</button>
-    <button id="cancel" disabled="disabled" title="Cancel current print job.">Cancel Print</button>
-    <button id="pen" class="normal">Brush</button>
-    <button id="park" class="normal" title="Move the carriage back to the home position">Park Home</button>
-    <button id="disable" class="normal" title="Raise brush and Unlock (disable) stepper motors, so that you can move the carriage by hand.">Unlock Motors</button>
+    <legend data-i18n>modes.print.control.subtitle</legend>
+    <button id="pause" class="ready" data-i18n="[title]modes.print.status.initial;common.action.start"></button>
+    <button id="cancel" disabled="disabled" data-i18n="[title]common.action.canceltitle;common.action.cancel"></button>
+    <button id="pen" class="normal" data-i18n>common.action.brush.lower</button>
+    <button id="park" class="normal" data-i18n="[title]common.action.parktitle;common.action.park"></button>
+    <button id="disable" class="normal" data-i18n="[title]common.action.disabletitle;common.action.disable"></button>
   </fieldset>
 
   <fieldset id="status">
-    <legend>Status</legend>
+    <legend data-i18n>common.labels.status</legend>
     <div id="statusmessage"></div>
     <div class="progress-wrapper">
-      <progress title="Current progress" max="100" value="0"></progress>
+      <progress data-i18n="[title]common.labels.progress" max="100" value="0"></progress>
     </div>
   </fieldset>
 </fieldset>
@@ -67,4 +67,5 @@
 
 </body>
 </html>
+
 

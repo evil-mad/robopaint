@@ -454,15 +454,6 @@ fieldset#control {
   margin-bottom: 0.25em;
 }
 
-/* Handle simple button text changes via class, tricksy CSS hobbits! */
-#pen.up:before {
-  content: "Raise ";
-}
-
-#pen.down:before {
-  content: "Lower ";
-}
-
 /* Status Specific */
 #status {
   text-align: center;

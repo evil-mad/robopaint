@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "release": "0.9.3",
+    "target": "pt",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "info": {
+    "title": "Exemplo Modo de renderização de texto",
+    "word": "Texto",
+    "description": "Um modo de exemplo para processamento de texto que pode ser enviado para outros modos.",
+    "detail": "A modo de exemplo RoboPaint simples para mostrar como construir o seu próprio modo."
+  },
+  "buttons": {
+    "save": "Clique aqui para salvar este como o desenho atual.",
+    "print": "Clique para salvar e mudar para o modo de impressão."
+  },
+  "labels": {
+    "title": "Renderer Texto",
+    "spacing": "Espaçamento Char:",
+    "scale": "Escala:",
+    "hcent": "Centro Horizontal:",
+    "vcent": "Centro Vertical:",
+    "wrap": "Enrole Largura:",
+    "text": "Olá Mundo!"
+  }
+}

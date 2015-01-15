@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "release": "0.9.3",
+    "target": "fr",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "info": {
+    "title": "mode de rendu de texte d'exemple",
+    "word": "Texte",
+    "description": "Un mode d'exemple pour le rendu de texte qui peut être envoyé à d'autres modes.",
+    "detail": "Un mode de RoboPaint exemple simple pour montrer comment construire votre propre mode de."
+  },
+  "buttons": {
+    "save": "Cliquez pour sauvegarder cet que le dessin courant.",
+    "print": "Cliquez sur pour enregistrer et passer au mode d'impression."
+  },
+  "labels": {
+    "title": "Moteur de rendu du texte",
+    "spacing": "Espacement Char:",
+    "scale": "Échelle:",
+    "hcent": "Centre horizontale:",
+    "vcent": "Centre verticale:",
+    "wrap": "Enveloppez Largeur:",
+    "text": "Bonjour Le Monde!"
+  }
+}

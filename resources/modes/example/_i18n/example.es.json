@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "release": "0.9.3",
+    "target": "es",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "labels": {
+    "wrap": "Envuelva Ancho:",
+    "vcent": "Centrado vertical:",
+    "scale": "Escala:",
+    "title": "Procesador de texto",
+    "hcent": "Centro horizontal:",
+    "spacing": "Char espaciado:",
+    "text": "Hola Mundo!"
+  },
+  "buttons": {
+    "print": "Haga clic para guardar y pasar al modo de impresión.",
+    "save": "Haga clic para guardar esto como el dibujo actual."
+  },
+  "info": {
+    "description": "Un modo de ejemplo para el renderizado de texto que se puede enviar a otros modos.",
+    "title": "Ejemplo Modo de procesamiento de texto",
+    "word": "Texto",
+    "detail": "A modo de ejemplo RoboPaint sencillo para mostrar cómo construir su propio modo."
+  }
+}

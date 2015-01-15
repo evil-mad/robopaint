@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "release": "0.9.3",
+    "target": "de",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "info": {
+    "word": "Drucken",
+    "description": "Malerei Mode: Drucken Sie Ihre Zeichnung!",
+    "title": "Automatische Farb",
+    "detail": "Automatisch malen einen bestimmten wohlgeformt SVG-Datei."
+  },
+  "control": {
+    "title": "Auto-Farbe",
+    "subtitle": "Steuerung"
+  },
+  "status": {
+    "initial": "Klicken Sie hier um zu malen Sie Ihr Bild!",
+    "park": "Bewegen Sie den Schlitten wieder in die Ausgangsposition",
+    "ready": "Klicken Sie hier um zu malen Sie Ihr Bild!",
+    "resume": "Klicken Sie auf den Betrieb wieder aufzunehmen",
+    "pause": "Klicken Sie hier um den laufenden Betrieb zu stoppen",
+    "pausing": "Pausieren der aktuellen Prozess ...",
+    "wait": "Bitte warten ausgeführten Prozesse komplette ...",
+    "paused": "Angehalten. Klicken Sie auf Fortsetzen, um fortzufahren.",
+    "confirm": "Sind Sie sicher, Sie wollen, um den aktuellen Druckauftrag abzubrechen und zurückzusetzen (zum Beispiel, um einen neuen Druckauftrag starten)?",
+    "resuming": "Wiederaufnahme der aktuellen Prozess ...",
+    "resumed": "Zeichnung wieder aufgenommen ...",
+    "parking": "Parkplatz ...",
+    "parked": "Erfolgreich geparkt",
+    "parkfail": "Kann nicht parken, bereits geparkt",
+    "unlocking": "Unlocking Motoren ...",
+    "unlocked": "Motors freigeschaltet! Platzieren Sie im Home-Ecke, wenn Sie fertig",
+    "connected": "Erfolgreich verbunden!",
+    "connecting": "Anschließen an Bot ..."
+  }
+}

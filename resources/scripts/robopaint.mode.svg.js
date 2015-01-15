@@ -139,11 +139,12 @@ $(function() {
     //}
 
     // Update button text/state
-    var toState = 'up';
-    if (cncserver.state.actualPen.state == "up" || cncserver.state.actualPen.state == 0){
-      toState = 'down';
+    // TODO: change implement type <brush> based on actual implement selected!
+    var key = 'common.action.brush.raise';
+    if (cncserver.state.actualPen.state === "up" || cncserver.state.actualPen.state === 0){
+      key = 'common.action.brush.lower';
     }
-    $('#pen').attr('class','normal ' + toState);
+    $('#pen').text(robopaint.t(key));
   }
 
   // Handle buffer status messages
@@ -185,7 +186,7 @@ $(function() {
   // Initial server connection handler
   function serverConnect() {
     // Get initial pen data from server
-    if (cncserver.wcb) cncserver.wcb.status('Connecting to bot...');
+    if (cncserver.wcb) cncserver.wcb.status(robopaint.t('modes.print.status.connecting'));
 
     // Ensure bot is cleared and ready to receive commands at startup
     robopaint.cncserver.api.buffer.clear();
@@ -197,7 +198,7 @@ $(function() {
     });
 
     robopaint.cncserver.api.pen.stat(function(d){
-      if (cncserver.wcb) cncserver.wcb.status(['Connected Successfully!'], d);
+      if (cncserver.wcb) cncserver.wcb.status([robopaint.t('modes.print.status.connected')], d);
       cncserver.state.pen.state = 1; // Assume down
       robopaint.cncserver.api.pen.up(); // Send to put up
       cncserver.state.pen.state = 0; // Assume it's up (doesn't return til later)
@@ -212,8 +213,6 @@ $(function() {
       // Default target to "current" media on startup
       cncserver.state.mediaTarget = cncserver.state.media;
 
-      // Set the Pen state button
-      $('#pen').addClass(!cncserver.state.pen.state ? 'down' : 'up');
       if (window.bindControls) window.bindControls();
 
       parent.fadeInWindow(); // Actually show the mode window
