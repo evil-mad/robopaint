@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "release": "0.9.3",
+    "target": "pt",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "info": {
+    "description": "Pintura Mode: Imprima seu desenho!",
+    "title": "Pintura automática",
+    "word": "Impressão",
+    "detail": "Pintar automaticamente um determinado arquivo SVG bem formado."
+  },
+  "control": {
+    "title": "Auto-paint",
+    "subtitle": "Controle"
+  },
+  "status": {
+    "initial": "Clique para começar a pintar a sua foto!",
+    "ready": "Clique para começar a pintar a sua foto!",
+    "pause": "Clique para parar as operações atuais",
+    "park": "Mova o carro de volta para a posição inicial",
+    "resume": "Clique para retomar as operações",
+    "confirm": "Tem certeza que deseja cancelar o trabalho de impressão atual e redefinir (por exemplo, para iniciar um novo trabalho de impressão)?",
+    "pausing": "Pausa na atual processo ...",
+    "wait": "Por favor aguarde enquanto executado processos completa ...",
+    "paused": "Pausada. Clique retomar para continuar.",
+    "resumed": "Desenho retomou ...",
+    "parking": "Estacionamento ...",
+    "resuming": "Retomando processo atual ...",
+    "parked": "Estacionado com sucesso",
+    "parkfail": "Não pode estacionar, já estacionado",
+    "unlocking": "Motores Desbloqueio ...",
+    "unlocked": "Motors desbloqueado! Coloque na esquina de casa quando feito",
+    "connecting": "Conexão com bot ...",
+    "connected": "Conectado com sucesso!"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "release": "0.9.3",
+    "target": "fr",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "info": {
+    "title": "",
+    "detail": "",
+    "description": "Open, redimensionner et modifier des illustrations vectorielles existant.",
+    "word": "Créer"
+  },
+  "menu": {
+    "file": {
+      "title": "Fichier",
+      "open": "Ouvrir SVG ...",
+      "new": "Nouveau document",
+      "import": "Importer une image ...",
+      "save": "Enregistrer l'image ..."
+    },
+    "edit": {
+      "title": "Éditer",
+      "undo": "Annuler",
+      "cut": "Coupe",
+      "redo": "Refaire",
+      "copy": "Copie",
+      "paste": "Pâte",
+      "dupe": "Dupliquer",
+      "del": "Effacer"
+    },
+    "object": {
+      "title": "Objet",
+      "top": "Mettre au premier plan",
+      "up": "Avancer",
+      "down": "Reculer",
+      "bottom": "Envoyer à l'arrière",
+      "group": "Éléments du groupe",
+      "ungroup": "Dissocier Elements",
+      "topath": "Convertir en chemin",
+      "orient": "Réorienter chemin"
+    },
+    "view": {
+      "title": "Vue",
+      "rulers": "Voir Rulers",
+      "wireframe": "Voir Filaire",
+      "source": "Source",
+      "fitcanvas": "Toile Ajuster à la fenêtre",
+      "fitcontent": "Contenu Ajuster à la fenêtre"
+    }
+  },
+  "dialogs": {
+    "error": {
+      "save": "Il y avait une erreur d'écriture du fichier.\n\n Vérifiez vos droits ou le nom du fichier et essayez à nouveau.",
+      "transfer": "Nous sommes désolés, mais il semble que il ya certains éléments dans votre incompaitble SVG RoboPaint ne pouvait pas fixer automatiquement.\n\n Nous vous suggérons d'ouvrir le SVG dans Inkscape ou un autre éditeur de SVG, simplifier le document ou juste réenregistrer.\n\n Vous pouvez continuer et essayer d'imprimer, mais vous pouvez avoir des problèmes. Erreur donnée ci-dessous:"
+    },
+    "confirmquit": "Etes-vous sûr de vouloir quitter?\n Vos modifications de cette image ne seront pas enregistrées avant l'impression. Cliquez sur OK pour quitter."
+  },
+  "tools": {
+    "select": "Outil de sélection",
+    "pencil": "Outil Crayon",
+    "line": "Outil de ligne",
+    "rect": "Square / outil Rectangle",
+    "ellipse": "Ellipse outil Cercle /",
+    "path": "Outil Chemins",
+    "shapes": {
+      "basic": "De base",
+      "object": "Objets",
+      "arrow": "Arrows",
+      "flowchart": "Organigramme",
+      "game": "Cartes & Echecs",
+      "dialog": "Ballons de dialogue",
+      "symbol": "Symboles",
+      "nature": "Nature",
+      "music": "Musique",
+      "ui": "Interface utilisateur",
+      "weather": "Météo & Temps",
+      "social": "Web social"
+    },
+    "zoom": "Zoom Tool",
+    "eyedrop": "Pipette Outil",
+    "opacity": "Opacité",
+    "roundness": "Rondeur",
+    "fitcontent": "Ajuster le contenu",
+    "fitcontenttitle": "Auto Taille contenu pour se adapter Toile",
+    "rotation": "Rotation",
+    "rotate": "Rotation à gauche",
+    "rotatetitle": "Faire pivoter à gauche de 90 °",
+    "align": {
+      "title": "Aligner",
+      "left": "Aligner à gauche",
+      "center": "Centrer",
+      "right": "Aligner à droite",
+      "top": "Aligner en haut",
+      "middle": "Aligner au milieu",
+      "bottom": "Aligner en bas"
+    },
+    "paths": {
+      "segtype": "Type de segment",
+      "curve": "Courbe",
+      "add": "Ajouter un noeud",
+      "straight": "Tout Droit",
+      "open": "Ouvrir Chemin",
+      "delete": "Supprimer Node"
+    },
+    "stroke": {
+      "title": "Coup",
+      "width": "Largeur de l'AVC",
+      "dash": "Dash Stroke"
+    }
+  },
+  "buttons": {
+    "zoom": "Zoom au mieux",
+    "zoomtitle": "Zoom pour se adapter à la toile"
+  },
+  "panels": {
+    "global": "Mondial",
+    "path": "Chemin",
+    "editpath": "Modifier Chemin",
+    "ellipse": "Ellipse",
+    "rect": "Rectangle"
+  }
+}
