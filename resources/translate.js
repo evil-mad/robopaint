@@ -268,6 +268,13 @@ function translateMode() {
       console.error('Bad DOM location file:' + domFile, e);
     }
   } else { // Native i18n parsing! (much simpler)
+    // Quick fix for non-reactive re-translate for modes
+    $('[data-i18n]=""', $subwindow.contents()).each(function() {
+      var $node = $(this);
+      if ($node.text().indexOf('.') > -1 && $node.attr('data-i18n') == "") {
+        $node.attr('data-i18n', $node.text());
+      }
+    });
     $('[data-i18n]', $subwindow.contents()).i18n();
   }
 
