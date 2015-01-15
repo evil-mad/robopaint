@@ -16,7 +16,9 @@
     "auto": "Auto",
     "record": "Record",
     "debug": "Debug",
-    "park": "Park after fill/stroke"
+    "park": "Park after fill/stroke",
+    "full": "Full",
+    "dip": "Dip"
   },
   "tools": {
     "water1": "Water 1",

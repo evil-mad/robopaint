@@ -306,12 +306,12 @@ $(function() {
       var $t = $(this);
 
       $('<a>')
-        .text('Full')
+        .text(mt('labels.full'))
         .attr('title', mt('commands.full'))
         .addClass('sub-option full')
         .appendTo($t);
       $('<a>')
-        .text('Dip')
+        .text(mt('labels.dip'))
         .attr('title', mt('commands.dip'))
         .addClass('sub-option dip')
         .appendTo($t);
