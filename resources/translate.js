@@ -202,6 +202,9 @@ function updateLang() {
 
   getColorsets(); // Reload and reparse colorsets
 
+  // Translate the mode if we're not on home
+  if (appMode !== 'home') translateMode();
+
   // Apply bolding to details text
   $('aside').each(function(){
     $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));
