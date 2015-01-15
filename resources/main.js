@@ -713,6 +713,7 @@ function loadAllModes(){
         $('<a>')
           .attr('href', m.main)
           .attr('id', m.name)
+          .attr('data-i18n', '[title]' + i18nStr + 'description;' + i18nStr + 'word')
           .attr('title', robopaint.t(i18nStr + 'description'))
           .css('display', (m.core ? 'block' : 'none'))
           .text(robopaint.t(i18nStr + 'word'))

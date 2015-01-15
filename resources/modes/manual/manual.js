@@ -308,11 +308,13 @@ $(function() {
       $('<a>')
         .text(mt('labels.full'))
         .attr('title', mt('commands.full'))
+        .attr('data-i18n', '[title]modes.manual.commands.full;modes.manual.labels.full')
         .addClass('sub-option full')
         .appendTo($t);
       $('<a>')
         .text(mt('labels.dip'))
         .attr('title', mt('commands.dip'))
+        .attr('data-i18n', '[title]modes.manual.commands.dip;modes.manual.labels.dip')
         .addClass('sub-option dip')
         .appendTo($t);
     });
