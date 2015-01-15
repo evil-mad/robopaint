@@ -186,7 +186,7 @@ $(function() {
   // Initial server connection handler
   function serverConnect() {
     // Get initial pen data from server
-    if (cncserver.wcb) cncserver.wcb.status('Connecting to bot...');
+    if (cncserver.wcb) cncserver.wcb.status(robopaint.t('modes.print.status.connecting'));
 
     // Ensure bot is cleared and ready to receive commands at startup
     robopaint.cncserver.api.buffer.clear();
@@ -198,7 +198,7 @@ $(function() {
     });
 
     robopaint.cncserver.api.pen.stat(function(d){
-      if (cncserver.wcb) cncserver.wcb.status(['Connected Successfully!'], d);
+      if (cncserver.wcb) cncserver.wcb.status([robopaint.t('modes.print.status.connected')], d);
       cncserver.state.pen.state = 1; // Assume down
       robopaint.cncserver.api.pen.up(); // Send to put up
       cncserver.state.pen.state = 0; // Assume it's up (doesn't return til later)
