@@ -3,7 +3,7 @@
     "creator": "docprofsky from Google Translate",
     "target": "zh-CN",
     "langname": "简体字",
-    "release": "0.9.2"
+    "release": "0.9.3"
   },
   "common": {
     "pause": "暂停",
@@ -20,6 +20,45 @@
     },
     "imperial": {
       "in": "在"
+    },
+    "substrate": "白色/纸",
+    "water": "水",
+    "transparent": "透明",
+    "implement": {
+      "brush": "刷",
+      "pen": "笔"
+    },
+    "action": {
+      "park": "公园首页",
+      "disable": "解锁汽车",
+      "parktitle": "移动托架回到起始位置。",
+      "pause": "暂停",
+      "resume": "简历",
+      "stop": "停止",
+      "disabletitle": "提高和解锁步进电机，这样就可以用手移动马车。",
+      "start": "开始",
+      "save": "保存",
+      "print": "打印",
+      "apply": "申请",
+      "cancel": "取消",
+      "done": "DONE",
+      "canceltitle": "取消当前的打印作业。",
+      "autocolor": "自动色彩",
+      "autocolortitle": "挑选最匹配的图形中现有的颜色。再次点击撤消。",
+      "brush": {
+        "raise": "提高刷",
+        "lower": "刷下",
+        "wash": "洗脸刷牙"
+      },
+      "pen": {
+        "raise": "募集笔",
+        "lower": "较低的笔"
+      }
+    },
+    "labels": {
+      "control": "控制",
+      "status": "状态",
+      "progress": "目前的进展"
     }
   },
   "status": {
@@ -244,5 +283,23 @@
         "detail": "取消选中此连接到其他设备中RoboPaint的CNCServer API。 **变化需要应用程序重新启动。**"
       }
     }
+  },
+  "libs": {
+    "problem": "连接问题☹",
+    "sub": "绘制子路径__num__",
+    "ignorewash": "忽略绘制模式__mode__充分洗涤指令",
+    "ignorewater": "水忽视绘制模式__mode__",
+    "inking": "把一些__media__上刷...",
+    "washing": "做一个完整的刷洗...",
+    "washed": "刷子要干净",
+    "ignorepaint": "油漆忽略绘制模式__mode__",
+    "inked": "现在有__media__上刷",
+    "reinkingdry": "会得到一些更__media__，没有水...",
+    "reinking": "会得到一些更多的__media __...",
+    "reinked": "继续涂刷__media__",
+    "autoinit": "自动喷漆：__pathNum__路径，__jobsNum__工作“",
+    "autofill": "填充路径__id __...",
+    "autostroke": "抚摸路径__id __...",
+    "autocomplete": "自动喷漆完成！"
   }
 }

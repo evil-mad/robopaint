@@ -3,7 +3,7 @@
     "creator": "R10 avec l’aide de Sofia",
     "target": "fr",
     "langname": "Français",
-    "release": "0.9.2"
+    "release": "0.9.3"
   },
   "common": {
     "pause": "Pause",
@@ -20,6 +20,45 @@
     },
     "imperial": {
       "in": "in"
+    },
+    "transparent": "Transparent",
+    "implement": {
+      "brush": "Brosse",
+      "pen": "Stylo"
+    },
+    "substrate": "Blanc / Livre",
+    "water": "Eau",
+    "action": {
+      "park": "Park Accueil",
+      "disable": "Débloquez Motors",
+      "parktitle": "Déplacez le chariot vers la position de la maison.",
+      "disabletitle": "Soulever et débloquer moteurs pas à pas afin que vous pouvez déplacer le chariot à la main.",
+      "pause": "Pause",
+      "stop": "Arrêtez",
+      "resume": "Cv",
+      "start": "Début",
+      "save": "Enregistrer",
+      "apply": "Appliquer",
+      "print": "Imprimer",
+      "cancel": "Annuler",
+      "done": "Fini",
+      "canceltitle": "Annuler actuel travail d'impression.",
+      "autocolortitle": "Choisissez le match le plus proche pour les couleurs existantes dans le dessin. Cliquez à nouveau pour le défaire.",
+      "autocolor": "Couleur Auto",
+      "brush": {
+        "lower": "Basse Brosse",
+        "wash": "Brosse de lavage",
+        "raise": "Levez Brush"
+      },
+      "pen": {
+        "lower": "Basse Pen",
+        "raise": "Levez Pen"
+      }
+    },
+    "labels": {
+      "control": "Contrôle",
+      "status": "Statut",
+      "progress": "Les progrès actuels"
     }
   },
   "status": {
@@ -77,11 +116,9 @@
     }
   },
   "settings": {
-
     "lang": {
       "title": "Sélectionner la langue:"
     },
-
     "tabs": {
       "output": "Style de Peinture",
       "common": "Standard",
@@ -246,6 +283,23 @@
         "detail": "Décochez cette option pour connecter d'autres appareils au serveur CNC de RoboPaint. ** nota bene: le changement exige un redémarrage.**"
       }
     }
-
+  },
+  "libs": {
+    "sub": "Dessin sous-chemin __num__",
+    "ignorewash": "La pleine commande de lavage ignoré pour le mode de tirage __mode__",
+    "problem": "Problème de connexion ☹",
+    "washed": "Brosse doit être propre",
+    "ignorewater": "Eau ignoré pour le mode de tirage __mode__",
+    "ignorepaint": "Peinture ignoré pour le mode de tirage __mode__",
+    "washing": "Faire un lavage de brosse pleine ...",
+    "inking": "Mettre un peu __media__ sur la brosse ...",
+    "reinking": "Aller chercher un peu plus __media __...",
+    "inked": "Il est maintenant __media__ sur la brosse",
+    "reinked": "Continuer à peindre avec __media__",
+    "reinkingdry": "Aller à obtenir un peu plus __media__, pas d'eau ...",
+    "autoinit": "Peinture automatique: chemins de __pathNum__, __jobsNum__ emplois »",
+    "autofill": "Chemin de remplissage __id __...",
+    "autostroke": "Chemin caressant __id __...",
+    "autocomplete": "Peinture automatique complet!"
   }
 }

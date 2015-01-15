@@ -3,7 +3,7 @@
     "creator": "techninja/google",
     "target": "es",
     "langname": "Español",
-    "release": "0.9.2"
+    "release": "0.9.3"
   },
   "common": {
     "pause": "Pausa",
@@ -20,7 +20,46 @@
     },
     "imperial": {
       "in": "pulg"
-    }
+    },
+    "labels": {
+      "status": "Estado",
+      "control": "Control",
+      "progress": "Los avances actuales"
+    },
+    "action": {
+      "pen": {
+        "lower": "Bajo la pluma",
+        "raise": "Levante Pen"
+      },
+      "brush": {
+        "wash": "Cepillo de lavar",
+        "lower": "Bajo Cepillo",
+        "raise": "Levante Brush"
+      },
+      "autocolortitle": "Escoja la coincidencia más cercana para los colores existentes en el dibujo. Haga clic de nuevo para deshacer.",
+      "autocolor": "Color automático",
+      "done": "Hecho",
+      "apply": "Aplicar",
+      "print": "Impresión",
+      "save": "Guardar",
+      "start": "Comienzo",
+      "stop": "Deténgase",
+      "resume": "Currículum",
+      "disabletitle": "Levante y desbloquear motores paso a paso para que pueda mover el carro con la mano.",
+      "disable": "Desbloquear Motors",
+      "parktitle": "Mueva el carro de regreso a la posición inicial.",
+      "park": "Park Inicio",
+      "canceltitle": "Cancelar trabajo de impresión actual.",
+      "pause": "Pausa",
+      "cancel": "Cancelar"
+    },
+    "implement": {
+      "pen": "Pluma",
+      "brush": "Cepillo"
+    },
+    "water": "Agua",
+    "substrate": "Blanco / Papel",
+    "transparent": "Transparente"
   },
   "status": {
     "start": "Puesta en marcha...",
@@ -244,5 +283,23 @@
         "detail": "Desactive esta para conectarse al servidor IPA CNC en RoboPaint de otros dispositivos. **El cambio requiere reiniciar la aplicación.**"
       }
     }
+  },
+  "libs": {
+    "autocomplete": "Pintura automática completa!",
+    "autostroke": "Camino Acariciando __id __...",
+    "reinking": "El ir a conseguir más __media __...",
+    "inked": "Ahora hay __media__ en el cepillo",
+    "inking": "Poner un poco de __media__ en el cepillo ...",
+    "washed": "Cepillo debe estar limpio",
+    "ignorepaint": "La pintura ignorado para el modo de sorteo __mode__",
+    "ignorewater": "Agua ignorado para el modo de sorteo __mode__",
+    "ignorewash": "Comando de lavado completo ignorado para el modo de sorteo __mode__",
+    "problem": "Problema de conexión ☹",
+    "sub": "Dibujo subtrayecto __num__",
+    "reinkingdry": "El ir a conseguir un poco más __media__, no hay agua ...",
+    "autoinit": "Pintura automática: caminos __pathNum__, __jobsNum__ empleos '",
+    "washing": "Hacer un lavado cepillo completo ...",
+    "reinked": "Continuando a pintar con __media__",
+    "autofill": "Camino Llenado __id __..."
   }
 }

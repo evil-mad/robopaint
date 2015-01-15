@@ -3,7 +3,7 @@
     "creator": "docprofsky from Google Translate",
     "target": "de",
     "langname": "Deutsch",
-    "release": "0.9.2"
+    "release": "0.9.3"
   },
   "common": {
     "pause": "Pause",
@@ -20,6 +20,45 @@
     },
     "imperial": {
       "in": "in"
+    },
+    "substrate": "Weiß / Papier",
+    "transparent": "Transparent",
+    "water": "Wasser",
+    "implement": {
+      "brush": "Bürste",
+      "pen": "Stift"
+    },
+    "action": {
+      "disable": "Entsperren Motors",
+      "park": "Park Startseite",
+      "parktitle": "Bewegen Sie den Schlitten wieder in die Ausgangsposition.",
+      "disabletitle": "Heben Sie und entsperren Schrittmotoren, so dass Sie den Wagen mit der Hand bewegen.",
+      "pause": "Pause",
+      "resume": "Lebenslauf",
+      "stop": "Stopp",
+      "save": "Speichern",
+      "start": "Start",
+      "print": "Drucken",
+      "cancel": "Stornieren",
+      "canceltitle": "Druckauftrag abbrechen.",
+      "done": "Gemacht",
+      "autocolor": "Auto-Farbe",
+      "apply": "Anwenden",
+      "autocolortitle": "Wählen Sie die beste Übereinstimmung für die bestehenden Farben in der Zeichnung. Klicken Sie erneut, um rückgängig zu machen.",
+      "brush": {
+        "lower": "Nieder Pinsel",
+        "raise": "Heben Sie Pinsel",
+        "wash": "Waschbürste"
+      },
+      "pen": {
+        "raise": "Heben Pen",
+        "lower": "Lower Pen"
+      }
+    },
+    "labels": {
+      "control": "Steuerung",
+      "status": "Status",
+      "progress": "Aktuelle Fortschritte"
     }
   },
   "status": {
@@ -244,5 +283,23 @@
         "detail": "Deaktivieren Sie diese Option, um die CNCServer API in RoboPaint von anderen Geräten zu verbinden. ** Veränderung erfordert App Neustart. **"
       }
     }
+  },
+  "libs": {
+    "sub": "Zeichnung Unterpfad __num__",
+    "problem": "Anschluss Problem ☹",
+    "ignorewash": "Vollwaschbefehl für Zeichenmodus __mode__ ignoriert",
+    "washed": "Pinsel sollte sauber sein",
+    "ignorewater": "Wasser für Zeichenmodus __mode__ ignoriert",
+    "ignorepaint": "Farbe für Zeichenmodus __mode__ ignoriert",
+    "washing": "Doing eine komplette Bürstenwäsche ...",
+    "inking": "Setzen einige __media__ auf die Bürste ...",
+    "reinking": "Werde ein paar mehr __media bekommen __...",
+    "inked": "Es ist jetzt __media__ am Bürsten",
+    "reinkingdry": "Möchten Sie etwas mehr __media__, kein Wasser zu bekommen ...",
+    "autoinit": "Automatische Paint: __pathNum__ Wege, __jobsNum__ Arbeitsplätze \"",
+    "autofill": "Füllen Weg __id __...",
+    "reinked": "Die weitere Zusammenarbeit mit __media__ malen",
+    "autostroke": "Streicheln Weg __id __...",
+    "autocomplete": "Automatische Farb Complete!"
   }
 }

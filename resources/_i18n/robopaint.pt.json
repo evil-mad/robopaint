@@ -3,7 +3,7 @@
     "creator": "docprofsky from Google Translate",
     "target": "pt",
     "langname": "português",
-    "release": "0.9.2"
+    "release": "0.9.3"
   },
   "common": {
     "pause": "Pausa",
@@ -20,6 +20,45 @@
     },
     "imperial": {
       "in": "em"
+    },
+    "transparent": "Transparente",
+    "substrate": "Branco / Papel",
+    "water": "Água",
+    "implement": {
+      "brush": "Escova",
+      "pen": "Caneta"
+    },
+    "action": {
+      "park": "Park Home",
+      "parktitle": "Mova o carro de volta para a posição inicial.",
+      "disable": "Desbloquear Motors",
+      "pause": "Pausa",
+      "disabletitle": "Levantar e destravar motores de passo para que você possa mover o carro com a mão.",
+      "resume": "Currículo",
+      "stop": "Pare",
+      "start": "Começo",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "print": "Impressão",
+      "canceltitle": "Cancelar trabalho de impressão atual.",
+      "apply": "Aplicar",
+      "done": "Feito",
+      "autocolor": "Auto Color",
+      "brush": {
+        "raise": "Levante Escova",
+        "lower": "Lower Escova",
+        "wash": "Escova da lavagem"
+      },
+      "autocolortitle": "Escolha a correspondência mais próxima para as cores existentes no desenho. Clique novamente para desfazer.",
+      "pen": {
+        "raise": "Levante Pen",
+        "lower": "Lower Pen"
+      }
+    },
+    "labels": {
+      "control": "Controle",
+      "status": "Estado",
+      "progress": "O progresso atual"
     }
   },
   "status": {
@@ -244,5 +283,23 @@
         "detail": "Desmarque essa para se conectar à API CNCServer em RoboPaint de outros dispositivos. ** Mudança requer reinicialização App. **"
       }
     }
+  },
+  "libs": {
+    "sub": "Desenho sub-caminho __num__",
+    "problem": "Connection Problem ☹",
+    "ignorewash": "Comando lavagem completa ignorado para o modo de tração __mode__",
+    "ignorepaint": "Pinte ignorado para o modo de tração __mode__",
+    "ignorewater": "Água ignorado para o modo de tração __mode__",
+    "washing": "Fazendo uma lavagem escova cheia ...",
+    "inking": "Colocando alguns __media__ na escova ...",
+    "washed": "Escova deve ser limpo",
+    "inked": "Existe agora __media__ na escova",
+    "reinking": "Vai ficar mais alguns __media __...",
+    "reinkingdry": "Vai ficar mais alguns __media__, sem água ...",
+    "reinked": "Continuando a pintar com __media__",
+    "autoinit": "Pintura Automática: caminhos __pathNum__, __jobsNum__ empregos '",
+    "autofill": "Enchendo caminho __id __...",
+    "autostroke": "Acariciando caminho __id __...",
+    "autocomplete": "Pintura automática Complete!"
   }
 }
