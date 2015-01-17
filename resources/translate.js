@@ -16,7 +16,7 @@ function translatePage() {
   // Get all available language JSON files from folders, add to the dropdown
   // list, and add to the rescources available.
   var i = 0;
-  var i18nPath = 'resources/i18n/';
+  var i18nPath = 'resources/_i18n/';
   fs.readdirSync(i18nPath).forEach(function(file) {
     // Get contents of the language file.
     try {
@@ -35,6 +35,8 @@ function translatePage() {
       resources[data['_meta'].target] = { translation: data};
       //Create empty colorset key
       resources[data['_meta'].target].translation['colorsets'] = {};
+      //Create empty modes key
+      resources[data['_meta'].target].translation['modes'] = {};
 
       i += 1;
     } catch(e) {
@@ -46,9 +48,9 @@ function translatePage() {
   // Parsing for colorset translation strings.
   try {
     // Iterate over global colorset i18n directory.
-    fs.readdirSync('resources/colorsets/i18n').forEach(function(file) {
+    fs.readdirSync('resources/colorsets/_i18n').forEach(function(file) {
       // Add each translation file to the global translate array.
-      var data = JSON.parse(fs.readFileSync('resources/colorsets/i18n/' + file , 'utf8'));
+      var data = JSON.parse(fs.readFileSync('resources/colorsets/_i18n/' + file , 'utf8'));
       resources[data['_meta'].target].translation['colorsets'] = data;
     });
   }catch(e) {
@@ -61,10 +63,10 @@ function translatePage() {
     try {
       // Ignore files that have extentions (we only want directories).
       // Ignore the 'i18n' directory (it is not a colorset!).
-      if (folder.indexOf(".") == -1 && !(folder == "i18n")) {
+      if (folder.indexOf(".") == -1 && folder !== "_i18n") {
        // Create a full path to the directory containing this colorset's i18n
        // files.
-        var fullPath = 'resources/colorsets/' + folder + '/i18n/';
+        var fullPath = 'resources/colorsets/' + folder + '/_i18n/';
 
         //  Iterate over language files in colorset's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {
@@ -76,6 +78,26 @@ function translatePage() {
   } catch(e) {
     // Catch and report errors to the console
     console.error('Bad or missing Colorset translation file for: ' + folder, e); }
+  });
+
+  // Load all mode translation files
+  fs.readdirSync('resources/modes/').forEach(function(folder) {
+    try {
+      // Ignore files that have extentions (we only want directories).
+      if (folder.indexOf(".") == -1) {
+        var fullPath = 'resources/modes/' + folder + '/_i18n/';
+        //  Iterate over language files in mode's i18n folder
+        fs.readdirSync(fullPath).forEach(function(file) {
+          if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
+            //  Add the data to the global i18n translation array
+            var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
+            resources[data['_meta'].target].translation['modes'][folder] = data;
+          }
+        });
+       }
+  } catch(e) {
+    // Catch and report errors to the console
+    console.error('Bad or missing Mode translation file for: ' + folder, e); }
   });
 
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
@@ -180,6 +202,9 @@ function updateLang() {
 
   getColorsets(); // Reload and reparse colorsets
 
+  // Translate the mode if we're not on home
+  if (appMode !== 'home') translateMode();
+
   // Apply bolding to details text
   $('aside').each(function(){
     $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));
@@ -187,3 +212,70 @@ function updateLang() {
 }
 
 
+/**
+ * Contains specific code to translating the 'Edit' mode, as the majority of that
+ * mode is method-draw, which is not made by us.
+ */
+function translateMode() {
+  var mode = robopaint.modes[appMode];
+
+  // DOM Map or native parsing?
+  if (mode.i18n == 'dom') {
+    var domFile = 'resources/' + mode.root + '_i18n/' + mode.name + '.map.json';
+    try {
+      var mappings = JSON.parse(fs.readFileSync(domFile , 'utf8'))['map'];
+      for (var selector in mappings) {
+        var $elements = $(selector, $subwindow.contents());
+
+        if ($elements.length === 0) {
+          console.debug("TranslationDOM Map selector not found:", selector);
+        }
+
+        // When creating DOM map and i18n for non-native modes, it helps to know
+        // which ones are done, and which aren't!
+        var debugExtra = ""; //"XXX";
+
+        // Replace text or specific attributes?
+        var i18nKey = mappings[selector];
+        if (typeof i18nKey === 'string') {
+          // Can't use .text() as it will replace child nodes!
+          $elements.each(function(){ // Just in case we select multiple elements.
+            $(this)
+              .contents()
+              .filter(function(){ return this.nodeType == 3; })
+              .first()
+              .replaceWith(robopaint.t(i18nKey) + debugExtra);
+          });
+        } else if (typeof i18nKey === 'object') {
+          for (var attr in i18nKey) {
+            $elements.each(function(){ // Just in case we select multiple elements.
+              if (attr === 'text') {
+                $(this)
+                  .contents()
+                  .filter(function(){ return this.nodeType == 3; })
+                  .first()
+                  .replaceWith(robopaint.t(i18nKey.text) + debugExtra);
+              } else {
+                $(this).attr(attr, robopaint.t(i18nKey[attr]) + debugExtra);
+              }
+            });
+          }
+        }
+
+     }
+
+    } catch(e) {
+      console.error('Bad DOM location file:' + domFile, e);
+    }
+  } else { // Native i18n parsing! (much simpler)
+    // Quick fix for non-reactive re-translate for modes
+    $('[data-i18n]=""', $subwindow.contents()).each(function() {
+      var $node = $(this);
+      if ($node.text().indexOf('.') > -1 && $node.attr('data-i18n') == "") {
+        $node.attr('data-i18n', $node.text());
+      }
+    });
+    $('[data-i18n]', $subwindow.contents()).i18n();
+  }
+
+}

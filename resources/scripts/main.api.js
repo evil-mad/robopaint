@@ -372,7 +372,7 @@ function setRemotePrintWindow(tryOpen, force) {
   if (toggle) {
     // Reset inputs
     $('#remoteprint-window progress').val(0);
-    $('#remoteprint-window button#pause').prop('disabled', true).text(robopaint.t('common.pause'));
+    $('#remoteprint-window button#pause').prop('disabled', true).text(robopaint.t('common.action.pause'));
     $('#remoteprint-window #statusmessage').text(robopaint.t('remoteprint.api.wait'));
 
     $('#remoteprint-window').fadeIn('slow');

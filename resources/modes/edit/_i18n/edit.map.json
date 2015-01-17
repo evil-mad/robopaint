@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "release": "0.9.5",
+    "basetype": "DOMmap"
+  },
+  "map": {
+    "#tool_select": {"title": "modes.edit.tools.select"},
+    "#tool_fhpath": {"title": "modes.edit.tools.pencil"},
+    "#tool_line": {"title": "modes.edit.tools.line"},
+    "#tool_rect": {"title": "modes.edit.tools.rect"},
+    "#tool_ellipse": {"title": "modes.edit.tools.ellipse"},
+    "#tool_path": {"title": "modes.edit.tools.path"},
+    "#tool_zoom": {"title": "modes.edit.tools.zoom"},
+    "#tools_shapelib_show": {"title": "modes.edit.tools.shapes"},
+    "#tool_eyedropper": {"title": "modes.edit.tools.eyedrop"},
+
+    ".menu_title:eq(1)": "modes.edit.menu.file.title",
+    "#tool_clear": "modes.edit.menu.file.new",
+    "#tool_open": "modes.edit.menu.file.open",
+    "#tool_import": "modes.edit.menu.file.import",
+    "#tool_save": "modes.edit.menu.file.save",
+
+    ".menu_title:eq(2)": "modes.edit.menu.edit.title",
+    "#tool_undo": "modes.edit.menu.edit.undo",
+    "#tool_redo": "modes.edit.menu.edit.redo",
+    "#tool_cut, #cmenu_canvas a[href='#cut']": "modes.edit.menu.edit.cut",
+    "#tool_copy, #cmenu_canvas a[href='#copy']": "modes.edit.menu.edit.copy",
+    "#tool_paste, #cmenu_canvas a[href='#paste']": "modes.edit.menu.edit.paste",
+    "#tool_clone": "modes.edit.menu.edit.dupe",
+    "#tool_delete, #cmenu_canvas a[href='#delete']": "modes.edit.menu.edit.del",
+
+    ".menu_title:eq(3)": "modes.edit.menu.object.title",
+    "#tool_move_top, #cmenu_canvas a[href='#move_front']": "modes.edit.menu.object.top",
+    "#tool_move_up, #cmenu_canvas a[href='#move_up']": "modes.edit.menu.object.up",
+    "#tool_move_down, #cmenu_canvas a[href='#move_down']": "modes.edit.menu.object.down",
+    "#tool_move_bottom, #cmenu_canvas a[href='#move_back']": "modes.edit.menu.object.bottom",
+    "#tool_group, #cmenu_canvas a[href='#group']": "modes.edit.menu.object.group",
+    "#tool_ungroup, #cmenu_canvas a[href='#ungroup']": "modes.edit.menu.object.ungroup",
+    "#tool_topath": "modes.edit.menu.object.topath",
+    "#tool_reorient": "modes.edit.menu.object.orient",
+
+    ".menu_title:eq(4)": "modes.edit.menu.view.title",
+    "#tool_rulers": "modes.edit.menu.view.rulers",
+    "#tool_wireframe": "modes.edit.menu.view.wireframe",
+    "#tool_snap": "modes.edit.menu.view.snap",
+    "#tool_source": "modes.edit.menu.view.source",
+
+    "#align_tools h4": "modes.edit.tools.align.title",
+    "#tool_posleft": {"title": "modes.edit.tools.align.left"},
+    "#tool_poscenter": {"title": "modes.edit.tools.align.center"},
+    "#tool_posright": {"title": "modes.edit.tools.align.right"},
+    "#tool_postop": {"title": "modes.edit.tools.align.top"},
+    "#tool_posmiddle": {"title": "modes.edit.tools.align.middle"},
+    "#tool_posbottom": {"title": "modes.edit.tools.align.bottom"},
+
+    "#tool_angle span": "modes.edit.tools.rotation",
+
+    "#stroke_panel h4": "modes.edit.tools.stroke.title",
+    "#stroke_panel div.toolset span": "modes.edit.tools.stroke.width",
+    "#stroke_panel .stroke_tool span": "modes.edit.tools.stroke.dash",
+
+    "#shape_cats div[data-cat='basic']": "modes.edit.tools.shapes.basic",
+    "#shape_cats div[data-cat='object']": "modes.edit.tools.shapes.object",
+    "#shape_cats div[data-cat='symbol']": "modes.edit.tools.shapes.symbol",
+    "#shape_cats div[data-cat='arrow']": "modes.edit.tools.shapes.arrow",
+    "#shape_cats div[data-cat='flowchart']": "modes.edit.tools.shapes.flowchart",
+    "#shape_cats div[data-cat='nature']": "modes.edit.tools.shapes.nature",
+    "#shape_cats div[data-cat='game']": "modes.edit.tools.shapes.game",
+    "#shape_cats div[data-cat='dialog_balloon']": "modes.edit.tools.shapes.dialog",
+    "#shape_cats div[data-cat='music']": "modes.edit.tools.shapes.music",
+    "#shape_cats div[data-cat='weather']": "modes.edit.tools.shapes.weather",
+    "#shape_cats div[data-cat='ui']": "modes.edit.tools.shapes.ui",
+    "#shape_cats div[data-cat='social']": "modes.edit.tools.shapes.social",
+
+    "#tool_source_save": "common.action.apply",
+    "#tool_source_cancel": "common.action.cancel",
+
+    "#rect_panel h4": "modes.edit.panels.rect",
+    "#path_panel h4": "modes.edit.panels.path",
+    "#path_node_panel h4": "modes.edit.panels.editpath",
+    "#ellipse_panel h4": "modes.edit.panels.ellipse",
+
+    "#straight_segments": "modes.edit.tools.paths.straight",
+    "#tool_node_clone": "modes.edit.tools.paths.add",
+    "#tool_node_delete": "modes.edit.tools.paths.delete",
+    "#tool_openclose_path": "modes.edit.tools.paths.open",
+    "#curve_segments": "modes.edit.tools.paths.curve",
+    "#seg_type_label": "modes.edit.tools.paths.straight",
+    "#segment_type span": "modes.edit.tools.paths.segtype",
+
+    "#tool_opacity span": "modes.edit.tools.opacity",
+    "#cornerRadiusLabel span": "modes.edit.tools.roundness"
+
+  }
+}

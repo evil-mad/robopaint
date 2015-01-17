@@ -18,7 +18,7 @@ cncserver.wcb = {
       // If it's an array, flop the message based on the status var
 
       // If there's not a second error message, default it.
-      if (msg.length == 1) msg.push('Connection Problem &#x2639;');
+      if (msg.length == 1) msg.push(robopaint.t('libs.problem'));
 
       $status.html((st == false) ? msg[1] : msg[0]);
     }
@@ -43,17 +43,21 @@ cncserver.wcb = {
     switch(parseInt(robopaint.settings.penmode)) {
       case 3:
       case 2: // Dissallow water
-        cncserver.wcb.status('Full wash command ignored for draw mode ' + robopaint.settings.penmode);
+        cncserver.wcb.status(
+          robopaint.t('libs.ignorewash', {mode:
+            robopaint.t('settings.output.penmode.opt' + robopaint.settings.penmode)
+          })
+        );
         if (callback) callback(true);
         break;
       default:
         cncserver.cmd.run([
-          ['status', 'Doing a full brush wash...'],
+          ['status', robopaint.t('libs.washing')],
           'resetdistance',
           ['tool', 'water0' + toolExt],
           ['tool', 'water1' + toolExt],
           ['tool', 'water2' + toolExt],
-          ['status', 'Brush should be clean'],
+          ['status', robopaint.t('libs.washed')],
         ], fromSendBuffer);
         /**
          * The 'fromSendBuffer' at the end here will run this set of commands
@@ -79,7 +83,7 @@ cncserver.wcb = {
     if (typeof toolName != 'string') toolName = cncserver.state.media;
 
     if (toolName.indexOf('water') !== -1) {
-      return "Water";
+      return robopaint.t('common.water');
     } else {
       return cncserver.config.colors[toolName.substr(5, 1)].name;
     }
@@ -95,7 +99,11 @@ cncserver.wcb = {
       switch(mode) {
         case 3: // Dissallow all
         case 2: // Dissallow water
-          cncserver.wcb.status('Water ignored for draw mode ' + mode);
+          cncserver.wcb.status(
+            robopaint.t('libs.ignorewater', {mode:
+              robopaint.t('settings.output.penmode.opt' + mode)
+            })
+          );
           if (callback) callback(true);
           return;
       }
@@ -103,7 +111,11 @@ cncserver.wcb = {
       switch(mode) {
         case 3: // Dissallow all
         case 1: // Dissallow paint
-          cncserver.wcb.status('Paint ignored for draw mode ' + mode);
+          cncserver.wcb.status(
+            robopaint.t('libs.ignorepaint', {mode:
+              robopaint.t('settings.output.penmode.opt' + mode)
+            })
+          );
           if (callback) callback(true);
           return;
       }
@@ -120,10 +132,10 @@ cncserver.wcb = {
     $('nav#tools #' + idName).addClass('selected');
 
     cncserver.cmd.run([
-      ['status', 'Putting some ' + name + ' on the brush...'],
+      ['status', robopaint.t('libs.inking', {media: name})],
       'resetdistance',
       ['tool', toolName],
-      ['status', 'There is now ' + name + ' on the brush']
+      ['status', robopaint.t('libs.inked', {media: name})]
     ], fromSendBuffer);
 
     if (callback) callback();
@@ -178,13 +190,14 @@ cncserver.wcb = {
     // Change what happens here depending on penmode
     switch(parseInt(robopaint.settings.penmode)) {
       case 1: // Dissallow paint
+        // TODO: Does this output the wrong target name if disallowed?
         cncserver.cmd.run([
-          ['status', 'Going to get some more water...'],
+          ['status', robopaint.t('libs.reinking', {media: name})],
           'resetdistance',
           ['media', 'water0'],
           'up',
           ['move', point],
-          ['status', 'Continuing to paint with water'],
+          ['status', robopaint.t('libs.reinked', {media: name})],
           'down'
         ], true); // Add to the start (not the end) of the local buffer
         if (callback) callback();
@@ -192,12 +205,12 @@ cncserver.wcb = {
         break;
       case 2: // Dissallow water
         cncserver.cmd.run([
-          ['status', 'Going to get some more ' + name + ', no water...'],
+          ['status', robopaint.t('libs.reinkingdry', {media: name})],
           'resetdistance',
           ['media', cncserver.state.mediaTarget],
           'up',
           ['move', point],
-          ['status', 'Continuing to paint with ' + name],
+          ['status', robopaint.t('libs.reinked', {media: name})],
           'down'
         ], true); // Add to the start (not the end) of the local buffer
 
@@ -210,13 +223,13 @@ cncserver.wcb = {
         break;
       default:
         cncserver.cmd.run([
-          ['status', 'Going to get some more ' + name + '...'],
+          ['status', robopaint.t('libs.reinking', {media: name})],
           'resetdistance',
           ['media', 'water0dip'],
           ['media', cncserver.state.mediaTarget],
           'up',
           ['move', point],
-          ['status', 'Continuing to paint with ' + name],
+          ['status', robopaint.t('libs.reinked', {media: name})],
           'down'
         ], true); // Add to the start (not the end) of the local buffer
 
@@ -327,9 +340,11 @@ cncserver.wcb = {
       }
     });
 
-    cncserver.wcb.status('Auto Paint: ' +
-      $('path', context).length + ' paths, ' +
-      finalJobs.length + ' jobs');
+    // Send out the initialization status message.
+    cncserver.wcb.status(robopaint.t('libs.autoinit', {
+      pathNum: $('path', context).length,
+      jobsNum: finalJobs.length
+    }));
 
     // Nothing manages color during automated runs, so you have to hang on to it.
     // Though we don't actually give it a default value, this ensures we get a
@@ -360,14 +375,14 @@ cncserver.wcb = {
 
           if (job.t == 'stroke'){
             job.p.addClass('selected');
-            run('status', 'Drawing path ' + job.p[0].id + ' stroke...');
+            run('status', robopaint.t('libs.autostroke', {id: job.p[0].id}));
             cncserver.paths.runOutline(job.p, function(){
               jobIndex++;
               job.p.removeClass('selected'); // Deselect now that we're done
               cncserver.cmd.sendComplete(doNextJob);
             })
           } else if (job.t == 'fill') {
-            run('status', 'Drawing path ' + job.p[0].id + ' fill...');
+            run('status', robopaint.t('libs.autofill', {id: job.p[0].id}));
 
             cncserver.paths.runFill(job.p, function(){
               jobIndex++;
@@ -380,7 +395,7 @@ cncserver.wcb = {
         cncserver.cmd.sendComplete(function(){
           run([
             'park',
-            ['status', 'AutoPaint Complete!'],
+            ['status', robopaint.t('libs.autocomplete')],
             ['callbackname', 'autopaintcomplete']
           ]);
         });

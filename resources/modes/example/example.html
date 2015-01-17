@@ -10,37 +10,37 @@
 
 <fieldset id="control">
   <fieldset>
-    <legend>Text Renderer</legend>
+    <legend data-i18n>modes.example.labels.title</legend>
     <nav>
-      <input id="fonttext" type="text" value="Hello World!">
+      <input id="fonttext" type="text" data-i18n="[value]modes.example.labels.text">
       <select id="fontselect"></select>
       <div>
-        <label for="charwidth">Char spacing:</label>
+        <label for="charwidth" data-i18n>modes.example.labels.spacing</label>
         <input type="range" id="charwidth" min="1" value="8" max="30"/>
       </div>
       <div>
-        <label for="scale">Scale:</label>
+        <label for="scale" data-i18n>modes.example.labels.scale</label>
         <input type="range" id="scale" min="50" value="500" max="1000"/>
       </div>
       <div>
-        <label for="hcenter">H Center:</label>
+        <label for="hcenter" data-i18n>modes.example.labels.hcent</label>
         <input type="range" id="hcenter" min="10" value="208" max="1152"/>
       </div>
       <div>
-        <label for="vcenter">V Center:</label>
+        <label for="vcenter" data-i18n>modes.example.labels.vcent</label>
         <input type="range" id="vcenter" min="10" value="185" max="1152"/>
       </div>
       <div>
-        <label for="wrap">Wrap Width:</label>
+        <label for="wrap" data-i18n>modes.example.labels.wrap</label>
         <input type="range" id="wrap" min="1" value="70" max="1152"/>
       </div>
     </nav>
   </fieldset>
 
   <fieldset id="buttons">
-    <legend>Control</legend>
-    <button id="save" class="normal" title="Click to save this as the current drawing.">Save</button>
-    <button id="print" class="normal" title="Click to save and move to print mode">Print</button>
+    <legend data-i18n>common.labels.control</legend>
+    <button id="save" class="normal" data-i18n="[title]modes.example.buttons.save;common.action.save"></button>
+    <button id="print" class="normal" data-i18n="[title]modes.example.buttons.print;common.action.print"></button>
   </fieldset>
 </fieldset>
 

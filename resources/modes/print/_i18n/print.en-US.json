@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "creator": "rogerfachini",
+    "target": "en-US",
+    "release": "0.9.5",
+    "basetype": "mode"
+  },
+  "info":{
+    "description": "Painting Mode: Print your drawing!",
+    "title": "Automatic Paint",
+    "detail": "Automatically paint a given well formed SVG file.",
+    "word": "Print"
+  },
+
+  "control":{
+    "title": "Auto-paint",
+    "subtitle": "Control"
+  },
+
+  "status": {
+    "connecting": "Connecting to bot...",
+    "connected": "Connected Successfully!",
+    "initial": "Click to start painting your picture!",
+    "park": "Move the carriage back to the home position",
+    "confirm": "Are you sure you want to cancel the current print job and reset (for example, to start a new print job)?",
+    "ready": "Click to start painting your picture!",
+    "pause": "Click to stop current operations",
+    "resume": "Click to resume operations",
+    "wait": "Please wait while executed processes complete...",
+    "pausing": "Pausing current process...",
+    "paused": "Paused. Click resume to continue.",
+    "resuming": "Resuming current process...",
+    "resumed": "Drawing resumed...",
+    "parking": "Parking...",
+    "parked": "Parked succesfully",
+    "parkfail": "Can't Park, already parked",
+    "unlocking": "Unlocking motors...",
+    "unlocked": "Motors unlocked! Place in home corner when done"
+  }
+}

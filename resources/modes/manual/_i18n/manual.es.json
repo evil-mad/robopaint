@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "release": "0.9.3",
+    "target": "es",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "commands": {
+    "buffer": {
+      "cleartitle": "Borra la memoria intermedia de registros",
+      "play": "Reproducción Grabación",
+      "record": "Iniciar grabación",
+      "recordtitle": "Inicia / detiene la grabación acciones actuales",
+      "clear": "Claro grabación",
+      "playtitle": "Derivaciones comandos grabados en búfer",
+      "stop": "Detener grabación"
+    },
+    "auto": {
+      "paint": "Auto Paint",
+      "painttitle": "Pinte el dibujo completo de forma automática. Verifica colores mediante la ejecución automática del color primero."
+    },
+    "debug": {
+      "buffertitle": "Ver la simulación búfer",
+      "buffer": "Buffer Prevista"
+    },
+    "specialpause": "Haga clic para pausar funcionamiento de amortiguación de bot.",
+    "dip": "Individual descenso temporal",
+    "full": "Inmersión y maniobra completa",
+    "stroke": "Carrera Camino",
+    "stroketitle": "Contornear el trazado seleccionado con un contorno.",
+    "checktitle": "Si no se controla, el seguimiento se basará en sólo forma del trazado, ignorando camino solapamiento.",
+    "calibrate": "Arriba a la izquierda",
+    "filltitle": "Llene el trazado seleccionado con un estilo de relleno dado.",
+    "check": "Compruebe visibilidad ictus",
+    "calibratetitle": "Coloque el centro del pincel en la esquina superior izquierda para la calibración.",
+    "fill": "Rellenar trazado"
+  },
+  "status": {
+    "zero": "Restauración de la posición absoluta",
+    "complete": "Pintura completa",
+    "fill": "Rellenar trazado seleccionado ...",
+    "stroke": "Pintura largo de la trayectoria seleccionada ..."
+  },
+  "tools": {
+    "water2": "El agua 2",
+    "water1": "Agua 1"
+  },
+  "labels": {
+    "debug": "Depurar",
+    "record": "Registro",
+    "auto": "Auto",
+    "manual": "Manual",
+    "machine": "Máquina",
+    "park": "Park después de llenado / derrame cerebral",
+    "full": "Completo",
+    "dip": "Inmersión"
+  },
+  "info": {
+    "description": "Modo Manual: Personaliza tu impresión",
+    "detail": "Al igual que Auto-pintura, pero permite un mayor control sobre qué elementos están pintados, y un número de otras opciones.",
+    "title": "Pintura Manual",
+    "word": "Manual"
+  }
+}
