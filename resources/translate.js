@@ -48,9 +48,9 @@ function translatePage() {
   // Parsing for colorset translation strings.
   try {
     // Iterate over global colorset i18n directory.
-    fs.readdirSync('resources/colorsets/_i18n').forEach(function(file) {
+    fs.readdirSync('resources/mediasets/_i18n').forEach(function(file) {
       // Add each translation file to the global translate array.
-      var data = JSON.parse(fs.readFileSync('resources/colorsets/_i18n/' + file , 'utf8'));
+      var data = JSON.parse(fs.readFileSync('resources/mediasets/_i18n/' + file , 'utf8'));
       resources[data['_meta'].target].translation['colorsets'] = data;
     });
   }catch(e) {
