@@ -289,13 +289,13 @@ body.print-auto fieldset#control {
 }
 
 body.print-auto #control>legend {
-  width: 49%;
+  width: 100%;
   font-weight: bold;
-  text-align: center;
   font-size: 1.2em;
   position: absolute;
-  top: -26px;
-  right: 54px;
+  top: 1px;
+  text-align: center;
+  margin-top: -28px;
 }
 
 body.print-auto #buttons {
