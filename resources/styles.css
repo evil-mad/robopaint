@@ -413,6 +413,14 @@ body.home #bar-translate {
   margin-bottom: -6px;
   height: 32px;
   margin-right: 13px;
+  position: absolute;
+  z-index: 12;
+  top: 6px;
+  right: 0;
+}
+
+body.home #bar-settings {
+  margin-right: 1.4em;
 }
 
 body.home #bar span.separator {
@@ -753,12 +761,16 @@ body.home div.options button.normal {
 
 #lang {
   position: absolute;
-  right: 4em;
+  right: 0;
   top: 5px;
 }
 
 .dd-option label {
   cursor: pointer;
+}
+
+.dd-option-selected {
+  background-color: #D3D3D3;
 }
 
 @media (max-height: 475px) {
