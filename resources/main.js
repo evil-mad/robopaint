@@ -81,10 +81,11 @@ function startInitialization() {
   $(window).resize(responsiveResize);
   responsiveResize();
 
-
-
   // Load the modes (adds to settings content)
   loadAllModes();
+
+  // Initalize Tooltips (after modes have been loaded)
+  initToolTips();
 
   // Bind settings controls & Load up initial settings!
   // @see scripts/main.settings.js
@@ -401,51 +402,37 @@ function checkModeClose(callback, isGlobal, destination) {
  * Initialize the toolTip configuration and binding
  */
 function initToolTips() {
-  // Check if this is not the first time initToolTips is running
-  if ($('#bar a.tipped:first').data("tipped")) {
-    // Destroy existing ToolTips before recreating them
-    $('#bar a.tipped, nav a').qtip("destroy");
-  };
+  $('#bar a.tipped, nav a').each(function() {
+    var $this = $(this);
+    $this.qtip({
+      style: {
+        classes: 'qtip-bootstrap',
+      },
+      position: {
+        my: 'top center',  // Position my top left...
+        at: 'bottom center', // at the bottom right of...
+        target: $this, // my target,
+        viewport: $(window)
+      },
+      events: {
+        render: function(event, api) {
+          // Extract the title translation ID
+          var transIDs = $this.data('i18n').split(';');
+          var titleTransID = transIDs[0].split(']')[1];
 
-  $('#bar a.tipped, nav a').qtip({
-    style: {
-      border: {
-        width: 5,
-        radius: 10
-      },
-      padding: 10,
-      tip: true,
-      textAlign: 'center',
-      name: 'blue'
-    },
-    position: {
-      corner: {
-        target: 'bottomMiddle',
-        tooltip: 'topMiddle'
-      },
-      adjust: {
-        screen: true,
-        y: 6,
-        x: -5
+          // Remove the translation data-i18ns for title (but not text node)
+          if (transIDs.length === 1) {
+            $this.removeAttr('data-i18n'); // Only had title, delete it
+          } else if (transIDs.length === 2) {
+            $this.attr('data-i18n', transIDs[1]); // Set to the main text ID
+          }
+
+          // Chuck the new title trans ID (without the [title]) onto the tooltip
+          api.elements.content.attr('data-i18n', titleTransID);
+        }
       }
-    },
-    api: {
-      beforeShow: beforeQtip
-    }
-  }).click(function(){
-    $(this).qtip("hide");
-  }).data("tipped", true);
-
-  function beforeQtip(){
-    // Move position to be more centered for outer elements
-    if (this.id <= 1) {
-      this.elements.wrapper.parent().css('margin-left', -30);
-    }
-
-    if (this.getPosition().left + this.getDimensions().width + 250 > $(window).width()) {
-      this.elements.wrapper.parent().css('margin-left', 30);
-    }
-  }
+    });
+  });
 }
 
 /**
