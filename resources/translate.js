@@ -7,7 +7,7 @@
  * Early called translate trigger for loading translations and static
  * strings.
  */
-function translatePage() {
+function initializeTranslation() {
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
@@ -29,7 +29,6 @@ function translatePage() {
           .text(data['_meta'].langname)
           .attr('value', data['_meta'].target)
       );
-
 
       // Add the language to the resource list.
       resources[data['_meta'].target] = { translation: data};
@@ -155,6 +154,8 @@ function translatePage() {
     robopaint.t = t;
     $('[data-i18n]').i18n();
     setVersion();
+    // Run main window initialization
+    startInitialization();
   });
 }
 

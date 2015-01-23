@@ -71,9 +71,9 @@ var $options;
 var $stat;
 
 /**
- * Central home screen initialization (jQuery document ready callback)
+ * Central home screen initialization (called after translations have loaded)
  */
-$(function() {
+function startInitialization() {
  initializing = true;
 
  try {
@@ -132,7 +132,7 @@ $(function() {
      .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
    console.error(e.stack);
  }
-})
+}
 
 /**
  * Bind all DOM main window elements to their respective functionality
