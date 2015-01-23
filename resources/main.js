@@ -727,6 +727,7 @@ function loadAllModes(){
         .attr('id', 'bar-' + m.name)
          // TODO: Add support for better icons
         .addClass('mode tipped ' + m.icon + (m.core ? '' : ' hidden') )
+        .attr('data-i18n', '[title]' + i18nStr + 'description')
         .attr('title', robopaint.t(i18nStr + 'description'))
         .html('&nbsp;')
     );
@@ -734,9 +735,14 @@ function loadAllModes(){
     // Add the non-core settings checkbox for enabling
     if (!m.core) {
       $('fieldset.advanced-modes aside:first').after($('<div>').append(
-        $('<label>').attr('for', m.name + 'modeenable').text(robopaint.t(i18nStr + 'title')),
+        $('<label>')
+          .attr('for', m.name + 'modeenable')
+          .attr('data-i18n', i18nStr + 'title')
+          .text(robopaint.t(i18nStr + 'title')),
         $('<input>').attr({type: 'checkbox', id: m.name + 'modeenable'}),
-        $('<aside>').text(robopaint.t(i18nStr + 'detail'))
+        $('<aside>')
+          .attr('data-i18n', i18nStr + 'detail')
+          .text(robopaint.t(i18nStr + 'detail'))
       ));
     }
   }
