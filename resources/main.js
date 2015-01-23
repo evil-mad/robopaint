@@ -315,20 +315,20 @@ function initSocketIO(){
  * Binds all the callbacks functions for controlling CNC Server via its Node API
  */
 function startSerial(){
-  setMessage(robopaint.t('status.start'), 'loading');
+  setMessage('status.start', 'loading');
 
   try {
     cncserver.start({
       botType: robopaint.currentBot.type,
       success: function() {
-        setMessage(robopaint.t('status.found'));
+        setMessage('status.found');
       },
       error: function(err) {
-        setMessage(robopaint.t('status.error') + ' - ' + err, 'warning');
+        setMessage('status.error', 'warning', ' - ' + err);
         $options.slideDown('slow');
       },
       connect: function() {
-        setMessage(robopaint.t('status.success'), 'success');
+        setMessage('status.success', 'success');
         $stat.fadeOut('slow');
         setModal(false);
 
@@ -350,7 +350,7 @@ function startSerial(){
       disconnect: function() {
         setModal(true);
         $stat.show();
-        setMessage(robopaint.t('status.disconnect'), 'error');
+        setMessage('status.disconnect', 'error');
         $options.slideDown();
       }
     });
@@ -746,14 +746,17 @@ function loadAllModes(){
 /**
  * Set modal message
  *
- * @param {String} txt
- *   Message to display
+ * @param {String} transKey
+ *   Translation key to be displayed
  * @param {String} mode
  *   Optional extra class to add to message element
  */
-function setMessage(txt, mode){
-  if (txt) {
-    $('b', $stat).text(txt);
+function setMessage(transKey, mode, append){
+  if (transKey) {
+    if (!append) append = '';
+    $('b', $stat)
+      .attr('data-i18n', transKey)
+      .text(robopaint.t(transKey) + append);
   }
 
   if (mode) {
