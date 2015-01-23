@@ -100,7 +100,7 @@ function initializeTranslation() {
   });
 
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
-  $('[data-i18n]=""').each(function() {
+  $('[data-i18n=""]').each(function() {
     // "this" in every $.each() function, is a reference to each selected DOM object from the query.
     // Note we have to use $() on it to get a jQuery object for it. Do that only once and save it in a var
     // to keep your code from having to instantiate it more than once.
@@ -286,7 +286,7 @@ function translateMode() {
     }
   } else { // Native i18n parsing! (much simpler)
     // Quick fix for non-reactive re-translate for modes
-    $('[data-i18n]=""', $subwindow.contents()).each(function() {
+    $('[data-i18n=""]', $subwindow.contents()).each(function() {
       var $node = $(this);
       if ($node.text().indexOf('.') > -1 && $node.attr('data-i18n') == "") {
         $node.attr('data-i18n', $node.text());

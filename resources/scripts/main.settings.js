@@ -503,7 +503,7 @@ function setSettingsWindow(toggle) {
  * Adds label markup for range slider controls and controls label conversion
  */
 function addSettingsRangeValues() {
-  $('input:[type=range]:not(.processed)').each(function(){
+  $('input[type=range]:not(.processed)').each(function(){
     var $r = $(this);
     var $l = $('<label>').addClass('rangeval');
 
