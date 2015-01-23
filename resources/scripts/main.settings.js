@@ -513,10 +513,6 @@ function addSettingsRangeValues() {
       var wrap = ['(', ')'];
       var dosep = true;
 
-      if (['servotime', 'latencyoffset'].indexOf(this.id) != -1) {
-        post = " " + robopaint.t('common.time.ms');
-      }
-
 
       switch (this.id){
         case "servotime":
@@ -525,8 +521,8 @@ function addSettingsRangeValues() {
         case "maxpaintdistance":
           // Display as Centimeters (16.6667 mm per step!)
           num = Math.round((num / 166.7) * 10) / 10;
-          num = num+ ' ' + robopaint.t('common.metric.cm') + ' / ' +
-            (Math.round((num / 2.54) * 10) / 10) + ' ' + robopaint.t('common.imperial.in');
+          num = robopaint.t('common.metric.cm', {count: num}) + ' / ' +
+            robopaint.t('common.imperial.in', {count: (Math.round((num / 2.54) * 10) / 10)});
           dosep = false;
           break;
         case 'servoup':
@@ -556,6 +552,12 @@ function addSettingsRangeValues() {
           wrap = ['', ''];
           post = "% - " + msg;
           break;
+      }
+
+      // Format translated text with
+      if (['servotime', 'latencyoffset'].indexOf(this.id) != -1) {
+        post = '';
+        num = robopaint.t('common.time.ms', {count: num});
       }
 
       if (dosep) num = num.toString(10).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
