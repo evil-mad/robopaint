@@ -145,6 +145,14 @@ function initializeTranslation() {
     $('#lang').val(localStorage['robopaint-lang']);
   }
 
+  $('#bar-translate').click(function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!$('#lang ul.dd-options').is('visible')) {
+      $('#lang').ddslick('open');
+    }
+  });
+
   i18n.init({
     resStore: resources,
     ns: 'translation',
@@ -152,8 +160,16 @@ function initializeTranslation() {
     lng: localStorage['robopaint-lang']
   }, function(t) {
     robopaint.t = t;
+    currentLang = localStorage['robopaint-lang'];
     $('[data-i18n]').i18n();
     setVersion();
+
+    // Bind & setup the global translation toolbar button
+    $('#lang').ddslick({
+      width: 110,
+      onSelected: updateLang
+    });
+
     // Run main window initialization
     startInitialization();
   });
@@ -175,11 +191,11 @@ function setVersion() {
  */
 function updateLang() {
   // Get the index pointer from the dropdown menu.
-  localStorage['robopaint-lang'] = $('#lang').val();
+  localStorage['robopaint-lang'] = $('#lang').data('ddslick').selectedData.value;
 
   // Abort the subroutine if the language has not changed (or on first load)
   if (currentLang == localStorage['robopaint-lang']) {
-      return;
+    return;
   }
 
   currentLang = localStorage['robopaint-lang'];

@@ -408,6 +408,13 @@ body.home #bar-help:hover {
   color: #444 !important;
 }
 
+body.home #bar-translate {
+  content: url('images/icons/translation.svg');
+  margin-bottom: -6px;
+  height: 32px;
+  margin-right: 13px;
+}
+
 body.home #bar span.separator {
   padding-right: 7px;
   font-size: 26px;
@@ -743,18 +750,21 @@ body.home div.options button.normal {
   margin-top: -6px;
 }
 
-#lang-wrapper {
+#lang {
   position: absolute;
-  right: 8.4em;
-  top: 1.6em;
-  background-image: url('images/icon_lang.png');
-  background-repeat: no-repeat;
-  padding-left: 1.7em;
-  background-position: left center;
-  height: 20px;
+  right: 4em;
+  top: 5px;
 }
 
-#lang {
+.dd-option label {
+  cursor: pointer;
+}
+
+@media (max-height: 475px) {
+  .dd-option {
+    padding:8px;
+    font-size: 0.7em;
+  }
 }
 
 #settings-done {
