@@ -592,7 +592,8 @@ body.home #colorsets optgroup {
 body.home #colorsets #colorset {
   position: absolute;
   top: 0;
-  left: 170px;
+  right: 2em;
+  font-size: 0.9em;
 }
 
 body.home #colorsets ul {
