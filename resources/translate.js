@@ -164,6 +164,11 @@ function initializeTranslation() {
     $('[data-i18n]').i18n();
     setVersion();
 
+    // Apply bolding to settings details text
+    $('aside').each(function(){
+      $(this).html($(this).text().replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'));
+    });
+
     // Bind & setup the global translation toolbar button
     $('#lang').ddslick({
       width: 110,
@@ -207,25 +212,22 @@ function updateLang() {
       robopaint.t = t;
       $('[data-i18n]').i18n();
       setVersion();
-    });
-  // Report language switch to the console
-  console.info("Language Switched to: " + localStorage['robopaint-lang']);
 
-  // Reload individual parts that handle translations uniquely
-  // ===========================================================================
-  $('fieldset.speed input[type=range]').change(); // Update speed slider labels
+      // Apply bolding to settings details text
+      $('aside').each(function(){
+        $(this).html($(this).text().replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'));
+      });
 
-  initToolTips(); // Initalize/reset Tooltips
+      // Report language switch to the console
+      console.info("Language Switched to: " + localStorage['robopaint-lang']);
 
-  getColorsets(); // Reload and reparse colorsets
+      $('input[type=range]').change(); // Update dynamic slider labels
+      getColorsets(); // Reload and reparse colorsets
 
-  // Translate the mode if we're not on home
-  if (appMode !== 'home') translateMode();
-
-  // Apply bolding to details text
-  $('aside').each(function(){
-    $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));
-  });
+      // Translate the mode if we're not on home
+      if (appMode !== 'home') translateMode();
+    }
+  );
 }
 
 
