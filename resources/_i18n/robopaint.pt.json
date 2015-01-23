@@ -3,23 +3,27 @@
     "creator": "docprofsky from Google Translate",
     "target": "pt",
     "langname": "português",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "Pausa",
     "resume": "Currículo",
     "stop": "Pare",
     "time": {
-      "ms": "senhorita",
-      "sec": "sec",
-      "seconds": "segundos"
+      "ms": "__count__ milissegundo",
+      "sec": "__count__ sec",
+      "sec_plural": "seg __count__",
+      "ms_plural": "milissegundos __count__",
+      "second": "__count__ segunda",
+      "second_plural": "segundos __count__"
     },
     "metric": {
-      "mm": "mm",
-      "cm": "cm"
+      "mm": "__count__ mm",
+      "cm": "__count__ cm"
     },
     "imperial": {
-      "in": "em"
+      "in": "__count__ polegadas",
+      "in_plural": "__count__ polegadas"
     },
     "transparent": "Transparente",
     "substrate": "Branco / Papel",

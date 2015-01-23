@@ -3,23 +3,27 @@
     "creator": "docprofsky from Google Translate",
     "target": "ur",
     "langname": "اردو",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "روک دیں",
     "resume": "تجربے کی فہرست",
     "stop": "بند کرو",
     "time": {
-      "ms": "ایم ایس",
-      "sec": "سیکنڈ",
-      "seconds": "سیکنڈ"
+      "ms": "__count__ millisecond کی",
+      "sec": "__count__ سیکنڈ",
+      "ms_plural": "__count__ ملی سیکنڈز",
+      "sec_plural": "__count__ سیکنڈ",
+      "second_plural": "__count__ سیکنڈ",
+      "second": "__count__ دوسرا"
     },
     "metric": {
-      "mm": "ملی میٹر",
-      "cm": "سینٹی میٹر"
+      "mm": "__count__ ملی میٹر",
+      "cm": "__count__ سینٹی میٹر"
     },
     "imperial": {
-      "in": "میں"
+      "in": "__count__ انچ",
+      "in_plural": "__count__ انچ"
     },
     "transparent": "شفاف",
     "substrate": "سفید / کاغذ",

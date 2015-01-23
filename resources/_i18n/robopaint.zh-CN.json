@@ -3,23 +3,27 @@
     "creator": "docprofsky from Google Translate",
     "target": "zh-CN",
     "langname": "简体字",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "暂停",
     "resume": "简历",
     "stop": "停止",
     "time": {
-      "ms": "女士",
-      "sec": "秒",
-      "seconds": "秒"
+      "ms": "__count__毫秒",
+      "sec": "__count__秒",
+      "second_plural": "__count__秒",
+      "sec_plural": "__count__秒",
+      "ms_plural": "__count__毫秒",
+      "second": "__count__第二"
     },
     "metric": {
-      "mm": "毫米",
-      "cm": "厘米"
+      "mm": "__count__毫米",
+      "cm": "__count__厘米"
     },
     "imperial": {
-      "in": "在"
+      "in": "__count__英寸",
+      "in_plural": "__count__英寸"
     },
     "substrate": "白色/纸",
     "water": "水",

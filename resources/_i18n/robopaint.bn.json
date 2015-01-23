@@ -3,23 +3,27 @@
     "creator": "docprofsky from Google Translate",
     "target": "bn",
     "langname": "বাঙালি",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "বিরতি",
     "resume": "সারসংকলন",
     "stop": "বন্ধ করা",
     "time": {
-      "ms": "মাইক্রোসফট",
-      "sec": "সেকেন্ড",
-      "seconds": "যাও"
+      "ms": "__count__ মিলিসেকেন্ডে",
+      "sec": "__count__ সেকেন্ড",
+      "ms_plural": "__count__ মিলিসেকেন্ড",
+      "sec_plural": "__count__ সেকেন্ড",
+      "second": "__count__ দ্বিতীয়",
+      "second_plural": "__count__ যাও"
     },
     "metric": {
-      "mm": "মিমি",
-      "cm": "সেমি"
+      "mm": "__count__ মিমি",
+      "cm": "__count__ সেমি"
     },
     "imperial": {
-      "in": "মধ্যে"
+      "in": "__count__ ইঞ্চি",
+      "in_plural": "__count__ ইঞ্চি"
     },
     "water": "পানি",
     "implement": {

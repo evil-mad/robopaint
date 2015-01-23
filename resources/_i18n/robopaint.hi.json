@@ -3,23 +3,27 @@
     "creator": "docprofsky from Google Translate",
     "target": "hi",
     "langname": "हिंदी",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "ठहराव",
     "resume": "बायोडाटा",
     "stop": "रोक",
     "time": {
-      "ms": "सुश्री",
-      "sec": "सेकंड",
-      "seconds": "सेकंड"
+      "ms": "__count__ मिलीसेकंड",
+      "sec": "__count__ सेक",
+      "ms_plural": "__count__ मिसे",
+      "sec_plural": "__count__ सेकेंड",
+      "second_plural": "__count__ सेकंड",
+      "second": "__count__ दूसरा"
     },
     "metric": {
-      "mm": "मिमी",
-      "cm": "सेमी"
+      "mm": "__count__ मिमी",
+      "cm": "__count__ सेमी"
     },
     "imperial": {
-      "in": "में"
+      "in": "__count__ इंच",
+      "in_plural": "__count__ इंच"
     },
     "transparent": "पारदर्शक",
     "substrate": "व्हाइट / कागज",
