@@ -254,6 +254,11 @@ cncserver.wcb = {
       colorsort[i] = colorsort[i].split('|')[1];
     }
 
+    // Add "water2" tool last (if available)
+    if (typeof robopaint.currentBot.data.tools.water2 !== 'undefined') {
+      colorsort.push('water2');
+    }
+
     return colorsort;
   },
 
@@ -281,12 +286,13 @@ cncserver.wcb = {
       stroke = (stroke == null) ? false : 'color' + colorMatch(stroke, c);
       fill = (fill == null) ? false : 'color' + colorMatch(fill, c);
 
-      // Account for fill/stroke opacity
-      var op = $p.css('fill-opacity');
-      if (typeof op != 'undefined') fill = (op < 0.5) ? false : fill;
+      // Account for fill/stroke opacity (paint with clean water2!)
+      // TODO: What do we do here for the EggBot? Likely skip, or ignore....
+      var op = Math.min($p.css('fill-opacity'), $p.css('opacity'));
+      if (typeof op != 'undefined') fill = (op < 1) ? 'water2' : fill;
 
-      op = $p.css('stroke-opacity');
-      if (typeof op != 'undefined') stroke = (op < 0.5) ? false : stroke;
+      op = Math.min($p.css('stroke-opacity'), $p.css('opacity'));
+      if (typeof op != 'undefined') stroke = (op < 1) ? 'water2' : stroke;
 
       // Don't actually fill or stroke for white... (color8)
       if (fill == 'color8') fill = false;
