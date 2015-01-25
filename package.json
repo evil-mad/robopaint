@@ -17,7 +17,7 @@
     "title": "RoboPaint!"
   },
   "scripts": {
-    "install": "resources/scripts/shell/build_serialport.sh"
+    "postinstall": "resources/scripts/shell/build_serialport.sh"
   },
   "dependencies" : {
     "cncserver": "https://github.com/techninja/cncserver/tarball/master"
