@@ -39,7 +39,7 @@ cncserver.renderText = function(s, options) {
     options.scale = options.scale ? options.scale : 1;
 
     // Create central group
-    var $group = $('<g>').attr({
+    var $group = $('<svg:g>').attr({
       id: options.id,
       stroke: 'black',
       fill: 'none',
@@ -51,7 +51,7 @@ cncserver.renderText = function(s, options) {
 
     // Initial Line container
     var lineCount = 0;
-    var $groupLine = $('<g>').attr('id', options.id + '-line-' + lineCount);
+    var $groupLine = $('<svg:g>').attr('id', options.id + '-line-' + lineCount);
     $group.prepend($groupLine);
 
     // Move through each word
@@ -70,7 +70,7 @@ cncserver.renderText = function(s, options) {
 
           // Add the char to the DOM
           $groupLine.append(
-            $('<path>').attr({
+            $('<svg:path>').attr({
               d: font[index].d,
               stroke: 'black',
               'stroke-width': 2,
@@ -98,7 +98,7 @@ cncserver.renderText = function(s, options) {
 
            // New Line container
            lineCount++;
-           $groupLine = $('<g>').attr('id', options.id + '-line-' + lineCount);
+           $groupLine = $('<svg:g>').attr('id', options.id + '-line-' + lineCount);
            $group.append($groupLine);
          } else {
            offset.left+= options.charWidth*2; // Add regular space
