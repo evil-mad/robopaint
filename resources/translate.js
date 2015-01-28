@@ -1,6 +1,6 @@
 /*
  * Holds code that utilizes the i18n module's features.
- * To translate a string, pass it to the tranString() function.
+ * To translate a string, pass its key to the robopaint.t() function.
  */
 
 /**
@@ -232,8 +232,8 @@ function updateLang() {
 
 
 /**
- * Contains specific code to translating the 'Edit' mode, as the majority of that
- * mode is method-draw, which is not made by us.
+ * Translate a mode, in either native or DOM map format. Will also trigger
+ * translateComplete() function on window object of mode.
  */
 function translateMode() {
   var mode = robopaint.modes[appMode];
@@ -280,7 +280,6 @@ function translateMode() {
             });
           }
         }
-
      }
 
     } catch(e) {
@@ -297,4 +296,8 @@ function translateMode() {
     $('[data-i18n]', $subwindow.contents()).i18n();
   }
 
+  // If there's a window function for it, trigger mode translationComplete()
+  if (typeof $subwindow[0].contentWindow.translateComplete === 'function') {
+    $subwindow[0].contentWindow.translateComplete();
+  }
 }
