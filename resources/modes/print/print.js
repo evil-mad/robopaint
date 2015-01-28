@@ -2,7 +2,7 @@
  * @file Holds all RoboPaint automatic painting mode specific code
  */
 
-robopaintRequire(['jquery.svg', 'jquery.svgdom', 'svgshared', 'wcb', 'commander', 'paths'],
+robopaintRequire(['svgshared', 'wcb', 'commander', 'paths'],
 function($, robopaint, cncserver) {
 
   /**

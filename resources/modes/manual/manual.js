@@ -2,7 +2,7 @@
  * @file Holds all RoboPaint manual painting mode specific code
  */
 
-robopaintRequire(['jquery.svg', 'jquery.svgdom', 'svgshared', 'wcb', 'commander', 'paths'],
+robopaintRequire(['superdom', 'svgshared', 'wcb', 'commander', 'paths'],
 function($, robopaint, cncserver) {
   /**
    * Update the rendering of the colorset
