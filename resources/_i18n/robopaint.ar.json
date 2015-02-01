@@ -3,23 +3,27 @@
     "creator": "docprofsky from Google Translate",
     "target": "ar",
     "langname": "العربية",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "وقفة",
     "resume": "استئنف",
     "stop": "توقف",
     "time": {
-      "ms": "السيدة",
-      "sec": "ثانية",
-      "seconds": "ثواني"
+      "ms": "__count__ ميلي ثانية واحدة",
+      "sec": "__count__ ثانية",
+      "sec_plural": "ثانية __count__",
+      "second": "__count__ الثانية",
+      "ms_plural": "ميلي ثانية __count__",
+      "second_plural": "ثواني __count__"
     },
     "metric": {
-      "mm": "مم",
-      "cm": "سم"
+      "mm": "مم __count__",
+      "cm": "__count__ سم"
     },
     "imperial": {
-      "in": "في"
+      "in": "__count__ بوصة",
+      "in_plural": "__count__ بوصة"
     },
     "labels": {
       "progress": "التقدم الحالي",

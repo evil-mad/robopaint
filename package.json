@@ -1,6 +1,6 @@
 {
   "name": "robopaint",
-  "version": "0.9.3",
+  "version": "0.9.5",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "resources/main.html",
   "author": "techninja",
@@ -17,7 +17,7 @@
     "title": "RoboPaint!"
   },
   "scripts": {
-    "install": "resources/scripts/shell/build_serialport.sh"
+    "postinstall": "resources/scripts/shell/build_serialport.sh"
   },
   "dependencies" : {
     "cncserver": "https://github.com/techninja/cncserver/tarball/master"

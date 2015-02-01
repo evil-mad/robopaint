@@ -3,23 +3,27 @@
     "creator": "R10 avec l’aide de Sofia",
     "target": "fr",
     "langname": "Français",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "Pause",
     "resume": "Reprendre",
     "stop": "Stop",
     "time": {
-      "ms": "ms",
-      "sec": "sec",
-      "seconds": "secondes"
+      "ms": "__count__ milliseconde",
+      "sec": "__count__ sec",
+      "ms_plural": "millisecondes __count__",
+      "sec_plural": "secondes __count__",
+      "second": "__count__ secondes",
+      "second_plural": "seconde __count__"
     },
     "metric": {
-      "mm": "mm",
-      "cm": "cm"
+      "mm": "__count__ mm",
+      "cm": "__count__ cm"
     },
     "imperial": {
-      "in": "in"
+      "in": "__count__ pouces",
+      "in_plural": "__count__ pouces"
     },
     "transparent": "Transparent",
     "implement": {

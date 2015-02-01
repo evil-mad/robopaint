@@ -1,13 +1,13 @@
 /*
  * Holds code that utilizes the i18n module's features.
- * To translate a string, pass it to the tranString() function.
+ * To translate a string, pass its key to the robopaint.t() function.
  */
 
 /**
  * Early called translate trigger for loading translations and static
  * strings.
  */
-function translatePage() {
+function initializeTranslation() {
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
   $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
@@ -29,7 +29,6 @@ function translatePage() {
           .text(data['_meta'].langname)
           .attr('value', data['_meta'].target)
       );
-
 
       // Add the language to the resource list.
       resources[data['_meta'].target] = { translation: data};
@@ -101,7 +100,7 @@ function translatePage() {
   });
 
   // Loop over every element in the current document scope that has a 'data-i18n' attribute that's empty
-  $('[data-i18n]=""').each(function() {
+  $('[data-i18n=""]').each(function() {
     // "this" in every $.each() function, is a reference to each selected DOM object from the query.
     // Note we have to use $() on it to get a jQuery object for it. Do that only once and save it in a var
     // to keep your code from having to instantiate it more than once.
@@ -146,6 +145,14 @@ function translatePage() {
     $('#lang').val(localStorage['robopaint-lang']);
   }
 
+  $('#bar-translate').click(function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!$('#lang ul.dd-options').is('visible')) {
+      $('#lang').ddslick('open');
+    }
+  });
+
   i18n.init({
     resStore: resources,
     ns: 'translation',
@@ -153,8 +160,23 @@ function translatePage() {
     lng: localStorage['robopaint-lang']
   }, function(t) {
     robopaint.t = t;
+    currentLang = localStorage['robopaint-lang'];
     $('[data-i18n]').i18n();
     setVersion();
+
+    // Apply bolding to settings details text
+    $('aside').each(function(){
+      $(this).html($(this).text().replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'));
+    });
+
+    // Bind & setup the global translation toolbar button
+    $('#lang').ddslick({
+      width: 110,
+      onSelected: updateLang
+    });
+
+    // Run main window initialization
+    startInitialization();
   });
 }
 
@@ -174,11 +196,11 @@ function setVersion() {
  */
 function updateLang() {
   // Get the index pointer from the dropdown menu.
-  localStorage['robopaint-lang'] = $('#lang').val();
+  localStorage['robopaint-lang'] = $('#lang').data('ddslick').selectedData.value;
 
   // Abort the subroutine if the language has not changed (or on first load)
   if (currentLang == localStorage['robopaint-lang']) {
-      return;
+    return;
   }
 
   currentLang = localStorage['robopaint-lang'];
@@ -190,31 +212,28 @@ function updateLang() {
       robopaint.t = t;
       $('[data-i18n]').i18n();
       setVersion();
-    });
-  // Report language switch to the console
-  console.info("Language Switched to: " + localStorage['robopaint-lang']);
 
-  // Reload individual parts that handle translations uniquely
-  // ===========================================================================
-  $('fieldset.speed input[type=range]').change(); // Update speed slider labels
+      // Apply bolding to settings details text
+      $('aside').each(function(){
+        $(this).html($(this).text().replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'));
+      });
 
-  initToolTips(); // Initalize/reset Tooltips
+      // Report language switch to the console
+      console.info("Language Switched to: " + localStorage['robopaint-lang']);
 
-  getColorsets(); // Reload and reparse colorsets
+      $('input[type=range]').change(); // Update dynamic slider labels
+      getColorsets(); // Reload and reparse colorsets
 
-  // Translate the mode if we're not on home
-  if (appMode !== 'home') translateMode();
-
-  // Apply bolding to details text
-  $('aside').each(function(){
-    $(this).html($(this).text().replace(/\*\*(\S(.*?\S)?)\*\*/gm, '<b>$1</b>'));
-  });
+      // Translate the mode if we're not on home
+      if (appMode !== 'home') translateMode();
+    }
+  );
 }
 
 
 /**
- * Contains specific code to translating the 'Edit' mode, as the majority of that
- * mode is method-draw, which is not made by us.
+ * Translate a mode, in either native or DOM map format. Will also trigger
+ * translateComplete() function on window object of mode.
  */
 function translateMode() {
   var mode = robopaint.modes[appMode];
@@ -261,7 +280,6 @@ function translateMode() {
             });
           }
         }
-
      }
 
     } catch(e) {
@@ -269,7 +287,7 @@ function translateMode() {
     }
   } else { // Native i18n parsing! (much simpler)
     // Quick fix for non-reactive re-translate for modes
-    $('[data-i18n]=""', $subwindow.contents()).each(function() {
+    $('[data-i18n=""]', $subwindow.contents()).each(function() {
       var $node = $(this);
       if ($node.text().indexOf('.') > -1 && $node.attr('data-i18n') == "") {
         $node.attr('data-i18n', $node.text());
@@ -278,4 +296,8 @@ function translateMode() {
     $('[data-i18n]', $subwindow.contents()).i18n();
   }
 
+  // If there's a window function for it, trigger mode translationComplete()
+  if (typeof $subwindow[0].contentWindow.translateComplete === 'function') {
+    $subwindow[0].contentWindow.translateComplete();
+  }
 }

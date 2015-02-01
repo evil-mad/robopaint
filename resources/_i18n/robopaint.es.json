@@ -3,23 +3,27 @@
     "creator": "techninja/google",
     "target": "es",
     "langname": "Español",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "Pausa",
     "resume": "Reanudar",
     "stop": "Parada",
     "time": {
-      "ms": "ms",
-      "sec": "seg",
-      "seconds": "segundos"
+      "ms": "__count__ milisegundo",
+      "sec": "__count__ seg",
+      "sec_plural": "seg __count__",
+      "ms_plural": "milisegundos __count__",
+      "second_plural": "segundo __count__",
+      "second": "__count__ segundos"
     },
     "metric": {
-      "mm": "mm",
-      "cm": "cm"
+      "mm": "__count__ mm",
+      "cm": "__count__ cm"
     },
     "imperial": {
-      "in": "pulg"
+      "in": "__count__ pulgadas",
+      "in_plural": "__count__ pulgadas"
     },
     "labels": {
       "status": "Estado",

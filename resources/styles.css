@@ -408,6 +408,21 @@ body.home #bar-help:hover {
   color: #444 !important;
 }
 
+body.home #bar-translate {
+  content: url('images/icons/translation.svg');
+  margin-bottom: -6px;
+  height: 32px;
+  margin-right: 13px;
+  position: absolute;
+  z-index: 12;
+  top: 6px;
+  right: 0;
+}
+
+body.home #bar-settings {
+  margin-right: 1.4em;
+}
+
 body.home #bar span.separator {
   padding-right: 7px;
   font-size: 26px;
@@ -585,7 +600,8 @@ body.home #colorsets optgroup {
 body.home #colorsets #colorset {
   position: absolute;
   top: 0;
-  left: 170px;
+  right: 2em;
+  font-size: 0.9em;
 }
 
 body.home #colorsets ul {
@@ -743,18 +759,25 @@ body.home div.options button.normal {
   margin-top: -6px;
 }
 
-#lang-wrapper {
+#lang {
   position: absolute;
-  right: 8.4em;
-  top: 1.6em;
-  background-image: url('images/icon_lang.png');
-  background-repeat: no-repeat;
-  padding-left: 1.7em;
-  background-position: left center;
-  height: 20px;
+  right: 0;
+  top: 5px;
 }
 
-#lang {
+.dd-option label {
+  cursor: pointer;
+}
+
+.dd-option-selected {
+  background-color: #D3D3D3;
+}
+
+@media (max-height: 475px) {
+  .dd-option {
+    padding:8px;
+    font-size: 0.7em;
+  }
 }
 
 #settings-done {
@@ -914,16 +937,23 @@ ul.tabs a.active {
 }
 
 /* qTip extra styles */
-.qtip-tip {
-  z-index: 1;
+.qtip {
+  border-radius: 10px !important;
+  box-shadow: 5px 5px 18px rgba(0,0,0,0.8);
+  border: 7px solid cornflowerblue !important;
+  background-color: #e5f1f9 !important;
 }
 
-.qtip-wrapper {
-  border-radius: 9px;
-  box-shadow: 5px 5px 18px rgba(0,0,0,0.8)
+.qtip-pos-tr {
+  margin-left: 30px;
 }
 
-.qtip-wrapper .qtip-content {
+.qtip-pos-tl {
+  margin-left: -30px;
+}
+
+.qtip .qtip-content {
   color: black !important;
-  font-size: 1.2em;
+  font-size: 1.4em;
+  text-align: center;
 }

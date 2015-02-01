@@ -3,23 +3,27 @@
     "creator": "docprofsky from Google Translate",
     "target": "ru",
     "langname": "русский",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "Пауза",
     "resume": "Резюме",
     "stop": "Стоп",
     "time": {
-      "ms": "Мисс",
-      "sec": "сек",
-      "seconds": "секунд"
+      "ms": "__count__ мс",
+      "sec": "__count__ сек",
+      "sec_plural": "__count__ сек",
+      "ms_plural": "__count__ миллисекунд",
+      "second": "__count__ второй",
+      "second_plural": "__count__ секунд"
     },
     "metric": {
-      "mm": "мм",
-      "cm": "см"
+      "mm": "__count__ мм",
+      "cm": "__count__ см"
     },
     "imperial": {
-      "in": "в"
+      "in": "__count__ дюймовый",
+      "in_plural": "__count__ дюймов"
     },
     "transparent": "Прозрачный",
     "substrate": "Белый / Бумага",

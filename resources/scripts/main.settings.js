@@ -379,10 +379,6 @@ function bindSettingsControls() {
           name: $('#bottype option:selected').text()
         });
         return;
-      case 'lang':
-        // localStorage['robopaint-lang'] set in updateLang() [main.js]
-        updateLang();
-        return;
       default: // Nothing special to set, just change the settings object value
         if ($input.attr('type') == 'checkbox') {
           robopaint.settings[this.id] = $input.is(':checked');
@@ -463,8 +459,6 @@ function bindSettingsControls() {
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
       loadSettings();
-      loadDefaultLang();
-
     }
   });
 
@@ -509,7 +503,7 @@ function setSettingsWindow(toggle) {
  * Adds label markup for range slider controls and controls label conversion
  */
 function addSettingsRangeValues() {
-  $('input:[type=range]:not(.processed)').each(function(){
+  $('input[type=range]:not(.processed)').each(function(){
     var $r = $(this);
     var $l = $('<label>').addClass('rangeval');
 
@@ -519,10 +513,6 @@ function addSettingsRangeValues() {
       var wrap = ['(', ')'];
       var dosep = true;
 
-      if (['servotime', 'latencyoffset'].indexOf(this.id) != -1) {
-        post = " " + robopaint.t('common.time.ms');
-      }
-
 
       switch (this.id){
         case "servotime":
@@ -531,8 +521,8 @@ function addSettingsRangeValues() {
         case "maxpaintdistance":
           // Display as Centimeters (16.6667 mm per step!)
           num = Math.round((num / 166.7) * 10) / 10;
-          num = num+ ' ' + robopaint.t('common.metric.cm') + ' / ' +
-            (Math.round((num / 2.54) * 10) / 10) + ' ' + robopaint.t('common.imperial.in');
+          num = robopaint.t('common.metric.cm', {count: num}) + ' / ' +
+            robopaint.t('common.imperial.in', {count: (Math.round((num / 2.54) * 10) / 10)});
           dosep = false;
           break;
         case 'servoup':
@@ -562,6 +552,12 @@ function addSettingsRangeValues() {
           wrap = ['', ''];
           post = "% - " + msg;
           break;
+      }
+
+      // Format translated text with
+      if (['servotime', 'latencyoffset'].indexOf(this.id) != -1) {
+        post = '';
+        num = robopaint.t('common.time.ms', {count: num});
       }
 
       if (dosep) num = num.toString(10).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -603,31 +599,4 @@ function updateColorSetSettings() {
   for (var i in meta) {
     $('#colorsets .' + meta[i]).text(set[meta[i]]);
   }
-}
-
-/**
- * Get default OS language and look if it is in the list of available languages,
- * if not, set default to i18n's defualt languge (English).
- * Called AFTER initial settings reload to
- */
-function loadDefaultLang() {
-    // Iterate through list of files in language directory
-    fs.readdirSync("resources/i18n/").forEach(function(file) {
-      // Test if the file is a directory.
-      var stat = fs.statSync("resources/i18n/"+file);
-      if (stat && stat.isDirectory())
-
-        // Do a RegEx search for the filename in the default system language (this
-        // returns an index position or -1 if not found, so we use a conditional
-        // to change this to a boolean of whether or not it is in the string).
-        var isDefLang = navigator.language.search(file) !== -1;
-
-        // If the language we are iterating is the OS's default language.
-        if(isDefLang) {
-          // Set the selected language to be the default language
-          $("#lang").value = file;
-          console.info('Language Reset to:' + file);
-        };
-    });
-
 }

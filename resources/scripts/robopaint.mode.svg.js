@@ -237,7 +237,7 @@ $(function() {
     // Load default content from SVG-edit
     if (localStorage["svgedit-default"]){
       $('svg#main g#cncserversvg').empty();
-      $('svg#main g#cncserversvg').append(localStorage["svgedit-default"]);
+      $('svg#main g#cncserversvg').html(localStorage["svgedit-default"]);
 
       // Convert anything not a path into a path for proper tracing
       cncserver.paths.changeToPaths('svg#main g#cncserversvg');

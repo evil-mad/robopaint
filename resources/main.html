@@ -12,9 +12,11 @@
     <script type="text/javascript" src="scripts/main.api.js"></script>
     <script type="text/javascript" src="translate.js"></script>
     <script type="text/javascript" src="scripts/robopaint.utils.js"></script>
-    <script type="text/javascript" src="scripts/lib/jquery.qtip.min.js"></script>
+    <script type="text/javascript" src="scripts/lib/qtip/jquery.qtip.min.js"></script>
+    <script type="text/javascript" src="scripts/lib/jquery.ddslick.min.js"></script>
 
     <link rel="stylesheet" href="styles.css">
+    <link type="text/css" rel="stylesheet" href="scripts/lib/qtip/jquery.qtip.css" />
 
     <title>RoboPaint!</title>
   </head>
@@ -31,12 +33,14 @@
   </span>
 
   <span class="right">
-    <a id="bar-remoteprint" class="modal tipped hidden icon-print" href="#" data-i18n="[title]nav.toolbar.remoteprint" title="Remote Paint: Enable Painting files from external programs">&nbsp;</a>
+    <a id="bar-remoteprint" class="modal tipped hidden icon-print-1" href="#" data-i18n="[title]nav.toolbar.remoteprint">&nbsp;</a>
     <a id="bar-help" data-i18n="[title]nav.toolbar.help" class="tipped" href="http://wiki.evilmadscientist.com/RoboPaint">?</a>
     <a id="bar-settings" class="modal icon-cog-alt tipped" href="#" data-i18n="[title]nav.toolbar.settings">&nbsp;</a>
   </span>
 </div>
 
+<select id="lang"></select>
+<a id="bar-translate" href="#">&nbsp;</a>
 <div id="modalmask"></div>
 <div id="settings">Loaded via jQuery...</div>
 
@@ -81,7 +85,7 @@
 <nav class="hidden"></nav>
 
 <script type="text/javascript">
-  translatePage();
+  initializeTranslation();
 </script>
 
 </body>

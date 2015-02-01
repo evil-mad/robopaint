@@ -3,7 +3,7 @@
     "creator": "techninja",
     "target": "en-US",
     "langname": "English",
-    "release": "0.9.2"
+    "release": "0.9.5"
   },
   "common": {
     "transparent": "Transparent",
@@ -41,16 +41,20 @@
       }
     },
     "time": {
-      "ms": "ms",
-      "sec": "sec",
-      "seconds": "seconds"
+      "ms": "__count__ ms",
+      "ms_plural": "__count__ ms",
+      "sec": "__count__ sec",
+      "sec_plural": "__count__ secs",
+      "second": "__count__ second",
+      "second_plural": "__count__ seconds"
     },
     "metric": {
-      "mm": "mm",
-      "cm": "cm"
+      "mm": "__count__ mm",
+      "cm": "__count__ cm"
     },
     "imperial": {
-      "in": "in"
+      "in": "__count__ inch",
+      "in_plural": "__count__ inches"
     },
     "labels": {
       "control": "Control",

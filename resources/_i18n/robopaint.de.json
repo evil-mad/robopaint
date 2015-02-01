@@ -3,23 +3,27 @@
     "creator": "docprofsky from Google Translate",
     "target": "de",
     "langname": "Deutsch",
-    "release": "0.9.3"
+    "release": "0.9.5"
   },
   "common": {
     "pause": "Pause",
     "resume": "Lebenslauf",
     "stop": "Stopp",
     "time": {
-      "ms": "Frau",
-      "sec": "Sekunde",
-      "seconds": "Sekunden"
+      "ms": "__count__ Millisekunden",
+      "sec": "__count__ sec",
+      "ms_plural": "__count__ Millisekunden",
+      "sec_plural": "__count__ Sekunden",
+      "second": "__count__ zweiten",
+      "second_plural": "__count__ Sekunden"
     },
     "metric": {
-      "mm": "Millimeter",
-      "cm": "cm"
+      "mm": "__count__ mm",
+      "cm": "__count__ cm"
     },
     "imperial": {
-      "in": "in"
+      "in": "__count__ Zoll",
+      "in_plural": "__count__ Zoll"
     },
     "substrate": "Weiß / Papier",
     "transparent": "Transparent",

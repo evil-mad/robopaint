@@ -2,7 +2,7 @@
  * @file Holds all RoboPaint example mode text renderer initialization code
  */
 
-robopaintRequire(['hersheytext', 'svgshared', 'wcb', 'commander'],
+robopaintRequire(['superdom', 'hersheytext', 'svgshared', 'wcb', 'commander'],
 function($, robopaint, cncserver) {
 
   // We don't ever check visibility/overlap for this mode because the
@@ -15,6 +15,7 @@ $(function() {
   responsiveResize();
   setTimeout(responsiveResize, 500);
   $(window).resize(responsiveResize);
+  var textHasRendered = false; // First run boolean
 
   // Populate font choices
   for (var id in cncserver.fonts) {
@@ -25,6 +26,7 @@ $(function() {
   window.bindControls = function() {
     // Bind trigger for font selection
     $('#fontselect').change(function(){
+      textHasRendered = true;
       $('#textexample').remove(); // Kill the old one (if any)
 
       // Render some text into the SVG area with it
@@ -39,11 +41,7 @@ $(function() {
         target: '#target',
         id: 'textexample'
       });
-
-      // REQUIRED: Refresh DOM to reinstate node status with XML namespaces
-      // TODO: There must be a better way to do this! :P
-      $('#scale-container').html($('#scale-container').html());
-    }).val('futural').change(); // Trigger initial run (and default font)
+    }).val('futural'); // Set default font
 
     // Re-render on keypress/change
     $('input').on('input change', function(e){
@@ -61,6 +59,13 @@ $(function() {
       robopaint.switchMode('print');
     });
   }
+
+  // Externally accessible event for when the mode is translated (can be called
+  // multiple times during a session, for every language change)
+  window.translateComplete = function() {
+    // Trigger initial run if no text and translate is done
+    if (!textHasRendered) $('#fonttext').change();
+  };
 
   // Externalize for remote triggering
   window.responsiveResize = responsiveResize;
