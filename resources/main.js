@@ -68,7 +68,6 @@ var robopaint = {
 // not be quite enough. Requires some research (and good understanding of
 // what this is currently used for, and what/if the other modes may make use of it).
 var $options;
-var $stat;
 
 /**
  * Central home screen initialization (called after translations have loaded)
@@ -119,8 +118,7 @@ function startInitialization() {
     .appendTo('body');
 
   // Prep the connection status overlay
-  $stat = $('body.home h1');
-  $options = $('.options', $stat);
+  $options = $('body.home h1 .options');
 
   // Actually try to init the connection and handle the various callbacks
   startSerial();
@@ -141,7 +139,7 @@ function startInitialization() {
 function bindMainControls() {
   // Bind the continue/simulation mode button functionality
   $('button.continue', $options).click(function(e){
-    $stat.fadeOut('slow');
+    setMessage(); // Empty setMessage makes it fade out
     cncserver.continueSimulation();
     cncserver.serialReadyInit();
 
@@ -787,17 +785,18 @@ function loadAllModes(){
  *   Optional extra class to add to message element
  */
 function setMessage(transKey, mode, append){
+  $stat = $('body.home h1');
   if (transKey) {
+    $stat.show();
     if (!append) append = '';
     $('b', $stat)
       .attr('data-i18n', transKey)
       .text(robopaint.t(transKey) + append);
-  }
 
-  if (mode) {
-    $stat.attr('class', mode);
+    if (mode) $stat.attr('class', mode);
+  } else {
+    $stat.fadeOut('slow');
   }
-
 }
 
 /**
