@@ -226,6 +226,56 @@ function bindMainControls() {
 }
 
 /**
+ * Central home screen initialization (called after translations have loaded)
+ */
+function startWizard() {
+  // Shuck the contents of the wizard into the DOM
+  var $wiz = $('#wizard');
+
+  $wiz
+    .addClass('swMain')
+    .html(fs.readFileSync('resources/main.wizard.inc.html').toString());
+
+  // Translate the WizBiz
+  $('#wizard [data-i18n]').i18n();
+
+  // TODO: Load bot specific stuff and images from CNCServer...?
+
+  // Smart Wizard
+  $wiz.smartWizard({
+    keyNavigation: true,
+    labelNext: robopaint.t('wizard.next'), // label for Next button
+    labelPrevious: robopaint.t('wizard.prev'), // label for Previous button
+    labelFinish: robopaint.t('wizard.finish'),  // label for Finish button
+    onFinish: endWizard
+  });
+
+  // Add data-i18n attrs to the buttons
+  $wiz.find('.actionBar a').each(function(){
+    var key = "";
+    switch ($(this).attr('class').split(' ')[0]) {
+      case 'buttonPrevious':
+        key = "prev";
+        break;
+      case 'buttonNext':
+        key = "next";
+        break;
+      case 'buttonFinish':
+        key = "finish";
+        break;
+    }
+    $(this).attr('data-i18n', 'wizard.' + key);
+  });
+
+  $wiz.fadeIn('slow');
+  setMessage(); // Sending an empty message sends it away
+
+  function endWizard() {
+     $('#wizard').smartWizard('showMessage','Finish Clicked');
+  }
+}
+
+/**
  * Actually does the switching between modes (no checking/confirmation steps)
  *
  * @param {String} mode

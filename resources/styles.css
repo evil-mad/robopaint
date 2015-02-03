@@ -588,6 +588,178 @@ body.home #settings .disabled label {
   color: #888;
 }
 
+/* Intro Welcome Setup Wizard tool styles  */
+body.home #wizard {
+  height: 80%;
+  width: 70%;
+}
+
+#wizard ul.steps {
+  float: none;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+#wizard ul.steps li {
+  padding: 0;
+  width: 33.3%;
+}
+
+#wizard ul.steps li:nth-child(1) { z-index: 3; }
+#wizard ul.steps li:nth-child(2) { z-index: 2; }
+#wizard ul.steps li:nth-child(3) { z-index: 1; }
+
+#wizard ul.steps li a {
+  height: 42px;
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 0 0 3.5em;
+  position: relative;
+  box-sizing: border-box;
+}
+
+
+#wizard ul.steps li a:after, #wizard ul.steps li a:before {
+  left: 100%;
+  top: 50%;
+  border: medium solid transparent;
+  content: " ";
+  height: 0px;
+  width: 0px;
+  position: absolute;
+  pointer-events: none;
+}
+
+#wizard ul.steps li a:before {
+  border-color: transparent transparent transparent #F8F8F8;
+  border-width: 23px;
+  margin-top: -23px;
+}
+
+#wizard ul.steps li a.selected:before { border-color: transparent transparent transparent #EA8511; }
+#wizard ul.steps li a.done:before { border-color: transparent transparent transparent #8CC63F; }
+
+#wizard ul.steps li a .stepNumber {
+  line-height: 40px;
+  font-size: 32px;
+  background-color: rgba(200,200,200,0.5);
+  border-radius: 0 11px 11px 0;
+  position: absolute;
+  left: -2px;
+  top: 0;
+  padding-left: 22px;
+  bottom: -2px;
+}
+
+#wizard ul.steps li:nth-child(1) .stepNumber {
+  padding-left: 10px;
+}
+
+#wizard .actionBar {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 15px;
+}
+
+#wizard .actionBar .buttonPrevious {
+  float: left;
+  margin-left: 1em;
+}
+
+#wizard .stepContainer {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 70px;
+  bottom: 70px;
+  height: auto;
+  border-radius: 0 20px;
+  overflow-y: auto;
+}
+
+#wizard .content {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  height: auto;
+}
+
+
+/* Wizard content styles (not the tool chrome) */
+#wizard #step-1 h3 {
+  margin: 0.5em 0 0;
+  text-align: center;
+}
+
+#wizard #step-1 aside {
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 0.5em;
+}
+
+#wizard-botselect {
+  border-top: 1px solid #aaa;
+  padding-top: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+#wizard-botselect a {
+  position: relative;
+  flex: 0 1 auto;
+  /*padding: 1.5em;*/
+  /* This adjusts the width based on the VH height of the window. Flexibox takes
+  care of making sure they fit comfortably inside the given width */
+  width: 43vh;
+}
+
+#wizard-botselect a img {
+  width: 100%;
+}
+
+#wizard-botselect a span.text-content {
+  background: rgba(255,255,255,0.5);
+  box-shadow: 10px 10px 71px -28px rgba(0,0,0,0.75);
+  border: 2px solid #888;
+  color: white;
+  cursor: pointer;
+  display: block;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+#wizard-botselect a span.text-content span {
+  transform: translate(-50%, -50%);
+  text-shadow:
+    0px 0px 26px rgba(0, 0, 0, 1),
+    0px 0px 16px rgba(0, 0, 0, 1),
+    0px 0px 6px rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  font-size: 2vw;
+  line-height: 2.5vw;
+  text-align: center;
+  display: block;
+  font-weight: bold;
+}
+
+#wizard-botselect a:hover span.text-content {
+  opacity: 1;
+}
+
 /* Colorset/custom color management interface */
 body.home #colorsets {
   position: relative;

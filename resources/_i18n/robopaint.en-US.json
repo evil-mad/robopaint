@@ -92,6 +92,25 @@
       "retry": "Try to Reconnect"
     }
   },
+  "wizard": {
+    "next": "Next",
+    "prev": "Previous",
+    "finish": "Finish",
+    "step1" : {
+      "title": "Select Bot",
+      "header": "First time setup: Select your robot",
+      "type": "Welcome! Please select the type of Robot you'll be painting with:",
+      "typenote": "(This can be changed later in settings)",
+      "wcb": "WaterColorBot version 1 or 2",
+      "eb": "EggBot original, professional, or ostrich"
+    },
+    "step2" : {
+      "title": "Plug in"
+    },
+    "step3" : {
+      "title": "Connect"
+    }
+  },
   "nav": {
     "toolbar": {
       "home": "Home Screen",

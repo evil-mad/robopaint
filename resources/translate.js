@@ -175,8 +175,13 @@ function initializeTranslation() {
       onSelected: updateLang
     });
 
-    // Run main window initialization
-    startInitialization();
+    // Run main window initialization (or init wizard)
+    if (localStorage['robopaint-is-setup']) {
+      startInitialization();
+    } else {
+      startWizard();
+    }
+
   });
 }
 
