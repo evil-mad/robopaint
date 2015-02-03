@@ -568,16 +568,32 @@ body.home #modalmask:before {
   opacity: 0.7;
 }
 
-body.home #settings {
-  display:none;
+body.home #settings, body.home #wizard  {
+  display: none;
   height: 70%;
+  width: 70%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   box-shadow: 3px 3px 12px;
   padding: 1em;
   position: absolute;
-  width: 70%;
+
   background-color: #aaa;
   border-radius: 8px;
   z-index: 15;
+  overflow: hidden;
+}
+
+#settings > div.settings-content {
+  border-radius: 0 10px;
+  padding: 10px;
+  overflow-y: auto;
+  background: #fff;
+  position: absolute;
+  top: 73px;
+  right: 2px;
+  bottom: 1px;
 }
 
 body.home #settings .disabled {
@@ -1048,14 +1064,6 @@ body.home div.options button.normal {
 
 #settings fieldset.filltype div:last-child {
   margin-bottom: 0;
-}
-
-#settings > div.settings-content {
-  border-radius: 0 10px;
-  padding:10px;
-  height: 75%;
-  overflow-y: auto;
-  background:#fff;
 }
 
 #settings aside {
