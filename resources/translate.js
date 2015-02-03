@@ -58,14 +58,14 @@ function initializeTranslation() {
 
   // Iterate over colorset folder, picking out colorset i18n files and adding
   // them to the translate array.
-  fs.readdirSync('resources/colorsets/').forEach(function(folder) {
+  fs.readdirSync('resources/mediasets/').forEach(function(folder) {
     try {
       // Ignore files that have extentions (we only want directories).
       // Ignore the 'i18n' directory (it is not a colorset!).
       if (folder.indexOf(".") == -1 && folder !== "_i18n") {
        // Create a full path to the directory containing this colorset's i18n
        // files.
-        var fullPath = 'resources/colorsets/' + folder + '/_i18n/';
+        var fullPath = 'resources/mediasets/' + folder + '/_i18n/';
 
         //  Iterate over language files in colorset's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {

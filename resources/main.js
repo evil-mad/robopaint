@@ -556,7 +556,7 @@ function fadeInWindow() {
  * Fetches all colorsets available from the colorsets dir
  */
 function getColorsets() {
-  var colorsetDir = 'resources/colorsets/';
+  var colorsetDir = 'resources/mediasets/';
   var files = fs.readdirSync(colorsetDir);
   var sets = [];
 
