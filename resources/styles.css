@@ -459,10 +459,11 @@ body.home #bar span.right {
 body.home h1 {
   padding: 11px;
   position: absolute;
-  top: 67%;
+  -webkit-transform: translate(0,-50%);
+  top: 50%;
   width: 100%;
   min-height: 46px;
-  margin-top: -130px;
+  box-sizing: border-box;
   text-align: center;
   background-color: #fff;
   z-index: 13;
@@ -699,10 +700,11 @@ body.home #wizard {
 
 #wizard .content {
   position: absolute;
-  width: 100%;
+  width: 97%;
   top: 0;
   bottom: 0;
   height: auto;
+  overflow-y: auto;
 }
 
 
