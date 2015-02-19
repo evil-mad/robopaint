@@ -245,6 +245,7 @@ function startWizard() {
     labelNext: robopaint.t('wizard.next'), // label for Next button
     labelPrevious: robopaint.t('wizard.prev'), // label for Previous button
     labelFinish: robopaint.t('wizard.finish'),  // label for Finish button
+    onShowStep: nextWizardStep,
     onFinish: endWizard
   });
 
@@ -265,11 +266,44 @@ function startWizard() {
     $(this).attr('data-i18n', 'wizard.' + key);
   });
 
+  $('#step-3').append($('h1')); // Append the loading H1 to step 3.
+
   $wiz.fadeIn('slow');
   setMessage(); // Sending an empty message sends it away
 
+  // Bind to bot click selection
+  $('#wizard-botselect a').click(function(e){
+    // TODO: SET BOTTYPE TO this.id
+    $('#wizard-botselect a').removeClass('selected');
+    $(this).addClass('selected');
+    e.preventDefault();
+    $('a.buttonNext').click();
+  });
+
+  // Wizard next step event
+  function nextWizardStep(step) {
+    var stepNum = step.find('.stepNumber').text();
+
+    if (stepNum == 3) {
+      // Start the actual bot connection at this point...
+      startInitialization();
+
+      // Bind to the "continue" button so we can hide the wizard, if clicked.
+      $('button.continue').bind('click.endWizard', endWizard);
+    }
+  }
+
+  // Wizard is done event
   function endWizard() {
-     $('#wizard').smartWizard('showMessage','Finish Clicked');
+    // Unbind the click (as we don't want to trigger endWizard events later)
+    $('button.continue').unbind('click.endWizard');
+
+    // Is the continue visible and someone clicked finish?
+    console.log($('button.continue').is(':visible'));
+
+    // Move the h1 Back to it's normal location, after the logo
+    $('img#logo').after($('h1'));
+    $wiz.fadeOut();
   }
 }
 

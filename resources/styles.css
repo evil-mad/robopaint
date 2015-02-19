@@ -709,15 +709,16 @@ body.home #wizard {
 
 
 /* Wizard content styles (not the tool chrome) */
-#wizard #step-1 h3 {
+#wizard h3 {
   margin: 0.5em 0 0;
   text-align: center;
 }
 
-#wizard #step-1 aside {
+#wizard aside {
   text-align: center;
   font-style: italic;
   margin-bottom: 0.5em;
+  font-size: 1.25em;
 }
 
 #wizard-botselect {
@@ -731,10 +732,16 @@ body.home #wizard {
 #wizard-botselect a {
   position: relative;
   flex: 0 1 auto;
-  /*padding: 1.5em;*/
   /* This adjusts the width based on the VH height of the window. Flexibox takes
   care of making sure they fit comfortably inside the given width */
   width: 43vh;
+  box-sizing: border-box;
+  border: 3px solid white;
+  border-radius: 10px;
+}
+
+#wizard-botselect a.selected {
+  border: 3px dashed red;
 }
 
 #wizard-botselect a img {
@@ -776,6 +783,17 @@ body.home #wizard {
 
 #wizard-botselect a:hover span.text-content {
   opacity: 1;
+}
+
+
+#wizard #step-2 img {
+  width: 52%;
+  margin: 1em auto;
+  display: block;
+}
+
+#wizard #step-3 h1 {
+  margin-left: -5px;
 }
 
 /* Colorset/custom color management interface */

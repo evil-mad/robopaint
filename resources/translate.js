@@ -115,7 +115,7 @@ function initializeTranslation() {
     }
   });
 
-  // Set default language if none set!
+  // Set default language if none set! Must be a first time run!
   if (!localStorage['robopaint-lang']) {
     localStorage['robopaint-lang'] = navigator.language;
     var navCode = localStorage['robopaint-lang'].split('-')[0].toLowerCase();
