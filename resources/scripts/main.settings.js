@@ -227,11 +227,16 @@ function bindSettingsControls() {
   for (var type in botTypes) {
     var o = $('<option>')
       .attr('value', type)
+      .data('imagesrc', 'images/bots/' + type + '_logo.png')
+      .data('description', robopaint.t('common.labels.bots.' + type))
       .text(botTypes[type].name);
 
-      o.appendTo('select#bottype');
+      o.appendTo('#bot-dropdown select');
   }
-  $('select#bottype').val(robopaint.currentBot.type);
+  $('#bot-dropdown select').val(robopaint.currentBot.type);
+
+  $('#bot-dropdown select').ddslick();
+
 
 
 

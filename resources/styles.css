@@ -15,7 +15,7 @@ canvas#debug {
 body {
   margin: 0;
   font-family: sans-serif;
-}
+}x
 
 /* Prevent selectability of text or other elements */
 * {
@@ -455,11 +455,51 @@ body.home #bar span.right {
   padding-left: 0.5em;
 }
 
+/* Bot Selection Dropdown */
+#bot-dropdown {
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  transform: translate(120px, 0);
+  z-index: 10;
+}
+
+#bot-dropdown .dd-select,
+#bot-dropdown .dd-container  {
+  background-color: transparent !important;
+  width: 103px !important;
+  border: none;
+}
+
+#bot-dropdown .dd-selected label,
+#bot-dropdown .dd-selected small {
+  display: none;
+}
+
+#bot-dropdown .dd-options {
+  top: 55px;
+  border-radius: 0 0 16px 16px;
+}
+
+#bot-dropdown .dd-options a small {
+ color: black;
+ font-style: italic;
+}
+
+#bot-dropdown .dd-option-selected {
+
+}
+
+#bot-dropdown .dd-options li a {
+  padding: 8px 2px;
+}
+
+
 /* Semi-modal alert status message */
 body.home h1 {
   padding: 11px;
   position: absolute;
-  -webkit-transform: translate(0,-50%);
+  transform: translate(0, -50%);
   top: 50%;
   width: 100%;
   min-height: 46px;
@@ -592,6 +632,7 @@ body.home #settings, body.home #wizard  {
   overflow-y: auto;
   background: #fff;
   position: absolute;
+  left: 2px;
   top: 73px;
   right: 2px;
   bottom: 1px;
@@ -714,6 +755,29 @@ body.home #wizard {
   text-align: center;
 }
 
+#wizard div.selected-bot {
+  overflow: visible;
+  width: 90%;
+  height: 30px;
+  padding: 1em;
+  margin: 1em auto;
+  position: relative;
+  border-radius: 1em 0;
+  background-color:#def;
+}
+
+#wizard div.selected-bot img {
+  height: 80px;
+  position: absolute;
+  left:-10px;
+  top: -10px;
+}
+
+#wizard div.selected-bot .title {
+  font-size: 2em;
+  margin-left: 70px;
+}
+
 #wizard aside {
   text-align: center;
   font-style: italic;
@@ -785,11 +849,24 @@ body.home #wizard {
   opacity: 1;
 }
 
+#wizard #step-2 aside {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  right: 10px;
+}
 
-#wizard #step-2 img {
-  width: 52%;
-  margin: 1em auto;
+#wizard #step-2 .anim {
+  position: absolute;
+  top: 162px;
+  bottom: 47px;
+  left: 10px;
+  right: 10px;
   display: block;
+  background-size: contain;
+  background-position:center center;
+  background-repeat:no-repeat;
+  background-image:url('images/usb.gif');
 }
 
 #wizard #step-3 h1 {

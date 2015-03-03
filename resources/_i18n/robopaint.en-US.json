@@ -59,7 +59,11 @@
     "labels": {
       "control": "Control",
       "status": "Status",
-      "progress": "Current progress"
+      "progress": "Current progress",
+      "bots": {
+        "watercolorbot": "WaterColorBot version 1 or 2",
+        "eggbot": "Original, professional, or ostrich EggBot"
+      }
     }
   },
   "libs": {
@@ -96,13 +100,12 @@
     "next": "Next",
     "prev": "Previous",
     "finish": "Finish",
+    "selected": "Selected robot: __bottype__",
     "step1" : {
       "title": "Select Bot",
       "header": "First time setup: Select your robot",
       "type": "Welcome! Please select the type of Robot you intend to use:",
-      "typenote": "(This can be changed later in settings)",
-      "wcb": "WaterColorBot version 1 or 2",
-      "eb": "EggBot original, professional, or ostrich"
+      "typenote": "(This can be changed at any time)"
     },
     "step2" : {
       "title": "Plug in",

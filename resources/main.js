@@ -74,6 +74,7 @@ var $options;
  */
 function startInitialization() {
  initializing = true;
+ if (robopaint.initialized) return false;
 
  try {
   // Bind and run inital resize first thing
@@ -131,6 +132,8 @@ function startInitialization() {
      .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
    console.error(e.stack);
  }
+
+ robopaint.initialized = true;
 }
 
 /**
@@ -273,7 +276,7 @@ function startWizard() {
 
   // Bind to bot click selection
   $('#wizard-botselect a').click(function(e){
-    // TODO: SET BOTTYPE TO this.id
+    // Manage class selection
     $('#wizard-botselect a').removeClass('selected');
     $(this).addClass('selected');
     e.preventDefault();
@@ -283,6 +286,30 @@ function startWizard() {
   // Wizard next step event
   function nextWizardStep(step) {
     var stepNum = step.find('.stepNumber').text();
+
+    if (stepNum == 2) {
+      // Verify selected bot
+      var $t = $('#wizard-botselect a.selected');
+
+      // Actually set the "currentbot"
+      localStorage["currentBot"] = JSON.stringify({
+        type: $t.attr('id'),
+        name: $t.attr('name')
+      });
+
+      // Change out the class on the selected box
+      $('#wizard div.selected-bot').each(function(){
+        $(this).attr('class', 'selected-bot ' + $t.attr('id'));
+        $('.title', this).text(
+          robopaint.t('wizard.selected', {bottype: $t.attr('name')})
+        );
+        $('img', this)
+          .attr('title', $t.text().trim())
+          .attr('src', 'images/bots/' + $t.attr('id') + '_logo.png');
+      })
+
+
+    }
 
     if (stepNum == 3) {
       // Start the actual bot connection at this point...
@@ -298,12 +325,10 @@ function startWizard() {
     // Unbind the click (as we don't want to trigger endWizard events later)
     $('button.continue').unbind('click.endWizard');
 
-    // Is the continue visible and someone clicked finish?
-    console.log($('button.continue').is(':visible'));
-
-    // Move the h1 Back to it's normal location, after the logo
-    $('img#logo').after($('h1'));
-    $wiz.fadeOut();
+    // Move the h1 Back to it's normal location, after the logo (when it's faded out)
+    $wiz.fadeOut(function() {
+      $('img#logo').after($('h1'));
+    });
   }
 }
 

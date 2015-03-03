@@ -186,13 +186,11 @@ function initializeTranslation() {
 }
 
 /**
- * DRY helper function to set the version text
+ * DRY helper function to set the version text from the manifest
  */
 function setVersion() {
-  // Set visible version from manifest (with appended bot type if not WCB)
   // This has to be done here because it's one of the few out of phase translations
-  var bt = robopaint.currentBot.type != "watercolorbot" ? ' - ' + robopaint.currentBot.name : '';
-  $('span.version').text('('+ robopaint.t('nav.toolbar.version') + gui.App.manifest.version + ')' + bt);
+  $('span.version').text(robopaint.t('nav.toolbar.version') + gui.App.manifest.version);
 }
 
 /**
