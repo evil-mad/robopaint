@@ -105,11 +105,34 @@
       </div>
     </fieldset>
 
+    <hr>
+    
+    <div>
+      <label for="refillmode" data-i18n>settings.output.refillmode.title</label>
+      <select id="refillmode">
+        <option value="0" data-i18n>settings.output.refillmode.opt0</option>
+        <option value="1" data-i18n>settings.output.refillmode.opt1</option>
+      </select>
+      <aside data-i18n>settings.output.refillmode.detail</aside>
+    </div>
+
     <div id="maxpaint">
       <label for="maxpaintdistance" data-i18n>settings.output.maxpaintdistance.title</label>
       <input type="range" data-i18n="[title]settings.output.maxpaintdistance.hint" id="maxpaintdistance" min="500" max="20000" />
       <aside data-i18n>settings.output.maxpaintdistance.detail</aside>
     </div>
+    
+    <div>
+        <label for="refillaction" data-i18n>settings.output.refillaction.title</label>
+        <select id="refillaction">
+            <option value="0" data-i18n>settings.output.refillaction.opt0</option>
+            <option value="1" data-i18n>settings.output.refillaction.opt1</option>
+            <option value="2" data-i18n>settings.output.refillaction.opt2</option>
+        </select>
+        <aside data-i18n>settings.output.refillaction.detail</aside>
+    </div>
+
+    <hr>
 
     <div>
       <label for="strokeprecision" data-i18n>settings.output.strokeprecision.title</label>
