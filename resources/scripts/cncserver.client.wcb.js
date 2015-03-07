@@ -222,17 +222,42 @@ cncserver.wcb = {
         if (callback) callback(true);
         break;
       default:
-        cncserver.cmd.run([
-          ['status', robopaint.t('libs.reinking', {media: name})],
-          'resetdistance',
-          ['media', 'water0dip'],
-          ['media', cncserver.state.mediaTarget],
-          'up',
-          ['move', point],
-          ['status', robopaint.t('libs.reinked', {media: name})],
-          'down'
-        ], true); // Add to the start (not the end) of the local buffer
-
+        if (parseInt(robopaint.settings.refillaction) == 0) {
+          cncserver.cmd.run([
+            ['status', robopaint.t('libs.reinking', {media: name})],
+            'resetdistance',
+            ['media', 'water0dip'],
+            ['media', cncserver.state.mediaTarget],
+            'up',
+            ['move', point],
+            ['status', robopaint.t('libs.reinked', {media: name})],
+            'down'
+          ], true); // Add to the start (not the end) of the local buffer
+        } else if (parseInt(robopaint.settings.refillaction) == 1) {
+          cncserver.cmd.run([
+            ['status', robopaint.t('libs.reinking', {media: name})],
+            'resetdistance',
+            ['media', 'water0dip'],
+            ['media', cncserver.state.mediaTarget + "dip"],
+            'up',
+            ['move', point],
+            ['status', robopaint.t('libs.reinked', {media: name})],
+            'down'
+          ], true); // Add to the start (not the end) of the local buffer
+        } else if (parseInt(robopaint.settings.refillaction) == 2) {
+          cncserver.cmd.run([
+            ['status', robopaint.t('libs.reinking', {media: name})],
+            'resetdistance',
+            ['media', 'water0dip'],
+            ['media', cncserver.state.mediaTarget + "dip"],
+            ['media', 'water0dip'],
+            ['media', cncserver.state.mediaTarget + "dip"],
+            'up',
+            ['move', point],
+            ['status', robopaint.t('libs.reinked', {media: name})],
+            'down'
+          ], true); // Add to the start (not the end) of the local buffer
+        }
         if (callback) callback();
     }
   },
