@@ -288,14 +288,14 @@ cncserver.paths = {
                   subPathCount++;
                   if (options.refillmode == 0) {
                       run([
-                        ['status', 'Drawing subpath #' + subPathCount],
+                        ['status', robopaint.t("libs.sub", {num: subPathCount})],
                         'up',
                         ['move', p],
                         'down'
                       ]);
                   } else if (options.refillmode == 1) {
                    run([
-                        ['status', 'Getting paint, then drawing subpath #' + subPathCount],
+                        ['status', robopaint.t("libs.subrefill", {num: subPathCount})],
                         'up',
                         ['getpaintfull', p],
                         ['move', p],
