@@ -64,6 +64,7 @@
   },
   "libs": {
     "sub": "Drawing sub-path __num__",
+    "subrefill": "Getting paint then drawing sub-path __num__",
     "problem": "Connection Problem ☹",
     "ignorewash": "Full wash command ignored for draw mode __mode__",
     "ignorewater": "Water ignored for draw mode __mode__",
