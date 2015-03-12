@@ -64,6 +64,7 @@
   },
   "libs": {
     "sub": "Drawing sub-path __num__",
+    "subrefill": "Getting paint then drawing sub-path __num__",
     "problem": "Connection Problem ☹",
     "ignorewash": "Full wash command ignored for draw mode __mode__",
     "ignorewater": "Water ignored for draw mode __mode__",
@@ -194,6 +195,19 @@
         "title": "Refill Distance:",
         "hint": "Move left to get paint more often, right to get paint less often.",
         "detail": " The distance for the brush to paint on the paper before it should go get more water/paint on the brush. Default is **48.2cm / 19in**."
+      },
+      "refillmode": {
+        "title": "Refill Mode:",
+        "opt0": "After Max Distance (default)",
+        "opt1": "After Each SVG Path",
+        "detail": "Choose to refill the paint either after a certain distance (default), or after each SVG path."
+      },
+      "refillaction": {
+        "title": "Refill Action:",
+        "opt0": "Full paint refill (default)",
+        "opt1": "Single dip in water and paint",
+        "opt2": "Double dip in water and paint",
+        "detail": "When refilling paint, get a lot of paint (default) or just dip in the paint either once or twice."
       },
       "strokeprecision": {
         "title": "Stroke Precision:",
