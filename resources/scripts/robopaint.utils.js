@@ -211,7 +211,17 @@ robopaint.utils = {
       // Add 48 to each side for 96dpi 1/2in offset
       return {x: p.x+48, y: p.y+48};
     };
-    $path.maxLength = $path[0].getTotalLength(); // Shortcut!
+    $path.getBBoxTransformed = function() {
+      var bbox = $path[0].getBBox();
+      return {
+        width: $path.transformMatrix.a * bbox.width,
+        height: $path.transformMatrix.d * bbox.height
+        // TODO: Add X & Y?
+      };
+    }
+    if ($path[0].getTotalLength) {
+      $path.maxLength = $path[0].getTotalLength(); // Shortcut!
+    }
   },
 
   /**
