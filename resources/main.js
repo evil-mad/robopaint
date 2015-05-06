@@ -87,9 +87,20 @@ function startInitialization() {
   // Initalize Tooltips (after modes have been loaded)
   initToolTips();
 
-  // Bind settings controls & Load up initial settings!
-  // @see scripts/main.settings.js
+  // Bind settings controls
   bindSettingsControls();
+
+  // Must be run before we enumerate colorsets to ensure data is cached properly
+  // Also must run after settings controls are bound (as that's when we get tool
+  // data on current bot. TODO: Find a better home for that?
+  verifyColorsetAbilities();
+
+  // Load the colorset configuration data (needs to happen before settings are
+  // loaded and a colorset is selected.
+  getColorsets();
+
+  // Load up initial settings!
+  // @see scripts/main.settings.js
   loadSettings();
 
   // Set base CNC Server API wrapper access location
@@ -124,8 +135,6 @@ function startInitialization() {
 
   // Actually try to init the connection and handle the various callbacks
   startSerial();
-
-  getColorsets(); // Load the colorset configuration data
 
   bindMainControls(); // Bind all the controls for the main interface
  } catch(e) {
@@ -604,14 +613,13 @@ function getColorsets() {
   // Actually add the colorsets in the correct weighted order to the dropdown
   for(var i in order) {
     var c = robopaint.statedata.colorsets[order[i]];
-    if (c.enabled) { // Only add enabled/allowed color/mediasets
-      $('#colorset').append(
-        $('<option>')
-          .attr('value', order[i])
-          .text(c.type + ' - ' + c.name)
-          .prop('selected', order[i] == robopaint.settings.colorset)
-      );
-    }
+    $('#colorset').append(
+      $('<option>')
+        .attr('value', order[i])
+        .text(c.type + ' - ' + c.name)
+        .prop('selected', order[i] == robopaint.settings.colorset)
+        .prop('disabled', !c.enabled) // Disable unavailable options
+    );
   }
 
   // No options? Disable color/mediasets

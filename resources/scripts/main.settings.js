@@ -302,6 +302,11 @@ function bindSettingsControls() {
 
 
     switch (this.id) {
+      case 'colorset':
+        // Disabled select properties can't be read with val(), so we use
+        // selectedIndex as an always working option.
+        robopaint.settings[this.id] = $input.find('option')[$input.prop('selectedIndex')].value;
+        break;
       case 'servoup':
       case 'servopaint':
       case 'servowash':

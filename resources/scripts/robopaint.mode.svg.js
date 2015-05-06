@@ -43,6 +43,7 @@ cncserver.state = {
 };
 
 cncserver.config = {
+  //TODO: Color sshould be rethought here when EggBot Support Comes in.
   colors: robopaint.statedata.colorsets[robopaint.settings.colorset].colors,
   canvasDebug: false, // Debug mode for helping find canvas offsets
   checkVisibility: true
