@@ -60,7 +60,7 @@ function loadSettings() {
   if (localStorage[settingsStorageKey()]) {
     var s = getSettings();
     for (var key in robopaint.settings) {
-      if (typeof s[key] != 'undefined') {
+      if (typeof s[key] != 'undefined' && s[key] !== null) {
         robopaint.settings[key] = s[key];
       }
     }
