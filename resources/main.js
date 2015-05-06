@@ -49,7 +49,7 @@ var barHeight = 40;
 var isModal = false;
 var initializing = false;
 var appMode = 'home';
-var $subwindow = {}; // Placeholder for subwindow iframe
+var $subwindow; // Placeholder for subwindow iframe
 var subWin = {}; // Placeholder for subwindow "window" object
 
 // Set the global scope object for any robopaint level details needed by other modes
@@ -77,6 +77,16 @@ function startInitialization() {
  initializing = true;
 
  try {
+  // Add the secondary page iFrame to the page
+  $subwindow = $('<iframe>').attr({
+    height: $(window).height() - barHeight,
+    border: 0,
+    id: 'subwindow'
+  })
+    .css('top', $(window).height())
+    .hide()
+    .appendTo('body');
+
   // Bind and run inital resize first thing
   $(window).resize(responsiveResize);
   responsiveResize();
@@ -118,16 +128,6 @@ function startInitialization() {
 
   // Load the quickload list
   initQuickload();
-
-  // Add the secondary page iFrame to the page
-  $subwindow = $('<iframe>').attr({
-    height: $(window).height() - barHeight,
-    border: 0,
-    id: 'subwindow'
-  })
-    .css('top', $(window).height())
-    .hide()
-    .appendTo('body');
 
   // Prep the connection status overlay
   $stat = $('body.home h1');
@@ -285,7 +285,7 @@ function responsiveResize() {
   $s.find('.settings-content').height($s.height() - 80);
 
   // Set subwindow height
-  if ($subwindow.height) {
+  if (typeof $subwindow !== 'undefined') {
     $subwindow.height($(window).height() - barHeight);
   }
 
@@ -794,7 +794,8 @@ function getCurrentBot() {
   try {
     bot = JSON.parse(localStorage['currentBot']);
   } catch(e) {
-    // Parse error.. will stick with default
+    // Parse error.. will stick with default and write it.
+    localStorage['currentBot'] = JSON.stringify(bot);
   }
   return bot;
 }
