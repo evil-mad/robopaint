@@ -287,21 +287,20 @@ cncserver.paths = {
                 if (seg.pathSegTypeAsLetter.toLowerCase() === "m") {
                   subPathCount++;
                   if (options.refillmode == 0) {
-                      run([
-                        ['status', robopaint.t("libs.sub", {num: subPathCount})],
-                        'up',
-                        ['move', p],
-                        'down'
-                      ]);
+                    run([
+                      ['status', robopaint.t("libs.sub", {num: subPathCount})],
+                      'up',
+                      ['move', p],
+                      'down'
+                    ]);
                   } else if (options.refillmode == 1) {
-                   run([
-                        ['status', robopaint.t("libs.subrefill", {num: subPathCount})],
-                        'up',
-                        ['getpaintfull', p],
-                        ['move', p],
-                        'down'
-                        ]);
-
+                    run([
+                      ['status', robopaint.t("libs.subrefill", {num: subPathCount})],
+                      'up',
+                      ['getpaintfull', p],
+                      ['move', p],
+                      'down'
+                    ]);
                   }
                   break;
                 }
