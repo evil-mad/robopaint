@@ -340,7 +340,7 @@ cncserver.paths = {
             cncserver.state.process.waiting = true;
           }
         }
-        setTimeout(runNextPoint, 0);
+        process.nextTick(runNextPoint);
       } else { // Done
         // Overshoot to make up for brush flexibility
         if (options.strokeovershoot) {
@@ -444,7 +444,7 @@ cncserver.paths = {
             cncserver.state.process.waiting = true;
           }
         }
-        setTimeout(runNextFill, 0);
+        process.nextTick(runNextFill);
       } else { // Done
         if (callback) callback();
       }
@@ -498,6 +498,7 @@ cncserver.paths = {
     var topOffset = 48;
     var bottomLimit = 48;
     var fillOffsetPadding = options.fillprecision;
+    var fillCount = 0;
 
     // Offset calculation for non-flat angles
     // TODO: Support angles other than 45
@@ -661,7 +662,7 @@ cncserver.paths = {
             lastPointChecked = {x:p.x, y:p.y};
           }
         }
-        setTimeout(runNextFill, 0);
+        process.nextTick(runNextFill);
       } else { // DONE!
         // Reset position of fill line (avoids odd prefill lines)
         $fill.attr('transform', 'translate(0,0)');
@@ -727,7 +728,7 @@ cncserver.paths = {
           // Save the point!
           points.push([p.x, p.y]);
         }
-        setTimeout(runNextFill, 0);
+        process.nextTick(runNextFill);
       } else { // Points are filled! Run the solver
         runTSPSolver();
       }
