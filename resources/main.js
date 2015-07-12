@@ -232,7 +232,7 @@ function bindMainControls() {
 
   // Bind help click (it's special)
   $('#bar-help').click(function(e){
-    gui.Shell.openExternal(this.href);
+    require('shell').openExternal(this.href);
     e.preventDefault();
   });
 }
