@@ -6,8 +6,9 @@
  */
 
 global.$ = $;
-var gui = require('nw.gui');
-
+var remote = require('remote');
+var mainWindow = remote.getCurrentWindow();
+var app = remote.require('app');
 
 // Setup and hide extraneous menu items for Mac Menu
 if (process.platform === "darwin") {
