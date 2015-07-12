@@ -5,7 +5,9 @@
  *
  */
 
-global.$ = $;
+window.$ = window.jQuery = require('./scripts/lib/jquery.js');
+window.$.i18n = window.i18n = require('./scripts/lib/i18next.js');
+
 var remote = require('remote');
 var mainWindow = remote.getCurrentWindow();
 var app = remote.require('app');
