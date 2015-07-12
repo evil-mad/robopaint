@@ -2,20 +2,10 @@
   "name": "robopaint",
   "version": "0.9.6",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
-  "main": "resources/main.html",
+  "main": "resources/window-main.js",
   "author": "techninja",
   "stage": "development",
   "license": "MIT",
-  "window": {
-    "toolbar": true,
-    "position": "center",
-    "min_width": 600,
-    "min_height": 420,
-    "width": 980,
-    "height": 600,
-    "icon": "resources/images/watercolorbot_icon.png",
-    "title": "RoboPaint!"
-  },
   "scripts": {
     "postinstall": "resources/scripts/shell/build_serialport.sh"
   },
