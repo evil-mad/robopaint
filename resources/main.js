@@ -40,7 +40,7 @@ bugsnag.register("e3704afa045597498ab11c74f032f755",{
 // Global Keypress catch for debug
 $(document).keypress(function(e){
   if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
-    gui.Window.get().showDevTools();
+    mainWindow.openDevTools();
   }
 });
 
