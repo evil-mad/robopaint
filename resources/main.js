@@ -14,12 +14,8 @@ var app = remote.require('app');
 
 // Setup and hide extraneous menu items for Mac Menu
 if (process.platform === "darwin") {
-  var mb = new gui.Menu({type: 'menubar'});
-  mb.createMacBuiltin('RoboPaint', {
-    hideEdit: true,
-    hideWindow: true
-  });
-  gui.Window.get().menu = mb;
+  // TODO: Implement Menus!
+  // https://github.com/atom/electron/blob/master/docs/api/menu.md
 }
 
 // BugSnag NODE Initialization
