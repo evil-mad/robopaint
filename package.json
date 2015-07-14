@@ -6,9 +6,6 @@
   "author": "techninja",
   "stage": "development",
   "license": "MIT",
-  "scripts": {
-    "postinstall": "resources/scripts/shell/build_serialport.sh"
-  },
   "dependencies" : {
     "cncserver": "https://github.com/techninja/cncserver/tarball/master"
   },
