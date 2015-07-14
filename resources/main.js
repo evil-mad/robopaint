@@ -180,7 +180,7 @@ function bindMainControls() {
   });
 
 
-  gui.Window.get().on('close', onClose); // Catch close event
+  mainWindow.on('close', onClose); // Catch close event
 
   // Bind links for home screen central bubble nav links
   $('nav a').click(function(e) {
@@ -376,12 +376,12 @@ function startSerial(){
  * Runs on application close request to catch exits and alert user with dialog
  * if applicable depending on mode status
  */
-function onClose() {
-  var w = this;
-
+function onClose(e) {
   checkModeClose(function(){
-    w.close(true); // Until this is called
+    mainWindow.destroy(); // Until this is called
   }, true);
+  e.preventDefault();
+  return false;
 }
 
 
