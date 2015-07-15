@@ -50,7 +50,7 @@ function windowInit() {
     });
 
     // and load the index.html of the app.
-    mainWindow.loadUrl('file://' + __dirname + '/main.html');
+    mainWindow.loadUrl('file://' + __dirname + '/../../main.html');
 
     // Open the devtools.
     mainWindow.openDevTools();
