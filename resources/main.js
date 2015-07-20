@@ -657,7 +657,7 @@ function getColorsets() {
  * Load all modes within the application
  */
 function loadAllModes(){
-  var modesDir = 'resources/modes/';
+  var modesDir = appPath + 'resources/modes/';
   var files = fs.readdirSync(modesDir);
   var modes = {};
   var modeDirs = [];
