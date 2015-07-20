@@ -44,7 +44,7 @@ $(document).keypress(function(e){
 
 
 var currentLang = "";
-var fs = require('fs');
+var fs = require('fs-plus');
 var cncserver = require('cncserver');
 var barHeight = 40;
 var isModal = false;
