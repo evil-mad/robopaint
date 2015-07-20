@@ -10,13 +10,13 @@
 function initializeTranslation() {
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
-  $('#settings').html(fs.readFileSync('resources/main.settings.inc.html').toString());
+  $('#settings').html(fs.readFileSync(appPath + 'resources/main.settings.inc.html').toString());
   var resources = {};
 
   // Get all available language JSON files from folders, add to the dropdown
   // list, and add to the rescources available.
   var i = 0;
-  var i18nPath = 'resources/_i18n/';
+  var i18nPath = appPath + 'resources/_i18n/';
   fs.readdirSync(i18nPath).forEach(function(file) {
     // Get contents of the language file.
     try {
@@ -47,9 +47,9 @@ function initializeTranslation() {
   // Parsing for colorset translation strings.
   try {
     // Iterate over global colorset i18n directory.
-    fs.readdirSync('resources/colorsets/_i18n').forEach(function(file) {
+    fs.readdirSync(appPath + 'resources/colorsets/_i18n').forEach(function(file) {
       // Add each translation file to the global translate array.
-      var data = JSON.parse(fs.readFileSync('resources/colorsets/_i18n/' + file , 'utf8'));
+      var data = JSON.parse(fs.readFileSync(appPath + 'resources/colorsets/_i18n/' + file , 'utf8'));
       resources[data['_meta'].target].translation['colorsets'] = data;
     });
   }catch(e) {
@@ -58,14 +58,14 @@ function initializeTranslation() {
 
   // Iterate over colorset folder, picking out colorset i18n files and adding
   // them to the translate array.
-  fs.readdirSync('resources/colorsets/').forEach(function(folder) {
+  fs.readdirSync(appPath + 'resources/colorsets/').forEach(function(folder) {
     try {
       // Ignore files that have extentions (we only want directories).
       // Ignore the 'i18n' directory (it is not a colorset!).
       if (folder.indexOf(".") == -1 && folder !== "_i18n") {
        // Create a full path to the directory containing this colorset's i18n
        // files.
-        var fullPath = 'resources/colorsets/' + folder + '/_i18n/';
+        var fullPath = appPath + 'resources/colorsets/' + folder + '/_i18n/';
 
         //  Iterate over language files in colorset's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {
@@ -80,11 +80,11 @@ function initializeTranslation() {
   });
 
   // Load all mode translation files
-  fs.readdirSync('resources/modes/').forEach(function(folder) {
+  fs.readdirSync(appPath + 'resources/modes/').forEach(function(folder) {
     try {
       // Ignore files that have extentions (we only want directories).
       if (folder.indexOf(".") == -1) {
-        var fullPath = 'resources/modes/' + folder + '/_i18n/';
+        var fullPath = appPath + 'resources/modes/' + folder + '/_i18n/';
         //  Iterate over language files in mode's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {
           if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
