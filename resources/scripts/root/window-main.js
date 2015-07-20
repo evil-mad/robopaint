@@ -52,9 +52,6 @@ function windowInit() {
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/../../main.html');
 
-    // Open the devtools.
-    mainWindow.openDevTools();
-
     mainWindow.onbeforeunload = function(e) {
       console.log('I do not want to be closed');
 
