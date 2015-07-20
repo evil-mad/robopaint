@@ -6,8 +6,9 @@
   "author": "techninja",
   "stage": "development",
   "license": "MIT",
-  "dependencies" : {
-    "cncserver": "https://github.com/techninja/cncserver/tarball/master"
+  "dependencies": {
+    "cncserver": "https://github.com/techninja/cncserver/tarball/master",
+    "fs-plus": "^2.8.1"
   },
   "repository": {
     "type": "git",
