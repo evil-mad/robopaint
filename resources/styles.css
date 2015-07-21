@@ -350,9 +350,11 @@ fieldset#control {
 .icon-attention-1:before { content: '\e854'; } /* '' */
 .icon-logout:before { content: '\e855'; } /* '' */
 
-/* Image side edit tools */
+/* Image quick load */
 
 #loadlist {
+  box-shadow: 11px 11px 47px -1px rgba(0,0,0,0.52);
+  width: 282px;
   background-color: #FFFFFF;
   border: 1px solid #999999;
   border-radius: 0 15px 15px 15px;
@@ -366,9 +368,42 @@ fieldset#control {
 
 #loadlist li a {
   display: block;
-  font-size: 17px !important;
+  position: relative;
   padding: 4px 7px;
+  width: 80px;
+  height: 70px;
+  float: left;
   font-weight: bold;
+}
+
+#loadlist li a span {
+  font-size: 14px;
+  line-height: 14px;
+  display: block;
+  font-weight: normal;
+  text-align: center;
+}
+
+#loadlist li a img {
+  max-width: 50px;
+  max-height: 50px;
+  display: block;
+  z-index: 1;
+  position: relative;
+  margin: 0 auto;
+  margin-bottom: 7px;
+}
+
+#loadlist li a span:before {
+  content: ' ';
+  left: 10px;
+  top: 3px;
+  background-image: url('modes/print/images/paper_texture.png');
+  display: block;
+  position: absolute;
+  width: 70px;
+  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);
+  height: 38px;
 }
 
 #loadlist li a {
@@ -377,6 +412,12 @@ fieldset#control {
 
 #loadlist li:nth-child(even) a {
   background-color: #FFF;
+}
+
+#loadlist li a:hover {
+  z-index: 2;
+  box-shadow: 0px 0px 19px 5px rgba(255,124,54,1);
+  background-color: #ffb996;
 }
 
 /* Central home screen general styles */
@@ -435,7 +476,7 @@ body.home #bar a {
   font-size: 30px;
 }
 
-body.home #bar a:hover {
+body.home #bar > a:hover {
   text-shadow: 0 0 15px red;
 }
 

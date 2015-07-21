@@ -480,7 +480,10 @@ function initQuickload() {
       var s = svgs[i];
       var name = s.split('.')[0].replace(/_/g, ' ');
       $('<li>').append(
-        $('<a>').text(name).data('file', paths[0] + '/' + s).attr('href', '#')
+        $('<a>').data('file', paths[0] + '/' + s).attr('href', '#').append(
+          $('<img>').attr('src', paths[0] + '/' + s),
+          $('<span>').text(name)
+        )
       ).appendTo($loadList);
     }
   }
