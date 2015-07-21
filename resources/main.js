@@ -452,7 +452,7 @@ function initToolTips() {
 function initQuickload() {
   var $load = $('#bar-load');
   var $loadList = $('#loadlist');
-  var paths = ['resources/svgs'];
+  var paths = [appPath + 'resources/svgs'];
 
   // TODO: Support user directories off executable
   // This is imagined as secondary dropdown folder to list SVG files from a
@@ -460,7 +460,7 @@ function initQuickload() {
   // folder, allowing for easy customizing of their quickload images. (This
   // could also be a good default location to save files to!). How do we get
   // that folder? No idea.
-  var svgs = fs.readdirSync(appPath + paths[0]);
+  var svgs = fs.readdirSync(paths[0]);
 
   // Bind Quick Load Hover
   $load.click(function(e) {
