@@ -62,6 +62,7 @@ var robopaint = {
   currentBot: getCurrentBot(),
   cncserver: cncserver, // Holds the reference to the real CNC server object with API wrappers
   $: $, // Top level jQuery Object for non-shared object bindings
+  appPath: appPath // Absolute App path to prefix relative dir locations
 };
 
 // Option buttons for connections
