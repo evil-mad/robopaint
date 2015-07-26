@@ -10,6 +10,9 @@ $('<link>').attr({rel: 'stylesheet', href: "../../edit.method-draw.css"}).append
 // Set the global scope object for any robopaint level details
 var robopaint = window.parent.robopaint;
 
+// Confirm dialog doesn't work in subwindow
+window.confirm = window.parent.confirm;
+
 // Page load complete...
 $(function() {
 
