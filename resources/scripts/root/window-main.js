@@ -1,5 +1,6 @@
 var app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
+var dialog = require('dialog');
 
 // Report crashes to our server.
 //require('crash-reporter').start();
@@ -48,6 +49,11 @@ function windowInit() {
       icon: "resources/images/watercolorbot_icon.png",
       title: "RoboPaint!"
     });
+
+    // Window wrapper for dialog (can't include module outside of this) :P
+    mainWindow.dialog = function(options, callback) {
+      dialog['show' + options.type](mainWindow, options, callback);
+    }
 
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/../../main.html');
