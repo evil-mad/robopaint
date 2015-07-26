@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "pt",
     "creator": "techninja via GoogleTranslate"
   },
@@ -53,7 +53,8 @@
     "error": {
       "save": "Houve um erro ao gravar o arquivo.\n\n Verifique as permissões ou o nome do arquivo e tente novamente.",
       "transfer": "Lamentamos, mas parece que há alguns elementos incompaitble em seu SVG que RoboPaint não poderia corrigir automaticamente.\n\n Sugerimos que você abrir o SVG em Inkscape ou outro editor SVG, simplificar o documento ou simplesmente salvá-lo novamente.\n\n Você pode continuar e tentar imprimir isso, mas você pode ter problemas. Erro dado abaixo:"
-    }
+    },
+    "savetitle": "salvar imagem como..."
   },
   "tools": {
     "select": "Select Tool",

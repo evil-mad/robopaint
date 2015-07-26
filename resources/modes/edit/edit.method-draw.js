@@ -144,76 +144,65 @@ function removeElements() {
 
 // Add in extra Method Draw elements
 function addElements() {
-  if (!robopaint.statedata.lastFile) robopaint.statedata.lastFile = '';
-
-  // Add NW integrated save functionality
-  var fileSave = $('<input>').attr({
-    type: 'file',
-    nwsaveas: robopaint.statedata.lastFile
-  });
+  if (!robopaint.statedata.lastFile) robopaint.statedata.lastFile = parent.app.getHomeDir();
 
   methodDraw.setCustomHandlers({
     save: function(win, svg) {
-      var ignoreChange = false;
-      fileSave.change(function(e) {
-        // If there was a failure is saving, we need to ignore the next change
-        // to ensure we catch the same save error next time
-        if (ignoreChange) {
-          console.log('CHANGEIGNORED');
-          ignoreChange = false;
-          return;
-        }
+      parent.mainWindow.dialog(
+        {
+          type: 'SaveDialog',
+          title: robopaint.t('modes.edit.dialogs.savetitle'),
+          defaultPath: robopaint.statedata.lastFile,
+          filters: [
+            {name: 'Scalable Vector Graphics ', extensions: ['svg']}
+          ]
+        },
+        function(path) {
+          if (!path) return; // Cancelled!
 
-        var path = this.value;
-
-        if (!path) return; // Cancelled!
-
-        // Verify .svg extension
-        if (path.split('.').pop().toLowerCase() !== 'svg') {
-          path += '.svg';
-        }
-
-        // Clean out lines 2-6 (& 8) (if existing)
-        var lines = svg.split("\n");
-        var backTitle = "  <title>background</title>";
-        if (lines[4] == backTitle || lines[3] == backTitle) {
-
-          var offset = lines[4] == backTitle ? 1 : 0;
-          var out = [];
-          for(var i in lines) {
-            var skip = false;
-
-            var skipRules = [
-              i < 6 + offset && i > 0,
-              i == 7 + offset
-            ];
-
-            for (var s in skipRules) {
-              skip = skip ? skip : skipRules[s];
-            }
-
-            if (!skip) {
-              out.push(lines[i]);
-            }
+          // Verify .svg extension
+          if (path.split('.').pop().toLowerCase() !== 'svg') {
+            path += '.svg';
           }
-          svg = out.join("\n");
-        }
 
-        try {
-          window.parent.fs.writeFileSync(path, svg);
-          robopaint.statedata.lastFile = path;
-          $(this).attr('nwsaveas', path);
-        } catch(err) {
-          ignoreChange = true;
-          $(this).val('');
-          window.alert(robopaint.t('modes.edit.dialogs.error.save') + '\n\n ERR# ' + err.errno + ',  ' + err.code);
-          console.log('Error saving file:', err);
+          // Clean out lines 2-6 (& 8) (if existing)
+          var lines = svg.split("\n");
+          var backTitle = "  <title>background</title>";
+          if (lines[4] == backTitle || lines[3] == backTitle) {
+
+            var offset = lines[4] == backTitle ? 1 : 0;
+            var out = [];
+            for(var i in lines) {
+              var skip = false;
+
+              var skipRules = [
+                i < 6 + offset && i > 0,
+                i == 7 + offset
+              ];
+
+              for (var s in skipRules) {
+                skip = skip ? skip : skipRules[s];
+              }
+
+              if (!skip) {
+                out.push(lines[i]);
+              }
+            }
+            svg = out.join("\n");
+          }
+
+          try {
+            window.parent.fs.writeFileSync(path, svg);
+            robopaint.statedata.lastFile = path;
+          } catch(err) {
+            $(this).val('');
+            window.alert(robopaint.t('modes.edit.dialogs.error.save') + '\n\n ERR# ' + err.errno + ',  ' + err.code);
+            console.log('Error saving file:', err);
+          }
         }
-      }).click();
+      );
     }
   });
-
-
 
 
   // Add and bind Auto Zoom Button / Menu item

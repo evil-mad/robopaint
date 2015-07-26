@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "fr",
     "creator": "techninja via GoogleTranslate"
   },
@@ -53,7 +53,8 @@
       "save": "Il y avait une erreur d'écriture du fichier.\n\n Vérifiez vos droits ou le nom du fichier et essayez à nouveau.",
       "transfer": "Nous sommes désolés, mais il semble que il ya certains éléments dans votre incompaitble SVG RoboPaint ne pouvait pas fixer automatiquement.\n\n Nous vous suggérons d'ouvrir le SVG dans Inkscape ou un autre éditeur de SVG, simplifier le document ou juste réenregistrer.\n\n Vous pouvez continuer et essayer d'imprimer, mais vous pouvez avoir des problèmes. Erreur donnée ci-dessous:"
     },
-    "confirmquit": "Etes-vous sûr de vouloir quitter?\n Vos modifications de cette image ne seront pas enregistrées avant l'impression. Cliquez sur OK pour quitter."
+    "confirmquit": "Etes-vous sûr de vouloir quitter?\n Vos modifications de cette image ne seront pas enregistrées avant l'impression. Cliquez sur OK pour quitter.",
+    "savetitle": "Enregistrer l'image sous..."
   },
   "tools": {
     "select": "Outil de sélection",

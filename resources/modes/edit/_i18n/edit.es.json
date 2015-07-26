@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "es",
     "creator": "techninja via GoogleTranslate"
   },
@@ -69,7 +69,8 @@
       "save": "Hubo un error al escribir el archivo.\n\n Compruebe sus permisos o el nombre del archivo y vuelva a intentarlo.",
       "transfer": "Lo sentimos, pero parece que hay algunos elementos incompaitble en su SVG que RoboPaint no podía solucionar automáticamente.\n\n Le sugerimos que abra el SVG en Inkscape u otro editor de SVG, simplificar el documento o simplemente volver a guardarlo.\n\n Puede continuar y tratar de imprimir esto, pero es posible que tenga problemas. Error da a continuación:"
     },
-    "confirmquit": "¿Seguro que quieres salir?\n Los cambios realizados en esta imagen no se guardarán antes de imprimir. Haga clic en Aceptar para salir."
+    "confirmquit": "¿Seguro que quieres salir?\n Los cambios realizados en esta imagen no se guardarán antes de imprimir. Haga clic en Aceptar para salir.",
+    "savetitle": "guardar imagen como..."
   },
   "menu": {
     "view": {
