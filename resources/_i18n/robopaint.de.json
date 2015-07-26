@@ -3,14 +3,14 @@
     "creator": "docprofsky from Google Translate",
     "target": "de",
     "langname": "Deutsch",
-    "release": "0.9.5"
+    "release": "0.9.6"
   },
   "common": {
     "pause": "Pause",
     "resume": "Lebenslauf",
     "stop": "Stopp",
     "time": {
-      "ms": "__count__ Millisekunden",
+      "ms": "__count__ ms",
       "sec": "__count__ sec",
       "ms_plural": "__count__ Millisekunden",
       "sec_plural": "__count__ Sekunden",
@@ -22,7 +22,7 @@
       "cm": "__count__ cm"
     },
     "imperial": {
-      "in": "__count__ Zoll",
+      "in": "__count__ inch",
       "in_plural": "__count__ Zoll"
     },
     "substrate": "Weiß / Papier",
@@ -235,6 +235,19 @@
       "gapconnect": {
         "title": "Schließen Sie kleine Lücken:",
         "detail": "Macht hin und her füllt glatter durch nicht anheben Bürste an Kanten."
+      },
+      "refillmode": {
+        "title": "Refill-Modus:",
+        "opt0": "Nach Max Entfernung (default)",
+        "opt1": "Nach jedem SVG-Pfad",
+        "detail": "Wählen Sie die Farbe entweder nach einer bestimmten Distanz (Standard), oder nach jedem SVG Weg wieder zu füllen."
+      },
+      "refillaction": {
+        "title": "Refill Aktion:",
+        "opt0": "Vollfarbe nachfüllen (default)",
+        "opt1": "Single Bad im Wasser und Farbe",
+        "opt2": "Double-Dip in Wasser und Farbe",
+        "detail": "Beim Nachfüllen von Farbe, bekommen eine Menge von Farbe (Standard) oder nur dip in der Farbe entweder einmal oder zweimal."
       }
     },
     "common": {
@@ -304,6 +317,7 @@
     "autofill": "Füllen Weg __id __...",
     "reinked": "Die weitere Zusammenarbeit mit __media__ malen",
     "autostroke": "Streicheln Weg __id __...",
-    "autocomplete": "Automatische Farb Complete!"
+    "autocomplete": "Automatische Farb Complete!",
+    "subrefill": "Anreise Farbe dann Ziehen Unterpfad __num__"
   }
 }

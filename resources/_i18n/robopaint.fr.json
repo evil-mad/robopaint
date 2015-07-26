@@ -3,14 +3,14 @@
     "creator": "R10 avec l’aide de Sofia",
     "target": "fr",
     "langname": "Français",
-    "release": "0.9.5"
+    "release": "0.9.6"
   },
   "common": {
     "pause": "Pause",
     "resume": "Reprendre",
     "stop": "Stop",
     "time": {
-      "ms": "__count__ milliseconde",
+      "ms": "__count__ ms",
       "sec": "__count__ sec",
       "ms_plural": "millisecondes __count__",
       "sec_plural": "secondes __count__",
@@ -235,6 +235,19 @@
       "gapconnect": {
         "title": "Connectez les petits espaces:",
         "detail": "Améliore le motif de trait en faisant des transitions plus douces sur les bords."
+      },
+      "refillmode": {
+        "opt0": "Après Max Distance (par défaut)",
+        "title": "Recharge Mode:",
+        "opt1": "Après chaque chemin de SVG",
+        "detail": "Choisissez pour remplir la peinture soit après une certaine distance (par défaut), ou après chaque chemin de SVG."
+      },
+      "refillaction": {
+        "title": "Action recharge:",
+        "opt0": "Peinture pleine recharge (par défaut)",
+        "opt1": "Dip unique dans l'eau et la peinture",
+        "opt2": "Double plongeon dans l'eau et la peinture",
+        "detail": "Lors du remplissage de la peinture, obtenir beaucoup de peinture (par défaut) ou tout simplement rafraîchir dans la peinture une ou deux fois."
       }
     },
     "common": {
@@ -304,6 +317,7 @@
     "autoinit": "Peinture automatique: chemins de __pathNum__, __jobsNum__ emplois »",
     "autofill": "Chemin de remplissage __id __...",
     "autostroke": "Chemin caressant __id __...",
-    "autocomplete": "Peinture automatique complet!"
+    "autocomplete": "Peinture automatique complet!",
+    "subrefill": "Obtenir la peinture puis en dessinant sous-chemin __num__"
   }
 }

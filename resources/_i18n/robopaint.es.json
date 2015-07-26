@@ -3,14 +3,14 @@
     "creator": "techninja/google",
     "target": "es",
     "langname": "Español",
-    "release": "0.9.5"
+    "release": "0.9.6"
   },
   "common": {
     "pause": "Pausa",
     "resume": "Reanudar",
     "stop": "Parada",
     "time": {
-      "ms": "__count__ milisegundo",
+      "ms": "__count__ ms",
       "sec": "__count__ seg",
       "sec_plural": "seg __count__",
       "ms_plural": "milisegundos __count__",
@@ -235,6 +235,19 @@
       "gapconnect": {
         "title": "Conecte pequeñas lagunas:",
         "detail": "Hace un lado a otro se llena más suave al no levantar el cepillo en los bordes."
+      },
+      "refillmode": {
+        "title": "Modo de Recarga:",
+        "opt1": "Después de cada ruta SVG",
+        "opt0": "Después de Max Distancia (predeterminado)",
+        "detail": "Elija para rellenar la pintura, ya sea después de una cierta distancia (por defecto), o después de cada ruta SVG."
+      },
+      "refillaction": {
+        "title": "Acción de recarga:",
+        "opt0": "Recarga pintura completa (por defecto)",
+        "opt1": "Inmersión individual en agua y pintura",
+        "opt2": "Inmersión doble en agua y pintura",
+        "detail": "Al rellenar pintura, obtener una gran cantidad de pintura (por defecto) o simplemente chapuzón en la pintura, ya sea una o dos veces."
       }
     },
     "common": {
@@ -304,6 +317,7 @@
     "autoinit": "Pintura automática: caminos __pathNum__, __jobsNum__ empleos '",
     "washing": "Hacer un lavado cepillo completo ...",
     "reinked": "Continuando a pintar con __media__",
-    "autofill": "Camino Llenado __id __..."
+    "autofill": "Camino Llenado __id __...",
+    "subrefill": "Conseguir la pintura y luego dibujo subtrayecto __num__"
   }
 }
