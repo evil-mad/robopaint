@@ -58,22 +58,6 @@ function windowInit() {
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/../../main.html');
 
-    mainWindow.onbeforeunload = function(e) {
-      console.log('I do not want to be closed');
-
-      // Unlike usual browsers, in which a string should be returned and the user is
-      // prompted to confirm the page unload, Electron gives developers more options.
-      // Returning empty string or false would prevent the unloading now.
-      // You can also use the dialog API to let the user confirm closing the application.
-      return false;
-    };
-
-
-    mainWindow.on('close', function(){
-      console.log('MAINWINDOWCONTROL CLOSE');
-      return false;
-    }); // Catch close event
-
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
       // Dereference the window object, usually you would store windows

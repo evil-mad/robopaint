@@ -182,7 +182,7 @@ function bindMainControls() {
   });
 
 
-  mainWindow.on('close', onClose); // Catch close event
+  window.onbeforeunload = onClose; // Catch close event
 
   // Bind links for home screen central bubble nav links
   $('nav a').click(function(e) {
