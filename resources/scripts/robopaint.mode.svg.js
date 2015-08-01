@@ -12,6 +12,8 @@ define(function(){return function($, robopaint, cncserver){
 // Or is this even needed?
 window.cncserver = cncserver;
 
+// Confirm dialog doesn't work in subwindow
+window.confirm = window.parent.confirm;
 
 // Set the "global" scope objects for any robopaint level details.
 // These are used for positioning and tracing SVG via a central SVG object

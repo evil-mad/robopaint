@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "zh-CN",
     "creator": "techninja via GoogleTranslate"
   },
@@ -53,7 +53,8 @@
     "error": {
       "save": "有一个错误写文件。\n\n 请检查您的权限或文件名，然后再试一次。",
       "transfer": "我们很抱歉，但它看起来像有您的SVG一些incompaitble元素RoboPaint无法自动修复。\n\n 我们建议您打开SVG在Inkscape中或其他SVG编辑器，简化文档或只是重新保存。\n\n 您可以继续尝试打印，但你可能有问题。下面给出的错误："
-    }
+    },
+    "savetitle": "保存图像为..."
   },
   "tools": {
     "select": "选择工具",

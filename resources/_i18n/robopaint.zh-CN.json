@@ -3,7 +3,7 @@
     "creator": "docprofsky from Google Translate",
     "target": "zh-CN",
     "langname": "简体字",
-    "release": "0.9.5"
+    "release": "0.9.6"
   },
   "common": {
     "pause": "暂停",
@@ -235,6 +235,19 @@
       "gapconnect": {
         "title": "连接小的差距：",
         "detail": "使得来回填充于未在边缘起重刷平滑。"
+      },
+      "refillmode": {
+        "opt0": "后最大距离（默认）",
+        "title": "笔芯方式：",
+        "opt1": "每个SVG路径后",
+        "detail": "选择再填充的涂料或者一定距离（默认）后，或之后的每个SVG路径。"
+      },
+      "refillaction": {
+        "title": "笔芯行动：",
+        "opt0": "满涂料填充（默认）",
+        "opt2": "二次探底水和油漆",
+        "opt1": "单浸在水和油漆",
+        "detail": "当注墨漆，获得了大量的油漆（默认）或只是浸在油漆一次或两次。"
       }
     },
     "common": {
@@ -304,6 +317,7 @@
     "autoinit": "自动喷漆：__pathNum__路径，__jobsNum__工作“",
     "autofill": "填充路径__id __...",
     "autostroke": "抚摸路径__id __...",
-    "autocomplete": "自动喷漆完成！"
+    "autocomplete": "自动喷漆完成！",
+    "subrefill": "获得油漆然后画子路径__num__"
   }
 }

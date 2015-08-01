@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "de",
     "creator": "techninja via GoogleTranslate"
   },
@@ -106,7 +106,8 @@
     "error": {
       "save": "Es gab einen Fehler beim Schreiben der Datei.\n\n Überprüfen Sie Ihre Berechtigungen oder Dateinamen und versuchen Sie es erneut.",
       "transfer": "Es tut uns Leid, aber es sieht aus wie es einige incompaitble Elemente in Ihrem SVG, die RoboPaint nicht automatisch zu beheben.\n\n Wir empfehlen Ihnen, die SVG in Inkscape oder eine andere SVG-Editor vereinfacht das Dokument erneut speichern oder einfach nur zu öffnen.\n\n Sie können weiter und versuchen, diese zu drucken, aber Sie können Probleme haben. Fehler unten angegeben:"
-    }
+    },
+    "savetitle": "Bild speichern als..."
   },
   "buttons": {
     "zoom": "Zoom to Fit",

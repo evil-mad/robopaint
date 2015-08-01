@@ -3,14 +3,14 @@
     "creator": "docprofsky from Google Translate",
     "target": "pt",
     "langname": "português",
-    "release": "0.9.5"
+    "release": "0.9.6"
   },
   "common": {
     "pause": "Pausa",
     "resume": "Currículo",
     "stop": "Pare",
     "time": {
-      "ms": "__count__ milissegundo",
+      "ms": "__count__ ms",
       "sec": "__count__ sec",
       "sec_plural": "seg __count__",
       "ms_plural": "milissegundos __count__",
@@ -235,6 +235,19 @@
       "gapconnect": {
         "title": "Conecte-se pequenas lacunas:",
         "detail": "Faz frente e para trás enche mais suave, não levantando pincel nas bordas."
+      },
+      "refillmode": {
+        "title": "Reabastecer Mode:",
+        "opt1": "Após Cada Caminho SVG",
+        "opt0": "Depois de Max Distância (padrão)",
+        "detail": "Escolha para encher a tinta ou após uma certa distância (padrão), ou depois de cada caminho SVG."
+      },
+      "refillaction": {
+        "title": "Ação Refill:",
+        "opt0": "Pintura completa recarga (padrão)",
+        "opt2": "Duplo mergulho em água e pintura",
+        "opt1": "Dip Individual em água e tinta",
+        "detail": "Ao reabastecer pintura, recebo um monte de tinta (padrão) ou simplesmente mergulhar na pintura uma ou duas vezes."
       }
     },
     "common": {
@@ -304,6 +317,7 @@
     "autoinit": "Pintura Automática: caminhos __pathNum__, __jobsNum__ empregos '",
     "autofill": "Enchendo caminho __id __...",
     "autostroke": "Acariciando caminho __id __...",
-    "autocomplete": "Pintura automática Complete!"
+    "autocomplete": "Pintura automática Complete!",
+    "subrefill": "Obtendo pintura em seguida, desenho sub-caminho __num__"
   }
 }

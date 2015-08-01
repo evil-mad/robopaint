@@ -339,7 +339,7 @@ cncserver.paths = {
             cncserver.state.process.waiting = true;
           }
         }
-        process.nextTick(runNextPoint);
+        setTimeout(runNextPoint, 0);
       } else { // Done
         // Overshoot to make up for brush flexibility
         if (options.strokeovershoot) {
@@ -443,7 +443,7 @@ cncserver.paths = {
             cncserver.state.process.waiting = true;
           }
         }
-        process.nextTick(runNextFill);
+        window.parent.process.nextTick(runNextFill);
       } else { // Done
         if (callback) callback();
       }
@@ -661,7 +661,7 @@ cncserver.paths = {
             lastPointChecked = {x:p.x, y:p.y};
           }
         }
-        process.nextTick(runNextFill);
+        window.parent.process.nextTick(runNextFill);
       } else { // DONE!
         // Reset position of fill line (avoids odd prefill lines)
         $fill.attr('transform', 'translate(0,0)');
@@ -727,7 +727,7 @@ cncserver.paths = {
           // Save the point!
           points.push([p.x, p.y]);
         }
-        process.nextTick(runNextFill);
+        window.parent.process.nextTick(runNextFill);
       } else { // Points are filled! Run the solver
         runTSPSolver();
       }

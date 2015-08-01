@@ -50,6 +50,7 @@
   },
   "dialogs": {
     "confirmquit": "Are you sure you want to quit? \n Your changes to this image will not be saved before printing. Click OK to Quit.",
+    "savetitle": "Save image as...",
     "error": {
       "save": "There was an error writing the file. \n\n Check your permissions or file name and try again.",
       "transfer": "We're sorry, but it looks like there are some incompaitble elements in your SVG that RoboPaint couldn't automatically fix. \n\n We suggest you open the SVG in Inkscape or another SVG editor, simplify the document or just resave it. \n\n You can continue and try to print this, but you may have issues. Error given below:"
