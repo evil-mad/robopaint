@@ -53,27 +53,31 @@ Want to help be a part of RoboPaint? Maybe spruce it up, or hack it to bits into
 your own thing? Here's a rough and tumble guide to getting set up:
 
 ### Pre-requisites
-#### Node-webkit (v0.10.x)
+#### Electron (v0.30.x)
 RoboPaint is an HTML5/Node.js application that runs in
-[node-webkit](https://github.com/rogerwang/node-webkit). Though the index.html
+[electron](https://electron.atom.io/). Though the main.html
 code may somewhat render in a regular browser window, it's still a node.js
-application that requires its low level file access and other APIs. Download a
-release from their main page above, extract the files from the zip to a
-working folder. For windows, I use `C:\nw\`, which you can then add to your PATH
-environment variable. For Linux, I use `~\.nw\`, with an alias in my ~\.bashrc
-file like `alias nw='~/.nw/nw'`.
+application that requires its low level file access and other APIs.
 
-#### Node.js & npm (v0.10+)
-Required for automated builds and installation content. See
-[nodejs.org](http://nodejs.org) for installation for your operating system. Node
-Package Manager is usually installed along with it.
+#### Install Io.js (2.4.x+) for node & npm
+Required for automated builds and installation content. Electron uses Node.js'
+little brother fork, io.js. See [iojs.org](http://iojs.org) for installation for
+your operating system. `npm` is installed along with it. If you already have
+node installed, you can probably go without switching to io.js as electron
+provides its own io.js implementation built in.
+
+#### Install Electron
+After node/io.js is installed, just run from your terminal/console
+`npm install -g electron-prebuilt` to install Electron on your path. When
+complete, just run `electron -v` to see the installed app version.
 
 #### Build Tools!
-* CNC Server uses node-serialport, a low-level partially native module that
-needs to be built/compiled for every OS.
+* CNC Server uses the node-serialport module, a low-level partially native
+module that needs to be built/compiled for every OS.
 * These are pre-compiled for each release in
 the [robopaint-build](https://github.com/evil-mad/robopaint-build/) repository,
-which you can easily use to replace the node_modules folder within cncserver
+which you can easily use to replace the node_modules folder within
+`cncserver/node_modules/serialport/
 * *BUT*, if you're experimenting with new versions of modules, you're going to
 need to be able to build your own, so continue on.
 
@@ -84,58 +88,36 @@ which will have the command line tools required for builds.
 
 ##### OSX
 * Install Xcode and the CLI Developer tools.
+* You _might_ be able to [skip installing Xcode to get the GCC tools alone](http://osxdaily.com/2012/07/06/install-gcc-without-xcode-in-mac-os-x/).
 
 ##### Linux
 * This is the easiest, as most [FOSS](http://en.wikipedia.org/wiki/FOSS) ships
 as source to be built on the target machines, so you shouldn't have to install
 anything new for this at all.
 
-#### Building natively for node-webkit with `node-pre-gyp` and `nw-gyp`
-* Run `npm install node-pre-gyp -g` to install the the node native builder, and
-`npm install nw-gyp -g` for the node-webkit specific version. See the
-node-webkit native module builder
-[wiki page](https://github.com/rogerwang/node-webkit/wiki/Build-native-modules-with-nw-gyp)
-for more help/info.
-* Because the previous commands use the `-g` flag, they install globally and
-will require administrator rights, so run with a `sudo` prefix for Linux/Mac.
-
-### Project installation
-1. Pull down/clone your fork of the RoboPaint repository with git (or just
+#### Building natively for Electron with `node-pre-gyp`
+ 0. Run `npm install node-gyp node-pre-gyp -g` to install globally the node
+native builder. (ignore this if you already have them)
+ 1. Pull down/clone your fork of the RoboPaint repository with git (or just
 download a zip of the files).
-2. In your terminal/command line interface, go to that folder and run
+ 2. In your terminal/command line interface, go to that folder and run
 `npm install`
- * This will run through all the required module dependencies and install/build
+   * This will run through all the required module dependencies and install/build
 them to the best of its ability.
- * This will also run a script to rebuild `serialport` for node-webkit. The
-script will prompt you for you architecture, select `1` for a 32 bit system
-or `2` for a 64 bit system. If the script has errors file an issue.
-* If the script fails, or you are running Windows, navigate to the new
-`node_modules/cncserver/node_modules/serialport` folder, and run
-`node-pre-gyp build --runtime=node-webkit --target=0.11.6 --target_arch=ia32`,
-for a 32 bit system or
-`node-pre-gyp build --runtime=node-webkit --target=0.11.6 --target_arch=x64` for
-a 64 bit system, substituting your target node-webkit version.
-   * For Windows, if you have multiple versions of Visual Studio, use the flag
-`--msvs_version=2012`, substituting the version of Visual Studio you'd like to
-build with.
- * If there are build issues here, the problems may be many and varied, and
-almost always have to do with either the
-[node-serialport](https://github.com/voodootikigod/node-serialport) or
-[nw-gyp](https://github.com/rogerwang/nw-gyp) projects.
+   * This will have built the node-serialport for io.js, but we actually need
+the binary created with electron headers, soo..
+   * Follow [Jed's instructions here](https://gist.github.com/jedthehumanoid/a7f8278e0a37d259adca)
+to build the binary correctly.
 4. That's it! You should now be installed and ready to hack. To update CNC server
 just run `npm install cncserver` from the project root and it should pull from
 the latest master.
 
 ### Running RoboPaint from source
-* On Linux from RoboPaint root, I simply run `nw ./`, and console output is
-piped to the terminal as the main program window opens.
-* On Windows, in the command window from `C:\nw`, I just run `nw C:\robopaint`,
-or just drag the folder to the executable.
-* On Mac put `/Applications/node-webkit.app/Contents/MacOS` or the directory to
-node-webkit in your path. Then run `node-webkit ./` from the RoboPaint root
-directory.
-* I also highly recommend setting the `package.json` toolbar flag to `true` for
-far easier debugging.
+* Once Electron prebuilt is installed, just run `electron path/to/robopaint`,
+or `electron ./` if you're working directory is the root of the repo.
+* Remember: Alt+Ctrl+I to open the debug console, Ctl+R will reload if the
+console is open, and a reload only reloads the contents of the window, and will
+_**not**_ reload the application main process.
 
 ## ETC.
 
