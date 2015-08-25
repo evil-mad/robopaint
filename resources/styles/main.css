@@ -398,7 +398,7 @@ fieldset#control {
   content: ' ';
   left: 10px;
   top: 3px;
-  background-image: url('modes/print/images/paper_texture.png');
+  background-image: url('../modes/print/images/paper_texture.png');
   display: block;
   position: absolute;
   width: 70px;
@@ -450,7 +450,7 @@ body.home #bar-help:hover {
 }
 
 body.home #bar-translate {
-  content: url('images/icons/translation.svg');
+  content: url('../images/icons/translation.svg');
   margin-bottom: -6px;
   height: 32px;
   margin-right: 13px;
@@ -598,7 +598,7 @@ body.home #loader {
 /* Settings Modal dialog */
 body.home #modalmask,
 body.home #modalmask:before {
-  background-image: url('images/glass.jpg');
+  background-image: url('../images/glass.jpg');
   opacity: 0.7;
   position: absolute;
   top: 0;
@@ -696,7 +696,7 @@ body.home #colorsets .meta span {
 /* Print Mode Modal dialog */
 body.home #remoteprint-mask,
 body.home #remoteprint-mask:before {
-  background-image: url('images/glass.jpg');
+  background-image: url('../images/glass.jpg');
   opacity: 0.7;
   position: absolute;
   top: 0;
