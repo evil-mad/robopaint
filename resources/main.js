@@ -6,8 +6,8 @@
  */
 
 // Must use require syntax for including these libs because of node duality.
-window.$ = window.jQuery = require('./scripts/lib/jquery.js');
-window.$.i18n = window.i18n = require('./scripts/lib/i18next.js');
+window.$ = window.jQuery = require('jquery');
+window.$.i18n = window.i18n = require('i18next');
 
 // Include global main node process connector objects.
 var remote = require('remote');
