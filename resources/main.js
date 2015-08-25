@@ -81,14 +81,33 @@ function startInitialization() {
 
  try {
   // Add the secondary page iFrame to the page
-  $subwindow = $('<iframe>').attr({
+  $subwindow = $('<webview>').attr({
     height: $(window).height() - barHeight,
     border: 0,
-    id: 'subwindow'
+    id: 'subwindow',
+    class: 'hide',
+    nodeintegration: 'true',
+    preload: './mode.preload.js'
   })
-    .css('top', $(window).height())
-    .hide()
-    .appendTo('body');
+    .appendTo('body')
+    .on('did-finish-load', fadeInWindow);
+
+  $subwindow.hideMe = function(callback){
+    $subwindow.fadeOut('slow', function(){
+      $subwindow
+        .addClass('hide')
+        .attr('src', "")
+        .show();
+      if (callback) callback();
+    });
+  };
+
+  $subwindow.showMe = function(callback){
+    $subwindow
+      .css('opacity', 0)
+      .removeClass('hide')
+      .css('opacity', 100);
+  };
 
   // Bind and run inital resize first thing
   $(window).resize(responsiveResize);
@@ -260,15 +279,12 @@ robopaint.switchMode = function(mode, callback) {
     case 'home':
       $('nav, #logo').fadeIn('slow');
       $('#loader').hide();
-      $subwindow.fadeOut('slow', function(){
-        $subwindow.attr('src', "");
-        if (callback) callback();
-      });
+      $subwindow.hideMe(callback);
       break;
     default:
       $('nav, #logo').fadeOut('slow');
       $('#loader').fadeIn();
-      $subwindow.fadeOut('slow', function(){
+      $subwindow.hideMe(function(){
         $subwindow.attr('src', $target.attr('href'));
         if (callback) callback();
       });
@@ -290,6 +306,7 @@ function responsiveResize() {
   // Set subwindow height
   if (typeof $subwindow !== 'undefined') {
     $subwindow.height($(window).height() - barHeight);
+    $subwindow.css('top', barHeight);
   }
 
   // Remote Print Window sizing
@@ -517,11 +534,10 @@ function initQuickload() {
  * "Public" helper function to fade in iframe when it's done loading
  */
 function fadeInWindow() {
-  if ($subwindow.offset().top != barHeight) {
-    $subwindow.hide().css('top', barHeight).fadeIn('fast');
-  }
-  subWin = $subwindow[0].contentWindow;
-  translateMode();
+  console.log('FADEIN!');
+  $subwindow.showMe();
+  //subWin = $subwindow[0].contentWindow;
+  //translateMode();
 }
 
 
