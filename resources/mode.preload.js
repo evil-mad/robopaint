@@ -4,13 +4,38 @@
  *
  * Globals made here are invisible to the window, but vars added to window will
  * become globals in the window.
- */
+ *
+ * Modes will be provided the following window "globals":
+ *  - i18n: The full i18next CommonJS client module, loaded with the modes full
+ *          translation set, and the RP central translations for common strings.
+ * - rpRequire: The helper function for adding RP "modules", external libraries,
+ *              and any otthaer cothode o
+ * - ipc: The Inter Process Communication module for sending events and messages
+ *        to/from the main window process. Most of this is managed here, but
+ *        having this globally available makes custom comms possible.
+ * - mode: Package of the current mode, with path, and utility functions.
+ *    mode.run({mixed}): Emulation IPC passthrough of original commander
+ *      API shortcut. Allows immediate queuing of ~500 cmds/sec to CNCServer.
+
+ *    This is also where event callbacks should be defined, full list here:
+ *     * mode.translateComplete(): Called whenever translate is done. Happens on
+ *         init, and after every language change.
+ *     * mode.onPenUpdate(actualPen): Called when the bot actually moves the
+ *         the object will contain the full CNCServer pen object of where it
+ *         should or will be after the "lastDuration" key value.
+ *     * mode.bindControls(): A handly function to store all your control button
+ *         bindings, called when the page is fully loaded & translation is done.
+ *     * mode.onClose(callback): Called whenever the user attempts to either
+ *         change the mode, or close the application. If implemented, the user
+ *         can only close or change the mode once "callback" has been called.
+ **/
 "use strict";
 
 var remote = require('remote');
 var path = require('path');
 var app = remote.require('app');
 var fs = require('fs-plus');
+var ipc = window.ipc = require('ipc');
 var appPath = app.getAppPath();
 var i18n = window.i18n = require('i18next-client');
 var $ = require('jquery');
@@ -69,6 +94,7 @@ window.rpRequire = function(module, callback){
 function insertScript(src) {
   var script = document.createElement('script');
   script.src = src;
+
   script.async = false;
   document.head.appendChild(script);
   return script;
@@ -132,7 +158,14 @@ function i18nInit() {
   });
 
   // On jQuery load trigger, run the initial translation
-  $(function(){ translateMode(); })
+  $(function(){
+    translateMode();
+
+    // A good time to run an Mode API for binding the controls.
+    if (_.isFunction(mode.bindControls)) {
+      mode.bindControls();
+    }
+  })
 }
 
 /**
@@ -159,7 +192,7 @@ function translateMode() {
 
         // Replace text or specific attributes?
         var i18nKey = mappings[selector];
-        if (typeof i18nKey === 'string') {
+        if (_.isString(i18nKey)) {
           // Can't use .text() as it will replace child nodes!
           $elements.each(function(){ // Just in case we select multiple elements.
             $(this)
@@ -168,7 +201,7 @@ function translateMode() {
               .first()
               .replaceWith(robopaint.t(i18nKey) + debugExtra);
           });
-        } else if (typeof i18nKey === 'object') {
+        } else if (_.isObject(i18nKey)) {
           for (var attr in i18nKey) {
             $elements.each(function(){ // Just in case we select multiple elements.
               if (attr === 'text') {
@@ -200,11 +233,45 @@ function translateMode() {
   }
 
   // If this mode implements a translateComplete callback, call it.
-  if (typeof mode.translateComplete === 'function') {
+  if (_.isFunction(mode.translateComplete)) {
     mode.translateComplete();
   }
 }
 
 i18nInit();
+
+// Default Inter Process Comm message management:
+ipc.on('langchange', translateMode);
+ipc.on('globalclose', function(){ handleModeClose('globalclose'); });
+ipc.on('modechange', function(){ handleModeClose('modechange'); });
+ipc.on('cncserver', function(args){ handleCNCServerMessages(args[0], args[1]); });
+
+// Add a limited CNCServer API interaction layer wrapper over IPC.
+mode.run = function(){
+  ipc.sendToHost('cncserver-run', Array.prototype.slice.call(arguments));
+}
+
+
+function handleModeClose(returnChannel) {
+  // If the mode cares to make a fuss about pausing close, let it.
+  if (_.isFunction(mode.onClose)) {
+    mode.onClose(function(){ ipc.sendToHost(returnChannel); });
+  } else { // Mode doesn't care!
+    ipc.sendToHost(returnChannel);
+  }
+}
+
+
+function handleCNCServerMessages(name, data) {
+  switch(name) {
+    case "penUpdate":
+      if (_.isFunction(mode.onPenUpdate)) {
+        mode.onPenUpdate(data);
+      }
+      break;
+  }
+}
+
+
 
 console.log('RobPaint Mode APIs Preloaded & Ready!');
