@@ -3,7 +3,7 @@
  * cncserver specific as every function should be atomic (at least to this file)
  */
 
-robopaint.utils = {
+var utils = {
   /**
    * Converts an RGB color value to HSL. Conversion formula
    * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
@@ -147,16 +147,16 @@ robopaint.utils = {
    */
   closestColor: function(source, colors){
     if (typeof source == 'string'){
-      source = robopaint.utils.colorStringToArray(source);
+      source = utils.colorStringToArray(source);
     }
 
     // Assume false (white) if null
     if (source == null || isNaN(source[0])){
-      source = robopaint.utils.colorStringToArray('#FFFFFF');
+      source = utils.colorStringToArray('#FFFFFF');
     }
 
     // Convert to YUV to better match human perception of colors
-    source = robopaint.utils.rgbToYUV(source);
+    source = utils.rgbToYUV(source);
 
     var lowestIndex = 0;
     var lowestValue = 1000; // High value start is replaced immediately below
@@ -192,7 +192,7 @@ robopaint.utils = {
    */
   pad: function(str, max) {
     if (typeof str == "number") str = String(str);
-    return str.length < max ? robopaint.utils.pad("0" + str, max) : str;
+    return str.length < max ? utils.pad("0" + str, max) : str;
   },
 
   /**
@@ -296,7 +296,7 @@ robopaint.utils = {
           // Find the closest color
           setColor = $(this).css('fill');
           $(this).data('oldColor', setColor);
-          i = robopaint.utils.closestColor(setColor, colors);
+          i = utils.closestColor(setColor, colors);
           setColor = 'rgb(' + colors[i].color.RGB.join(',') + ')';
         } else {
           // Recover the old color
@@ -312,7 +312,7 @@ robopaint.utils = {
           // Find the closest color
           setColor = $(this).css('stroke');
           $(this).data('oldStrokeColor', setColor);
-          i = robopaint.utils.closestColor(setColor, colors);
+          i = utils.closestColor(setColor, colors);
           setColor = 'rgb(' + colors[i].color.RGB.join(',') + ')';
         } else {
           // Recover the old color
@@ -353,3 +353,5 @@ robopaint.utils = {
     }
   }
 };
+
+module.exports = utils;
