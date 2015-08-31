@@ -7,14 +7,15 @@
  * finish, handles all API callbacks internally.
  */
 
-
-define(function(){return function($, robopaint, cncserver){
+var robopaint = window.robopaint;
+var cncserver = robopaint.cncserver;
 
 // Buffer of commands to send out: This is just a localized buffer to ensure
 // That commands sent very quickly get sent out in the correct order.
 var sendBuffer = [];
 var running = false;
 var lastPoint = {};
+
 
 // Command iterator (sends the next command to be timed/queued by CNCserver)
 function sendNext() {
@@ -23,19 +24,6 @@ function sendNext() {
     return;
   } else {
     running = true;
-  }
-
-  // Because we're interacting with an object in the parent scope, this file
-  // stays loaded even after its parent window instance dies. An easy way
-  // to see if it's dead, is if console is null (evaluates false)
-  if (!console) {
-    // At this point the parent window is gone and we don't need to do anything
-    // but a bit of cleanup
-    delete cncserver.wcb;
-    delete cncserver.config;
-    delete cncserver.paths;
-    delete cncserver.state;
-    return;
   }
 
   // Pop the next command off the array
@@ -52,7 +40,7 @@ function sendNext() {
 
   switch (cmd[0]) {
     case "move":
-      var point = cncserver.wcb.getPercentCoord(cmd[1]);
+      var point = cncserver.utils.getPercentCoord(cmd[1]);
       point.ignoreTimeout = '1';
 
       // Short-circuit API call for a direct localized NODE API call
@@ -122,22 +110,11 @@ function sendNext() {
 }
 
 cncserver.cmd = {
-  // Easy set for progress!
-  progress: function(options){
-    if (typeof options.val !== "undefined") {
-      $('progress').attr('value', options.val);
-    }
-
-    if (typeof options.max !== "undefined") {
-      $('progress').attr('max', options.max);
-    }
-  },
-
   // Add a command to the queue! format is cmd short name, arguments, or
   // An array based multiple set. Pass "true" as second arg for adding to start
   // of the queue.
   run: function() {
-    if (typeof arguments[0] == "object") {
+    if (typeof arguments[0] === "object") {
       var reverse = (arguments[1] === true);
 
       // Reverse the order of items added to the wrong end of the buffer
@@ -175,5 +152,3 @@ setInterval(function(){
     sendNext();
   }
 }, 10);
-
-}});
