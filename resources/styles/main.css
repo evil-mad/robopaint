@@ -154,71 +154,29 @@ fieldset#control {
 /* Status Specific */
 #status {
   text-align: center;
+  position: absolute;
+  border-top-left-radius: 2em;
+  padding: 1em;
+  height: 83px;
+  width: 245px;
+  background: radial-gradient(ellipse at center, rgba(242,255,255,1) 0%,rgba(230,248,253,1) 30%,rgba(200,238,251,1) 54%,rgba(190,228,248,1) 75%,rgba(177,216,245,1) 100%);
+  right: -262px;
+  bottom: 0;
+  box-shadow: 0px 0px 21px 0px rgba(0,0,0,0.75);
+  transition: right 0.5s;
+  z-index: 6;
+}
+
+#status:hover {
+  right: 0 !important;
+}
+
+#status legend {
+  font-weight: bold;
 }
 
 #status progress {
   width: 100%;
-}
-
-.print #pause {
-  background: linear-gradient(to bottom, #eff7f9 0%,rgb(249, 234, 239) 50%,rgb(242, 218, 230) 51%,rgb(249, 229, 231) 100%);
-  border-radius: 11px;
-  box-shadow: 0 0 14px 6px rgba(255,0,0,0.5);
-  float: none;
-  margin: 0.5em auto;
-  display: block;
-  height: 1.9em;
-  width: 5em;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.print #pause.ready {
-  box-shadow: 0 0 14px 6px rgba(0,255,0,0.5);
-  background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
-}
-
-.print #pause:disabled {
-  box-shadow: 0 0 14px 6px rgba(155, 155, 155, 0.5);
-  background: linear-gradient(to bottom, #ECECEC 0%,rgb(238, 238, 238) 50%,rgb(236, 236, 236) 51%,rgb(173, 173, 173) 100%);
-}
-
-#pause:hover {
-  box-shadow: 0 0 14px 10px rgba(255,0,0,1);
-  -webkit-animation: none;
-}
-
-.print #pause.active {
-  background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
-  box-shadow: 0 0 14px 6px #04aa1e;
-
-  -webkit-animation-name: pause-active;
-  -webkit-animation-duration: 1500ms;
-  -webkit-animation-iteration-count: infinite;
-}
-
-.print #cancel {
-  border: none;
-  font-size: 17px;
-  border-radius: 11px;
-  margin: 1.1em auto;
-  margin-bottom: 0.5em;
-  float: none;
-  background-color: transparent;
-  text-decoration: underline;
-  color: red;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.print-manual #cancel {
-  margin-bottom: 0;
-}
-
-.print #cancel:disabled {
-  color: #777;
-  cursor: default;
-  font-style: italic;
 }
 
 #statusmessage {
