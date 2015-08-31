@@ -1,41 +1,11 @@
 /**
  * @file Holds all Robopaint watercolorbot specific configuration and utility
- * functions in AMD Module format for inclusion via RequireJS.
+ * functions.
  */
+ var robopaint = window.robopaint;
+ var cncserver = robopaint.cncserver;
 
-define(function(){return function($, robopaint, cncserver){
 cncserver.wcb = {
-  // Set the current status message
-  status: function(msg, st) {
-
-    var $status = $('#statusmessage');
-    var classname = 'wait';
-
-    // String messages, just set em
-    if (typeof msg == "string") {
-      $status.html(msg);
-    } else if (Object.prototype.toString.call(msg) == "[object Array]") {
-      // If it's an array, flop the message based on the status var
-
-      // If there's not a second error message, default it.
-      if (msg.length == 1) msg.push(robopaint.t('libs.problem'));
-
-      $status.html((st == false) ? msg[1] : msg[0]);
-    }
-
-    // If stat var is actually set
-    if (typeof st != 'undefined') {
-      if (typeof st == 'string') {
-        classname = st;
-      } else {
-        classname = (st == false) ? 'error' : 'success'
-      }
-
-    }
-
-    $status.attr('class', classname); // Reset class to only the set class
-  },
-
   // Grouping function to do a full wash of the brush
   fullWash: function(callback, useDip, fromSendBuffer) {
     var toolExt = useDip ? 'dip' : '';
@@ -43,7 +13,7 @@ cncserver.wcb = {
     switch(parseInt(robopaint.settings.penmode)) {
       case 3:
       case 2: // Dissallow water
-        cncserver.wcb.status(
+        cncserver.status(
           robopaint.t('libs.ignorewash', {mode:
             robopaint.t('settings.output.penmode.opt' + robopaint.settings.penmode)
           })
@@ -81,11 +51,12 @@ cncserver.wcb = {
   // Get the name of paint/water/media on the brush
   getMediaName: function(toolName) {
     if (typeof toolName != 'string') toolName = cncserver.state.media;
+    var colors = robopaint.statedata.colorsets[robopaint.settings.colorset].colors;
 
     if (toolName.indexOf('water') !== -1) {
       return robopaint.t('common.water');
     } else {
-      return cncserver.config.colors[toolName.substr(5, 1)].name;
+      return colors[toolName.substr(5, 1)].name;
     }
   },
 
@@ -99,7 +70,7 @@ cncserver.wcb = {
       switch(mode) {
         case 3: // Dissallow all
         case 2: // Dissallow water
-          cncserver.wcb.status(
+          cncserver.status(
             robopaint.t('libs.ignorewater', {mode:
               robopaint.t('settings.output.penmode.opt' + mode)
             })
@@ -111,7 +82,7 @@ cncserver.wcb = {
       switch(mode) {
         case 3: // Dissallow all
         case 1: // Dissallow paint
-          cncserver.wcb.status(
+          cncserver.status(
             robopaint.t('libs.ignorepaint', {mode:
               robopaint.t('settings.output.penmode.opt' + mode)
             })
@@ -139,44 +110,6 @@ cncserver.wcb = {
     ], fromSendBuffer);
 
     if (callback) callback();
-  },
-
-  // Convert a screen coord to one in the correct format for the API
-  getPercentCoord: function(point) {
-    return {
-      // Remove 1in (96dpi) from total width for WCB margin offsets
-      // TODO: Base this off BOT specific margin setting
-      x: (point.x / (cncserver.canvas.width - 96)) * 100,
-      y: (point.y / (cncserver.canvas.height - 96)) * 100
-    };
-  },
-
-  // Convert a strict percent coord to an absolute canvas based one
-  getAbsCoord: function(point) {
-    return {
-      // Remove 1/2in (96dpi / 2) from total width for right/bottom offset
-      x: (point.x / 100) * (cncserver.canvas.width - 48) ,
-      y: (point.y / 100) * (cncserver.canvas.height - 48)
-    };
-  },
-
-  // Convert an absolute steps to a draw coordinate
-  getStepstoAbsCoord: function(point) {
-    var bot = robopaint.currentBot.data;
-
-    // Only work with the WorkArea (coord is absolute in max area)
-    var x = (point.x - robopaint.currentBot.data.workArea.left);
-    var y = (point.y - robopaint.currentBot.data.workArea.top);
-
-    // Remove 1/2in (96dpi / 2) from total width for right/bottom offset
-    var xscale = (cncserver.canvas.width - 48*2) / (bot.maxArea.width - bot.workArea.left);
-    var yscale = (cncserver.canvas.height - 48*2) / (bot.maxArea.height - bot.workArea.top);
-
-    return {
-      // Add back minimum 1/2in (96dpi / 2) from total width for right/bottom offset
-      x: parseInt(x * xscale) + 48,
-      y: parseInt(y * yscale) + 48,
-    };
   },
 
   // Wet the brush and get more of targeted media, then return to
@@ -372,7 +305,7 @@ cncserver.wcb = {
     });
 
     // Send out the initialization status message.
-    cncserver.wcb.status(robopaint.t('libs.autoinit', {
+    cncserver.status(robopaint.t('libs.autoinit', {
       pathNum: $('path', context).length,
       jobsNum: finalJobs.length
     }));
@@ -436,60 +369,6 @@ cncserver.wcb = {
     }
   },
 
-  // Simulation draw of current buffer
-  simulateBuffer: function() {
-    var c = $('#sim')[0];
-    var ctx = c.getContext("2d");
-    // Clear sim canvas
-    c.width = c.width;
-
-    // Set stroke color
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
-    ctx.lineWidth = 4;
-
-    var doDraw = false;
-    console.log('Start draw, buffer:', cncserver.state.buffer.length);
-
-    // Move through every item in the command buffer
-    for (var i in cncserver.state.buffer) {
-      var next = cncserver.state.buffer[i];
-
-      // Ensure it's an array
-      if (typeof next == "string"){
-        next = [next];
-      }
-
-      // What's the command?
-      switch (next[0]) {
-        case 'down':
-          doDraw = false;
-          //ctx.beginPath();
-          break;
-        case 'up':
-          //ctx.closePath();
-          doDraw = true;
-          break;
-        case 'move':
-          // Add 48 to each side for 1/2in offset
-          var x = next[1].x + 48; //(next[1].x / cncserver.canvas.width) * c.width;
-          var y = next[1].y + 48; //(next[1].y / cncserver.canvas.height) * c.height;
-
-          if (doDraw) {
-            ctx.lineTo(x, y);
-          } else {
-            ctx.moveTo(x, y);
-          }
-
-          //ctx.lineTo(x, y);
-          break;
-      }
-    }
-    ctx.stroke();
-    $('#sim').show();
-    console.log('Simulation draw done!');
-
-  },
-
   // Retrieve a fill path depending on config
   getFillPath: function(options){
     var ft = options.filltype;
@@ -500,4 +379,3 @@ cncserver.wcb = {
     }
   }
 };
-}});
