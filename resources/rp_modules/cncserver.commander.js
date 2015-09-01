@@ -43,6 +43,9 @@ function sendNext() {
       var point = cncserver.utils.getPercentCoord(cmd[1]);
       point.ignoreTimeout = '1';
 
+      // Third argument: skipBuffer
+      if (cmd[2] === true) point.skipBuffer = true;
+
       // Short-circuit API call for a direct localized NODE API call
       if (robopaint.cncserver.api.server.domain == "localhost") {
         robopaint.cncserver.setPen(point, moveCallback);
@@ -69,15 +72,26 @@ function sendNext() {
     case "up":
     case "down":
       var h = (cmd[0] === 'down') ? 1 : 0;
+      var options = {};
 
       if (robopaint.cncserver.api.server.domain == "localhost") {
-        robopaint.cncserver.setPen({state: h}, sendNext);
+        options = {state: h};
+        if (cmd[1] === true) options.skipBuffer = true;
+        robopaint.cncserver.setPen(options, sendNext);
       } else {
-        api.pen.height(h, sendNext, {ignoreTimeout: '1'});
+        options = {ignoreTimeout: '1'};
+        if (cmd[1] === true) options.skipBuffer = true;
+        api.pen.height(h, sendNext, options);
       }
       break;
     case "status":
-      api.buffer.message(cmd[1], sendNext);
+      // Third argument: skipBuffer
+      if (cmd[2] === true) { // Skipping buffer means just show it!
+        cncserver.status(cmd[1]);
+        sendNext();
+      } else {
+        api.buffer.message(cmd[1], sendNext);
+      }
       break;
     case "callbackname":
       api.buffer.callbackname(cmd[1], sendNext);
@@ -101,7 +115,12 @@ function sendNext() {
       cncserver.wcb.fullWash(sendNext, cmd[1], true);
       break;
     case "park":
-      api.pen.park(sendNext, {ignoreTimeout: '1'});
+      options = {ignoreTimeout: '1'};
+
+      // Second argument: skipBuffer
+      if (cmd[1] === true) options.skipBuffer = true;
+
+      api.pen.park(sendNext, options);
       break;
     default:
       console.debug('Queue shortcut not found:' + cmd);
