@@ -97,10 +97,16 @@ function sendNext() {
       api.buffer.callbackname(cmd[1], sendNext);
       break;
     case "pause":
-      api.buffer.pause(sendNext);
+      api.buffer.pause(function(){
+        cncserver.pushToMode('fullyPaused');
+        sendNext();
+      });
       break;
     case "resume":
-      api.buffer.resume(sendNext);
+      api.buffer.resume(function(){
+        cncserver.pushToMode('fullyResumed');
+        sendNext();
+      });
       break;
     case "clear":
       api.buffer.clear(sendNext);
