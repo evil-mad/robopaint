@@ -20,22 +20,22 @@ function initializeTranslation() {
   fs.readdirSync(i18nPath).forEach(function(file) {
     // Get contents of the language file.
     try {
-      var data = JSON.parse(fs.readFileSync(i18nPath + file , 'utf8'));
+      var data = require(i18nPath + file);
 
       // Create new option in the pulldown language list, with the text being
       // the language's name value is the two letter language code.
       $("#lang").append(
         $("<option>")
-          .text(data['_meta'].langname)
-          .attr('value', data['_meta'].target)
+          .text(data._meta.langname)
+          .attr('value', data._meta.target)
       );
 
       // Add the language to the resource list.
-      resources[data['_meta'].target] = { translation: data};
+      resources[data._meta.target] = { translation: data};
       //Create empty colorset key
-      resources[data['_meta'].target].translation['colorsets'] = {};
+      resources[data._meta.target].translation['colorsets'] = {};
       //Create empty modes key
-      resources[data['_meta'].target].translation['modes'] = {};
+      resources[data._meta.target].translation['modes'] = {};
 
       i += 1;
     } catch(e) {
@@ -49,8 +49,8 @@ function initializeTranslation() {
     // Iterate over global colorset i18n directory.
     fs.readdirSync(appPath + 'resources/colorsets/_i18n').forEach(function(file) {
       // Add each translation file to the global translate array.
-      var data = JSON.parse(fs.readFileSync(appPath + 'resources/colorsets/_i18n/' + file , 'utf8'));
-      resources[data['_meta'].target].translation['colorsets'] = data;
+      var data = require(appPath + 'resources/colorsets/_i18n/' + file);
+      resources[data._meta.target].translation['colorsets'] = data;
     });
   }catch(e) {
     // Catch and report errors to the console.
@@ -70,8 +70,8 @@ function initializeTranslation() {
         //  Iterate over language files in colorset's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {
           //  Add the data to the global i18n translation array
-          var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
-          resources[data['_meta'].target].translation['colorsets'][folder] = data;
+          var data = require(fullPath + file);
+          resources[data._meta.target].translation['colorsets'][folder] = data;
         });
        }
   } catch(e) {
@@ -89,8 +89,8 @@ function initializeTranslation() {
         fs.readdirSync(fullPath).forEach(function(file) {
           if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
             //  Add the data to the global i18n translation array
-            var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
-            resources[data['_meta'].target].translation['modes'][folder] = data;
+            var data = require(fullPath + file);
+            resources[data._meta.target].translation['modes'][folder] = data;
           }
         });
        }
