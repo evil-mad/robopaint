@@ -7,6 +7,8 @@
 
 // Must use require syntax for including these libs because of node duality.
 window.$ = window.jQuery = require('jquery');
+window._ = require('underscore');
+$.qtip = require('qtip2');
 window.i18n = require('i18next-client');
 
 // Include global main node process connector objects.
