@@ -815,23 +815,3 @@ function setModal(toggle){
 
   isModal = toggle;
 }
-
-/**
- * Simple wrapper to pull out current bot from storage
- *
- * @returns {Object}
- *   Current/default from storage
- */
-function getCurrentBot() {
-  var bot = {type: 'watercolorbot', name: 'WaterColorBot'};
-
-  try {
-    bot = JSON.parse(localStorage['currentBot']);
-  } catch(e) {
-    // Parse error.. will stick with default and write it.
-    localStorage['currentBot'] = JSON.stringify(bot);
-  }
-  return bot;
-}
-
-
