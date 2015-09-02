@@ -10,8 +10,8 @@ cncserver.utils = {
   getPercentCoord: function(point) {
    return {
      // Remove 1in (96dpi) from total width for WCB margin offsets
-     x: (point.x / (cncserver.canvas.width - 96)) * 100,
-     y: (point.y / (cncserver.canvas.height - 96)) * 100
+     x: (point.x / cncserver.canvas.width) * 100,
+     y: (point.y / cncserver.canvas.height) * 100
    };
   },
 
@@ -35,13 +35,13 @@ cncserver.utils = {
     var y = (point.y - bot.workArea.top);
 
     // Remove margin from total width for right/bottom offset
-    var xscale = (c.width - c.margin.width) / (bot.maxArea.width - bot.workArea.left);
-    var yscale = (c.height - c.margin.height) / (bot.maxArea.height - bot.workArea.top);
+    var xscale = (c.width) / (bot.maxArea.width - bot.workArea.left);
+    var yscale = (c.height) / (bot.maxArea.height - bot.workArea.top);
 
     return {
       // Add back minimum margin from total width for right/bottom offset
-      x: parseInt(x * xscale) + c.margin.right,
-      y: parseInt(y * yscale) + c.margin.bottom,
+      x: parseInt(x * xscale),
+      y: parseInt(y * yscale),
     };
   }
 };
