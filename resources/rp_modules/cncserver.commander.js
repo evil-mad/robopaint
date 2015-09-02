@@ -117,6 +117,12 @@ function sendNext() {
     case "resetdistance":
       api.pen.resetCounter(sendNext);
       break;
+    case "zero":
+      api.pen.zero(sendNext);
+      break;
+    case "unlock":
+      api.motors.unlock(sendNext);
+      break;
     case "wash":
       cncserver.wcb.fullWash(sendNext, cmd[1], true);
       break;
