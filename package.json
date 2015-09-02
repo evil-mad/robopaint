@@ -10,7 +10,7 @@
     "cncserver": "https://github.com/techninja/cncserver/tarball/master",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.0",
-    "i18next": "^1.10.4",
+    "i18next-client": "^1.10.2",
     "jquery": "^2.1.4",
     "paper": "^0.9.23",
     "qtip2": "^2.2.0",

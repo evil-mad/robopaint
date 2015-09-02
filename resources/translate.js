@@ -159,9 +159,9 @@ function initializeTranslation() {
     fallbackLng: 'en-US',
     lng: localStorage['robopaint-lang']
   }, function(t) {
-    robopaint.t = t;
+    robopaint.t = i18n.t;
     currentLang = localStorage['robopaint-lang'];
-    $('[data-i18n]').i18n();
+    i18n.translateObject($('body')[0]);
     setVersion();
 
     // Apply bolding to settings details text
@@ -208,9 +208,9 @@ function updateLang() {
   // Change the language on i18n, and reload the translation variable.
   i18n.setLng(
     localStorage['robopaint-lang'],
-    function(t) {
-      robopaint.t = t;
-      $('[data-i18n]').i18n();
+    function() {
+      robopaint.t = i18n.t;
+      i18n.translateObject($('body')[0]);
       setVersion();
 
       // Apply bolding to settings details text
