@@ -69,9 +69,18 @@ rpRequire('cnc_api', function(){
   });
 });
 
-
+// Define the local settings getters/setters
+mode.settings = {
+  v: {},
+  load: function() {
+    this.v = robopaint.utils.getSettings(mode.name);
+  },
+  save: function() {
+    robopaint.utils.saveSettings(this.v, mode.name);
   }
 };
+mode.settings.load();
+
 // Manage loading roboPaintDependencies from mode package config
 if (mode.roboPaintDependencies) {
   _.each(mode.roboPaintDependencies, function(modName){
