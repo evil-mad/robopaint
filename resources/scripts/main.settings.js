@@ -396,12 +396,12 @@ function bindSettingsControls() {
     // Force the pen up when exiting...
     if (appMode == 'print' || appMode == 'manual') {
       // Unless we' have're probably printing something
-      if ($subwindow[0].contentWindow.cncserver.state.buffer.length == 0) {
+      if (robopaint.cncserver.state.buffer.length == 0) {
         // Use the more abstracted API to allow sub-app callbacks to handle specifics
-        robopaint.cncserver.api.pen.up();
+        robopaint.cncserver.cmd.run('up');
       }
     } else {
-      cncserver.setHeight('up');
+      robopaint.cncserver.cmd.run('up');
     }
     setSettingsWindow(false);
   });
