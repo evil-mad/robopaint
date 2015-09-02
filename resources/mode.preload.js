@@ -55,7 +55,19 @@ var modePath = path.parse(window.location.pathname);
 var mode = window.mode = require(path.join(modePath.dir, 'package.json'));
 mode.path = modePath;
 
+// Load the central RP settings
+var robopaint = window.robopaint = {
+  utils: rpRequire('utils')
 };
+robopaint.settings = robopaint.utils.getSettings();
+rpRequire('cnc_api', function(){
+  window.cncserver.api.server = robopaint.utils.getAPIServer(robopaint.settings);
+  robopaint.cncserver = window.cncserver;
+  robopaint.cncserver.api.settings.bot(function(b){
+    robopaint.canvas = robopaint.utils.getRPCanvas(b);
+    preloadComplete(); // This should be the last thing to run in preload.
+  });
+});
 
 
   }
