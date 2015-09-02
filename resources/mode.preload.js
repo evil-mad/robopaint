@@ -47,6 +47,7 @@ var ipc = window.ipc = require('ipc');
 var appPath = app.getAppPath();
 var i18n = window.i18n = require('i18next-client');
 var $ = require('jquery');
+var _ = require('underscore');
 var rpRequire = window.rpRequire = require(appPath + '/resources/rp_modules/rp.require');
 
 // Get our mode path, find the mode's package.json, and load it.
@@ -59,6 +60,26 @@ mode.path = modePath;
 
   }
 };
+// Manage loading roboPaintDependencies from mode package config
+if (mode.roboPaintDependencies) {
+  _.each(mode.roboPaintDependencies, function(modName){
+    switch (modName) {
+      case 'jquery':
+        window.$ = window.jQuery = $;
+        break;
+      case 'underscore':
+        window._ = _;
+        break;
+      case 'paper':
+        console.log('Loading Paper');
+        rpRequire('paper', preloadComplete);
+        break;
+      default:
+        rpRequire(modName);
+    }
+  });
+}
+
 
 /**
  * Load language resources for this mode and RP common
@@ -120,11 +141,6 @@ function i18nInit() {
   // On jQuery load trigger, run the initial translation
   $(function(){
     translateMode();
-
-    // A good time to run an Mode API for binding the controls.
-    if (_.isFunction(mode.bindControls)) {
-      mode.bindControls();
-    }
   })
 }
 
@@ -232,6 +248,15 @@ function handleCNCServerMessages(name, data) {
   }
 }
 
+function preloadComplete() {
+  // If we need both of these before we're ready, they both load async so
+  // we need to check both before continuing to avoid race conditions.
+  // This may not actually be needed, but its technically possible.
+  if (mode.roboPaintDependencies && mode.roboPaintDependencies.indexOf('paper') != -1) {
+    if (!robopaint.canvas || !window.paper) return;
+  }
 
-
-console.log('RobPaint Mode APIs Preloaded & Ready!');
+  if (_.isFunction(mode.bindControls)) mode.bindControls();
+  if (_.isFunction(mode.pageInitReady)) mode.pageInitReady();
+  console.log('RobPaint Mode APIs Preloaded & Ready!');
+}
