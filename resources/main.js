@@ -63,12 +63,14 @@ var subWin = {}; // Placeholder for subwindow "window" object
 var robopaint = {
   settings: {}, // Holds the "permanent" app settings data
   statedata: {}, // Holds per app session volitile settings
-  // currentBot lies outside of settings as it actually controls what settings will be loaded
-  currentBot: getCurrentBot(),
   cncserver: cncserver, // Holds the reference to the real CNC server object with API wrappers
   $: $, // Top level jQuery Object for non-shared object bindings
-  appPath: appPath // Absolute App path to prefix relative dir locations
+  appPath: appPath, // Absolute App path to prefix relative dir locations
+  utils: rpRequire('utils')
 };
+
+// currentBot lies outside of settings as it actually controls what settings will be loaded
+robopaint.currentBot = robopaint.utils.getCurrentBot();
 
 // Option buttons for connections
 // TODO: Redo this is as a message management window system.
@@ -77,6 +79,11 @@ var robopaint = {
 // what this is currently used for, and what/if the other modes may make use of it).
 var $options;
 var $stat;
+
+rpRequire('manager'); // Manage state and messages
+rpRequire('cnc_utils'); // Canvas calculation utils
+rpRequire('commander'); // Simple command queuing
+rpRequire('wcb'); // WaterColorBot Specific group commands
 
 /**
  * Central home screen initialization (called after translations have loaded)
