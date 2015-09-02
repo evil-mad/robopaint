@@ -87,7 +87,7 @@ function loadSettings() {
     $input.change();
   }
 
-  afterSettings();
+  $(robopaint).trigger('settingsComplete');
 }
 
 /**
@@ -168,7 +168,7 @@ function verifyColorsetAbilities() {
 /**
  * Called after settings have been loaded
  */
-function afterSettings() {
+$(robopaint).on('settingsComplete', function(){
   addSettingsRangeValues(); // Add in the range value displays
 
   // Clear last used image
