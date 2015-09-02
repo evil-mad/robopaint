@@ -15,6 +15,10 @@ window.i18n = require('i18next-client');
 var remote = require('remote');
 var mainWindow = remote.getCurrentWindow();
 var app = remote.require('app');
+var appPath = app.getAppPath() + '/';
+var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
+
+rpRequire('cnc_api'); // Add the DOM CNCServer API wrapper
 
 // Setup and hide extraneous menu items for Mac Menu
 if (process.platform === "darwin") {
@@ -48,7 +52,6 @@ $(document).keypress(function(e){
 var currentLang = "";
 var fs = require('fs-plus');
 var cncserver = require('cncserver');
-var appPath = app.getAppPath() + '/';
 var barHeight = 40;
 var isModal = false;
 var initializing = false;
