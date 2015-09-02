@@ -147,15 +147,6 @@ function startInitialization() {
   // @see scripts/main.settings.js
   loadSettings();
 
-  // Set base CNC Server API wrapper access location
-  if (!robopaint.cncserver.api) robopaint.cncserver.api = {};
-  robopaint.cncserver.api.server = {
-    domain: 'localhost',
-    port: robopaint.settings.httpport,
-    protocol: 'http',
-    version: '1'
-  }
-
   // Bind all the functionality required for Remote Print mode
   // @see scripts/main.api.js
   bindRemoteControls();
