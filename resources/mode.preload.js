@@ -6,17 +6,22 @@
  * become globals in the window.
  *
  * Modes will be provided the following window "globals":
- *  - i18n: The full i18next CommonJS client module, loaded with the modes full
+ * - i18n: The full i18next CommonJS client module, loaded with the modes full
  *          translation set, and the RP central translations for common strings.
  * - rpRequire: The helper function for adding RP "modules", external libraries,
  *              and any otthaer cothode o
  * - ipc: The Inter Process Communication module for sending events and messages
  *        to/from the main window process. Most of this is managed here, but
  *        having this globally available makes custom comms possible.
+ * - cncserver: Just the clientside API wrappers for cncserver.
+ * - robopaint: A limited version of the robopaint object. Contains:
+ *        settings (read only), utils, canvas, cncserver.
  * - mode: Package of the current mode, with path, and utility functions.
- *    mode.run({mixed}): Emulation IPC passthrough of original commander
- *      API shortcut. Allows immediate queuing of ~500 cmds/sec to CNCServer.
-
+ *    * mode.run({mixed}): Emulation IPC passthrough of original commander
+ *        API shortcut. Allows immediate queuing of ~500 cmds/sec to CNCServer.
+ *    * mode.settings: An object with setters/getters to manage storing this
+ *        modes specific settings.
+ *
  *    This is also where event callbacks should be defined, full list here:
  *     * mode.translateComplete(): Called whenever translate is done. Happens on
  *         init, and after every language change.
@@ -28,6 +33,9 @@
  *     * mode.onClose(callback): Called whenever the user attempts to either
  *         change the mode, or close the application. If implemented, the user
  *         can only close or change the mode once "callback" has been called.
+ *     * mode.onFullyResumed() & mode.onFullyPaused(): A mode can run pause or
+ *         resume, but doesn't know when this happens until these are called.
+ *     * mode.onMessage(channel, data): For any non-general messages, wraps ipc.
  **/
 "use strict";
 
