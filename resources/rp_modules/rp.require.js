@@ -31,18 +31,26 @@ var modules = {
   var m = modules[module];
 
   if (m) {
+    var modPath = m.path;
+
     if (m.name) {
-      m.path = appPath + '/resources/rp_modules/' + m.name;
+      modPath = appPath + '/resources/rp_modules/' + m.name;
     }
 
-    m.path+= '.js';
+    modPath+= '.js';
 
     if (m.type === 'dom') {
-      insertScript(m.path).onload = callback;
+      if (m.added === true) {
+        console.error('rpRequire DOM module "' + module + '" already loaded!"');
+        return false;
+      }
+      insertScript(modPath).onload = callback;
+      m.added = true;
     } else if (m.type === 'node') {
-      return require(m.path);
+      return require(modPath);
     }
   } else { // Shortcut not found
+    console.error('rpRequire module "' + module + '" not found or supported!"');
     return false;
   }
 
