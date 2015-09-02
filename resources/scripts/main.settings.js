@@ -57,8 +57,8 @@ function loadSettings() {
   verifyColorsetAbilities();
 
   // Are there existing settings from a previous run? Mesh them into the defaults
-  if (localStorage[settingsStorageKey()]) {
-    var s = getSettings();
+  if (localStorage[robopaint.utils.settingsStorageKey()]) {
+    var s = robopaint.utils.getSettings();
     for (var key in robopaint.settings) {
       if (typeof s[key] != 'undefined' && s[key] !== null) {
         robopaint.settings[key] = s[key];
@@ -173,40 +173,7 @@ function afterSettings() {
 
   // Clear last used image
   if (robopaint.settings.openlast == 0) delete localStorage["svgedit-default"];
-}
-
-/**
- * Actually retrieve settings from local storage
- */
-function getSettings() {
-  if (localStorage[settingsStorageKey()]) {
-    return JSON.parse(localStorage[settingsStorageKey()]);
-  } else {
-    return {};
-  }
-}
-
-/**
- * Get the settings key (based on bot type)
- *
- * @returns {String}
- *   Name of current bot specific settings key
- */
-function settingsStorageKey() {
-  var t = robopaint.currentBot.type;
-  if (t == 'watercolorbot') {
-    return 'cncserver-settings';
-  } else {
-    return t + '-settings';
-  }
-}
-
-/**
- * Actually save settings to local storage
- */
-function saveSettings() {
-  localStorage[settingsStorageKey()] = JSON.stringify(robopaint.settings);
-}
+});
 
 /**
  * Bind and callback functionality for any settings specific markup/controls
@@ -235,17 +202,10 @@ function bindSettingsControls() {
   }
   $('select#bottype').val(robopaint.currentBot.type);
 
-
-
-  // Set robopaint global aspect ratio
+  // Set robopaint global aspect ratio & margin
   var b = botTypes[robopaint.currentBot.type].data;
   robopaint.currentBot.data = b;
-  var aspect = (b.maxArea.height - b.workArea.top) / (b.maxArea.width - b.workArea.left);
-  robopaint.canvas = {
-    width: 1152, // "Trusted" width to base transformations off of
-    height: Math.round(1152 * aspect),
-    aspect: aspect
-  };
+  robopaint.canvas = robopaint.utils.getRPCanvas(b);
 
   // Setup settings group tabs
   $('ul.tabs').each(function(){
@@ -296,7 +256,7 @@ function bindSettingsControls() {
       robopaint.settings.enabledmodes[name] = $input.is(':checked');
       $('#' + name + ', #bar-' + name).toggle(robopaint.settings.enabledmodes[name]);
       responsiveResize();
-      if (!initializing) saveSettings();
+      if (!initializing) robopaint.utils.saveSettings(robopaint.settings);
       return;
     }
 
@@ -428,7 +388,7 @@ function bindSettingsControls() {
       }
     }
 
-    if (!initializing) saveSettings();
+    if (!initializing) robopaint.utils.saveSettings(robopaint.settings);
   });
 
   // Done Button
@@ -461,7 +421,7 @@ function bindSettingsControls() {
       // Disable any non-core modes
       $('.advanced-modes input').prop('checked', false).change();
 
-      delete localStorage[settingsStorageKey()];
+      delete localStorage[robopaint.utils.settingsStorageKey()];
 
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();

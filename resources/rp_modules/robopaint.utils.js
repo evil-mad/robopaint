@@ -351,7 +351,103 @@ var utils = {
 
       return out.join(', ');
     }
+  },
+
+  /**
+   * Simple wrapper to pull out current bot from storage
+   *
+   * @returns {Object}
+   *   Current/default from storage
+   */
+  getCurrentBot: function() {
+    var bot = {type: 'watercolorbot', name: 'WaterColorBot'};
+
+    try {
+      bot = JSON.parse(localStorage['currentBot']);
+    } catch(e) {
+      // Parse error.. will stick with default and write it.
+      localStorage['currentBot'] = JSON.stringify(bot);
+    }
+    return bot;
+  },
+
+  /**
+   * Get the settings key (based on bot type)
+   *
+   * @returns {String}
+   *   Name of current bot specific settings key
+   */
+  settingsStorageKey: function (extraKey) {
+    var t = this.getCurrentBot().type;
+    if (typeof extraKey === 'string') {
+      extraKey += '-';
+    } else {
+      extraKey = "";
+    }
+
+    if (t == 'watercolorbot') {
+      return 'cncserver-' + extraKey + 'settings';
+    } else {
+      return t + '-' + extraKey + 'settings';
+    }
+  },
+
+  /**
+   * Actually retrieve settings from local storage
+   */
+  getSettings: function (extraKey) {
+    if (localStorage[this.settingsStorageKey(extraKey)]) {
+      return JSON.parse(localStorage[this.settingsStorageKey(extraKey)]);
+    } else {
+      return {};
+    }
+  },
+
+  /**
+   * Actually save settings to local storage
+   */
+  saveSettings: function (settings, extraKey) {
+    localStorage[this.settingsStorageKey(extraKey)] = JSON.stringify(settings);
+  },
+
+  /**
+   * Return the object required for the CNCServer DOM API wrapper server object
+   */
+  getAPIServer: function(settings) {
+    return {
+      domain: 'localhost',
+      port: settings.httpport,
+      protocol: 'http',
+      version: '1'
+    };
+  },
+
+  getRPCanvas: function(b) {
+    var aspect = (b.maxArea.height - b.workArea.top) / (b.maxArea.width - b.workArea.left);
+
+    // Margin for the WCB, will be different for Eggbot, etc.
+    // TODO: Should be defined by bot in values other than SVG pixels based around
+    // the trusted width of 1152 below.
+    var canvasMargin = {
+      left: 48, // 48 = 1/2in (96dpi / 2)
+      right: 48,
+      bottom: 48,
+      top: 48
+    };
+
+    // Store combined values as well to save space later.
+    canvasMargin.width = canvasMargin.left + canvasMargin.right;
+    canvasMargin.height = canvasMargin.top + canvasMargin.bottom;
+
+    return {
+      width: 1152, // "Trusted" width to base transformations off of
+      height: Math.round(1152 * aspect),
+      aspect: aspect,
+      margin: canvasMargin
+    };
   }
+
+
 };
 
 module.exports = utils;
