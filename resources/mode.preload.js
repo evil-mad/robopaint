@@ -262,10 +262,14 @@ function handleModeClose(returnChannel) {
 function handleCNCServerMessages(name, data) {
   switch(name) {
     case "penUpdate":
-      if (_.isFunction(mode.onPenUpdate)) {
-        mode.onPenUpdate(data);
-      }
+    case "bufferUpdate":
+    case "fullyPaused":
+    case "fullyResumed":
+      var funcName = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
+      if (_.isFunction(mode[funcName])) mode[funcName](data);
       break;
+    default:
+      if (_.isFunction(mode.onMessage)) mode.onMessage(name, data);
   }
 }
 
