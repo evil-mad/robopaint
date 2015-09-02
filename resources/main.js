@@ -191,7 +191,7 @@ function bindMainControls() {
     if (initializing) {
       // Initialize settings...
       loadSettings();
-      saveSettings();
+      robopaint.utils.saveSettings(robopaint.settings);
 
       // Init sockets for data stream
       initSocketIO();
@@ -382,7 +382,7 @@ function startSerial(){
 
         // Initialize settings...
         loadSettings();
-        saveSettings();
+        robopaint.utils.saveSettings(robopaint.settings);
 
         robopaint.api.bindCreateEndpoints();
 
