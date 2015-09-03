@@ -84,6 +84,7 @@ rpRequire('manager'); // Manage state and messages
 rpRequire('cnc_utils'); // Canvas calculation utils
 rpRequire('commander'); // Simple command queuing
 rpRequire('wcb'); // WaterColorBot Specific group commands
+rpRequire('mediasets') // Colors and other media specific details.
 
 /**
  * Central home screen initialization (called after translations have loaded)
@@ -546,104 +547,23 @@ function fadeInWindow() {
  * Fetches all colorsets available from the colorsets dir
  */
 function getColorsets() {
-  var colorsetDir = appPath + 'resources/colorsets/';
-  var files = fs.readdirSync(colorsetDir);
-  var sets = [];
-
-  // List all files, only add directories
-  for(var i in files) {
-    if (fs.statSync(colorsetDir + files[i]).isDirectory()) {
-      sets.push(files[i]);
-    }
-  }
-
-  robopaint.statedata.colorsets = {};
-
-  // Move through each colorset JSON definition file...
-  for(var i in sets) {
-    var set = sets[i];
-    var setDir = colorsetDir + set + '/';
-
-
-    try {
-      var fileSets = JSON.parse(fs.readFileSync(setDir + set + '.json'));
-    } catch(e) {
-      // Silently fail on bad parse!
-      continue;
-    }
-
-     // Move through all colorsets in file
-    for(var s in fileSets) {
-      var c = fileSets[s];
-      var machineName = c.machineName;
-
-      try {
-        // Add pure white to the end of the color set for auto-color
-        c.colors.push({'white': '#FFFFFF'});
-
-        // Process Colors to avoid re-processing later
-        var colorsOut = [];
-        for (var i in c.colors){
-          var color = c.colors[i];
-          var name = Object.keys(color)[0];
-          var h = c.colors[i][name];
-          var r = robopaint.utils.colorStringToArray(h);
-          colorsOut.push({
-            name: robopaint.t("colorsets.colors." + name),
-            color: {
-              HEX: h,
-              RGB: r,
-              HSL: robopaint.utils.rgbToHSL(r),
-              YUV: robopaint.utils.rgbToYUV(r)
-            }
-
-          });
-        }
-      } catch(e) {
-        console.error("Parse error on colorset: " + s, e);
-        continue;
-      }
-      // Use the machine name and set name of the colorset to create translate
-      // strings.
-      var name  = "colorsets." + set + "." + machineName + ".name";
-      var maker = "colorsets." + set + "." + machineName + ".manufacturer";
-      var desc  = "colorsets." + set + "." + machineName + ".description";
-      var media = "colorsets.media." + c.media;
-
-      robopaint.statedata.colorsets[c.styles.baseClass] = {
-        name: robopaint.t(name),
-        type: robopaint.t(maker),
-        weight: parseInt(c.weight),
-        description: robopaint.t(desc),
-        media: robopaint.t(media),
-        enabled: robopaint.statedata.allowedMedia[c.media],
-        baseClass: c.styles.baseClass,
-        colors: colorsOut,
-        stylesheet: $('<link>').attr({rel: 'stylesheet', href: setDir + c.styles.src}),
-        styleSrc: setDir + c.styles.src
-      };
-    }
-  }
-
-
-  var order = Object.keys(robopaint.statedata.colorsets).sort(function(a, b) {
-    return (robopaint.statedata.colorsets[a].weight - robopaint.statedata.colorsets[b].weight)
-  });
+  // Load the sets. Must happen here to get translations.
+  robopaint.media.load();
 
   //  Clear the menu (prevents multiple copies appearing on language switch)
   $('#colorset').empty();
 
   // Actually add the colorsets in the correct weighted order to the dropdown
-  for(var i in order) {
-    var c = robopaint.statedata.colorsets[order[i]];
+  _.each(robopaint.media.setOrder, function(setIndex){
+    var c = robopaint.media.sets[setIndex];
     $('#colorset').append(
       $('<option>')
-        .attr('value', order[i])
+        .attr('value', setIndex)
         .text(c.type + ' - ' + c.name)
-        .prop('selected', order[i] == robopaint.settings.colorset)
+        .prop('selected', setIndex == robopaint.settings.colorset)
         .prop('disabled', !c.enabled) // Disable unavailable options
     );
-  }
+  });
 
   // No options? Disable color/mediasets
   if (!$('#colorset option').length) {

@@ -506,9 +506,9 @@ function addSettingsRangeValues() {
  * Update/render currently selected colorset in settings window
  */
 function updateColorSetSettings() {
-  if (!robopaint.statedata.colorsets) return; // Don't run too early
+  if (!robopaint.media.sets) return; // Don't run too early
 
-  var set = robopaint.statedata.colorsets[robopaint.settings.colorset];
+  var set = robopaint.media.currentSet;
   if (!set) return; // Don't run if the set is invalid
 
   var $colors = $('#colorsets .colors');

@@ -12,6 +12,7 @@ var modules = {
   paper: {path: appPath + '/node_modules/paper/dist/paper-full', type: 'dom'},
   cnc_api: {path: appPath + '/node_modules/cncserver/example/cncserver.client.api', type: 'dom'},
   utils: {name: 'robopaint.utils', type: 'node'},
+  mediasets: {name: 'robopaint.mediasets', type: 'node'},
   manager: {name: 'cncserver.manager', type: 'node'},
   wcb: {name: 'cncserver.wcb', type: 'node'},
   commander: {name: 'cncserver.commander', type: 'node'},
