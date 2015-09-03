@@ -53,9 +53,6 @@ function loadSettings() {
   // Allow machine specific overrides of initial default settings
   settingsDefaultAlter(robopaint.settings);
 
-  // Set the visibility/enabled status of color/mediasets
-  verifyColorsetAbilities();
-
   // Are there existing settings from a previous run? Mesh them into the defaults
   if (localStorage[robopaint.utils.settingsStorageKey()]) {
     var s = robopaint.utils.getSettings();
@@ -129,41 +126,6 @@ function settingsDefaultAlter(settings) {
 
 }
 
-/**
- * Verify the abilities for a given bot to access/use a given set of media.
- * If no media types can be used by the current bot, the colorset pallette
- * will be completely hidden.
- */
-function verifyColorsetAbilities() {
-  var tools = robopaint.currentBot.data.tools;
-  var bot = robopaint.currentBot.type;
-
-  // Assume bot allows for all media types
-  var allowedMedia = {
-    watercolor: true,
-    pen: true,
-    engraver: true,
-    wax: true
-  };
-
-  // Only Eggbot supports engraver and wax right now
-  if (bot !== 'eggbot') {
-    allowedMedia.engraver = false;
-    allowedMedia.wax = false;
-  }
-
-  // Without color, no watercolor
-  if (!tools.color0) {
-    allowedMedia.watercolor = false;
-  }
-
-  // Without manual swap/resume, no pen
-  if (!tools.manualswap && !tools.manualresume) {
-    allowedMedia.pen = false;
-  }
-
-  robopaint.statedata.allowedMedia = allowedMedia;
-}
 
 /**
  * Called after settings have been loaded
@@ -202,9 +164,13 @@ function bindSettingsControls() {
   }
   $('select#bottype').val(robopaint.currentBot.type);
 
-  // Set robopaint global aspect ratio & margin
+
   var b = botTypes[robopaint.currentBot.type].data;
-  robopaint.currentBot.data = b;
+
+  // Re-init currentBot with full data and tools (also sets capabilities!)
+  robopaint.currentBot = robopaint.utils.getCurrentBot(b);
+
+  // Set robopaint global aspect ratio & margin
   robopaint.canvas = robopaint.utils.getRPCanvas(b);
 
   // Setup settings group tabs

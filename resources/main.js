@@ -137,11 +137,6 @@ function startInitialization() {
   // Bind settings controls
   bindSettingsControls();
 
-  // Must be run before we enumerate colorsets to ensure data is cached properly
-  // Also must run after settings controls are bound (as that's when we get tool
-  // data on current bot. TODO: Find a better home for that?
-  verifyColorsetAbilities();
-
   // Load the colorset configuration data (needs to happen before settings are
   // loaded and a colorset is selected.
   getColorsets();

@@ -359,7 +359,7 @@ var utils = {
    * @returns {Object}
    *   Current/default from storage
    */
-  getCurrentBot: function() {
+  getCurrentBot: function(botData) {
     var bot = {type: 'watercolorbot', name: 'WaterColorBot'};
 
     try {
@@ -368,6 +368,39 @@ var utils = {
       // Parse error.. will stick with default and write it.
       localStorage['currentBot'] = JSON.stringify(bot);
     }
+
+    if (botData) {
+      var tools = botData.tools;
+
+      // Assume bot allows for all media types
+      var allowedMedia = {
+        watercolor: true,
+        pen: true, // I think everything can use a pen... ?
+        multiPen: true,
+        engraver: true,
+        wax: true
+      };
+
+      // Only Eggbot supports engraver and wax right now
+      if (bot !== 'eggbot') {
+        allowedMedia.engraver = false;
+        allowedMedia.wax = false;
+      }
+
+      // Without color, no watercolor
+      if (!tools.color0) {
+        allowedMedia.watercolor = false;
+      }
+
+      // Without manual swap/resume, no multi pen
+      if (!tools.manualswap && !tools.manualresume) {
+        allowedMedia.multiPen = false;
+      }
+
+      bot.allowedMedia = allowedMedia;
+      bot.data = botData;
+    }
+
     return bot;
   },
 
