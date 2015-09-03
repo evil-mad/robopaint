@@ -119,6 +119,9 @@ function startInitialization() {
       .css('opacity', 0)
       .removeClass('hide')
       .css('opacity', 100);
+    if (robopaint.modes[appMode].debug) {
+      $subwindow[0].openDevTools();
+    }
   };
 
   // Bind and run inital resize first thing
