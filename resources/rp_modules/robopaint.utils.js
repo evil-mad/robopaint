@@ -107,7 +107,7 @@ var utils = {
 
     // If it's already RGB, use it!
     if (string.indexOf('rgb') !== -1){
-      var color = string.slice(4, -1).split(', ');
+      var color = string.slice(4, -1).split(',');
 
       $.each(color, function(i, c){
         color[i] = Number(c);
