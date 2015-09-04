@@ -38,6 +38,7 @@ function sendNext() {
   // things to wait before their items are added (tool, wash) need to be done a
   // little differently to avoid out of order command errors.
 
+  var setHeight = null; // Used on three height manuevers
   switch (cmd[0]) {
     case "move":
       var point = cncserver.utils.getPercentCoord(cmd[1]);
@@ -70,18 +71,21 @@ function sendNext() {
       api.tools.change(cmd[1], sendNext, {ignoreTimeout: '1'});
       break;
     case "up":
+      setHeight = 0;
     case "down":
-      var h = (cmd[0] === 'down') ? 1 : 0;
+      setHeight = 1;
+    case "height":
+      if (setHeight === null) setHeight = cmd[1]; // Specific height
       var options = {};
 
       if (robopaint.cncserver.api.server.domain == "localhost") {
-        options = {state: h};
+        options = {state: setHeight};
         if (cmd[1] === true) options.skipBuffer = true;
         robopaint.cncserver.setPen(options, sendNext);
       } else {
         options = {ignoreTimeout: '1'};
         if (cmd[1] === true) options.skipBuffer = true;
-        api.pen.height(h, sendNext, options);
+        api.pen.height(setHeight, sendNext, options);
       }
       break;
     case "status":
