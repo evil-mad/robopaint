@@ -41,9 +41,7 @@ paper.drawPoint = new Group({
       strokeWidth: 3,
       strokeColor: 'black'
     })
-  ],
-  /*strokeColor: 'black',
-  strokeWidth: 3,*/
+  ]
 });
 
 paper.moveDrawPoint = function(pos, duration) {
@@ -62,8 +60,6 @@ paper.moveDrawPoint = function(pos, duration) {
     d.src = paper.drawPoint.position;
     d.dest = pos;
     d.duration = (duration-40) / 1000; // Passed in MS, needed in S
-
-    //paper.drawPoint.data.vectorAdd = (vector / 60) * (duration / 1000);
   }
 }
 
@@ -88,19 +84,6 @@ paper.animDrawPoint = function(event) {
   }
 }
 
-// Run a path into the buffer (Open linear segmented non-compound paths only!)
-paper.runPath = function(path) {
-  mode.run('up');
-  var isDown = false;
-  _.each(path.segments, function(seg){
-    mode.run('move', {x: seg.point.x, y: seg.point.y});
-    if (!isDown) {
-      mode.run('down');
-      isDown = true;
-    }
-  });
-  mode.run('up');
-}
 
 // Default to writing on this layer
 paper.mainLayer.activate();
@@ -257,11 +240,9 @@ function onFrame(event) {
       }
     };
   }
+
+  }
 }
-
-
-
-
 
 
 
