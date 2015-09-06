@@ -59,14 +59,18 @@ mode.path = modePath;
 
 // Load the central RP settings
 var robopaint = window.robopaint = {
-  utils: rpRequire('utils')
+  utils: rpRequire('utils'),
+  appPath: appPath + path.sep,
+  t: i18n.t
 };
+
 robopaint.settings = robopaint.utils.getSettings();
 rpRequire('cnc_api', function(){
   window.cncserver.api.server = robopaint.utils.getAPIServer(robopaint.settings);
   robopaint.cncserver = window.cncserver;
   robopaint.cncserver.api.settings.bot(function(b){
     robopaint.canvas = robopaint.utils.getRPCanvas(b);
+    robopaint.currentBot = robopaint.utils.getCurrentBot(b);
     preloadComplete(); // This should be the last thing to run in preload.
   });
 });
@@ -249,7 +253,7 @@ ipc.on('settingsUpdate', function(){ robopaint.settings = robopaint.utils.getSet
 // Add a limited CNCServer API interaction layer wrapper over IPC.
 mode.run = function(){
   ipc.sendToHost('cncserver-run', Array.prototype.slice.call(arguments));
-}
+};
 
 
 function handleModeClose(returnChannel) {
