@@ -67,7 +67,6 @@ $(robopaint).on('settingsComplete', _.once(function(){
     }
   });
 
-
   // TODO: replace with ServerConnect(?)
   cncserver.status(robopaint.t('status.connected'));
 }));
@@ -105,7 +104,7 @@ function bufferUpdateEvent(b){
       break;
   }
 
-  // Semd useful info to the mode
+  // Send useful info to the mode
   cncserver.pushToMode('bufferUpdate', {
     length: cncserver.state.buffer.length,
     paused: cncserver.state.process.paused
@@ -114,23 +113,24 @@ function bufferUpdateEvent(b){
   // Empty buffer?
   if (!cncserver.state.buffer.length) {
     cncserver.state.process.max = 1;
-    updateProgress({val: 0, max: 1});
+    cncserver.progress({val: 0, max: 1});
   } else { // At least one item in buffer
     // Update the progress bar
-    updateProgress({
+    cncserver.progress({
       val: cncserver.state.process.max - cncserver.state.buffer.length,
       max: cncserver.state.process.max
     });
   }
 }
 
+// Pen update event callback
 function penUpdateEvent(actualPen){
   actualPen.absCoord = cncserver.utils.getStepstoAbsCoord(actualPen);
   cncserver.state.actualPen = $.extend({}, actualPen);
   cncserver.pushToMode('penUpdate', actualPen);
 }
 
-// Handle buffer status messages
+// General message update callback (handled locally for the main process)
 function messageUpdateEvent(data){
   cncserver.status(data.message);
 }
@@ -145,7 +145,7 @@ cncserver.pushToMode = function() {
   try {
     modeWindow.send('cncserver', arguments);
   } catch(e) {
-    // The above will fail for various reasons, we should mourn the loss of here
+    // The above will fail whenever the window isn't ready. That's a fine fail.
   }
 }
 
@@ -154,7 +154,7 @@ $(robopaint).on('settingsUpdate', function(){
   try {
     modeWindow.send('settingsUpdate');
   } catch(e) {
-    // The above will fail ehenever the window isn't ready. That's a fine fail.
+    // The above will fail whenever the window isn't ready. That's a fine fail.
   }
 });
 
