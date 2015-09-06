@@ -79,10 +79,26 @@
     "autoinit": "Automatic Paint: __pathNum__ paths, __jobsNum__ jobs'",
     "autofill": "Filling path __id__...",
     "autostroke": "Stroking path __id__...",
-    "autocomplete": "Automatic Paint Complete!"
+    "autocomplete": "Automatic Paint Complete!",
+    "spool": {
+      "stroke": "Tracing stroke paths...",
+      "fill": "Tracing fill paths..."
+    }
   },
   "status": {
+    "connecting": "Connecting to robot...",
+    "connected": "Connected Successfully!",
+    "pausing": "Pausing current process...",
+    "paused": "Paused. Click resume to continue.",
+    "resuming": "Resuming current process...",
+    "resumed": "Drawing resumed...",
     "start": "Starting up...",
+    "parking": "Parking...",
+    "parked": "Parked succesfully",
+    "parkfail": "Can't Park, already parked",
+    "unlocking": "Unlocking motors...",
+    "wait": "Please wait while executed processes complete...",
+    "unlocked": "Motors unlocked! Place in home corner when done",
     "found": "Port found, connecting...",
     "question": "What do you want to do?",
     "error": "Couldn't connect!",
