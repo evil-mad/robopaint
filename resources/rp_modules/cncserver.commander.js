@@ -79,7 +79,7 @@ function sendNext() {
       var options = {};
 
       if (robopaint.cncserver.api.server.domain == "localhost") {
-        options = {state: setHeight};
+        options = {state: setHeight, ignoreTimeout: '1'};
         if (cmd[1] === true) options.skipBuffer = true;
         robopaint.cncserver.setPen(options, sendNext);
       } else {
