@@ -51,12 +51,11 @@ cncserver.wcb = {
   // Get the name of paint/water/media on the brush
   getMediaName: function(toolName) {
     if (typeof toolName != 'string') toolName = cncserver.state.media;
-    var colors = robopaint.statedata.colorsets[robopaint.settings.colorset].colors;
 
     if (toolName.indexOf('water') !== -1) {
       return robopaint.t('common.water');
     } else {
-      return colors[toolName.substr(5, 1)].name;
+      return robopaint.media.currentSet.colors[toolName.substr(-1)].name;
     }
   },
 
