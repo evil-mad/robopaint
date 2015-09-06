@@ -222,7 +222,10 @@ function bindSettingsControls() {
       robopaint.settings.enabledmodes[name] = $input.is(':checked');
       $('#' + name + ', #bar-' + name).toggle(robopaint.settings.enabledmodes[name]);
       responsiveResize();
-      if (!initializing) robopaint.utils.saveSettings(robopaint.settings);
+      if (!initializing) {
+        robopaint.utils.saveSettings(robopaint.settings);
+        $(robopaint).trigger('settingsUpdate');
+      }
       return;
     }
 
@@ -354,7 +357,10 @@ function bindSettingsControls() {
       }
     }
 
-    if (!initializing) robopaint.utils.saveSettings(robopaint.settings);
+    if (!initializing) {
+      robopaint.utils.saveSettings(robopaint.settings);
+      $(robopaint).trigger('settingsUpdate');
+    }
   });
 
   // Done Button

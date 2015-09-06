@@ -143,6 +143,15 @@ cncserver.pushToMode = function() {
   }
 }
 
+// Send settings updates to modes
+$(robopaint).on('settingsUpdate', function(){
+  try {
+    modeWindow.send('settingsUpdate');
+  } catch(e) {
+    // The above will fail ehenever the window isn't ready. That's a fine fail.
+  }
+});
+
 // Handle CNCServer requests from mode windows.
 function handleClientCmd() {
   console.log('CNC clientcmd', args);
