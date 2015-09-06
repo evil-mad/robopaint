@@ -115,6 +115,8 @@ function fixOffset(){
 paper.loadSVG = function(svgData) {
   paper.mainLayer.activate();
   paper.mainLayer.removeChildren();
+  paper.tempLayer.removeChildren();
+  paper.actionLayer.removeChildren();-
 
   project.importSVG(svgData, {
     applyMatrix: true,
@@ -149,6 +151,9 @@ paperLoadedInit();
 // Render the "action" layer, this is actually what will become the motion path
 // send to the bot.
 paper.renderMotionPaths = function () {
+  paper.mainLayer.opacity = 0.1;
+  paper.tempLayer.opacity = 0.3;
+
   prepTracePreview();
 
   view.update();
@@ -164,17 +169,33 @@ function prepTracePreview() {
   tmp.activate();
   tmp.removeChildren(); // Clear it out
 
-  // Move through all child items in the mainLayer and copy them into preview
+  // Move through all child items in the mainLayer and copy them into temp
   _.each(paper.mainLayer.children, function(path){
     path.copyTo(tmp);
   });
 
-  // Move through each preview layer child
+  // Ungroup all groups copied
+  ungroupAllGroups(tmp);
+
+  // Move through each temp item to prep them
+  var maxLen = 0;
   _.each(tmp.children, function(path){
-    path.fillColor = path.fillColor ? 'red' : null;
+    maxLen += path.length;
+    path.strokeColor = (path.strokeColor && path.strokeWidth) ? snapColor(path.strokeColor) : snapColor(path.fillColor);
+    path.data.color = snapColorID(path.strokeColor, path.opacity);
+    path.data.name = path.name;
+    path.fillColor = path.fillColor ? snapColor(path.fillColor) : null;
     path.strokeWidth = previewWidth;
-    path.strokeColor = '#0000FF';
+    if (!path.closed) path.closed = path.fillColor !== null;
   });
+
+  console.log(maxLen);
+
+  // Keep the user up to date with what's going on.
+  mode.run([
+    ['status', i18n.t('libs.spool.stroke'), true],
+    ['progress', 0, maxLen]
+  ]);
 }
 
 // Copy the needed parts for filling (all paths with fills)
@@ -186,35 +207,97 @@ function prepFillPreview() {
 
     // Move through all child items in the mainLayer and copy them into temp
   _.each(paper.mainLayer.children, function(path){
-    if (path.fillColor) path.copyTo(tmp);
+    path.copyTo(tmp);
   });
 
+  // Ungroup all groups copied
+  ungroupAllGroups(tmp);
+
+  // Filter out non-fill paths, and ensure paths are closed.
+  for(var i in tmp.children) {
+    var path = tmp.children[i];
+    if (!path.fillColor) {
+      path.remove();
+    } else {
+      path.closed = true;
+      path.data.color = snapColorID(path.fillColor, path.opacity);
+      path.data.name = path.name;
+      path.fillColor = snapColor(path.fillColor);
+      path.strokeWidth = 0;
+      path.strokeColor = null;
+    }
+  }
 
   // Subtract each layer from the previous, again and again.
   // Move through each preview layer child
   for (var srcIndex = 0; srcIndex < tmp.children.length; srcIndex++) {
     var srcPath = tmp.children[srcIndex];
-    srcPath.strokeWidth = 0;
-    srcPath.strokeColor = null;
+    srcPath.data.processed = true;
 
     // Replace this path with a subtract for every intersecting path, starting
     // at the current index (lower paths don't subtract from higher ones)
     for (var destIndex = srcIndex; destIndex < tmp.children.length; destIndex++) {
       var destPath = tmp.children[destIndex];
-      if (destIndex !== srcIndex && srcPath.getIntersections(destPath).length) {
+      if (destIndex !== srcIndex) {
         var tmpPath = srcPath; // Hold onto the original path
         // Set the new srcPath to the subtracted one inserted at the same index
         srcPath = tmp.insertChild(srcIndex, srcPath.subtract(destPath));
+        srcPath.data.color = tmpPath.data.color;
+        srcPath.data.name = tmpPath.data.name;
         tmpPath.remove(); // Remove the old srcPath
+      }
+    }
+  }
+
+  // Keep the user up to date
+  mode.run([
+    ['status', i18n.t('libs.spool.fill'), true],
+    ['progress', 0, tmp.children.length * 2] // 2 steps for fill: lines & groups
+  ]);
+}
+
+// Ungroup any groups recursively
+function ungroupAllGroups(layer) {
+  // Remove all groups
+  while(layerContainsGroups(layer)) {
+    for(var i in layer.children) {
+      var path = layer.children[i];
+      if (path instanceof paper.Group) {
+        path.parent.insertChildren(0, path.removeChildren());
+        path.remove();
       }
     }
   }
 }
 
+// Snap the given color to the nearest tool ID
+// TODO: When refactoring media sets, pull tool names from definition.
+window.snapColor = snapColor;
+function snapColorID (color, opacity) {
+  if (typeof opacity !== 'undefined' & opacity < 1) {
+    return 'water2';
+  }
+
+  return "color" + robopaint.utils.closestColor(color.toCSS(), robopaint.media.currentSet.colors);
+}
+
+// Get the actual color of the nearest color to the one given.
+function snapColor (color) {
+  return robopaint.media.currentSet.colors[snapColorID(color).substr(-1)].color.HEX;
+}
+
+// Return true if the layer contains any groups at the top level
+function layerContainsGroups(layer) {
+  for(var i in layer.children) {
+    if (layer.children[i] instanceof paper.Group) return true;
+  }
+  return false;
+}
 
 // Animation frame callback
 function onFrame(event) {
   paper.animDrawPoint(event);
+  for(var i = 0; i < 2; i++) {
 
   if (runTraceSpooling) {
     if (!traceStrokeNext()) { // Check for trace complete
@@ -251,6 +334,7 @@ var tpIndex = 0; // Current tracePath
 var cPathPos = 0; // Position on current tracing path
 var lastGood = false; // Keep track if the last hit was good
 var lastItem = null;
+var totalLength = 0;
 
 // Iterationally process each path to be traced from preview paths
 function traceStrokeNext() {
@@ -266,12 +350,20 @@ function traceStrokeNext() {
   }
 
   var cPath = tmp.children[0]; // 0 is always current because we delete it when done!
-  //cPath.selected=true;
+
+  // Ignore white paths (color id 8)
+  // TODO: This should probably be handled depending on number of colors in the
+  // media (you can have more pens than 8), paper color might not be white.
+  if (cPath.data.color === 'color8') {
+    console.log('REMOVE WHITE STROKE:', cPath);
+    cPath.remove(); return true;
+  }
 
   // Current trace path doesn't exist? Make it!
   if (!tracePaths[tpIndex]) {
     tracePaths[tpIndex] = new Path({
-      strokeColor: '#00FF00',
+      strokeColor: cPath.strokeColor,
+      data: {color: cPath.data.color, name: cPath.data.name, type: 'stroke'},
       strokeWidth: previewWidth
     });
   }
@@ -285,7 +377,6 @@ function traceStrokeNext() {
 
     return true;
   }
-
 
   // Last path!
   if (tmp.children.length === 1) {
@@ -323,12 +414,23 @@ function traceStrokeNext() {
     lastGood = false;
     lastItem = null;
     cPathPos = 0;
-    if (tp.segments.length) tpIndex++; // Increment only if this path is used
+    if (tp.length > 0) { // Increment only if this path is used
+      tpIndex++;
+    } else { // If it wasn't used, can it so the next one gets a clean start.
+      tp.remove();
+      tracePaths[tpIndex] = null;
+    }
   } else { // Next part of the path
     cPathPos+= flattenResolution; // Increment the path position.
 
     // If we're too far, limit it and it will be the last point added
-    if (cPathPos > cPath.length) cPathPos = cPath.length;
+    if (cPathPos > cPath.length) {
+      totalLength+= cPath.length - (cPathPos - flattenResolution);
+      cPathPos = cPath.length;
+    } else {
+      totalLength+= flattenResolution;
+    }
+    mode.run('progress', totalLength);
   }
 
   return true;
@@ -358,12 +460,20 @@ var cSubIndex = 0; // Keep track of which sub we're working on
 var cStep = 0; // Which fill step are we on?
 var cGroup; // The current line grouping
 var lines = [];
+var totalSteps = 0; // Keep track of total step changes for user.
 function traceFillNext(fillPath, options) {
   // 1. Assume line is ALWAYS bigger than the entire object
   // 2. If filled path, number of intersections will ALWAYS be multiple of 2
   // 3. Grouping pairs will always yield complete line intersections.
 
   if (!fillPath) return false;
+
+  // Ignore white paths (color id 8)
+  // TODO: This should probably be handled depending on number of colors in the
+  // media (you can have more pens than 8), paper color might not be white.
+  if (fillPath.data.color === 'color8') {
+    fillPath.remove(); return true;
+  }
 
   var p = fillPath;
 
@@ -374,7 +484,7 @@ function traceFillNext(fillPath, options) {
       // The path drawn around the object the line traverses
       var boundPath = new Path.Ellipse({
         center: p.position,
-        size: [p.bounds.width + p.bounds.width/Math.PI , p.bounds.height + p.bounds.height/Math.PI]
+        size: [p.bounds.width * 2 , p.bounds.height * 2]
       });
 
       // Set start & destination based on input angle
@@ -383,7 +493,6 @@ function traceFillNext(fillPath, options) {
 
       // Set source position to calculate iterations and create destination vector
       var pos = amt * (options.angle + 180);
-
 
       // The actual line used to find the intersections
       // Ensure line is far longer than the diagonal of the object
@@ -413,8 +522,9 @@ function traceFillNext(fillPath, options) {
 
           var y = new Path({
             segments: [ints[x].point, ints[x+1].point],
-            strokeColor: 'red', // Will become fill color
-            strokeWidth: 4,
+            strokeColor: p.fillColor, // Will become fill color
+            data: {color: p.data.color, name: p.data.name, type: 'fill'},
+            strokeWidth: 5,
             miterLimit: 40,
             strokeJoin: 'round'
           });
@@ -431,6 +541,7 @@ function traceFillNext(fillPath, options) {
         cStep++;
         cFillIndex = 0;
         cSubIndex = 0;
+        totalSteps++;
       }
 
       // Clean up our helper paths
@@ -484,6 +595,9 @@ function traceFillNext(fillPath, options) {
           cSubIndex = 0;
           lines = [];
 
+          totalSteps++;
+          mode.run('progress', totalSteps);
+
           console.log('Path Done!');
           cStep = 0;
 
@@ -493,6 +607,7 @@ function traceFillNext(fillPath, options) {
       }
   }
 
+  mode.run('progress', totalSteps);
   return true;
 }
 
@@ -527,155 +642,151 @@ function findLineFillGroup(testPoint, lines, newGroupThresh){
   return groupID;
 }
 
-// When the motion paths have been rendered... sort them!
-paper.renderMotionComplete = function() {
-  var a = paper.actionLayer;
 
-}
 
-paper.autoPaint = function(callback) {
-   // Clear all selections
-  $('path.selected', context).removeClass('selected');
+// Order a layers children by top left travel path from tip to tail, reversing
+// path order where needed, grouped by job/color.
+paper.travelSortLayer = function(layer) {
+  var a = layer;
 
-  // Make sure the colors are ready
-  robopaint.utils.autoColor(context, false, cncserver.config.colors);
+  // 1. Move through all paths, group into colors
+  // 2. Move through each group, convert list of paths into sets of first and
+  //    last segment points, ensure groups are sorted by luminosity.
+  // 3. Find the point closest to the top left corner. If it's an end, reverse
+  //    the path associated, make the first point the next one to check, remove
+  //    the points from the group.
+  // 4. Rinse and repeat!
 
-  // Holds all jobs keyed by color
-  var jobs = {};
-  var c = cncserver.config.colors;
-  var colorMatch = robopaint.utils.closestColor;
-  var convert = robopaint.utils.colorStringToArray;
+  // Prep the colorGroups
+  var sortedColors = robopaint.media.sortedColors();
+  var colorGroups = {};
+  _.each(sortedColors, function(tool) {
+    colorGroups[tool] = [];
+  })
 
-  $('path', context).each(function(){
-    var $p = $(this);
-    var stroke = convert($p.css('stroke'));
-    var fill = convert($p.css('fill'));
+  // Put each path in the sorted colorGroups, with its first and last point
+  _.each(a.children, function(path){
+    colorGroups[path.data.color].push({
+      path: path,
+      points: [path.firstSegment.point, path.lastSegment.point]
+    });
+  });
 
-    // Occasionally, these come back undefined
-    stroke = (stroke == null) ? false : 'color' + colorMatch(stroke, c);
-    fill = (fill == null) ? false : 'color' + colorMatch(fill, c);
+  // Move through each color group, then each point set for distance
+  var drawIndex = 0; // Track the path index to insert paths into on the layer
+  _.each(colorGroups, function(group){
+    var lastPoint = new Point(0, 0); // The last point to move from, start at the corner
 
-    // Account for fill/stroke opacity (paint with clean water2!)
-    // TODO: What do we do here for the EggBot? Likely skip, or ignore....
-    var op = Math.min($p.css('fill-opacity'), $p.css('opacity'));
-    if (typeof op != 'undefined') fill = (op < 1) ? 'water2' : fill;
+    while(group.length) {
+      var c = closestPointInGroup(lastPoint, group);
 
-    op = Math.min($p.css('stroke-opacity'), $p.css('opacity'));
-    if (typeof op != 'undefined') stroke = (op < 1) ? 'water2' : stroke;
+      // First segment, or last segment?
+      if (c.closestPointIndex === 0) { // First
+        // Set last point to the end of the path
+        lastPoint = group[c.id].points[1];
+      } else { // last
+        // Reverse the path direction, so its first point is now the last
+         group[c.id].path.reverse();
 
-    // Don't actually fill or stroke for white... (color8)
-    if (fill == 'color8') fill = false;
-    if (stroke == 'color8') stroke = false;
-
-    // Add fill (and fill specific stroke) for path
-    if (fill) {
-      // Initialize the color job object as an array
-      if (typeof jobs[fill] == 'undefined') jobs[fill] = [];
-
-      // Give all non-stroked filled paths a stroke of the same color first
-      if (!stroke) {
-        jobs[fill].push({t: 'stroke', p: $p});
+        // Set last point to the start of the path (now the end)
+        lastPoint = group[c.id].points[0];
       }
 
-      // Add fill job
-      jobs[fill].push({t: 'fill', p: $p});
-    }
+      // Insert the path to the next spot in the action layer.
+      a.insertChild(drawIndex, group[c.id].path);
+      group.splice(c.id, 1); // Remove it from the list of paths
 
-    // Add stroke for path
-    if (stroke) {
-      // Initialize the color job object as an array
-      if (typeof jobs[stroke] == 'undefined') jobs[stroke] = [];
-
-      jobs[stroke].push({t: 'stroke', p: $p});
+      drawIndex++;
     }
   });
 
-  var sortedColors = cncserver.wcb.sortedColors();
+}
 
-  var finalJobs = [];
+function closestPointInGroup(srcPoint, pathGroup) {
+  var closestID = 0;
+  var closestPointIndex = 0;
+  var closest = srcPoint.getDistance(pathGroup[0].points[0]);
 
-  $.each(sortedColors, function(i, c){
-    if (typeof jobs[c] != 'undefined'){
-      var topPos = finalJobs.length;
-      for(j in jobs[c]){
-        var out = {
-          c: c,
-          t: jobs[c][j].t,
-          p: jobs[c][j].p
-        };
-
-        // Place strokes ahead of fills, but retain color order
-        if (out.t == 'stroke') {
-          finalJobs.splice(topPos, 0, out);
-        } else {
-          finalJobs.push(out);
-        }
-
+  _.each(pathGroup, function(p, index){
+    _.each(p.points, function(destPoint, pointIndex){
+      var dist = srcPoint.getDistance(destPoint);
+      if (dist < closest) {
+        closest = dist;
+        closestID = index;
+        closestPointIndex = pointIndex;
       }
+    })
+  });
+
+  return {id: closestID, closestPointIndex: closestPointIndex, dist: closest};
+}
+
+// Run an open linear segmented non-compound tracing path into the buffer
+paper.runPath = function(path) {
+  mode.run('up');
+  var isDown = false;
+  _.each(path.segments, function(seg){
+    mode.run('move', {x: seg.point.x, y: seg.point.y});
+    if (!isDown) {
+      mode.run('down');
+      isDown = true;
+    }
+  });
+
+  // TODO: Extend the last point to account for brush bend
+  //robopaint.settings.strokeovershoot;
+  mode.run('up');
+}
+
+// Actually handle a fully setup action layer to be streamed into the buffer
+// in the path and segment order they're meant to be streamed.
+paper.autoPaint = function(layer) {
+  paper.travelSortLayer(layer);
+  var run = mode.run;
+  // TODO: Pre-check to make sure the layer is fully ready, composed of only
+  // completely open polygonal (linear) non-compound paths with no fill.
+
+  // All paths on layer are expected to have data value object with:
+  //  * data.color: media/toolName
+  //  * data.name: name/id of the path
+  //  * data.type: either "fill" or "stroke"
+
+  var pathNum = 0;
+  var lastPath = '';
+  _.each(layer.children, function(path){
+    if (path.data.name != lastPath) {
+      pathNum++;
     }
   });
 
   // Send out the initialization status message.
-  cncserver.status(robopaint.t('libs.autoinit', {
-    pathNum: $('path', context).length,
-    jobsNum: finalJobs.length
+  run('status', i18n.t('common.libs.autoinit', {
+    pathNum: pathNum,
+    jobsNum: layer.children.length
   }));
 
-  // Nothing manages color during automated runs, so you have to hang on to it.
-  // Though we don't actually give it a default value, this ensures we get a
-  // full wash before every auto-paint initialization
   var runColor;
-
-  var jobIndex = 0;
-  doNextJob();
-
-  function doNextJob() {
-    var job = finalJobs[jobIndex];
-    var run = cncserver.cmd.run;
-
-    if (job) {
-      // Make sure the color matches, full wash and switch colors!
-      if (runColor != job.c) {
-        run(['wash', ['media', job.c]]);
-        runColor = job.c;
-        cncserver.cmd.sendComplete(readyStartJob);
-      } else {
-        readyStartJob();
-      }
-
-      function readyStartJob() {
-        // Clear all selections at start
-        $('path.selected', context).removeClass('selected');
-        robopaint.utils.addShortcuts(job.p);
-
-        if (job.t == 'stroke'){
-          job.p.addClass('selected');
-          run('status', robopaint.t('libs.autostroke', {id: job.p[0].id}));
-          cncserver.paths.runOutline(job.p, function(){
-            jobIndex++;
-            job.p.removeClass('selected'); // Deselect now that we're done
-            cncserver.cmd.sendComplete(doNextJob);
-          })
-        } else if (job.t == 'fill') {
-          run('status', robopaint.t('libs.autofill', {id: job.p[0].id}));
-
-          cncserver.paths.runFill(job.p, function(){
-            jobIndex++;
-            cncserver.cmd.sendComplete(doNextJob);
-          });
-        }
-      }
-    } else {
-      run('wash');
-      cncserver.cmd.sendComplete(function(){
-        run([
-          'park',
-          ['status', robopaint.t('libs.autocomplete')],
-          ['callbackname', 'autopaintcomplete']
-        ]);
-      });
-      if (callback) callback();
-      // Done!
+  _.each(layer.children, function(path){
+    // If the color doesn't match, be sure to wash & change it
+    if (path.data.color !== runColor) {
+      runColor = path.data.color;
+      run(['wash', ['media', runColor]]);
     }
-  }
+
+    var typeKey = 'stroke'
+    if (path.data.type === "fill") {
+      typeKey = 'fill';
+    }
+
+    run('status', i18n.t('libs.auto' + typeKey, {id: path.data.name}))
+    paper.runPath(path);
+  });
+
+  // Wrap up
+  run([
+    ['wash']
+    ['park'],
+    ['status', i18n.t('libs.autocomplete')],
+    ['callbackname', 'autoPaintComplete']
+  ]);
 };
