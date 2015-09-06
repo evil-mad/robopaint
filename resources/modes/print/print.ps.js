@@ -4,7 +4,7 @@
 
 // Init defaults & settings
 var previewWidth = 10;
-var flattenResolution = 30; // Flatten curve value (smaller value = more points)
+var flattenResolution = 15; // Flatten curve value (smaller value = more points)
 var lastCenter = view.center;
 var runTraceSpooling = false; // Set to true to run items from preview into action
 var runFillSpooling = false; // Set to true to run items from preview into action
