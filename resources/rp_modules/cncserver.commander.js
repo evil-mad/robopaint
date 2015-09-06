@@ -97,6 +97,13 @@ function sendNext() {
         api.buffer.message(cmd[1], sendNext);
       }
       break;
+    case "progress":
+      // Shortcut for streaming progress updates from modes. Use sparingly.
+      var p = {val: cmd[1]};
+      if (typeof cmd[2] !== 'undefined') p.max = cmd[2];
+      cncserver.progress(p);
+      sendNext();
+      break;
     case "callbackname":
       api.buffer.callbackname(cmd[1], sendNext);
       break;

@@ -200,12 +200,15 @@ cncserver.status = function(msg, st) {
   $status.attr('class', classname); // Reset class to only the set class
 }
 
-function updateProgress(prog) {
+// Update global progress bar
+// TODO: integrate with OS ui taskbar UI progress
+cncserver.progress = function(p) {
+  var $prog = $('#status progress');
+
+  if (typeof p.max !== 'undefined') $prog.attr('max', p.max)
+  $prog.val(p.val);
   popoutStatus();
-  $('#status progress').attr('max', prog.max).val(prog.val);
 }
-
-
 
 // TODO: Provide something for the parent script?
 module.exports = {};
