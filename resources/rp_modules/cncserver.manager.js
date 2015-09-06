@@ -135,6 +135,11 @@ function messageUpdateEvent(data){
   cncserver.status(data.message);
 }
 
+// Custom buffered callbacks (called here when eventually executed)
+function callbackEvent(data){
+  cncserver.pushToMode('callbackEvent', data.name);
+}
+
 // Send data to the window (pen updates)
 cncserver.pushToMode = function() {
   try {
