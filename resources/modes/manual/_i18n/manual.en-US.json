@@ -20,6 +20,9 @@
     "full": "Full",
     "dip": "Dip"
   },
+  "dialog": {
+    "confirmexit": "Are you sure you want to go?\n\nExiting this mode while printing will cancel all your jobs. Click OK to leave."
+  },
   "tools": {
     "water1": "Water 1",
     "water2": "Water 2",
