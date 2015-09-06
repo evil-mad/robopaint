@@ -331,20 +331,12 @@ function bindSettingsControls() {
     // Update paint sets when changes made that would effect them
     if (this.id == 'colorset' || this.id == 'showcolortext') {
       updateColorSetSettings();
-      if ($subwindow[0]) {
-        if ($subwindow[0].contentWindow.updateColorSet) {
-          $subwindow[0].contentWindow.updateColorSet();
-        }
-      }
+      cncserver.pushToMode('updateMediaSet');
     }
 
     // Update visibility of paintsets on penmode change
     if (this.id == 'penmode') {
-      if ($subwindow[0]) {
-        if ($subwindow[0].contentWindow.responsiveResize) {
-          $subwindow[0].contentWindow.responsiveResize();
-        }
-      }
+      cncserver.pushToMode('updatePenMode');
     }
 
     // If there's a key to override for CNC server, set it
