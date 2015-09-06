@@ -69,7 +69,7 @@ $(robopaint).on('settingsComplete', _.once(function(){
 
 
   // TODO: replace with ServerConnect(?)
-  cncserver.status(robopaint.t('modes.print.status.connected'));
+  cncserver.status(robopaint.t('status.connected'));
 }));
 
 // Bind the Stream event callbacks ===========================================
