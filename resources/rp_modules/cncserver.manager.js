@@ -76,6 +76,7 @@ $(robopaint).on('settingsComplete', _.once(function(){
 // Bind socket connect
 $(robopaint).on('socketIOComplete', function(){
   robopaint.socket.on('message update', messageUpdateEvent);
+  robopaint.socket.on('callback update', callbackEvent);
 });
 
 // CNCServer Buffer Change events (for pause, update, or resume)

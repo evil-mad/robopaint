@@ -28,6 +28,8 @@
  *     * mode.onPenUpdate(actualPen): Called when the bot actually moves the
  *         the object will contain the full CNCServer pen object of where it
  *         should or will be after the "lastDuration" key value.
+ *     * mode.onCallbackEvent(name): When a "callbackname" is run into the
+ *         buffer and eventually run, this will fire with the name given.
  *     * mode.bindControls(): A handly function to store all your control button
  *         bindings, called when the page is fully loaded & translation is done.
  *     * mode.onClose(callback): Called whenever the user attempts to either
@@ -35,7 +37,7 @@
  *         can only close or change the mode once "callback" has been called.
  *     * mode.onFullyResumed() & mode.onFullyPaused(): A mode can run pause or
  *         resume, but doesn't know when this happens until these are called.
- *     * mode.onMessage(channel, data): For any non-general messages, wraps ipc.
+ *     * mode.onMessage(channel, data): For any undefined gen events, wraps ipc.
  **/
 "use strict";
 
@@ -242,6 +244,7 @@ ipc.on('langchange', translateMode);
 ipc.on('globalclose', function(){ handleModeClose('globalclose'); });
 ipc.on('modechange', function(){ handleModeClose('modechange'); });
 ipc.on('cncserver', function(args){ handleCNCServerMessages(args[0], args[1]); });
+ipc.on('settingsUpdate', function(){ robopaint.settings = robopaint.utils.getSettings(); });
 
 // Add a limited CNCServer API interaction layer wrapper over IPC.
 mode.run = function(){
@@ -265,6 +268,7 @@ function handleCNCServerMessages(name, data) {
     case "bufferUpdate":
     case "fullyPaused":
     case "fullyResumed":
+    case "callbackEvent":
       var funcName = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
       if (_.isFunction(mode[funcName])) mode[funcName](data);
       break;
