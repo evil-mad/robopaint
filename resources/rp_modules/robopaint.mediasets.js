@@ -94,6 +94,9 @@ robopaint.media = {
     });
   },
 
+
+  // Add a stylesheet for the given media set to the page
+  // TODO: fully document
   addStylesheet: function(setName) {
     var link = window.document.createElement('link');
       link.type = 'text/css';
@@ -102,8 +105,34 @@ robopaint.media = {
     window.document.head.appendChild(link);
   },
 
+  // Always return the current media set, as defined in robopaint.settings
   get currentSet() {
     if (!this.sets) this.load();
     return this.sets[robopaint.settings.colorset];
-  }
+  },
+
+  // Returns a list of the current mediaset tools, sorted by luminosty, or Y val
+  sortedColors: function() {
+    var colorsort = [];
+
+    // Use JS internal sort by slapping a zero padded value into an array
+    $.each(robopaint.media.currentSet.colors, function(index, color){
+      if (index != 8) { // Ignore white
+        colorsort.push(robopaint.utils.pad(color.color.YUV[0], 3) + '|' + 'color' + index);
+      }
+    });
+    colorsort.sort().reverse();
+
+    // Now extract the luminostiy from the array, and leave a clean list of colors
+    for(var i in colorsort){
+      colorsort[i] = colorsort[i].split('|')[1];
+    }
+
+    // Add "water2" tool last (if available)
+    if (typeof robopaint.currentBot.data.tools.water2 !== 'undefined') {
+      colorsort.push('water2');
+    }
+
+    return colorsort;
+  },
 }

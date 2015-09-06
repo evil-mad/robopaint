@@ -195,31 +195,6 @@ cncserver.wcb = {
     }
   },
 
-  // Returns a list of the current colorset, sorted by luminosty, or Y value
-  sortedColors: function() {
-    var colorsort = [];
-
-    // Use JS internal sort by slapping a zero padded value into an array
-    $.each(cncserver.config.colors, function(index, color){
-      if (index != 8) { // Ignore white
-        colorsort.push(robopaint.utils.pad(color.color.YUV[0], 3) + '|' + 'color' + index);
-      }
-    });
-    colorsort.sort().reverse();
-
-    // Now extract the luminostiy from the array, and leave a clean list of colors
-    for(var i in colorsort){
-      colorsort[i] = colorsort[i].split('|')[1];
-    }
-
-    // Add "water2" tool last (if available)
-    if (typeof robopaint.currentBot.data.tools.water2 !== 'undefined') {
-      colorsort.push('water2');
-    }
-
-    return colorsort;
-  },
-
   // Retrieve a fill path depending on config
   getFillPath: function(options){
     var ft = options.filltype;
