@@ -8,6 +8,7 @@
  */
 
 var robopaint = window.robopaint;
+var _ = window._;
 var cncserver = robopaint.cncserver;
 
 // Buffer of commands to send out: This is just a localized buffer to ensure
@@ -28,9 +29,23 @@ function sendNext() {
 
   // Pop the next command off the array
   var cmd = sendBuffer.pop();
-  if (typeof cmd == "string"){
+
+  // Toss out nulls, TODO: find out where these come from.
+  if (cmd === null) {
+    sendNext();
+    return;
+  }
+
+  // Convert args to a real array
+  if (_.isArguments(cmd)) {
+    cmd = _.toArray(cmd);
+  }
+
+  // Force the value to be an array (if it isn't)
+  if (!_.isArray(cmd)){
     cmd = [cmd];
   }
+
 
   var api = robopaint.cncserver.api;
 
