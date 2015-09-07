@@ -375,7 +375,9 @@ function traceStrokeNext() {
     tracePaths[tpIndex] = new Path({
       strokeColor: cPath.strokeColor,
       data: {color: cPath.data.color, name: cPath.data.name, type: 'stroke'},
-      strokeWidth: previewWidth
+      strokeWidth: previewWidth,
+      strokeCap: 'round',
+      miterLimit: 1
     });
   }
 
