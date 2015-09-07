@@ -490,6 +490,11 @@ function traceFillNext(fillPath, options) {
     fillPath.remove(); return true;
   }
 
+  // Ignore 0 width/height fill paths.
+  if (fillPath.bounds.width === 0 || fillPath.bounds.height === 0) {
+    fillPath.remove(); return true;
+  }
+
   var p = fillPath;
 
   // Choose the iteration fill step
