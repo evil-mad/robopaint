@@ -88,7 +88,7 @@ function sendNext() {
     case "up":
       setHeight = 0;
     case "down":
-      setHeight = 1;
+      if (setHeight === null) setHeight = 1;
     case "height":
       if (setHeight === null) setHeight = cmd[1]; // Specific height
       var options = {};
