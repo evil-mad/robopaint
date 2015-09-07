@@ -786,14 +786,17 @@ paper.autoPaint = function(layer) {
       typeKey = 'fill';
     }
 
+    // If it doesn't have a name, default to an empty string.
+    if (typeof path.data.name === 'undefined') path.data.name = '';
+
     run('status', i18n.t('libs.auto' + typeKey, {id: path.data.name}))
     paper.runPath(path);
   });
 
   // Wrap up
   run([
-    ['wash']
-    ['park'],
+    'wash',
+    'park',
     ['status', i18n.t('libs.autocomplete')],
     ['callbackname', 'autoPaintComplete']
   ]);
