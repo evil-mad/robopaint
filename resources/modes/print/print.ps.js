@@ -767,20 +767,6 @@ paper.autoPaint = function(layer) {
   //  * data.name: name/id of the path
   //  * data.type: either "fill" or "stroke"
 
-  var pathNum = 0;
-  var lastPath = '';
-  _.each(layer.children, function(path){
-    if (path.data.name != lastPath) {
-      pathNum++;
-    }
-  });
-
-  // Send out the initialization status message.
-  run('status', i18n.t('common.libs.autoinit', {
-    pathNum: pathNum,
-    jobsNum: layer.children.length
-  }));
-
   var runColor;
   _.each(layer.children, function(path){
     // If the color doesn't match, be sure to wash & change it
