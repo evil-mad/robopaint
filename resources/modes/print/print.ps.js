@@ -164,6 +164,8 @@ paper.renderMotionPaths = function () {
 };
 
 // Copy the needed parts for tracing (all paths with strokes) and their fills
+var traceChildrenMax = 0;
+var currentTraceChild = 1;
 function prepTracePreview() {
   var tmp = paper.tempLayer;
   tmp.activate();
@@ -250,9 +252,11 @@ function prepFillPreview() {
   }
 
   // Keep the user up to date
+  traceChildrenMax = tmp.children.length;
+  currentTraceChild = 1;
   mode.run([
-    ['status', i18n.t('libs.spool.fill'), true],
-    ['progress', 0, tmp.children.length * 2] // 2 steps for fill: lines & groups
+    ['status', i18n.t('libs.spool.fill', {id: '1/' + traceChildrenMax}), true],
+    ['progress', 0, traceChildrenMax * 2] // 2 steps for fill: lines & groups
   ]);
 }
 
@@ -409,7 +413,9 @@ function traceStrokeNext() {
   }
 
   if (cPathPos === cPath.length) { // Path is done!
-    console.log('Path done!', cPathPos);
+    if (currentTraceChild !== traceChildrenMax) currentTraceChild++;
+    mode.run('status', i18n.t('libs.spool.stroke', {id: currentTraceChild + '/' + traceChildrenMax}), true);
+
     cPath.remove();
     lastGood = false;
     lastItem = null;
@@ -598,7 +604,9 @@ function traceFillNext(fillPath, options) {
           totalSteps++;
           mode.run('progress', totalSteps);
 
-          console.log('Path Done!');
+          if (currentTraceChild !== traceChildrenMax) currentTraceChild++;
+          mode.run('status', i18n.t('libs.spool.fill', {id: currentTraceChild + '/' + traceChildrenMax}), true);
+
           cStep = 0;
 
           fillPath.remove(); // Actually remove the path (not needed anymore)

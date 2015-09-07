@@ -81,8 +81,8 @@
     "autostroke": "Stroking path __id__...",
     "autocomplete": "Automatic Paint Complete!",
     "spool": {
-      "stroke": "Tracing stroke paths...",
-      "fill": "Tracing fill paths..."
+      "stroke": "Tracing stroke path __id__...",
+      "fill": "Tracing fill path __id__..."
     }
   },
   "status": {
