@@ -188,20 +188,27 @@ function prepTracePreview() {
     path.data.name = path.name;
     path.fillColor = path.fillColor ? snapColor(path.fillColor) : null;
     path.strokeWidth = previewWidth;
-    if (!path.closed) path.closed = path.fillColor !== null;
+
+    // Close stroke paths with fill to ensure they fully encompass the filled
+    // color (only when they have a fillable color);
+    if (!path.closed) {
+      if (path.fillColor !== null) {
+        if (snapColorID(path.fillColor) !== 'color8') {
+          path.closed = true;
+        }
+      }
+    }
   });
 
-  console.log(maxLen);
-
   // Keep the user up to date with what's going on.
+  traceChildrenMax = tmp.children.length;
   mode.run([
-    ['status', i18n.t('libs.spool.stroke'), true],
+    ['status', i18n.t('libs.spool.stroke', {id: '1/' + traceChildrenMax}), true],
     ['progress', 0, maxLen]
   ]);
 }
 
 // Copy the needed parts for filling (all paths with fills)
-window.prepFill = prepFillPreview;
 function prepFillPreview() {
   var tmp = paper.tempLayer;
   tmp.activate();
@@ -556,7 +563,6 @@ function traceFillNext(fillPath, options) {
 
       break;
     case 1: // Grouping and re-grouping the lines
-      console.log('Grouping...');
       // Combine lines within position similarity groupings
       if (cSubIndex === 0) {
         if (!lines[cFillIndex]) {
@@ -580,7 +586,7 @@ function traceFillNext(fillPath, options) {
         if (!p.contains(v.getPointAt(v.length/2)) || v.getIntersections(p).length > 3) {
           // Not contained, store the previous l & start a new grouping;
           cGroup = lines[cFillIndex][cSubIndex];
-          console.log('Tossed!');
+          //console.log('Tossed!');
         } else {
           cGroup.join(lines[cFillIndex][cSubIndex]);
         }
