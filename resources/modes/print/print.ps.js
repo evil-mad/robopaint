@@ -89,27 +89,9 @@ paper.animDrawPoint = function(event) {
 paper.mainLayer.activate();
 
 function onResize() {
-  var vector = lastCenter - view.center;
-
-  // Reposition all layers
-  _.each(project.layers, function(layer){
-    layer.position-= vector;
-  });
-
-  lastCenter = view.center;
   view.zoom = $canvas.scale;
-
-  fixOffset();
-}
-
-var offsetFixed = false;
-function fixOffset(){
-  if (!offsetFixed) {
-    offsetFixed = true;
-    var corner = view.viewToProject(new Point(0,0));
-    view.scrollBy(-corner);
-    lastCenter = view.center;
-  }
+  var corner = view.viewToProject(new Point(0,0));
+  view.scrollBy(-corner);
 }
 
 paper.loadSVG = function(svgData) {
