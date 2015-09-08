@@ -3,15 +3,6 @@
   @file Holds ALL styles for Automatic Print Mode
 */
 
-canvas#debug {
-  position: absolute;
-  display: none;
-  background-color: rgba(255,255,255,0.7);
-  z-index: 1;
-  left: 0;
-  top: 0;
-}
-
 body.print:before {
   content: "";
   position: fixed;
@@ -73,47 +64,24 @@ button.normal:focus {
 
 /* Drawing Area */
 
-#scale-container {
+#canvas-container {
   position: absolute;
-  top: 30px;
-  left: 20px;
-  -webkit-transform-origin: 0 0 0;
 }
 
-svg#main {
+
+#paper-back {
   background-image: url('images/paper_texture.png');
   border: 1px solid #ddd;
-  position: absolute;
   box-shadow: 0 0 38px -2px rgba(0,0,0,0.3);
+  position: absolute;
 }
 
-svg#main, #sim, #shadow {
-  left: 256px;
-}
-
-body.print svg#main,
-body.print #sim,
-body.print #shadow {
-  top: 0;
-}
-
-body.print-auto svg#main,
-body.print-auto #sim,
-body.print-auto #shadow {
-  left: 0;
-}
-
-svg#main #cncserversvg path.selected {
-  stroke: blue !important;
-  stroke-width: 10 !important;
-  stroke-opacity: 1 !important;
+#main {
+  position: relative;
 }
 
 #shadow {
   position: absolute;
-  top: 20px;
-  height: 864px;
-  width: 1152px;
   z-index: -5;
   margin: 2px auto;
 }
@@ -136,15 +104,6 @@ svg#main #cncserversvg path.selected {
   -webkit-transform: rotate(3deg);
   right: 10px;
   left: auto;
-}
-
-/* Drawing Simulation Canvas */
-canvas#sim {
-  position: absolute;
-  background-color: rgba(255,255,255,0.8);
-  top: 20px;
-  z-index: 5;
-  display: none;
 }
 
 /* Animation Keyframes */
@@ -311,15 +270,6 @@ body.print-auto #buttons button.normal {
   margin: 0.2em auto;
   display: block;
   width: 190px;
-}
-
-/* Status Specific */
-#status {
-  text-align: center;
-}
-
-#status progress {
-  width: 100%;
 }
 
 .print #pause {

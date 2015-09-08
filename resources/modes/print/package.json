@@ -2,11 +2,18 @@
   "name": "print",
   "version": "0.1.0",
   "type": "robopaint_mode",
+  "debug": "true",
   "icon": "icon-print",
   "weight": 0,
   "i18n": "native",
   "core": true,
   "main": "print.html",
   "author": "techninja",
-  "license": "MIT"
+  "license": "MIT",
+  "roboPaintDependencies": [
+    "paper",
+    "jquery",
+    "underscore",
+    "mediasets"
+  ]
 }
