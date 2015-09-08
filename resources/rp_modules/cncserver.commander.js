@@ -189,16 +189,6 @@ cncserver.cmd = {
       sendBuffer.unshift(arguments);
       if (cncserver.state.isRecording) cncserver.state.recordBuffer.unshift(arguments);
     }
-  },
-
-  // Run callback once the sendBuffer is empty
-  sendComplete: function(callback) {
-    var timer = setInterval(function(){
-      if (sendBuffer.length === 0) {
-        callback();
-        clearInterval(timer);
-      }
-    }, 20);
   }
 };
 
