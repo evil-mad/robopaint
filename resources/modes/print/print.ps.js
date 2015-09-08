@@ -398,6 +398,12 @@ function traceStrokeNext() {
 
     // Check if the current point matches the hittest
     var testPoint = cPath.getPointAt(cPathPos);
+
+    // Note: In checking for stroke overlaps, we can't reliably test for stroke
+    // intersection with hittest as it takes the stroke width into account,
+    // not actual path intersection. Meaning that any stroke point that
+    // touches another stroke width without intersecting the actual path
+    // will cause closest intersection connection issues.
     var h = tmp.hitTest(testPoint);
     if (h.item === cPath) { // We're on the current path! Add a point
       // If we came off a bad part of the path, add the closest intersection
@@ -411,7 +417,7 @@ function traceStrokeNext() {
       if (tp.segments.length) {
         tpIndex++; // Increment only if this path is used
         // If we came off a good part of the path, add the intersection closest
-        if (lastGood && getClosestIntersection(cPath, h.item, testPoint)) {
+        if (lastGood && getClosestIntersection(cPath, h.item, testPoint) && h.type !== 'stroke') {
           tp.add(getClosestIntersection(cPath, h.item, testPoint));
         }
       }
