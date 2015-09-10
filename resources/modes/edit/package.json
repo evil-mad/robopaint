@@ -1,12 +1,22 @@
 {
-  "name": "edit",
+  "name": "robopaint-mode-edit",
   "version": "0.1.0",
   "type": "robopaint_mode",
-  "icon": "icon-edit",
-  "weight": -5,
-  "i18n": "dom",
-  "core": true,
-  "main": "method-editor/editor/index.html",
   "author": "techninja",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "edit.method-draw.js",
+  "robopaint": {
+    "core": true,
+    "debug": true,
+    "i18n": "dom",
+    "icon": "icon-edit",
+    "index": "method-editor/editor/index.html",
+    "name": "edit",
+    "opensvg": true,
+    "weight": -5,
+    "dependencies": [
+      "underscore",
+      "mediasets"
+    ]
+  }
 }

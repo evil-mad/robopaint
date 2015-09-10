@@ -1,12 +1,24 @@
 {
-  "name": "manual",
+  "name": "robopaint-mode-manual",
   "version": "0.1.0",
   "type": "robopaint_mode",
-  "icon": "icon-picture-1",
-  "weight": 1,
-  "i18n": "native",
-  "core": false,
-  "main": "manual.html",
+  "main": "manual.js",
   "author": "techninja",
-  "license": "MIT"
+  "license": "MIT",
+  "robopaint": {
+    "core": false,
+    "debug": true,
+    "i18n": "native",
+    "icon": "icon-picture-1",
+    "index": "manual.html",
+    "name": "manual",
+    "opensvg": true,
+    "weight": 1,
+    "dependencies": [
+      "paper",
+      "jquery",
+      "underscore",
+      "mediasets"
+    ]
+  }
 }

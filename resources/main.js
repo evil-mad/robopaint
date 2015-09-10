@@ -65,7 +65,10 @@ var robopaint = {
   cncserver: cncserver, // Holds the reference to the real CNC server object with API wrappers
   $: $, // Top level jQuery Object for non-shared object bindings
   appPath: appPath, // Absolute App path to prefix relative dir locations
-  utils: rpRequire('utils')
+  utils: rpRequire('utils'),
+  get currentMode() {
+    return appMode === "home" ? {robopaint: {}} : this.modes[appMode];
+  }
 };
 
 // currentBot lies outside of settings as it actually controls what settings will be loaded
@@ -241,19 +244,15 @@ function bindMainControls() {
   $('#bar a.mode').click(function(e) {
     e.preventDefault();
 
-    checkModeClose(function(){
-      var $target = $(e.target);
-      var mode = $target[0].id.split('-')[1];
+    var $target = $(e.target);
 
-      // Don't do anything if already selected
-      if ($target.is('.selected')) {
-        return false;
-      }
+    // Don't do anything if already selected
+    if ($target.is('.selected')) {
+      return false;
+    }
 
-      robopaint.switchMode(mode); // Actually switch to the mode
-    }, false, e.target.id.split('-')[1]);
-
-    e.preventDefault();
+    targetMode = $target;
+    checkModeClose(false, e.target.id.split('-')[1]);
   });
 
   // Bind toolbar modal links =======================
@@ -266,10 +265,11 @@ function bindMainControls() {
         break;
       case 'remoteprint':
         // @see scripts/main.api.js
-        checkModeClose(function(){
+        // TODO: Redo This part of Remoteprint
+        /*checkModeClose(function(){
           robopaint.switchMode('home');
           setRemotePrintWindow(true);
-        }, false, "home");
+        }, false, "home");*/
 
         break;
     }
@@ -313,7 +313,8 @@ robopaint.switchMode = function(mode, callback) {
       $('nav, #logo').fadeOut('slow');
       $('#loader').fadeIn();
       $subwindow.hideMe(function(){
-        $subwindow.attr('src', $target.attr('href'));
+        // Include the absolute root path so the mode can load its own info
+        $subwindow.attr('src', $target.attr('href') + '#' + encodeURIComponent(robopaint.currentMode.root + 'package.json'));
         if (callback) callback();
       });
   }
@@ -330,12 +331,6 @@ function responsiveResize() {
   $s.css({left: (win[0]/2) - (size[0]/2), top: (win[1]/2) - (size[1]/2)});
   // Set height for inner settings content window, just remove tab and H2 height
   $s.find('.settings-content').height($s.height() - 80);
-
-  // Set subwindow height
-  if (typeof $subwindow !== 'undefined') {
-    $subwindow.height($(window).height() - barHeight);
-    $subwindow.css('top', barHeight);
-  }
 
   // Remote Print Window sizing
   if (robopaint.api.print.enabled) {
@@ -367,6 +362,7 @@ function initSocketIO(){
     '://' + robopaint.cncserver.api.server.domain + ':' +
     robopaint.cncserver.api.server.port;
   robopaint.socket = io(path);
+  $(robopaint).trigger('socketIOComplete');
 }
 
 /**
@@ -424,35 +420,39 @@ function startSerial(){
  * if applicable depending on mode status
  */
 function onClose(e) {
-  checkModeClose(function(){
-    mainWindow.destroy(); // Until this is called
-  }, true);
+  if (!document.hasFocus()) return true;
+  checkModeClose(true);
   e.preventDefault();
   return false;
 }
 
 
 /**
- * Runs current subwindow/mode specific close delay functions (if they exist)
+ * Runs current subwindow/mode specific close delay functions (if they exist).
  *
- * @param {Function} callback
- *   Function is called when check is complete, or is passed to subwindow close
  * @param {Boolean} isGlobal
  *   Demarks an application level quit, function is also called for mode changes
  * @param {String} destination
  *   Name of mode change target. Used to denote special reactions.
  */
-function checkModeClose(callback, isGlobal, destination) {
+function checkModeClose(isGlobal, destination) {
   // Settings mode not considered mode closer
   if (destination == 'settings') {
-    callback(); return;
+    return;
   }
 
-  if (appMode == 'print' || appMode == 'edit' || appMode == 'manual') {
-    subWin.onClose(callback, isGlobal);
+  if ($subwindow[0] && appMode !== 'home') {
+    $subwindow[0].send(isGlobal ? 'globalclose' : 'modechange');
   } else {
-    callback();
+    continueModeChange();
   }
+}
+
+var targetMode; // Hold onto the target ode to change to
+
+function continueModeChange() {
+  var mode = targetMode[0].id.split('-')[1];
+  robopaint.switchMode(mode); // Actually switch to the mode
 }
 
 /**
@@ -542,14 +542,11 @@ function initQuickload() {
     // Push the files contents into the localstorage object
     window.localStorage.setItem('svgedit-default', fileContents);
 
-    if (appMode == 'print') {
-      subWin.cncserver.canvas.loadSVG();
-    } else if (appMode == 'edit') {
-      subWin.methodDraw.openPrep(function(doLoad){
-        if(doLoad) subWin.methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
-      });
+     // Tell the current mode that it happened.
+    cncserver.pushToMode('loadSVG');
 
-    } else {
+    // Switch to print default if the current mode doesn't support SVGs
+    if (robopaint.currentMode.robopaint.opensvg !== true) {
       $('#bar-print').click();
     }
 
@@ -643,24 +640,24 @@ function loadAllModes(){
     var package = {};
 
     try {
-      package = JSON.parse(fs.readFileSync(modeDir + 'package.json'));
+      package = require(modeDir + 'package.json');
     } catch(e) {
       // Silently fail on bad parse!
       continue;
     }
 
     // This a good file? if so, lets make it ala mode!
-    if (package.type == "robopaint_mode" && package.main !== '') {
-      // TODO: Add FS checks to see if its main file actually exists
-      package.root = 'modes/' + modeDirs[i] + '/';
-      package.main = package.root + package.main;
-      modes[package.name] = package;
+    if (package.type === "robopaint_mode" && _.has(package.robopaint, 'index')) {
+      // TODO: Add FS checks to see if its index file actually exists
+      package.root = appPath + 'resources/modes/' + modeDirs[i] + '/';
+      package.index = package.root + package.robopaint.index;
+      modes[package.robopaint.name] = package;
     }
   }
 
   // Calculate correct order for modes based on package weight (reverse)
   var order = Object.keys(modes).sort(function(a, b) {
-    return (modes[b].weight - modes[a].weight)
+    return (modes[b].robopaint.weight - modes[a].robopaint.weight)
   });
 
   // Move through all approved modes based on mode weight and add DOM
@@ -669,15 +666,15 @@ function loadAllModes(){
   for(var i in order) {
     var m = modes[order[i]];
     // Add the nav bubble
-    var i18nStr = "modes." + m.name + ".info.";
+    var i18nStr = "modes." + m.robopaint.name + ".info.";
     $('nav table tr').prepend(
       $('<td>').append(
         $('<a>')
-          .attr('href', m.main)
-          .attr('id', m.name)
+          .attr('href', m.index)
+          .attr('id', m.robopaint.name)
           .attr('data-i18n', '[title]' + i18nStr + 'description;' + i18nStr + 'word')
           .attr('title', robopaint.t(i18nStr + 'description'))
-          .css('display', (m.core ? 'block' : 'none'))
+          .css('display', (m.robopaint.core ? 'block' : 'none'))
           .text(robopaint.t(i18nStr + 'word'))
       )
     );
@@ -685,23 +682,23 @@ function loadAllModes(){
     // Add the toolbar link icon
     $('#bar-home').after(
       $('<a>')
-        .attr('href', m.main)
-        .attr('id', 'bar-' + m.name)
+        .attr('href', m.index)
+        .attr('id', 'bar-' + m.robopaint.name)
          // TODO: Add support for better icons
-        .addClass('mode tipped ' + m.icon + (m.core ? '' : ' hidden') )
+        .addClass('mode tipped ' + m.robopaint.icon + (m.robopaint.core ? '' : ' hidden') )
         .attr('data-i18n', '[title]' + i18nStr + 'description')
         .attr('title', robopaint.t(i18nStr + 'description'))
         .html('&nbsp;')
     );
 
     // Add the non-core settings checkbox for enabling
-    if (!m.core) {
+    if (m.robopaint.core !== true) {
       $('fieldset.advanced-modes aside:first').after($('<div>').append(
         $('<label>')
-          .attr('for', m.name + 'modeenable')
+          .attr('for', m.robopaint.name + 'modeenable')
           .attr('data-i18n', i18nStr + 'title')
           .text(robopaint.t(i18nStr + 'title')),
-        $('<input>').attr({type: 'checkbox', id: m.name + 'modeenable'}),
+        $('<input>').attr({type: 'checkbox', id: m.robopaint.name + 'modeenable'}),
         $('<aside>')
           .attr('data-i18n', i18nStr + 'detail')
           .text(robopaint.t(i18nStr + 'detail'))

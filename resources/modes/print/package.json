@@ -1,19 +1,24 @@
 {
-  "name": "print",
+  "name": "robopaint-mode-print",
   "version": "0.1.0",
   "type": "robopaint_mode",
-  "debug": "true",
-  "icon": "icon-print",
-  "weight": 0,
-  "i18n": "native",
-  "core": true,
-  "main": "print.html",
+  "main": "print.js",
   "author": "techninja",
   "license": "MIT",
-  "roboPaintDependencies": [
-    "paper",
-    "jquery",
-    "underscore",
-    "mediasets"
-  ]
+  "robopaint": {
+    "core": true,
+    "debug": true,
+    "i18n": "native",
+    "icon": "icon-print",
+    "index": "print.html",
+    "name": "print",
+    "opensvg": true,
+    "weight": 0,
+    "dependencies": [
+      "paper",
+      "jquery",
+      "underscore",
+      "mediasets"
+    ]
+  }
 }

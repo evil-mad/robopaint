@@ -522,8 +522,8 @@ body.home nav a:focus {
 
 webview {
   position: absolute;
-  border: none;
-  top: 0;
+  bottom: 0;
+  top: 40px; /* same as header position */
   width: 100%;
   left: 0;
   z-index: 5;

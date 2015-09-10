@@ -1,12 +1,23 @@
 {
-  "name": "example",
+  "name": "robopaint-mode-example",
   "version": "0.8.0",
   "type": "robopaint_mode",
-  "icon": "icon-font",
-  "weight": 2,
-  "i18n": "native",
-  "core": false,
-  "main": "example.html",
+  "main": "example.js",
   "author": "techninja",
-  "license": "MIT"
+  "license": "MIT",
+  "robopaint": {
+    "core": false,
+    "debug": true,
+    "i18n": "native",
+    "icon": "icon-font",
+    "index": "example.html",
+    "name": "print",
+    "opensvg": false,
+    "weight": 2,
+    "dependencies": [
+      "paper",
+      "jquery",
+      "underscore"
+    ]
+  }
 }

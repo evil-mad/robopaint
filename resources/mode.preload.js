@@ -8,6 +8,7 @@
  * Modes will be provided the following window "globals":
  * - i18n: The full i18next CommonJS client module, loaded with the modes full
  *          translation set, and the RP central translations for common strings.
+ * - app: The electron app object from the main process.
  * - rpRequire: The helper function for adding RP "modules", external libraries,
  *              and any otthaer cothode o
  * - ipc: The Inter Process Communication module for sending events and messages
@@ -43,7 +44,7 @@
 
 var remote = require('remote');
 var path = require('path');
-var app = remote.require('app');
+var app = window.app = remote.require('app');
 var fs = require('fs-plus');
 var ipc = window.ipc = require('ipc');
 var appPath = app.getAppPath();
@@ -52,8 +53,9 @@ var $ = require('jquery');
 var _ = require('underscore');
 var rpRequire = window.rpRequire = require(appPath + '/resources/rp_modules/rp.require');
 
-// Get our mode path, find the mode's package.json, and load it.
-var modePath = path.parse(window.location.pathname);
+// Get our absolute mode path passed in the location hash, and get the mode's
+// package.json, and load it.
+var modePath = path.parse(decodeURIComponent(location.hash.substr(1)));
 var mode = window.mode = require(path.join(modePath.dir, 'package.json'));
 mode.path = modePath;
 
@@ -79,17 +81,17 @@ rpRequire('cnc_api', function(){
 mode.settings = {
   v: {},
   load: function() {
-    this.v = robopaint.utils.getSettings(mode.name);
+    this.v = robopaint.utils.getSettings(mode.robopaint.name);
   },
   save: function() {
-    robopaint.utils.saveSettings(this.v, mode.name);
+    robopaint.utils.saveSettings(this.v, mode.robopaint.name);
   }
 };
 mode.settings.load();
 
 // Manage loading roboPaintDependencies from mode package config
-if (mode.roboPaintDependencies) {
-  _.each(mode.roboPaintDependencies, function(modName){
+if (mode.robopaint.dependencies) {
+  _.each(mode.robopaint.dependencies, function(modName){
     switch (modName) {
       case 'jquery':
         window.$ = window.jQuery = $;
@@ -106,7 +108,6 @@ if (mode.roboPaintDependencies) {
     }
   });
 }
-
 
 /**
  * Load language resources for this mode and RP common
@@ -151,7 +152,7 @@ function i18nInit() {
           res[langCode].translation.modes = {};
         }
 
-        res[langCode].translation.modes[mode.name] = data;
+        res[langCode].translation.modes[mode.robopaint.name] = data;
       } catch(e) {
         console.error('Bad language file:' + path.join(fullPath, file), e);
       }
@@ -168,7 +169,7 @@ function i18nInit() {
   // On jQuery load trigger, run the initial translation
   $(function(){
     translateMode();
-  })
+  });
 }
 
 /**
@@ -178,12 +179,12 @@ function i18nInit() {
 function translateMode() {
   i18n.setLng(localStorage['robopaint-lang']);
   // DOM Map or native parsing?
-  if (mode.i18n == 'dom') {
-    var domFile = 'resources/modes/' + mode.name + '/_i18n/' + mode.name + '.map.json';
+  if (mode.robopaint.i18n == 'dom') {
+    var domFile = path.join(mode.path.dir, '_i18n', mode.robopaint.name + '.map.json');
     try {
       var mappings = require(domFile).map;
       for (var selector in mappings) {
-        var $elements = $(selector, $subwindow.contents());
+        var $elements = $(selector);
 
         if ($elements.length === 0) {
           console.debug("TranslationDOM Map selector not found:", selector);
@@ -285,7 +286,7 @@ function preloadComplete() {
   // If we need both of these before we're ready, they both load async so
   // we need to check both before continuing to avoid race conditions.
   // This may not actually be needed, but its technically possible.
-  if (mode.roboPaintDependencies && mode.roboPaintDependencies.indexOf('paper') != -1) {
+  if (mode.robopaint.dependencies && _.contains(mode.robopaint.dependencies, 'paper')) {
     if (!robopaint.canvas || !window.paper) return;
   }
 
