@@ -61,13 +61,7 @@ function sendNext() {
 
       // Third argument: skipBuffer
       if (cmd[2] === true) point.skipBuffer = true;
-
-      // Short-circuit API call for a direct localized NODE API call
-      if (robopaint.cncserver.api.server.domain == "localhost") {
-        robopaint.cncserver.setPen(point, moveCallback);
-      } else {
-        api.pen.move(point, moveCallback);
-      }
+      api.pen.move(point, moveCallback);
 
       function moveCallback(p) {
         // Refill paint rules!
