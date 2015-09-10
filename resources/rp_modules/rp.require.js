@@ -6,6 +6,7 @@
 var remote = require('remote');
 var app = remote.require('app');
 var appPath = app.getAppPath();
+var _ = require('underscore');
 
 // List of shortcuts and paths to RP modules and other libraries.
 var modules = {
@@ -22,14 +23,22 @@ var modules = {
 /**
  * RoboPaint require wrapper function.
  *
- * @param {string} module
- *   The short name of the API module.
+ * @param {string|object} module
+ *   The short name of the API module, or an object representing standin
+ *   shortcut object containing the type & name.
  * @param {function} callback
  *   Optional callback for when the script has loaded (for DOM insertion).
  */
  module.exports = rpRequire;
- function rpRequire(module, callback){
-  var m = modules[module];
+function rpRequire(module, callback){
+  var m;
+  if (_.isObject(module)) {
+    m = module;
+    module = m.name;
+  } else {
+    m = modules[module];
+  }
+
 
   if (m) {
     var modPath = m.path;
@@ -38,7 +47,7 @@ var modules = {
       modPath = appPath + '/resources/rp_modules/' + m.name;
     }
 
-    modPath+= '.js';
+    if (modPath.split('.').pop().toLowerCase() !== 'js') modPath+= '.js';
 
     if (m.type === 'dom') {
       if (m.added === true) {
