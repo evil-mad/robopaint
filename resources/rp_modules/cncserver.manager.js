@@ -24,10 +24,25 @@ cncserver.state = {
   }
 };
 
+// When the subwindow has been (re)created.
+$(robopaint).on('subwindowReady', function(){
+  modeWindow = window.$subwindow[0]; // Set to actual webview
+
+  // Bind for client messages
+  modeWindow.addEventListener('ipc-message', function(event){
+     // TODO: Is this needed if run works?
+    if (event.channel === 'cncserver') {
+      handleClientCmd.apply(undefined, event.args);
+    }
+
+    if(event.channel === 'cncserver-run') {
+      cncserver.cmd.run.apply(undefined, event.args[0]);
+    }
+  });
+});
 
 // When main settings have fully loaded...
 $(robopaint).on('settingsComplete', _.once(function(){
-  modeWindow = window.$subwindow[0]; // Set to actual webview
 
   // Set the "global" scope objects for any robopaint level details.
   cncserver.canvas = {
@@ -54,18 +69,6 @@ $(robopaint).on('settingsComplete', _.once(function(){
     robopaint.socket.on('buffer update', bufferUpdateEvent);
     robopaint.socket.on('pen update', penUpdateEvent);
   }
-
-  // Bind for client messages
-  modeWindow.addEventListener('ipc-message', function(event){
-     // TODO: Is this needed if run works?
-    if (event.channel === 'cncserver') {
-      handleClientCmd.apply(undefined, event.args);
-    }
-
-    if(event.channel === 'cncserver-run') {
-      cncserver.cmd.run.apply(undefined, event.args[0]);
-    }
-  });
 
   // TODO: replace with ServerConnect(?)
   cncserver.status(robopaint.t('status.connected'));
