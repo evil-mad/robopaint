@@ -1,4 +1,5 @@
 var app = require('app');  // Module to control application life.
+var path = require('path');
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
 var dialog = require('dialog');
 
@@ -55,8 +56,9 @@ function windowInit() {
       dialog['show' + options.type](mainWindow, options, callback);
     }
 
-    // and load the index.html of the app.
-    mainWindow.loadUrl('file://' + __dirname + '/../../main.html');
+    // Load the main html of the app.
+    var p = path.join(app.getAppPath(), 'resources', 'main.html');
+    mainWindow.loadUrl('file://' + p);
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
