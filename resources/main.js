@@ -56,8 +56,7 @@ var barHeight = 40;
 var isModal = false;
 var initializing = false;
 var appMode = 'home';
-var $subwindow; // Placeholder for subwindow iframe
-var subWin = {}; // Placeholder for subwindow "window" object
+var $subwindow = null; // Placeholder for mode subwindow webview
 
 // Set the global scope object for any robopaint level details needed by other modes
 var robopaint = {
@@ -93,37 +92,8 @@ function startInitialization() {
  initializing = true;
 
  try {
-  // Add the secondary page iFrame to the page
-  $subwindow = $('<webview>').attr({
-    height: $(window).height() - barHeight,
-    border: 0,
-    id: 'subwindow',
-    class: 'hide',
-    nodeintegration: 'true',
-    preload: './mode.preload.js'
-  })
-    .appendTo('body')
-    .on('did-finish-load', fadeInWindow);
-
-  $subwindow.hideMe = function(callback){
-    $subwindow.fadeOut('slow', function(){
-      $subwindow
-        .addClass('hide')
-        .attr('src', "")
-        .show();
-      if (callback) callback();
-    });
-  };
-
-  $subwindow.showMe = function(callback){
-    $subwindow
-      .css('opacity', 0)
-      .removeClass('hide')
-      .css('opacity', 100);
-    if (robopaint.modes[appMode].debug) {
-      $subwindow[0].openDevTools();
-    }
-  };
+  // Initialize the mode webview.
+  createSubwindow();
 
   // Bind and run inital resize first thing
   $(window).resize(responsiveResize);
@@ -166,6 +136,62 @@ function startInitialization() {
      .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
    console.error(e.stack);
  }
+}
+
+function createSubwindow() {
+  if ($subwindow !== null) return;
+
+  $subwindow = $('<webview>').attr({
+    border: 0,
+    id: 'subwindow',
+    class: 'hide',
+    nodeintegration: 'true',
+    disablewebsecurity: 'true',
+    preload: './mode.preload.js'
+  })
+    .appendTo('body')
+    .on('did-finish-load', fadeInWindow);
+
+  $subwindow.hideMe = function(callback){
+    $subwindow.fadeOut('slow', function(){
+      $subwindow
+        .addClass('hide')
+        .attr('src', "")
+        .show();
+      destroySubwindow();
+      if (callback) callback();
+    });
+  };
+
+  $subwindow.showMe = function(callback){
+    $subwindow
+      .css('opacity', 0)
+      .removeClass('hide')
+      .css('opacity', 100)
+    if (robopaint.currentMode.robopaint.debug === true) {
+      $subwindow[0].openDevTools();
+    }
+  };
+
+  // Handle global channel message events from the mode (close/change/etc).
+  $subwindow[0].addEventListener('ipc-message', function(event){
+    switch (event.channel) {
+      case 'globalclose': // Mode has decided it's OK to globally close.
+        mainWindow.destroy();
+        break;
+      case 'modechange': // Mode has decided it's OK to change.
+        continueModeChange();
+        break;
+    }
+  });
+
+  $(robopaint).trigger('subwindowReady');
+}
+
+function destroySubwindow() {
+  $subwindow.remove();
+  $subwindow = null;
+  createSubwindow();
 }
 
 /**
@@ -538,8 +564,6 @@ function initQuickload() {
 function fadeInWindow() {
   console.log('FADEIN!');
   $subwindow.showMe();
-  //subWin = $subwindow[0].contentWindow;
-  //translateMode();
 }
 
 
