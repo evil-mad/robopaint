@@ -1,31 +1,17 @@
 /**
  * @file Holds all Robopaint specific overrides and JS modifications for Method
- * Draw. Any code here is executed in the space of the subwindow iframe that
- * Method Draw (SVG-edit) runs in.
+ * Draw. Any code here is executed in the space of the webview Method Draw
+ * (SVG-edit) runs in.
  */
 
 // Add in the robopaint specific Method Draw css override file
 $('<link>').attr({rel: 'stylesheet', href: "../../edit.method-draw.css"}).appendTo('head');
 
-// Set the global scope object for any robopaint level details
-var robopaint = window.parent.robopaint;
-
-// Confirm dialog doesn't work in subwindow
-window.confirm = window.parent.confirm;
-
-// Page load complete...
-$(function() {
-
+// Mode load complete...
+mode.pageInitReady = function() {
   // Fit Controls to the screen size
   responsiveResize();
   $(window).resize(responsiveResize);
-
-
-  parent.fadeInWindow(); // Trigger iframe window reposition / fade in
-
-  // Parent keypresses push focus to window
-  parent.document.onkeydown = function(e) {window.focus();}
-  window.focus() // Set window focus (required for keyboard shortcuts)
 
   // Remove elements we don't want =============================================
   removeElements();
@@ -50,24 +36,6 @@ $(function() {
     // Load last drawing
     if (localStorage["svgedit-default"]) {
       var loadResult = methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
-
-      // If there's a remote print external callback waiting, trigger it =======
-      if (typeof robopaint.api.print.loadCallback === "function") {
-        if (loadResult === true) {
-          if (!robopaint.api.print.requestOptions.noresize) {
-            autoSizeContent(); // Autosize content
-          }
-
-          // Pass on the requirement to call the loadCallback to AutoPaint
-          robopaint.switchMode('print'); // Load autopaint
-        } else {
-          robopaint.api.print.loadCallback({
-            status: 'failure',
-            error: loadResult
-          });
-        }
-      }
-
     } else {
       methodDraw.canvas.undoMgr.resetUndoStack();
       // Set zoom to fit empty canvas at init
@@ -85,51 +53,7 @@ $(function() {
       }, 250);
     });
   });
-
-  // Method Draw Closing / Switching ===========================================
-  window.onbeforeunload = function (){
-    try {
-      // Remove unwanted elements~~~~~~~~~~~~
-      $('#svgcontent title').remove() // Get rid of titles!
-
-      // Save the top level group objects before moving elements...
-      var $topGroups = $('#svgcontent>g');
-
-      // Move all SVG child elements to SVG root
-      $('#svgcontent>g:last').children().appendTo('#svgcontent');
-      $topGroups.remove(); // Remove editor groupings
-
-      // Convert elements that don't play well with robopaint's handlers
-      var $elems = $('circle, ellipse, line, polyline', '#svgcontent');
-      console.log('Converting ' + $elems.length + ' elements into paths for printing...');
-      $elems.each(function(){
-        methodDraw.canvas.convertToPath(this);
-      });
-
-      // Reset orientation so paths have a more accessible BBox
-      $elems = $('path','#svgcontent');
-      console.log('Resetting path orientation for ' + $elems.length + ' paths for printing...');
-      $elems.each(function(){
-        methodDraw.canvas.pathActions.resetOrientation(this)
-      });
-    } catch(e) {
-      console.log(e);
-
-      // If there's an external callback waiting, trigger the error
-      if (typeof robopaint.api.print.loadCallback === "function") {
-        robopaint.api.print.loadCallback({
-          status: 'failure',
-          error: e
-        });
-      } else {
-        return(robopaint.t('modes.edit.dialogs.error.transfer') + "\n\n\n" + e.message);
-      }
-    }
-
-    window.localStorage.setItem('svgedit-default', methodDraw.canvas.svgCanvasToString());
-  };
-
-})
+};
 
 // Remove all the Method Draw components we don't want
 function removeElements() {
@@ -144,7 +68,7 @@ function removeElements() {
 
 // Add in extra Method Draw elements
 function addElements() {
-  if (!robopaint.statedata.lastFile) robopaint.statedata.lastFile = parent.app.getHomeDir();
+  if (!mode.settings.v.lastFile) mode.settings.v.lastFile = app.getHomeDir();
 
   methodDraw.setCustomHandlers({
     save: function(win, svg) {
@@ -152,7 +76,7 @@ function addElements() {
         {
           type: 'SaveDialog',
           title: robopaint.t('modes.edit.dialogs.savetitle'),
-          defaultPath: robopaint.statedata.lastFile,
+          defaultPath: mode.settings.v.lastFile,
           filters: [
             {name: 'Scalable Vector Graphics ', extensions: ['svg']}
           ]
@@ -193,7 +117,8 @@ function addElements() {
 
           try {
             window.parent.fs.writeFileSync(path, svg);
-            robopaint.statedata.lastFile = path;
+            mode.settings.v.lastFile = path;
+            mode.settings.save();
           } catch(err) {
             $(this).val('');
             window.alert(robopaint.t('modes.edit.dialogs.error.save') + '\n\n ERR# ' + err.errno + ',  ' + err.code);
@@ -271,21 +196,21 @@ function addElements() {
   loadColorsets();
   bindColorSelect();
 
- // Add Autocolor button
- var recover = false;
+  // Add Autocolor button
+  var recover = false;
 
- // jQuery selector list of objects to recolor
- var types = 'path, rect:not(#canvas_background), circle, ellipse, line, polygon';
- $('#tools_bottom_3').append(
-   $('<button>')
-     .attr({id:"auto-color", title: robopaint.t('common.action.autocolortitle')})
-     .text(robopaint.t('common.action.autocolor'))
-     .click(function(){
-       robopaint.utils.autoColor($('#svgcontent'), recover, robopaint.colors, types);
-       recover = !recover;
-     })
- );
-
+  // jQuery selector list of objects to recolor
+  var types = 'path, rect:not(#canvas_background), circle, ellipse, line, polygon';
+  $('#tools_bottom_3').append(
+    $('<button>')
+      .attr({id:"auto-color", title: robopaint.t('common.action.autocolortitle')})
+      .text(robopaint.t('common.action.autocolor'))
+      .click(function(){
+        robopaint.utils.autoColor($('#svgcontent'), recover, robopaint.media.currentSet.colors, types);
+        recover = !recover;
+      }
+    )
+  );
 }
 
 // Build out the DOM elements for the watercolor eyedropper selection palette
@@ -314,18 +239,46 @@ function buildPalette(){
 
 // Load in the colorset data
 function loadColorsets() {
-  for(var i in robopaint.statedata.colorsets) {
-    var set = robopaint.statedata.colorsets[i];
-    $('<link>').attr({rel: 'stylesheet', href: set.styleSrc}).appendTo('head');
+  robopaint.media.load();
+  for(var setName in robopaint.media.sets) {
+    robopaint.media.addStylesheet(setName);
   }
 
   updateColorSet();
 }
 
+// Catch less general message types
+mode.onMessage = function(channel, data) {
+  switch (channel) {
+    // SVG has been pushed into localStorage, and main suggests you do something
+    case 'loadSVG':
+      methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+      break;
+    case 'updateMediaSet': // Colors changed
+      updateColorSet();
+      break;
+    case 'remotePaintLoad': // Remote print trigger
+      /* // TODO: This is going to require some serious rethinking. :)
+      if (loadResult === true) {
+        if (!robopaint.api.print.requestOptions.noresize) {
+          autoSizeContent(); // Autosize content
+        }
+
+        // Pass on the requirement to call the loadCallback to AutoPaint
+        robopaint.switchMode('print'); // Load autopaint
+      } else {
+        robopaint.api.print.loadCallback({
+          status: 'failure',
+          error: loadResult
+        });
+      }*/
+      break;
+  }
+};
+
 // Update the rendering of the color set when it changes, called from main.js
 function updateColorSet(){
-  var set = robopaint.statedata.colorsets[robopaint.settings.colorset];
-  robopaint.colors = set.colors; // Update shortcut
+  var set = robopaint.media.currentSet;
   $('#colors').attr('class', '').addClass(set.baseClass);
   for (var i in set.colors) {
     $('#color' + i)
@@ -369,15 +322,46 @@ function bindColorSelect() {
 }
 
 // Triggered on before close or switch mode, call callback to complete operation
-function onClose(callback, isGlobal){
-  if (isGlobal && !robopaint.settings.openlast && methodDraw.canvas.undoMgr.getUndoStackSize() > 0) {
+mode.onClose = function(callback){
+  if (!robopaint.settings.openlast && methodDraw.canvas.undoMgr.getUndoStackSize() > 0) {
     var r = confirm(robopaint.t('modes.edit.dialogs.confirmquit'));
     if (r == true) {
       callback(); // Close/continue
     }
   } else {
+    saveBeforeQuit();
     callback();
   }
+};
+
+
+function saveBeforeQuit() {
+  try {
+    // Remove unwanted elements~~~~~~~~~~~~
+    $('#svgcontent title').remove() // Get rid of titles!
+
+    // Save the top level group objects before moving elements...
+    var $topGroups = $('#svgcontent>g');
+
+    // Move all SVG child elements to SVG root
+    $('#svgcontent>g:last').children().appendTo('#svgcontent');
+    $topGroups.remove(); // Remove editor groupings
+
+  } catch(e) {
+    console.log(e);
+
+    // If there's an external callback waiting, trigger the error
+    if (typeof robopaint.api.print.loadCallback === "function") {
+      robopaint.api.print.loadCallback({
+        status: 'failure',
+        error: e
+      });
+    } else {
+      return(robopaint.t('modes.edit.dialogs.error.transfer') + "\n\n\n" + e.message);
+    }
+  }
+
+  window.localStorage.setItem('svgedit-default', methodDraw.canvas.svgCanvasToString());
 }
 
 // Takes all content and ensures it's centered and sized to fit exactly within
