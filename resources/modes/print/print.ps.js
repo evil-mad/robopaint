@@ -390,6 +390,12 @@ function traceStrokeNext() {
       strokeCap: 'round',
       miterLimit: 1
     });
+
+    // Make Water preview paths blue and transparent
+    if (tracePaths[tpIndex].data.color === 'water2') {
+      tracePaths[tpIndex].strokeColor = '#256d7b';
+      tracePaths[tpIndex].opacity = 0.5;
+    }
   }
 
   var tp = tracePaths[tpIndex];
@@ -565,6 +571,12 @@ function traceFillNext(fillPath, options) {
             miterLimit: 40,
             strokeJoin: 'round'
           });
+
+          // Make Water preview paths blue and transparent
+          if (y.data.color === 'water2') {
+            y.strokeColor = '#256d7b';
+            y.opacity = 0.5;
+          }
 
           if (!lines[groupingID]) lines[groupingID] = [];
           lines[groupingID].push(y);
