@@ -588,6 +588,14 @@ function traceFillNext(fillPath, options) {
       break;
     case 1: // Grouping and re-grouping the lines
       // Combine lines within position similarity groupings
+
+      // If there are none, then the first step didn't ever actually touch the
+      // shape. Must be pretty small! Finish up early.
+      if (!lines[0]) {
+        finishFillPath(fillPath);
+        return false;
+      }
+
       if (cSubIndex === 0) {
         if (!lines[cFillIndex]) {
           console.log(cFillIndex)
@@ -627,19 +635,7 @@ function traceFillNext(fillPath, options) {
 
         cFillIndex++;
         if (cFillIndex >= lines.length) { // End of fill index loop (single)
-          cFillIndex = 0;
-          cSubIndex = 0;
-          lines = [];
-
-          totalSteps++;
-          mode.run('progress', totalSteps);
-
-          if (currentTraceChild !== traceChildrenMax) currentTraceChild++;
-          mode.run('status', i18n.t('libs.spool.fill', {id: currentTraceChild + '/' + traceChildrenMax}), true);
-
-          cStep = 0;
-
-          fillPath.remove(); // Actually remove the path (not needed anymore)
+          finishFillPath(fillPath);
           return false;
         }
       }
@@ -647,6 +643,22 @@ function traceFillNext(fillPath, options) {
 
   mode.run('progress', totalSteps);
   return true;
+}
+
+function finishFillPath(fillPath) {
+  cFillIndex = 0;
+  cSubIndex = 0;
+  lines = [];
+
+  totalSteps++;
+  mode.run('progress', totalSteps);
+
+  if (currentTraceChild !== traceChildrenMax) currentTraceChild++;
+  mode.run('status', i18n.t('libs.spool.fill', {id: currentTraceChild + '/' + traceChildrenMax}), true);
+
+  cStep = 0;
+
+  fillPath.remove(); // Actually remove the path (not needed anymore)
 }
 
 function findLineFillGroup(testPoint, lines, newGroupThresh){
