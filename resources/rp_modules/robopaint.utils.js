@@ -476,6 +476,8 @@ var utils = {
   },
 
   getRPCanvas: function(b) {
+    if (!b.maxArea) return {};
+
     var aspect = (b.maxArea.height - b.workArea.top) / (b.maxArea.width - b.workArea.left);
 
     // Margin for the WCB, will be different for Eggbot, etc.
