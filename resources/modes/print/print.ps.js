@@ -424,7 +424,7 @@ function traceStrokeNext() {
     var h = tmp.hitTest(testPoint);
     if (h.item === cPath) { // We're on the current path! Add a point
       // If we came off a bad part of the path, add the closest intersection
-      if (!lastGood && lastItem && getClosestIntersection(cPath, lastItem, testPoint)) {
+      if (!lastGood && lastItem && getClosestIntersection(cPath, lastItem, testPoint) && h.type !== 'stroke') {
         tp.add(getClosestIntersection(cPath, lastItem, testPoint));
       }
 
