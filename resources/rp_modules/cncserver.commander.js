@@ -133,6 +133,7 @@ function sendNext() {
       break;
     case "localclear":
       sendBuffer = [];
+      sendNext();
       break;
     case "resetdistance":
       api.pen.resetCounter(sendNext);
