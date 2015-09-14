@@ -119,6 +119,8 @@ mode.onMessage = function(channel, data) {
   switch (channel) {
     // SVG has been pushed into localStorage, and main suggests you load it.
     case 'loadSVG':
+      paper.resetAll();
+      mode.run('status', '')
       paper.loadSVG(localStorage['svgedit-default']);
       break;
   }
@@ -130,12 +132,17 @@ mode.bindControls = function(){
   $('#cancel').click(function(){
     var cancelPrint = confirm(t("modes.print.status.confirm"));
     if (cancelPrint) {
-      // TODO: Try to actually reset the mode and cancel buffering out.
+      paper.resetAll(); // Cleanup paper portions
+      mode.onCallbackEvent('autoPaintComplete');
       mode.run([
-        ['localclear'],
+        ['park'],
+        ['status', i18n.t('modes.print.status.cancelled'), true],
+        ['progress', 0, 1],
         ['clear'],
-        ['park']
-      ]);
+        ['localclear']
+        // As a nice reminder, localclear MUST be last, otherwise the commands
+        // after it will be cleared before being sent :P
+      ], true); // As this is a forceful cancel, shove to the front of the queue
     }
   });
 
@@ -241,9 +248,9 @@ mode.onClose = function(callback) {
     var r = confirm(t('modes.print.dialog.confirmexit'));
     if (r == true) {
       run([
-        ['clearlocal'],
         ['clear'],
-        ['park']
+        ['park'],
+        ['clearlocal']
       ]);
       callback(); // The user chose to close.
     }

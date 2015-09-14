@@ -5,7 +5,6 @@
 // Init defaults & settings
 var previewWidth = 10;
 var flattenResolution = 15; // Flatten curve value (smaller value = more points)
-var lastCenter = view.center;
 var runTraceSpooling = false; // Set to true to run items from preview into action
 var runFillSpooling = false; // Set to true to run items from preview into action
 
@@ -43,6 +42,36 @@ paper.drawPoint = new Group({
     })
   ]
 });
+
+
+// Reset Everything on non-mainLayer and vars
+paper.resetAll = function() {
+  // Stop all Fill and trace spooling (if running)
+  runTraceSpooling = false;
+  runFillSpooling = false;
+
+  paper.mainLayer.opacity = 1;
+
+  paper.tempLayer.removeChildren();
+  paper.actionLayer.removeChildren();
+
+  // Fill & Stroke states
+  // TODO: There's got to be a better way to manage these.
+  traceChildrenMax = 0;
+  currentTraceChild = 1;
+  tracePaths = [];
+  tpIndex = 0;
+  cPathPos = 0;
+  lastGood = false;
+  lastItem = null;
+  totalLength = 0;
+  cFillIndex = 0;
+  cSubIndex = 0;
+  cStep = 0;
+  cGroup = null;
+  lines = [];
+  totalSteps = 0;
+}
 
 paper.moveDrawPoint = function(pos, duration) {
   pos = new Point(pos.x, pos.y);
