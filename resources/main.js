@@ -155,6 +155,10 @@ function createSubwindow() {
     .appendTo('body')
     .on('did-finish-load', fadeInWindow);
 
+  $subwindow[0].addEventListener('dragover', function(e) {
+    e.preventDefault();
+  });
+
   $subwindow.hideMe = function(callback){
     $subwindow.fadeOut('slow', function(){
       $subwindow
@@ -745,3 +749,13 @@ function setModal(toggle){
 
   isModal = toggle;
 }
+
+// Prevent drag/dropping onto the window (it's really bad!)
+document.addEventListener('drop', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+});
+document.addEventListener('dragover', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+});
