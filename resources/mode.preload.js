@@ -245,7 +245,6 @@ function translateMode() {
 i18nInit();
 
 // Default Inter Process Comm message management:
-ipc.on('langchange', translateMode);
 ipc.on('globalclose', function(){ handleModeClose('globalclose'); });
 ipc.on('modechange', function(){ handleModeClose('modechange'); });
 ipc.on('cncserver', function(args){ handleCNCServerMessages(args[0], args[1]); });
@@ -276,6 +275,9 @@ function handleCNCServerMessages(name, data) {
     case "callbackEvent":
       var funcName = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
       if (_.isFunction(mode[funcName])) mode[funcName](data);
+      break;
+    case "langChange":
+      translateMode();
       break;
     default:
       if (_.isFunction(mode.onMessage)) mode.onMessage(name, data);

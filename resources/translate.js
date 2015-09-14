@@ -227,7 +227,7 @@ function updateLang() {
       getColorsets(); // Reload and reparse colorsets
 
       // Translate the mode if we're not on home
-      $subwindow[0].send('langchange');
+      cncserver.pushToMode('langChange');
     }
   );
 }
