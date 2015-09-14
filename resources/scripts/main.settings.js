@@ -37,7 +37,7 @@ function loadSettings() {
     openlast: 0,
     showcolortext: 0,
     colorset: 'generic-standard',
-    maxpaintdistance: 8040,
+    maxpaintdistance: 10805, // 48.2cm @ ~2.24mm per step
     fillspacing: 10,
     fillprecision: 14,
     strokeovershoot: 5,
@@ -450,8 +450,8 @@ function addSettingsRangeValues() {
           num = Math.round(num / 10) * 10;
           break;
         case "maxpaintdistance":
-          // Display as Centimeters (16.6667 mm per step!)
-          num = Math.round((num / 166.7) * 10) / 10;
+          // Display as Centimeters (2.24076923 mm per step!)
+          num = Math.round((num / 224.076923) * 10) / 10;
           num = robopaint.t('common.metric.cm', {count: num}) + ' / ' +
             robopaint.t('common.imperial.in', {count: (Math.round((num / 2.54) * 10) / 10)});
           dosep = false;
