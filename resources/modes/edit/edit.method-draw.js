@@ -4,6 +4,10 @@
  * (SVG-edit) runs in.
  */
 
+ var remote = require('remote');
+ var mainWindow = remote.getCurrentWindow();
+ var fs = require('fs-plus');
+
 // Add in the robopaint specific Method Draw css override file
 $('<link>').attr({rel: 'stylesheet', href: "../../edit.method-draw.css"}).appendTo('head');
 
@@ -25,7 +29,7 @@ mode.pageInitReady = function() {
     // Drawing has been opened =================================================
     methodDraw.openCallback = function() {
       // Force the resolution to match what's expected
-      methodDraw.canvas.setResolution(robopaint.canvas.width - 48*2, robopaint.canvas.height - 48*2);
+      methodDraw.canvas.setResolution(robopaint.canvas.width, robopaint.canvas.height);
 
       // Set zoom to fit canvas at load
       methodDraw.zoomChanged(window, 'canvas');
@@ -72,7 +76,7 @@ function addElements() {
 
   methodDraw.setCustomHandlers({
     save: function(win, svg) {
-      parent.mainWindow.dialog(
+      mainWindow.dialog(
         {
           type: 'SaveDialog',
           title: robopaint.t('modes.edit.dialogs.savetitle'),
@@ -116,7 +120,7 @@ function addElements() {
           }
 
           try {
-            window.parent.fs.writeFileSync(path, svg);
+            fs.writeFileSync(path, svg);
             mode.settings.v.lastFile = path;
             mode.settings.save();
           } catch(err) {
