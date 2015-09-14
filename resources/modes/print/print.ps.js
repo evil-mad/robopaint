@@ -541,8 +541,6 @@ function traceFillNext(fillPath, options) {
       // Ensure line is far longer than the diagonal of the object
       var line = new Path({
         segments: [new Point(0, 0), new Point(p.bounds.width + p.bounds.height, 0)],
-        strokeWidth: 2,
-        strokeColor: '#00ff00',
         position: boundPath.getPointAt(pos),
         rotation: options.angle + 90
       });
