@@ -92,6 +92,26 @@ var utils = {
   },
 
   /**
+   * Map a value in a given range to a new range.
+   *
+   * @param {Number} x
+   *   The input number to be mapped.
+   * @param {Number} inMin
+   *   Expected minimum of the input number.
+   * @param {Number} inMax
+   *   Expected maximum of the input number.
+   * @param {Number} outMin
+   *   Expected minimum of the output map.
+   * @param {Number} outMax
+   *   Expected maximum of the output map.
+   * @return {Number}
+   *   The output number after mapping.
+   */
+  map: function(x, inMin, inMax, outMin, outMax) {
+    return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+  },
+
+  /**
    * Converts a jQuery rgb or hex color string to a proper array [r,g,b]
    *
    * @param {String} string
