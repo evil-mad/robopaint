@@ -530,6 +530,13 @@ function traceFillNext(fillPath, options) {
         size: [p.bounds.width * 2 , p.bounds.height * 2]
       });
 
+      // Init canvas boundary line to intersect if beyond the printable area,
+      // we do this for fill but not for stroke.
+      var canvasBounds = new Path.Rectangle({
+        from: [0, 0],
+        to: [view.bounds.width, view.bounds.height]
+      });
+
       // Set start & destination based on input angle
       // Divide the length of the bound ellipse into 1 part per angle
       var amt = boundPath.length/360;
@@ -556,9 +563,36 @@ function traceFillNext(fillPath, options) {
 
       // Move through calculated iterations for given spacing
       var ints = line.getIntersections(p);
+      var canvasBoundInts = line.getIntersections(canvasBounds);
 
       if (ints.length % 2 === 0) { // If not dividable by 2, we don't want it!
         for (var x = 0; x < ints.length; x+=2) {
+
+          // Manage intersection points beyond print area.
+          // TODO: This currently only supports bottom to top right angle lines.
+          // Need to find closest boundary intersection for all outside boundary
+          // points.
+
+          // Off the left of the screen
+          if (ints[x].point.x < 0 && canvasBoundInts.length) {
+            ints[x] = canvasBoundInts[0];
+          }
+
+          // Off the right of the screen
+          if (ints[x+1].point.x > view.bounds.width && canvasBoundInts.length) {
+            ints[x+1] = canvasBoundInts.pop();
+          }
+
+          // Off the top
+          if (ints[x+1].point.y < 0 && canvasBoundInts.length) {
+            ints[x+1] = canvasBoundInts.pop();
+          }
+
+          // Off the bottom
+          if (ints[x].point.y > view.bounds.height && canvasBoundInts.length) {
+            ints[x] = canvasBoundInts[0];
+          }
+
           var groupingID = findLineFillGroup(ints[x].point, lines, options.threshold);
 
           var y = new Path({
@@ -594,6 +628,7 @@ function traceFillNext(fillPath, options) {
       // Clean up our helper paths
       line.remove();
       boundPath.remove();
+      canvasBounds.remove();
 
       break;
     case 1: // Grouping and re-grouping the lines
