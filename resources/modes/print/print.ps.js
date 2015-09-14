@@ -530,13 +530,6 @@ function traceFillNext(fillPath, options) {
         size: [p.bounds.width * 2 , p.bounds.height * 2]
       });
 
-      // Init canvas boundary line to intersect if beyond the printable area,
-      // we do this for fill but not for stroke.
-      var canvasBounds = new Path.Rectangle({
-        from: [0, 0],
-        to: [view.bounds.width, view.bounds.height]
-      });
-
       // Set start & destination based on input angle
       // Divide the length of the bound ellipse into 1 part per angle
       var amt = boundPath.length/360;
@@ -562,36 +555,10 @@ function traceFillNext(fillPath, options) {
       line.position+= (vector / iterations) * cFillIndex; // Move the line
 
       // Move through calculated iterations for given spacing
-      var ints = line.getIntersections(p);
-      var canvasBoundInts = line.getIntersections(canvasBounds);
+      var ints = checkBoundaryIntersections(line, line.getIntersections(p));
 
       if (ints.length % 2 === 0) { // If not dividable by 2, we don't want it!
         for (var x = 0; x < ints.length; x+=2) {
-
-          // Manage intersection points beyond print area.
-          // TODO: This currently only supports bottom to top right angle lines.
-          // Need to find closest boundary intersection for all outside boundary
-          // points.
-
-          // Off the left of the screen
-          if (ints[x].point.x < 0 && canvasBoundInts.length) {
-            ints[x] = canvasBoundInts[0];
-          }
-
-          // Off the right of the screen
-          if (ints[x+1].point.x > view.bounds.width && canvasBoundInts.length) {
-            ints[x+1] = canvasBoundInts.pop();
-          }
-
-          // Off the top
-          if (ints[x+1].point.y < 0 && canvasBoundInts.length) {
-            ints[x+1] = canvasBoundInts.pop();
-          }
-
-          // Off the bottom
-          if (ints[x].point.y > view.bounds.height && canvasBoundInts.length) {
-            ints[x] = canvasBoundInts[0];
-          }
 
           var groupingID = findLineFillGroup(ints[x].point, lines, options.threshold);
 
@@ -628,7 +595,6 @@ function traceFillNext(fillPath, options) {
       // Clean up our helper paths
       line.remove();
       boundPath.remove();
-      canvasBounds.remove();
 
       break;
     case 1: // Grouping and re-grouping the lines
@@ -688,6 +654,55 @@ function traceFillNext(fillPath, options) {
 
   mode.run('progress', totalSteps);
   return true;
+}
+
+// If any given intersections that are outside the view bounds, move them to the
+// nearest view boundary intersection
+function checkBoundaryIntersections(line, intersections) {
+  // Init canvas boundary line to intersect if beyond the printable area.
+  var canvasBounds = new Path.Rectangle({
+    from: [0, 0],
+    to: [view.bounds.width, view.bounds.height]
+  });
+
+  var outPoints = [];
+
+  var canvasBoundInts = line.getIntersections(canvasBounds);
+  _.each(intersections, function(int) {
+    // If the path intersection is out of bounds...
+    if (int.point.x < 0 || int.point.x > view.bounds.width ||
+        int.point.y < 0 || int.point.y > view.bounds.height) {
+
+      // ...and only if the line intersects the boundary of the view:
+      // Pick the closest boundary point add it as the incoming point.
+      if (canvasBoundInts.length) {
+        outPoints.push(canvasBoundInts[getClosestIntersectionID(int.point, canvasBoundInts)]);
+      } else {
+        // This point is part of a line that doesn't intersect the view bounds,
+        // and is outside the view bounds, therefore it is not visible.
+        // Do not add it to the output set of points.
+      }
+
+      /* Though somewhat counterintuitive, this can definitely happen:
+       * Given a shape that extends "far" beyond a corner or side of the view,
+       * the intersection fill line never touches the canvas boundary on that
+       * fill iteration, even if it properly intersects the shape.
+       *
+       *        / < Fill line
+       *  ____/_________
+       * |  / _ _ _ _ _|_ _ _ _
+       * |/  | ^(0,0)  | ^ View bounds
+       * |__ |_________|
+       *     |
+       *     |
+      **/
+    } else {
+      outPoints.push(int);
+    }
+  });
+
+  canvasBounds.remove();
+  return outPoints;
 }
 
 function finishFillPath(fillPath) {
@@ -797,6 +812,7 @@ paper.travelSortLayer = function(layer) {
 
 }
 
+// Find the closest point to a given source point from an array of point groups.
 function closestPointInGroup(srcPoint, pathGroup) {
   var closestID = 0;
   var closestPointIndex = 0;
@@ -814,6 +830,22 @@ function closestPointInGroup(srcPoint, pathGroup) {
   });
 
   return {id: closestID, closestPointIndex: closestPointIndex, dist: closest};
+}
+
+// Get only the ID of the intersection to a given source point from a flat array.
+function getClosestIntersectionID(srcPoint, points) {
+  var closestID = 0;
+  var closest = srcPoint.getDistance(points[0].point);
+
+  _.each(points, function(destPoint, index){
+    var dist = srcPoint.getDistance(destPoint.point);
+    if (dist < closest) {
+      closest = dist;
+      closestID = index;
+    }
+  });
+
+  return closestID;
 }
 
 // Run an open linear segmented non-compound tracing path into the buffer
