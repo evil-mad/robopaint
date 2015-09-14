@@ -221,7 +221,9 @@ function updateLang() {
       // Report language switch to the console
       console.info("Language Switched to: " + localStorage['robopaint-lang']);
 
-      $('input[type=range]').change(); // Update dynamic slider labels
+      // Update dynamic slider labels (not the servo ones though as they set
+      // pen height, which is not what we want to do).
+      $('input[type=range]:not(#servowash,#servopaint,#servoup)').change();
       getColorsets(); // Reload and reparse colorsets
 
       // Translate the mode if we're not on home
