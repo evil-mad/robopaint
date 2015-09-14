@@ -135,10 +135,11 @@ mode.bindControls = function(){
       paper.resetAll(); // Cleanup paper portions
       mode.onCallbackEvent('autoPaintComplete');
       mode.run([
+        ['clear'],
+        ['resume'],
         ['park'],
         ['status', i18n.t('modes.print.status.cancelled'), true],
         ['progress', 0, 1],
-        ['clear'],
         ['localclear']
         // As a nice reminder, localclear MUST be last, otherwise the commands
         // after it will be cleared before being sent :P
