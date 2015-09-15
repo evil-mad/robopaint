@@ -107,7 +107,8 @@ mode.onCallbackEvent = function(name) {
     case 'autoPaintComplete': // Should happen when we're completely done
       $('#pause').attr('class', 'ready')
         .attr('title', t('modes.print.status.ready'))
-        .text(robopaint.t('common.action.start'));
+        .text(robopaint.t('common.action.start'))
+        .prop('disabled', false);
       $('#buttons button.normal').prop('disabled', false); // Enable options
       $('#cancel').prop('disabled', true); // Disable the cancel print button
       break;
@@ -156,19 +157,16 @@ mode.bindControls = function(){
       $('#pause')
         .removeClass('ready')
         .attr('title', t("modes.print.status.pause"))
-        .text(t('common.action.pause'));
+        .text(t('common.action.pause'))
+        .prop('disabled', true);
       $('#buttons button.normal').prop('disabled', true); // Disable options
       $('#cancel').prop('disabled', false); // Enable the cancel print button
-
-      /*
-      cncserver.wcb.autoPaint($('#cncserversvg'),
-
-      );*/
 
       paper.renderMotionPaths(); // Render motion to the action layer
 
       // When done, lets autoPaint em!
       paper.renderMotionComplete = function(){
+        $('#pause').prop('disabled', false);
         paper.autoPaint(paper.actionLayer);
       }
 
