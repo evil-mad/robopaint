@@ -100,13 +100,12 @@ mode.bindControls = function(){
       $('#buttons button.normal').prop('disabled', true); // Disable options
       $('#cancel').prop('disabled', false); // Enable the cancel print button
 
-      paper.renderMotionPaths(); // Render motion to the action layer
-
-      // When done, lets autoPaint em!
-      paper.renderMotionComplete = function(){
+      // Render stroke and fill to the actionLayer
+      paper.renderMotionPaths(function(){
+        // When done, lets autoPaint em!
         $('#pause').prop('disabled', false);
-        paper.autoPaint(paper.actionLayer);
-      }
+        paper.utils.autoPaint(paper.canvas.actionLayer);
+      });
 
     } else {
       // With something in the queue... we're either pausing, or resuming
