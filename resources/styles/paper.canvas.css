@@ -24,7 +24,7 @@
   margin: 2px auto;
 }
 
-#shadow:before, #shadow:after {
+#paper-shadow:before, #paper-shadow:after {
   z-index: -1;
   position: absolute;
   content: "";
@@ -38,7 +38,7 @@
   transform: rotate(-3deg);
 }
 
-#shadow:after {
+#paper-shadow:after {
   transform: rotate(3deg);
   right: 10px;
   left: auto;
