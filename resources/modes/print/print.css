@@ -3,96 +3,14 @@
   @file Holds ALL styles for Automatic Print Mode
 */
 
-body.print:before {
-  content: "";
-  position: fixed;
-  top: -10px;
-  left: 0;
-  width: 100%;
-  height: 10px;
-  z-index: 100;
-  box-shadow: 0px 0px 10px rgba(0,0,0,.8);
-}
-
 body {
   margin: 0;
   font-family: sans-serif;
-}
-
-/* Prevent selectability of text or other elements */
-* {
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-}
-
-body.home {
-  background-color: #ffae1a;
-  overflow: hidden;
-}
-
-.hidden {
-  display: none;
-}
-
-body.print {
   background-image:url('images/seamless-wood.jpg');
   background-color: #E3BC83;
 }
 
-/* Attempt some kind of button standardization */
-button.normal {
-  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
-  border-radius: 7px;
-  font-size: 1em;
-  color: #FFF;
-  margin-top: 0.3em;
-  padding: 0.2em 0.4em;
-  background: linear-gradient(to bottom, #3093c7, #1c5a85);
-}
-
-button.normal:focus {
-  outline: none;
-}
-
-@media (max-width: 690px) {
-  img.logo {
-    top: 7px;
-    width: 126px;
-    margin-left: -32px;
-  }
-}
-
-/* Drawing Area */
-
-
-
-/* Animation Keyframes */
-
-@-webkit-keyframes hover-pulse {
-  0%   { box-shadow: 0 0 2px 5px red; }
-  50%  { box-shadow: 0 0 6px 8px red; }
-  100%  { box-shadow: 0 0 2px 5px red; }
-}
-
-@-webkit-keyframes hover-pulse-selected {
-  0%   { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
-  50%  { box-shadow: 0 0 0 3px #fff, 0 0 6px 8px #33F; }
-  100%  { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
-}
-
-
-@-webkit-keyframes hover-button {
-  0%   { box-shadow: 0 0 2px 8px #33F; }
-  50%  { box-shadow: 0 0 6px 8px #33F; }
-  100%  { box-shadow: 0 0 2px 8px #33F; }
-}
-
-@-webkit-keyframes pause-active {
-  0%   { box-shadow: 0 0 10px 10px #04aa1e; }
-  50%  { box-shadow: 0 0 10px 5px #04aa1e; }
-  100%  { box-shadow: 0 0 10px 10px #04aa1e; }
-}
-
+/* Tools */
 nav#tools div.static {
   background-color: #CCCCCC;
   border-radius: 15px 15px 15px 15px;
@@ -203,11 +121,11 @@ fieldset#control {
 }
 
 /* Auto print specific */
-body.print-auto fieldset#control {
+fieldset#control {
   top: 20px;
 }
 
-body.print-auto #control>legend {
+#control > legend {
   width: 100%;
   font-weight: bold;
   font-size: 1.2em;
@@ -217,14 +135,14 @@ body.print-auto #control>legend {
   margin-top: -28px;
 }
 
-body.print-auto #buttons {
+#buttons {
   margin-top: -9px;
   padding-top: 5px;
   margin-bottom: 6px;
 }
 
 /* Control panel specific button adjustments */
-body.print-auto #buttons button.normal {
+#buttons button.normal {
   font-size: 1.1em;
   float: none;
   margin: 0.2em auto;
@@ -232,7 +150,7 @@ body.print-auto #buttons button.normal {
   width: 190px;
 }
 
-.print #pause {
+#control #pause {
   background: linear-gradient(to bottom, #eff7f9 0%,rgb(249, 234, 239) 50%,rgb(242, 218, 230) 51%,rgb(249, 229, 231) 100%);
   border-radius: 11px;
   box-shadow: 0 0 14px 6px rgba(255,0,0,0.5);
@@ -245,22 +163,22 @@ body.print-auto #buttons button.normal {
   font-weight: bold;
 }
 
-.print #pause.ready {
+#control #pause.ready {
   box-shadow: 0 0 14px 6px rgba(0,255,0,0.5);
   background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
 }
 
-.print #pause:disabled {
+#control #pause:disabled {
   box-shadow: 0 0 14px 6px rgba(155, 155, 155, 0.5);
   background: linear-gradient(to bottom, #ECECEC 0%,rgb(238, 238, 238) 50%,rgb(236, 236, 236) 51%,rgb(173, 173, 173) 100%);
 }
 
-#pause:hover {
+#control #pause:hover {
   box-shadow: 0 0 14px 10px rgba(255,0,0,1);
   -webkit-animation: none;
 }
 
-.print #pause.active {
+#control #pause.active {
   background: linear-gradient(to bottom, #eff7f9 0%,rgb(236, 249, 234) 50%,rgb(190, 250, 185) 51%,rgb(189, 245, 180) 100%);
   box-shadow: 0 0 14px 6px #04aa1e;
 
@@ -269,7 +187,7 @@ body.print-auto #buttons button.normal {
   -webkit-animation-iteration-count: infinite;
 }
 
-.print #cancel {
+#control #cancel {
   border: none;
   font-size: 17px;
   border-radius: 11px;
@@ -283,70 +201,14 @@ body.print-auto #buttons button.normal {
   font-weight: bold;
 }
 
-.print #cancel:disabled {
+#control #cancel:disabled {
   color: #777;
   cursor: default;
   font-style: italic;
 }
-
-#statusmessage {
-  font-size: 0.9em;
-  height: 2em;
-  margin-top: 0.5em;
-  line-height: 1em;
-  margin-bottom: 0.6em;
-}
-
 
 #control button:disabled, #control button:disabled:hover {
   opacity: 0.5;
   animation: none;
   -webkit-animation: none;
 }
-
-/* ICONS! Use anywhere */
-@font-face {
-  src: url(icons.ttf) format("truetype");
-  font-family: "fontello";
-  font-style: normal;
-}
-
-[class^="icon-"]:before, [class*=" icon-"]:before {
-  font-family: "fontello";
-  font-style: normal;
-  font-weight: normal;
-  speak: none;
-
-  display: inline-block;
-  text-decoration: inherit;
-  width: 1em;
-  margin-right: .2em;
-  text-align: center;
-  /* opacity: .8; */
-
-  /* For safety - reset parent styles, that can break glyph codes*/
-  font-variant: normal;
-  text-transform: none;
-
-  /* fix buttons height, for twitter bootstrap */
-  line-height: 1em;
-}
-
-.icon-picture-1:before { content: '\e811'; } /* '' */
-.icon-params:before { content: '\e805'; } /* '' */
-.icon-cog-alt:before { content: '\e80f'; } /* '' */
-.icon-angle-circled-left:before { content: '\e80a'; } /* '' */
-.icon-angle-circled-right:before { content: '\e80b'; } /* '' */
-.icon-angle-circled-up:before { content: '\e80c'; } /* '' */
-.icon-angle-circled-down:before { content: '\e80d'; } /* '' */
-.icon-floppy:before { content: '\e810'; } /* '' */
-.icon-picture:before { content: '\e804'; } /* '' */
-.icon-gamepad:before { content: '\e807'; } /* '' */
-.icon-shuffle:before { content: '\e809'; } /* '' */
-.icon-cloud-thunder:before { content: '\e800'; } /* '' */
-.icon-flight:before { content: '\e808'; } /* '' */
-.icon-brush:before { content: '\e802'; } /* '' */
-.icon-edit:before { content: '\e803'; } /* '' */
-.icon-print:before { content: '\e806'; } /* '' */
-.icon-download-cloud:before { content: '\e80e'; } /* '' */
-.icon-home:before { content: '\e801'; } /* '' */

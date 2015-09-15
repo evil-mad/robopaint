@@ -1,0 +1,69 @@
+@charset "UTF-8";
+/*
+ * @file Holds styles to be placed in every mode. This includes the top toolbar
+ *   shadow, basic button formatting, preventing selection, etc.
+*/
+
+/* Toolbar shadow */
+body:before {
+  content: "";
+  position: fixed;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  z-index: 100;
+  box-shadow: 0px 4px 9px rgba(0,0,0,.8);
+}
+
+/* Utility class for hiding stuff */
+.hidden {
+  display: none;
+}
+
+/* Prevent selectability of text or other elements by default */
+* {
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Attempt some kind of button standardization */
+button.normal {
+  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+  border-radius: 7px;
+  font-size: 1em;
+  color: #FFF;
+  margin-top: 0.3em;
+  padding: 0.2em 0.4em;
+  background: linear-gradient(to bottom, #3093c7, #1c5a85);
+}
+
+button.normal:focus {
+  outline: none;
+}
+
+/* Animation Keyframes */
+@-webkit-keyframes hover-pulse {
+  0%   { box-shadow: 0 0 2px 5px red; }
+  50%  { box-shadow: 0 0 6px 8px red; }
+  100%  { box-shadow: 0 0 2px 5px red; }
+}
+
+@-webkit-keyframes hover-pulse-selected {
+  0%   { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
+  50%  { box-shadow: 0 0 0 3px #fff, 0 0 6px 8px #33F; }
+  100%  { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
+}
+
+
+@-webkit-keyframes hover-button {
+  0%   { box-shadow: 0 0 2px 8px #33F; }
+  50%  { box-shadow: 0 0 6px 8px #33F; }
+  100%  { box-shadow: 0 0 2px 8px #33F; }
+}
+
+@-webkit-keyframes pause-active {
+  0%   { box-shadow: 0 0 10px 10px #04aa1e; }
+  50%  { box-shadow: 0 0 10px 5px #04aa1e; }
+  100%  { box-shadow: 0 0 10px 10px #04aa1e; }
+}
