@@ -21,6 +21,7 @@ var modules = {
 
   canvas: {name: 'paper.canvas', type: 'node'},
   paper_utils: {name: 'paper.utils', type: 'node'},
+  auto_fill: {name: 'paper.auto.fill', type: 'node'},
   auto_stroke: {name: 'paper.auto.stroke', type: 'node'}
 };
 

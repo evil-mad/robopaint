@@ -37,15 +37,16 @@ module.exports = function(paper) {
     settings: settings,
 
     // Copy the needed parts for tracing (all paths with strokes) and their fills
-    setup: function () {
+    setup: function (callback) {
+      paper.stroke.complete = callback;
       var tmp = paper.canvas.tempLayer;
       tmp.activate();
       tmp.removeChildren(); // Clear it out
 
       // Move through all child items in the mainLayer and copy them into temp
-      _.each(paper.canvas.mainLayer.children, function(path){
-        path.copyTo(tmp);
-      });
+      for (var i = 0; i < paper.canvas.mainLayer.children.length; i++) {
+        paper.canvas.mainLayer.children[i].copyTo(tmp);
+      }
 
       // Ungroup all groups copied
       paper.utils.ungroupAllGroups(tmp);
