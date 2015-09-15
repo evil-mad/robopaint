@@ -17,7 +17,9 @@ var modules = {
   manager: {name: 'cncserver.manager', type: 'node'},
   wcb: {name: 'cncserver.wcb', type: 'node'},
   commander: {name: 'cncserver.commander', type: 'node'},
-  cnc_utils: {name: 'cncserver.utils', type: 'node'}
+  cnc_utils: {name: 'cncserver.utils', type: 'node'},
+
+  canvas: {name: 'paper.canvas', type: 'node'},
 };
 
 /**

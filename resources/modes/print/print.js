@@ -6,94 +6,32 @@
 var actualPen = {}; // Hold onto the latest actualPen object from updates.
 var buffer = {};
 var t = i18n.t; // The mother of all shortcuts
-var $canvas;
-
-// The limit that the canvas wrapper can move to in the window
-var wrapperMargin = {
-  top: 30,
-  left: 30,
-  right: 265,
-  bottom: 40
-};
+var canvas = rpRequire('canvas');
 
 mode.pageInitReady = function () {
-  $canvas = $('canvas#main');
-  $canvas.container = $('#canvas-container');
+  // Initialize the paper.js canvas with wrapper margin and other settings.
+  canvas.domInit({
+    replace: '#paper-placeholder', // jQuery selecter of element to replace
+    paperScriptFile: 'print.ps.js', // The main PaperScript file to load
+    wrapperMargin: {
+      top: 30,
+      left: 30,
+      right: 265,
+      bottom: 40
+    },
 
-  $(window).on('resize', responsiveResize).resize();
-}
-
-function responsiveResize() {
-  var m = wrapperMargin; // Absolute window margins
-  var dm = robopaint.canvas.margin; // Relative/scaled paper margins
-  var c = robopaint.canvas;
-  var $s = $('#shadow');
-  var $p = $('#paper-back');
-  var scale = 1;
-
-  // Position the main container
-  $canvas.container.css(m);
-
-  // Window Size (less the appropriate absolute margins)
-  var win = {
-    w: $(window).width() - (m.left + m.right),
-    h: $(window).height() - (m.top + m.bottom),
-  };
-
-  // canvas plus margins
-  var total = {
-    w: c.width + dm.width,
-    h: c.height + dm.height
-  };
-
-  // How much of the total size can fit in the area?
-  var scale = {
-    x: win.w / total.w,
-    y: win.h / total.h,
-  };
-
-  // Use the smallest
-  scale = (scale.x < scale.y ? scale.x : scale.y);
-
-  $canvas.scale = scale;
-
-  // Set the size of the canvas to be only the size without margin
-  $canvas.width(c.width * scale);
-  $canvas.height(c.height * scale);
-
-  // Paper size (matches shadow element), adding margins
-  $s.add($p).width(total.w * scale);
-  $s.add($p).height(total.h * scale);
-
-  // Adjust position of canvas inside paper
-  $canvas.css({
-    top: dm.top * scale,
-    left: dm.left * scale
+    // Called when PaperScript init is complete, requires
+    // canvas.paperInit(paper) to be called in this modes paperscript file.
+    // Don't forget that!
+    loadedCallback: paperLoadedInit
   });
-
-
-  paperLoad();
 }
 
-// Load the actual paper PaperScript (only when the canvas is ready).
-var paperLoaded = false;
-function paperLoad() {
-  if (!paperLoaded) {
-    paperLoaded = true;
-    $canvas.attr('resize', true);
-    paper.PaperScript.load($('<script>').attr({
-      type:"text/paperscript",
-      src: "print.ps.js",
-      canvas: "main"
-    })[0]);
-  }
-}
 
 // Trigger load init resize only after paper has called this function.
 function paperLoadedInit() {
-  $(window).resize();
   if (localStorage['svgedit-default']) {
-    paper.loadSVG(localStorage['svgedit-default']);
+    paper.canvas.loadSVG(localStorage['svgedit-default']);
   }
 
   // With Paper ready, send a single up to fill values for buffer & pen.
@@ -121,8 +59,8 @@ mode.onMessage = function(channel, data) {
     // SVG has been pushed into localStorage, and main suggests you load it.
     case 'loadSVG':
       paper.resetAll();
-      mode.run('status', '')
-      paper.loadSVG(localStorage['svgedit-default']);
+      mode.run('status', ''); // TODO: Can we do better for the user here?
+      paper.canvas.loadSVG(localStorage['svgedit-default']);
       break;
   }
 };
@@ -260,7 +198,7 @@ mode.onClose = function(callback) {
 
 // Actual pen update event
 mode.onPenUpdate = function(botPen){
-  paper.moveDrawPoint(botPen.absCoord, botPen.lastDuration);
+  paper.canvas.drawPoint.move(botPen.absCoord, botPen.lastDuration);
   actualPen = $.extend({}, botPen);
 
   // Update button text/state

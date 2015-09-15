@@ -2,46 +2,16 @@
  * @file Holds all RoboPaint automatic painting mode specific code
  */
 
+// Initialize the RoboPaint canvas Paper.js extensions & layer management.
+canvas.paperInit(paper);
+
 // Init defaults & settings
 var previewWidth = 10;
 var flattenResolution = 15; // Flatten curve value (smaller value = more points)
 var runTraceSpooling = false; // Set to true to run items from preview into action
 var runFillSpooling = false; // Set to true to run items from preview into action
 
-// Setup layers
 paper.settings.handleSize = 10;
-paper.mainLayer = project.getActiveLayer(); // SVG is imported to here
-paper.tempLayer = new Layer(); // Temporary working layer
-paper.actionLayer = new Layer(); // Actual movement paths & preview
-paper.overlayLayer = new Layer(); // Overlay elements, like the pen position.
-
-// Overlay layer is ready
-paper.drawPoint = new Group({
-  children: [
-    new Path.Circle({
-      center: [0, 0],
-      radius: 15,
-      strokeColor: 'red',
-      strokeWidth: 10,
-    }),
-    new Path.Circle({
-      center: [0, 0],
-      radius: 10,
-      strokeColor: 'white',
-      strokeWidth: 5,
-    }),
-    new Path({
-      segments:[[0, -20], [0, 20]],
-      strokeWidth: 3,
-      strokeColor: 'black'
-    }),
-    new Path({
-      segments:[[-20, 0], [20, 0]],
-      strokeWidth: 3,
-      strokeColor: 'black'
-    })
-  ]
-});
 
 
 // Reset Everything on non-mainLayer and vars
@@ -73,72 +43,11 @@ paper.resetAll = function() {
   totalSteps = 0;
 }
 
-paper.moveDrawPoint = function(pos, duration) {
-  pos = new Point(pos.x, pos.y);
-  var vector = pos - paper.drawPoint.position;
-  if (vector.length) {
-    var d = paper.drawPoint.data;
-    // If we're already moving, just hurry up and get straight to the dest
-    if (d.moving === 2) {
-      paper.drawPoint.position = d.dest;
-    }
-
-    // Moves through stages: 0 is off, 1 is anim frame init, 2 is moving
-    d.moving = 1;
-    d.vector = vector;
-    d.src = paper.drawPoint.position;
-    d.dest = pos;
-    d.duration = (duration-40) / 1000; // Passed in MS, needed in S
-  }
-}
-
-paper.animDrawPoint = function(event) {
-  var d = paper.drawPoint.data;
-  if (!d.moving) return; // Not moving
-
-  if (d.moving === 1) { // Setup anim end time
-    d.endTime = event.time + d.duration;
-    d.moving = 2;
-    return;
-  }
-
-  if (d.moving === 2){ // Actual animated movement based on delta.
-    if (event.time > d.endTime) { // Movement is done
-      d.moving = 0;
-      paper.drawPoint.position = d.dest;
-    } else {
-      var timeDiff = d.duration - (d.endTime - event.time);
-      paper.drawPoint.position = d.src.add(d.vector.divide(d.duration / timeDiff));
-    }
-  }
-}
-
-
-// Default to writing on this layer
-paper.mainLayer.activate();
-
-function onResize() {
-  view.zoom = $canvas.scale;
-  var corner = view.viewToProject(new Point(0,0));
-  view.scrollBy(-corner);
-}
-
-paper.loadSVG = function(svgData) {
-  paper.mainLayer.activate();
-  paper.mainLayer.removeChildren();
-  paper.tempLayer.removeChildren();
-  paper.actionLayer.removeChildren();-
-
-  project.importSVG(svgData, {
-    applyMatrix: true,
-    expandShapes: true
-  });
-
-  // SVG Imports as a group, ungroup it.
-  var group = paper.mainLayer.children[0]
-
-  group.parent.addChildren(group.removeChildren());
-  group.remove();
+// Animation frame callback
+function onFrame(event) {
+  canvas.onFrame(event);
+  paper.stroke.onFrameStep();
+  paper.fill.onFrameStep();
 }
 
 // Show preview paths
@@ -154,10 +63,17 @@ function onMouseDown(event)  {
   if (event.item && event.item.parent === paper.actionLayer) {
     paper.runPath(event.item);
   }
-}
 
-// Loaded complete
-paperLoadedInit();
+  // Delete specific items for debugging
+  if (event.item) {
+    if (event.item.children) {
+      ungroupAllGroups(paper.mainLayer);
+    } else {
+      event.item.remove();
+    }
+  }
+
+}
 
 // Render the "action" layer, this is actually what will become the motion path
 // send to the bot.
@@ -316,39 +232,44 @@ function layerContainsGroups(layer) {
   return false;
 }
 
-// Animation frame callback
-function onFrame(event) {
-  paper.animDrawPoint(event);
-  for(var i = 0; i < 2; i++) {
-
-  if (runTraceSpooling) {
-    if (!traceStrokeNext()) { // Check for trace complete
-      runTraceSpooling = false;
-      prepFillPreview();
-      runFillSpooling = true;
-      paper.actionLayer.activate();
-      tpIndex = 0;
-    }
-  }
-
-  if (runFillSpooling) { // Are we doing fills?
-    // We always fill item 0 on the bottom, as we delete paths when done.
-    if (!traceFillNext(paper.tempLayer.children[0],{
-      angle: -155,
-      spacing: 13,
-      threshold: 40
-    })){
-      // We're done if there are no more paths in the preview layer!
-      if (!paper.tempLayer.children.length) {
-        runFillSpooling = false;
-        if (_.isFunction(paper.renderMotionComplete)) paper.renderMotionComplete();
+paper.fill = {
+  onFrameStep: function() {
+    // TODO: implement trace interation speed X
+    for(var i = 0; i < 2; i++) {
+      if (runFillSpooling) { // Are we doing fills?
+        // We always fill item 0 on the bottom, as we delete paths when done.
+        if (!traceFillNext(paper.tempLayer.children[0],{
+          angle: -155,
+          spacing: 13,
+          threshold: 40
+        })){
+          // We're done if there are no more paths in the preview layer!
+          if (!paper.tempLayer.children.length) {
+            runFillSpooling = false;
+            if (_.isFunction(paper.renderMotionComplete)) paper.renderMotionComplete();
+          }
+        };
       }
-    };
-  }
-
+    }
   }
 }
 
+paper.stroke = {
+  onFrameStep: function () {
+    // TODO: implement trace interation speed X
+    for(var i = 0; i < 2; i++) {
+      if (runTraceSpooling) {
+        if (!traceStrokeNext()) { // Check for trace complete
+          runTraceSpooling = false;
+          prepFillPreview();
+          runFillSpooling = true;
+          paper.actionLayer.activate();
+          tpIndex = 0;
+        }
+      }
+    }
+  }
+}
 
 
 var tracePaths = [];
@@ -550,9 +471,9 @@ function traceFillNext(fillPath, options) {
       var destination = boundPath.getPointAt(pos * amt);
 
       // Find vector and vector length divided by line spacing to get # iterations.
-      var vector = destination - line.position;
+      var vector = destination.subtract(line.position);
       var iterations = parseInt(vector.length / options.spacing);
-      line.position+= (vector / iterations) * cFillIndex; // Move the line
+      line.position = line.position.add(vector.divide(iterations).multiply(cFillIndex)); // Move the line
 
       // Move through calculated iterations for given spacing
       var ints = checkBoundaryIntersections(line, line.getIntersections(p));
@@ -732,20 +653,19 @@ function findLineFillGroup(testPoint, lines, newGroupThresh){
   // 2. Compare each, use the shortest...
   // 3. ...unless it's above the new group threshold, then return a group id
 
-  var vector = -1;
-  var bestVector = newGroupThresh;
+  var bestDistance = newGroupThresh;
   var groupID = 0;
   for (var i = 0; i < lines.length; i++) {
-    vector = lines[i][lines[i].length-1].firstSegment.point - testPoint;
+    var dist = lines[i][lines[i].length-1].firstSegment.point.getDistance(testPoint);
 
-    if (vector.length < bestVector) {
+    if (dist < bestDistance) {
       groupID = i;
-      bestVector = vector.length;
+      bestDistance = dist;
     }
   }
 
   // Check if we went over the threshold, make a new group!
-  if (bestVector === newGroupThresh) {
+  if (bestDistance === newGroupThresh) {
     groupID = lines.length;
   }
 
