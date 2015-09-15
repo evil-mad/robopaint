@@ -4,11 +4,10 @@
 
 // Initialize the RoboPaint canvas Paper.js extensions & layer management.
 canvas.paperInit(paper);
+rpRequire('paper_utils')(paper);
+rpRequire('auto_stroke')(paper);
 
 // Init defaults & settings
-var previewWidth = 10;
-var flattenResolution = 15; // Flatten curve value (smaller value = more points)
-var runTraceSpooling = false; // Set to true to run items from preview into action
 var runFillSpooling = false; // Set to true to run items from preview into action
 
 paper.settings.handleSize = 10;
@@ -17,7 +16,7 @@ paper.settings.handleSize = 10;
 // Reset Everything on non-mainLayer and vars
 paper.resetAll = function() {
   // Stop all Fill and trace spooling (if running)
-  runTraceSpooling = false;
+
   runFillSpooling = false;
 
   paper.mainLayer.opacity = 1;
@@ -78,62 +77,16 @@ function onMouseDown(event)  {
 // Render the "action" layer, this is actually what will become the motion path
 // send to the bot.
 paper.renderMotionPaths = function () {
-  paper.mainLayer.opacity = 0.1;
-  paper.tempLayer.opacity = 0.3;
+  paper.canvas.mainLayer.opacity = 0.1;
+  paper.canvas.tempLayer.opacity = 0.3;
 
-  prepTracePreview();
-
-  view.update();
-
-  // Paths are rendered to the action Layer
-  paper.actionLayer.activate();
-  runTraceSpooling = true;
+  paper.stroke.setup();
+  paper.stroke.complete = function() {
+    //paper.fill.
+    console.log('done!');
+  };
 };
 
-// Copy the needed parts for tracing (all paths with strokes) and their fills
-var traceChildrenMax = 0;
-var currentTraceChild = 1;
-function prepTracePreview() {
-  var tmp = paper.tempLayer;
-  tmp.activate();
-  tmp.removeChildren(); // Clear it out
-
-  // Move through all child items in the mainLayer and copy them into temp
-  _.each(paper.mainLayer.children, function(path){
-    path.copyTo(tmp);
-  });
-
-  // Ungroup all groups copied
-  ungroupAllGroups(tmp);
-
-  // Move through each temp item to prep them
-  var maxLen = 0;
-  _.each(tmp.children, function(path){
-    maxLen += path.length;
-    path.strokeColor = (path.strokeColor && path.strokeWidth) ? snapColor(path.strokeColor) : snapColor(path.fillColor);
-    path.data.color = snapColorID(path.strokeColor, path.opacity);
-    path.data.name = path.name;
-    path.fillColor = path.fillColor ? snapColor(path.fillColor) : null;
-    path.strokeWidth = previewWidth;
-
-    // Close stroke paths with fill to ensure they fully encompass the filled
-    // color (only when they have a fillable color);
-    if (!path.closed) {
-      if (path.fillColor !== null) {
-        if (snapColorID(path.fillColor) !== 'color8') {
-          path.closed = true;
-        }
-      }
-    }
-  });
-
-  // Keep the user up to date with what's going on.
-  traceChildrenMax = tmp.children.length;
-  mode.run([
-    ['status', i18n.t('libs.spool.stroke', {id: '1/' + traceChildrenMax}), true],
-    ['progress', 0, maxLen]
-  ]);
-}
 
 // Copy the needed parts for filling (all paths with fills)
 function prepFillPreview() {
@@ -147,7 +100,7 @@ function prepFillPreview() {
   });
 
   // Ungroup all groups copied
-  ungroupAllGroups(tmp);
+  paper.utils.ungroupAllGroups(tmp);
 
   // Filter out non-fill paths, and ensure paths are closed.
   for(var i in tmp.children) {
@@ -194,43 +147,6 @@ function prepFillPreview() {
   ]);
 }
 
-// Ungroup any groups recursively
-function ungroupAllGroups(layer) {
-  // Remove all groups
-  while(layerContainsGroups(layer)) {
-    for(var i in layer.children) {
-      var path = layer.children[i];
-      if (path instanceof paper.Group) {
-        path.parent.insertChildren(0, path.removeChildren());
-        path.remove();
-      }
-    }
-  }
-}
-
-// Snap the given color to the nearest tool ID
-// TODO: When refactoring media sets, pull tool names from definition.
-window.snapColor = snapColor;
-function snapColorID (color, opacity) {
-  if (typeof opacity !== 'undefined' & opacity < 1) {
-    return 'water2';
-  }
-
-  return "color" + robopaint.utils.closestColor(color.toCSS(), robopaint.media.currentSet.colors);
-}
-
-// Get the actual color of the nearest color to the one given.
-function snapColor (color) {
-  return robopaint.media.currentSet.colors[snapColorID(color).substr(-1)].color.HEX;
-}
-
-// Return true if the layer contains any groups at the top level
-function layerContainsGroups(layer) {
-  for(var i in layer.children) {
-    if (layer.children[i] instanceof paper.Group) return true;
-  }
-  return false;
-}
 
 paper.fill = {
   onFrameStep: function() {
@@ -254,165 +170,6 @@ paper.fill = {
   }
 }
 
-paper.stroke = {
-  onFrameStep: function () {
-    // TODO: implement trace interation speed X
-    for(var i = 0; i < 2; i++) {
-      if (runTraceSpooling) {
-        if (!traceStrokeNext()) { // Check for trace complete
-          runTraceSpooling = false;
-          prepFillPreview();
-          runFillSpooling = true;
-          paper.actionLayer.activate();
-          tpIndex = 0;
-        }
-      }
-    }
-  }
-}
-
-
-var tracePaths = [];
-var tpIndex = 0; // Current tracePath
-var cPathPos = 0; // Position on current tracing path
-var lastGood = false; // Keep track if the last hit was good
-var lastItem = null;
-var totalLength = 0;
-
-// Iterationally process each path to be traced from preview paths
-function traceStrokeNext() {
-  // 1. Do we have preview paths?
-  // 2. Move from bottom paths to top, removing each as we go.
-  // 3. Move through
-  // 4. Just convert the whole path if it's the last one
-  // 5. Profit?!?
-
-  var tmp = paper.tempLayer;
-  if (tmp.children.length === 0) {
-    return false;
-  }
-
-  var cPath = tmp.children[0]; // 0 is always current because we delete it when done!
-
-  // Ignore white paths (color id 8)
-  // TODO: This should probably be handled depending on number of colors in the
-  // media (you can have more pens than 8), paper color might not be white.
-  if (cPath.data.color === 'color8') {
-    console.log('REMOVE WHITE STROKE:', cPath);
-    cPath.remove(); return true;
-  }
-
-  // Current trace path doesn't exist? Make it!
-  if (!tracePaths[tpIndex]) {
-    tracePaths[tpIndex] = new Path({
-      strokeColor: cPath.strokeColor,
-      data: {color: cPath.data.color, name: cPath.data.name, type: 'stroke'},
-      strokeWidth: previewWidth,
-      strokeCap: 'round',
-      miterLimit: 1
-    });
-
-    // Make Water preview paths blue and transparent
-    if (tracePaths[tpIndex].data.color === 'water2') {
-      tracePaths[tpIndex].strokeColor = '#256d7b';
-      tracePaths[tpIndex].opacity = 0.5;
-    }
-  }
-
-  var tp = tracePaths[tpIndex];
-
-  // If it's a compound path, break it apart
-  if (cPath.children) {
-    cPath.parent.insertChildren(0, cPath.removeChildren());
-    cPath.remove();
-
-    return true;
-  }
-
-  // Last path!
-  if (tmp.children.length === 1) {
-    tp.add(cPath.getPointAt(cPathPos));
-  } else { // Not the last path...
-
-    // Check if the current point matches the hittest
-    var testPoint = cPath.getPointAt(cPathPos);
-
-    // Note: In checking for stroke overlaps, we can't reliably test for stroke
-    // intersection with hittest as it takes the stroke width into account,
-    // not actual path intersection. Meaning that any stroke point that
-    // touches another stroke width without intersecting the actual path
-    // will cause closest intersection connection issues.
-    var h = tmp.hitTest(testPoint);
-    if (h.item === cPath) { // We're on the current path! Add a point
-      // If we came off a bad part of the path, add the closest intersection
-      if (!lastGood && lastItem && getClosestIntersection(cPath, lastItem, testPoint) && h.type !== 'stroke') {
-        tp.add(getClosestIntersection(cPath, lastItem, testPoint));
-      }
-
-      tp.add(testPoint);
-      lastGood = true;
-    } else { // We're obstructed
-      if (tp.segments.length) {
-        tpIndex++; // Increment only if this path is used
-        // If we came off a good part of the path, add the intersection closest
-        if (lastGood && getClosestIntersection(cPath, h.item, testPoint) && h.type !== 'stroke') {
-          tp.add(getClosestIntersection(cPath, h.item, testPoint));
-        }
-      }
-      lastGood = false;
-    }
-
-    lastItem = h.item;
-  }
-
-  if (cPathPos === cPath.length) { // Path is done!
-    if (currentTraceChild !== traceChildrenMax) currentTraceChild++;
-    mode.run('status', i18n.t('libs.spool.stroke', {id: currentTraceChild + '/' + traceChildrenMax}), true);
-
-    cPath.remove();
-    lastGood = false;
-    lastItem = null;
-    cPathPos = 0;
-    if (tp.length > 0) { // Increment only if this path is used
-      tpIndex++;
-    } else { // If it wasn't used, can it so the next one gets a clean start.
-      tp.remove();
-      tracePaths[tpIndex] = null;
-    }
-  } else { // Next part of the path
-    cPathPos+= flattenResolution; // Increment the path position.
-
-    // If we're too far, limit it and it will be the last point added
-    if (cPathPos > cPath.length) {
-      totalLength+= cPath.length - (cPathPos - flattenResolution);
-      cPathPos = cPath.length;
-    } else {
-      totalLength+= flattenResolution;
-    }
-    mode.run('progress', totalLength);
-  }
-
-  return true;
-}
-
-function getClosestIntersection(path1, path2, point) {
-  var ints = path1.getIntersections(path2);
-
-  if (!ints.length) return null; // No intersections? huh
-
-  var best = (ints[0].point - point).length;
-  var bestPoint = ints[0].point;
-
-  _.each(ints, function(i) {
-    var v = i.point - point;
-    if (v.length < best) {
-      best = v.length;
-      bestPoint = i.point;
-    }
-  });
-
-  return bestPoint;
-}
 
 var cFillIndex = 0; // Keep track of which line we're working on
 var cSubIndex = 0; // Keep track of which sub we're working on
@@ -752,21 +509,7 @@ function closestPointInGroup(srcPoint, pathGroup) {
   return {id: closestID, closestPointIndex: closestPointIndex, dist: closest};
 }
 
-// Get only the ID of the intersection to a given source point from a flat array.
-function getClosestIntersectionID(srcPoint, points) {
-  var closestID = 0;
-  var closest = srcPoint.getDistance(points[0].point);
 
-  _.each(points, function(destPoint, index){
-    var dist = srcPoint.getDistance(destPoint.point);
-    if (dist < closest) {
-      closest = dist;
-      closestID = index;
-    }
-  });
-
-  return closestID;
-}
 
 // Run an open linear segmented non-compound tracing path into the buffer
 paper.runPath = function(path) {
