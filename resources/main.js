@@ -161,10 +161,6 @@ function createSubwindow() {
 
   $subwindow.hideMe = function(callback){
     $subwindow.fadeOut('slow', function(){
-      $subwindow
-        .addClass('hide')
-        .attr('src', "")
-        .show();
       destroySubwindow();
       if (callback) callback();
     });
