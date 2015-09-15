@@ -12,7 +12,7 @@
     "hersheytext": "^0.5.0",
     "i18next-client": "^1.10.2",
     "jquery": "^2.1.4",
-    "paper": "^0.9.23",
+    "paper": "^0.9.24",
     "qtip2": "^2.2.0",
     "underscore": "^1.8.3"
   },
