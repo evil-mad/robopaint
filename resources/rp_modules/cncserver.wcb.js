@@ -53,6 +53,9 @@ cncserver.wcb = {
     if (typeof toolName != 'string') toolName = cncserver.state.media;
     if (toolName === "") return '';
 
+    // TODO: There probably has to be a better way to do this.
+    toolName = toolName.replace('dip', ''); // Conversion for dip tools
+
     if (toolName.indexOf('water') !== -1) {
       return robopaint.t('common.water');
     } else {
