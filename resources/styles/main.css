@@ -3,18 +3,11 @@
   @file Holds styles for RoboPaint central application home & settings.
 */
 
-canvas#debug {
-  position: absolute;
-  display: none;
-  background-color: rgba(255,255,255,0.7);
-  z-index: 1;
-  left: 0;
-  top: 0;
-}
-
 body {
   margin: 0;
   font-family: sans-serif;
+  background-color: #ffae1a;
+  overflow: hidden;
 }
 
 /* Prevent selectability of text or other elements */
@@ -23,31 +16,8 @@ body {
   -webkit-user-drag: none;
 }
 
-body.home {
-  background-color: #ffae1a;
-  overflow: hidden;
-}
-
 .hidden {
   display: none;
-}
-
-img.logo {
-  margin-left: -100px;
-  height: 37px;
-  display: block;
-  position: absolute;
-  left: 50%;
-  top: 5px;
-  width: 200px;
-}
-
-span.version {
-  position: absolute;
-  font-size: 12px;
-  top: 28px;
-  left: 50%;
-  margin-left: 89px;
 }
 
 /* Attempt some kind of button standardization */
@@ -65,6 +35,16 @@ button.normal:focus {
   outline: none;
 }
 
+img.logo {
+  margin-left: -100px;
+  height: 37px;
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 5px;
+  width: 200px;
+}
+
 @media (max-width: 690px) {
   img.logo {
     top: 7px;
@@ -73,83 +53,14 @@ button.normal:focus {
   }
 }
 
-/* Animation Keyframes */
-
-@-webkit-keyframes hover-pulse {
-  0%   { box-shadow: 0 0 2px 5px red; }
-  50%  { box-shadow: 0 0 6px 8px red; }
-  100%  { box-shadow: 0 0 2px 5px red; }
-}
-
-@-webkit-keyframes hover-pulse-selected {
-  0%   { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
-  50%  { box-shadow: 0 0 0 3px #fff, 0 0 6px 8px #33F; }
-  100%  { box-shadow: 0 0 0 3px #fff, 0 0 2px 8px #33F; }
-}
-
-
-@-webkit-keyframes hover-button {
-  0%   { box-shadow: 0 0 2px 8px #33F; }
-  50%  { box-shadow: 0 0 6px 8px #33F; }
-  100%  { box-shadow: 0 0 2px 8px #33F; }
-}
-
-@-webkit-keyframes pause-active {
-  0%   { box-shadow: 0 0 10px 10px #04aa1e; }
-  50%  { box-shadow: 0 0 10px 5px #04aa1e; }
-  100%  { box-shadow: 0 0 10px 10px #04aa1e; }
-}
-
-/* Nav Controls & Button Graphics */
-fieldset#control {
-  background-color: rgba(255,255,255,0.6);
-  border: 1px solid #C9A165;
-  border-radius: 0.5em 0.5em 0.5em 0.5em;
-  box-shadow: 0 0 8px 2px #EBC089 inset, 1px 1px 3px rgba(0, 0, 0, 0.2);
-  padding: 0.75em 0;
+span.version {
   position: absolute;
-  right: 1em;
-  width: 14em;
-  margin-top: 1em;
-  -webkit-transform-origin: right top;
-  padding-bottom: 0;
+  font-size: 12px;
+  top: 28px;
+  left: 50%;
+  margin-left: 89px;
 }
 
-#control button {
-  display: block;
-  float: left;
-}
-
-#control h2 {
-  font-size: 1em;
-  margin: 0 0 0.5em;
-  text-shadow: 0 2px 1px #EEEEEE;
-}
-
-#control button:hover {
-  -webkit-animation-name: hover-button;
-  -webkit-animation-duration: 3000ms;
-  -webkit-animation-iteration-count: infinite;
-}
-
-#control fieldset {
-  padding: 0 7px 7px;
-  border: 0;
-  border-top: 1px solid #C9A165;
-  margin: 0.5em 0;
-}
-
-#control fieldset legend {
-  font-size: 0.9em;
-  text-align: left;
-  font-weight: bold;
-}
-
-#control div.check-control {
-  float: left;
-  margin-bottom: 0.6em;
-  margin-bottom: 0.25em;
-}
 
 /* Status Specific */
 #status {
@@ -185,12 +96,6 @@ fieldset#control {
   margin-top: 0.5em;
   line-height: 1em;
   margin-bottom: 0.6em;
-}
-
-#control button:disabled, #control button:disabled:hover {
-  opacity: 0.5;
-  animation: none;
-  -webkit-animation: none;
 }
 
 /* ICONS! Use anywhere */
@@ -309,7 +214,6 @@ fieldset#control {
 .icon-logout:before { content: '\e855'; } /* '' */
 
 /* Image quick load */
-
 #loadlist {
   box-shadow: 11px 11px 47px -1px rgba(0,0,0,0.52);
   width: 282px;
