@@ -53,7 +53,7 @@ mode.onCallbackEvent = function(name) {
   }
 };
 
-// Catch less general message types
+// Catch less general message types from RoboPaint.
 mode.onMessage = function(channel, data) {
   switch (channel) {
     // SVG has been pushed into localStorage, and main suggests you load it.

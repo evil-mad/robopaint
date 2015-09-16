@@ -48,7 +48,7 @@ function onMouseDown(event)  {
   // Delete specific items for debugging
   if (event.item) {
     if (event.item.children) {
-      ungroupAllGroups(paper.mainLayer);
+      paper.utils.ungroupAllGroups(paper.mainLayer);
     } else {
       event.item.remove();
     }
