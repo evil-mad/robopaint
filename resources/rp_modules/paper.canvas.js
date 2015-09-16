@@ -30,7 +30,7 @@
  *  overlayLayer {Layer}: Holds any non-drawing elements meant too be on top.
  *  loadSVG(svgData): Clears all layers and loads into the mainLayer all the
  *    paths contained within the SVG data.
- *  drawPoint {Group}: Just use drawPoint.move as shown above. 
+ *  drawPoint {Group}: Just use drawPoint.move as shown above.
  */
 "use strict";
 
@@ -70,8 +70,10 @@ module.exports = {
     // Insert elements on top of configured replacement element.
     $(settings.replace).replaceWith(settings.$canvas.container);
 
-    // Bind the resize function to the window resize event.
-    $(window).on('resize', module.exports.resize).resize();
+    // Bind the resize function to the window resize event if the mode isn't.
+    if (settings.modeHandleResize !== true) {
+      $(window).on('resize', module.exports.resize).resize();
+    }
   },
 
 
