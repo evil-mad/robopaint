@@ -98,7 +98,9 @@ robopaint.media = {
   // Add a stylesheet for the given media set to the page
   // TODO: fully document
   addStylesheet: function(setName) {
+    if (!setName) setName = robopaint.media.currentSet.baseClass;
     if (!robopaint.media.sets[setName]) return false;
+
     var link = window.document.createElement('link');
       link.type = 'text/css';
       link.rel = 'stylesheet';
