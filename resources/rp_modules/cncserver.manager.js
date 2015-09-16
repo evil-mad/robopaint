@@ -130,6 +130,7 @@ function bufferUpdateEvent(b){
 function penUpdateEvent(actualPen){
   actualPen.absCoord = cncserver.utils.getStepstoAbsCoord(actualPen);
   cncserver.state.actualPen = $.extend({}, actualPen);
+  actualPen.media = cncserver.state.mediaTarget; // Give the modes access to pen media
   cncserver.pushToMode('penUpdate', actualPen);
 }
 
