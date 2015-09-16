@@ -3,7 +3,7 @@
  * components and variables. Replaces previous AMD style Require.js code.
  *
  * Globals made here are invisible to the window, but vars added to window will
- * become globals in the window.
+ * become globals in the window. A generic mode CSS file is also added.
  *
  * Modes will be provided the following window "globals":
  * - i18n: The full i18next CommonJS client module, loaded with the modes full
@@ -76,6 +76,12 @@ rpRequire('cnc_api', function(){
     preloadComplete(); // This should be the last thing to run in preload.
   });
 });
+
+// Add the generic mode for body drop shadow and basic button formatting.
+$('<link>').attr({
+  href: robopaint.appPath + "resources/styles/modes.css",
+  rel: "stylesheet"
+}).appendTo('head');
 
 // Define the local settings getters/setters
 mode.settings = {
