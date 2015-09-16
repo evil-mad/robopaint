@@ -18,7 +18,9 @@
     "debug": "Debug",
     "park": "Park after fill/stroke",
     "full": "Full",
-    "dip": "Dip"
+    "dip": "Dip",
+    "tools": "Tools",
+    "disabled": "Disabled for this drawing mode."
   },
   "dialog": {
     "confirmexit": "Are you sure you want to go?\n\nExiting this mode while printing will cancel all your jobs. Click OK to leave."
