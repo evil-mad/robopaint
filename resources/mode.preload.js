@@ -22,6 +22,10 @@
  *        API shortcut. Allows immediate queuing of ~500 cmds/sec to CNCServer.
  *    * mode.settings: An object with setters/getters to manage storing this
  *        modes specific settings.
+ *    * mode.settings.$manage(selectors): A full settings management system for
+ *        form elements. List the selectors for each input element you want to
+ *        track, and from one call this will load, track changes & save all
+ *        values automagically keyed on the elements ID!
  *
  *    This is also where event callbacks should be defined, full list here:
  *     * mode.translateComplete(): Called whenever translate is done. Happens on
@@ -91,6 +95,48 @@ mode.settings = {
   },
   save: function() {
     robopaint.utils.saveSettings(this.v, mode.robopaint.name);
+  },
+  clear: function() {
+    robopaint.utils.clearSettings(mode.robopaint.name);
+  },
+  $manage: function(selectors) { // Settings management on input forms
+    mode.settings.load();
+    $(selectors).each(function(){
+      var key = this.id; // IDs required!
+      var v = mode.settings.v;
+
+      // If there's no value, check for radio buttons
+      if (typeof this.value === 'undefined') {
+        var $radio = $('input[type=radio]', this);
+
+        if ($radio.length) {
+          // Set loaded value (if any)
+          if (typeof v[key] !== 'undefined') {
+            $radio.prop('checked', false);
+            $('input[value=' + v[key] + ']', this).prop('checked', true);
+          }
+
+          // Bind to catch change
+          $radio.change(function(){
+            if ($(this).prop('checked')) {
+              mode.settings.v[key] = this.value;
+              mode.settings.save();
+            }
+          }).change();
+        } else {
+          console.warn('Incompatible settings $manage element:', this);
+        }
+      } else { // Otherwise, use it
+        // Set loaded value (if any)
+        if (typeof v[key] !== 'undefined') $(this).val(v[key]);
+
+        // Bind to catch change
+        $(this).change(function(){
+          mode.settings.v[key] = this.value;
+          mode.settings.save();
+        }).change();
+      }
+    });
   }
 };
 mode.settings.load();
