@@ -385,7 +385,7 @@ function bindSettingsControls() {
       // Disable any non-core modes
       $('.advanced-modes input').prop('checked', false).change();
 
-      delete localStorage[robopaint.utils.settingsStorageKey()];
+      robopaint.utils.clearSettings();
 
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();

@@ -464,6 +464,13 @@ var utils = {
   },
 
   /**
+   * Clear settings in local storage
+   */
+  clearSettings: function (extraKey) {
+    delete localStorage[this.settingsStorageKey(extraKey)];
+  },
+
+  /**
    * Return the object required for the CNCServer DOM API wrapper server object
    */
   getAPIServer: function(settings) {
