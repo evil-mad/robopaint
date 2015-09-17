@@ -8,6 +8,7 @@ var hershey = window.hershey ? window.hershey : require('hersheytext');
 module.exports = function(paper) {
   var Point = paper.Point;
   var Group = paper.Group;
+  var Path = paper.Path;
   var CompoundPath = paper.CompoundPath;
   var view = paper.view;
 
@@ -51,25 +52,39 @@ module.exports = function(paper) {
           lines.push(new Group());
         }
       } else {
-        lines[cLine].addChild(new CompoundPath({
-          strokeWidth: options.strokeWidth,
-          strokeColor: options.strokeColor,
-          pathData: char.d,
-          data: {
-            d: char.d,
-            char: char.type,
+        var data = {
+          d: char.d,
+          char: char.type,
 
-            // Structure for paper.utils.autoPaint
-            color: paper.utils.snapColorID(new paper.Color(options.strokeColor)),
-            name: 'letter-' + char.type + ' - ' + index + '-' + cLine,
-            type: 'stroke'
-          }
-        }));
+          // Structure for paper.utils.autoPaint
+          color: paper.utils.snapColorID(new paper.Color(options.strokeColor)),
+          name: 'letter-' + char.type + ' - ' + index + '-' + cLine,
+          type: 'stroke'
+        };
+
+        // Create the compound path as a group to retain subpath data.
+        lines[cLine].addChild(new Group());
         var c = lines[cLine].lastChild;
-        var b = c.bounds;
 
+        // Use CompoundPath as a simple parser to get the subpaths, then add
+        // them to our group and set the details in the subpath.
+        var tmpCompound = new CompoundPath(char.d);
+        _.each(tmpCompound.children, function(subpath){
+          c.addChild(new Path({
+            data: data,
+            pathData: subpath.pathData,
+            strokeWidth: options.strokeWidth,
+            strokeColor: options.strokeColor
+          }));
+        });
+        tmpCompound.remove();
+
+        // Align to the top left as expected by the font system
+        var b = c.bounds;
         c.pivot = new Point(0, 0);
         c.position = caretPos;
+
+        // Move the caret to the next position based on width and char spacing
         caretPos.x += b.width + options.charSpacing;
       }
     });
