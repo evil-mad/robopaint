@@ -20,6 +20,7 @@ var modules = {
   cnc_utils: {name: 'cncserver.utils', type: 'node'},
 
   canvas: {name: 'paper.canvas', type: 'node'},
+  paper_hershey: {name: 'paper.hersheytext', type: 'node'},
   paper_utils: {name: 'paper.utils', type: 'node'},
   auto_fill: {name: 'paper.auto.fill', type: 'node'},
   auto_stroke: {name: 'paper.auto.stroke', type: 'node'}
