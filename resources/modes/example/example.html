@@ -2,9 +2,8 @@
 <html>
   <head>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="stylesheet" href="example.css">
-    <script data-main="example" src="../require.js"></script>
+    <script src="example.js"></script>
   </head>
 <body>
 
@@ -12,27 +11,46 @@
   <fieldset>
     <legend data-i18n>modes.example.labels.title</legend>
     <nav>
-      <input id="fonttext" type="text" data-i18n="[value]modes.example.labels.text">
-      <select id="fontselect"></select>
+      <input class="managed" id="fonttext" type="text" data-i18n="[value]modes.example.labels.text">
+      <select class="managed" id="fontselect"></select>
       <div>
-        <label for="charwidth" data-i18n>modes.example.labels.spacing</label>
-        <input type="range" id="charwidth" min="1" value="8" max="30"/>
+        <label for="spacewidth" data-i18n>modes.example.labels.spacewidth</label>
+        <input class="managed" type="range" id="spacewidth" min="-10" value="12" max="50"/>
+      </div>
+      <div>
+        <label for="charspacing" data-i18n>modes.example.labels.spacing</label>
+        <input class="managed" type="range" id="charspacing" min="0" value="12" max="100"/>
+      </div>
+      <div>
+        <label for="lineheight" data-i18n>modes.example.labels.lineheight</label>
+        <input class="managed" type="range" id="lineheight" min="0" value="100" max="200"/>
       </div>
       <div>
         <label for="scale" data-i18n>modes.example.labels.scale</label>
-        <input type="range" id="scale" min="50" value="500" max="1000"/>
+        <input class="managed" type="range" id="scale" min="50" value="400" max="1000"/>
       </div>
       <div>
         <label for="hcenter" data-i18n>modes.example.labels.hcent</label>
-        <input type="range" id="hcenter" min="10" value="208" max="1152"/>
+        <input class="managed" type="range" id="hcenter" min="10" value="208" max="1152"/>
       </div>
       <div>
         <label for="vcenter" data-i18n>modes.example.labels.vcent</label>
-        <input type="range" id="vcenter" min="10" value="185" max="1152"/>
+        <input class="managed" type="range" id="vcenter" min="10" value="185" max="1152"/>
       </div>
       <div>
         <label for="wrap" data-i18n>modes.example.labels.wrap</label>
-        <input type="range" id="wrap" min="1" value="70" max="1152"/>
+        <input class="managed" type="range" id="wrap" min="1" value="70" max="1152"/>
+      </div>
+      <div>
+        <label for="textalign" data-i18n>modes.example.labels.align</label>
+        <div class="managed" id="textalign">
+          <input type="radio" name="textalign" id="textalign-left" value="left" />
+            <label for="textalign-left" data-i18n>modes.example.labels.left</label>
+          <input type="radio" name="textalign" id="textalign-center" value="center" checked />
+            <label for="textalign-center" data-i18n>modes.example.labels.center</label>
+          <input type="radio" name="textalign" id="textalign-right" value="right" />
+            <label for="textalign-right" data-i18n>modes.example.labels.right</label>
+        </div>
       </div>
     </nav>
   </fieldset>
@@ -44,15 +62,7 @@
   </fieldset>
 </fieldset>
 
-<div id="scale-container">
-  <div id="export">
-    <svg id="main" xmlns="http://www.w3.org/2000/svg" version="1.1" height="816" width="1056">
-      <g id="target"></g>
-    </svg>
-  </div>
-
-  <div id="shadow"></div>
-</div>
+<div id="paper-placeholder"/>
 
 </body>
 </html>

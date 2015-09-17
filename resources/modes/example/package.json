@@ -11,13 +11,14 @@
     "i18n": "native",
     "icon": "icon-font",
     "index": "example.html",
-    "name": "print",
+    "name": "example",
     "opensvg": false,
     "weight": 2,
     "dependencies": [
       "paper",
       "jquery",
-      "underscore"
+      "underscore",
+      "mediasets"
     ]
   }
 }

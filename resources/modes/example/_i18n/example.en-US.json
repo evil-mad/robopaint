@@ -17,10 +17,16 @@
   "labels": {
     "title": "Text Renderer",
     "spacing": "Char spacing:",
+    "spacewidth": "Space Width:",
+    "lineheight": "Line Height:",
     "scale": "Scale:",
+    "align": "Text Alignment:",
     "hcent": "Horizontal Center:",
     "vcent": "Vertical Center:",
     "wrap": "Wrap Width:",
-    "text": "Hello World!"
+    "text": "Hello World!",
+    "left": "Left",
+    "center": "Center",
+    "right": "Right"
   }
 }

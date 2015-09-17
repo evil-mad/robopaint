@@ -3,108 +3,10 @@
   @file Holds ALL styles for Example Mode
 */
 
-body:before {
-  content: "";
-  position: fixed;
-  top: -10px;
-  left: 0;
-  width: 100%;
-  height: 10px;
-  z-index: 100;
-  box-shadow: 0px 0px 10px rgba(0,0,0,.8);
-}
-
 body {
   margin: 0;
   font-family: sans-serif;
   background-color: #EEE;
-}
-
-/* Prevent selectability of text or other elements */
-* {
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-}
-
-.hidden {
-  display: none;
-}
-
-#status {
-  margin-top: -10px;
-}
-
-/* Attempt some kind of button standardization */
-button.normal {
-  text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
-  border-radius: 7px;
-  font-size: 1em;
-  color: #FFF;
-  margin-top: 0.3em;
-  padding: 0.2em 0.4em;
-  background: linear-gradient(to bottom, #3093c7, #1c5a85);
-}
-
-body.print-manual #tab-content fieldset {
-  border: none;
-}
-
-button.normal:focus {
-  outline: none;
-}
-
-@media (max-width: 690px) {
-  img.logo {
-    top: 7px;
-    width: 126px;
-    margin-left: -32px;
-  }
-}
-
-/* Drawing Area */
-
-#scale-container {
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  -webkit-transform-origin: 0 0 0;
-}
-
-svg#main {
-  background-image: url('../print/images/paper_texture.png');
-  border: 1px solid #ddd;
-  position: absolute;
-  box-shadow: 0 0 38px -2px rgba(0,0,0,0.3);
-  top: 0;
-}
-
-#shadow {
-  position: absolute;
-  top: 3px;
-  height: 864px;
-  width: 1056px;
-  z-index: -5;
-  margin: 2px auto;
-}
-
-#shadow:before, #shadow:after {
-  z-index: -1;
-  position: absolute;
-  content: "";
-  bottom: 15px;
-  left: 10px;
-  width: 50%;
-  top: 80%;
-  max-width:485px;
-  background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 15px 10px rgba(0, 0, 0, 0.6);
-  -webkit-transform: rotate(-3deg);
-}
-
-#shadow:after {
-  -webkit-transform: rotate(3deg);
-  right: 10px;
-  left: auto;
 }
 
 /* Nav Controls */
@@ -113,7 +15,11 @@ svg#main {
   font-size: 11px;
 }
 
-#control fieldset nav div input {
+#control fieldset nav div #textalign label {
+  display: inline;
+}
+
+#control fieldset nav div input[type=range] {
   width: 100%;
 }
 
