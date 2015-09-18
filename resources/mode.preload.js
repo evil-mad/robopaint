@@ -326,6 +326,10 @@ mode.run = function(){
   ipc.sendToHost('cncserver-run', Array.prototype.slice.call(arguments));
 };
 
+// Add a shortcut T that doesn't require the mode prefix
+mode.t = function(t,x) {
+  return i18n.t('modes.' + mode.robopaint.name + '.' + t, x);
+}
 
 function handleModeClose(returnChannel) {
   // If the mode cares to make a fuss about pausing close, let it.
@@ -335,7 +339,6 @@ function handleModeClose(returnChannel) {
     ipc.sendToHost(returnChannel);
   }
 }
-
 
 function handleCNCServerMessages(name, data) {
   switch(name) {

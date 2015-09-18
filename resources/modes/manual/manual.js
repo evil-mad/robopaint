@@ -7,9 +7,6 @@ var actualPen = {}; // Hold onto the latest actualPen object from updates.
 var buffer = {};
 var canvas = rpRequire('canvas');
 
-// Translation super shortcut
-function t(s) { return robopaint.t("modes.manual." + s); }
-
 mode.pageInitReady = function () {
   // Initialize the paper.js canvas with wrapper margin and other settings.
   canvas.domInit({
@@ -93,7 +90,7 @@ mode.bindControls = function() {
 
   // Cancel Print
   $('#cancel').click(function(){
-    var cancelPrint = confirm(t("status.confirm"));
+    var cancelPrint = confirm(mode.t("status.confirm"));
     if (cancelPrint) {
       unBindEvents(function(){
         robopaint.switchMode('home', function(){
@@ -109,24 +106,24 @@ mode.bindControls = function() {
     if (!buffer.paused) { // Not paused
 
       // Starting Pause =========
-      $('#pause').prop('disabled', true).attr('title', t("status.wait"));
+      $('#pause').prop('disabled', true).attr('title', mode.t("status.wait"));
       mode.run([
-        ['status', t("status.pausing")],
+        ['status', mode.t("status.pausing")],
         ['pause']
       ], true); // Insert at the start of the buffer so it happens immediately
 
       mode.onFullyPaused = function(){
-        mode.run('status', t("status.paused"));
+        mode.run('status', mode.t("status.paused"));
         $('#pause')
           .addClass('active')
-          .attr('title',  t('status.resume'))
+          .attr('title',  mode.t('status.resume'))
           .prop('disabled', false)
-          .text(robopaint.t("common.action.resume"));
+          .text(i18n.t("common.action.resume"));
       };
     } else { // We are paused... resume
       // Resuming ===============
       mode.run([
-        ['status', t("status.resuming")],
+        ['status', mode.t("status.resuming")],
         ['resume']
       ], true); // Insert at the start of the buffer so it happens immediately
     }
@@ -169,9 +166,9 @@ mode.bindControls = function() {
   $('#park').click(function(){
     // If we're paused, skip the buffer
     mode.run([
-      ['status', t("status.parking"), buffer.paused],
+      ['status', mode.t("status.parking"), buffer.paused],
       ['park', buffer.paused], // TODO: If paused, only one message will show :/
-      ['status', t("status.parked"), buffer.paused]
+      ['status', mode.t("status.parked"), buffer.paused]
     ]);
   });
 
@@ -187,7 +184,7 @@ mode.bindControls = function() {
         if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
         $('#draw').prop('disabled', false);
         $path.addClass('ants');
-        cncserver.cmd.run('status', t('status.complete'));
+        cncserver.cmd.run('status', mode.t('status.complete'));
 
         if (cncserver.config.canvasDebug) {
           $('canvas#debug').show();
@@ -215,17 +212,17 @@ mode.bindControls = function() {
   // Motor unlock: Also lifts pen and zeros out.
   $('#disable').click(function(){
     mode.run([
-      ['status', t("status.unlocking")],
+      ['status', mode.t("status.unlocking")],
       ['up'],
       ['zero'],
       ['unlock'],
-      ['status', t("status.unlocked")]
+      ['status', mode.t("status.unlocked")]
     ]);
   });
 
   $('#zero').click(function(){
     mode.run([
-      ['status', t("status.zero")],
+      ['status', mode.t("status.zero")],
       ['zero']
     ]);
   });
@@ -255,11 +252,11 @@ mode.bindControls = function() {
     $('#fill').prop('disabled', true);
     // TODO: Rewrite this
     /*
-    cncserver.cmd.run('status', t('status.fill'));
+    cncserver.cmd.run('status', mode.t('status.fill'));
     cncserver.paths.runFill($path, function(){
       $('#fill').prop('disabled', false);
       if ($('#parkafter').is(':checked')) cncserver.cmd.run('park');
-      cncserver.cmd.run('status', t('status.complete'));
+      cncserver.cmd.run('status', mode.t('status.complete'));
     });*/
   });
 
@@ -270,9 +267,9 @@ mode.bindControls = function() {
     if (this.id == 'record-toggle') {
       cncserver.state.isRecording = !cncserver.state.isRecording;
       if (cncserver.state.isRecording) {
-        $(this).text(t('commands.buffer.stop'));
+        $(this).text(mode.t('commands.buffer.stop'));
       } else {
-        $(this).text(t('commands.buffer.record'));
+        $(this).text(mode.t('commands.buffer.record'));
         if (cncserver.state.recordBuffer.length) {
           $('#record-play, #record-clear').prop('disabled', false);
         }
@@ -290,14 +287,14 @@ mode.bindControls = function() {
     var $t = $(this);
 
     $('<a>')
-      .text(t('labels.full'))
-      .attr('title', t('commands.full'))
+      .text(mode.t('labels.full'))
+      .attr('title', mode.t('commands.full'))
       .attr('data-i18n', '[title]modes.manual.commands.full;modes.manual.labels.full')
       .addClass('sub-option full')
       .appendTo($t);
     $('<a>')
-      .text(t('labels.dip'))
-      .attr('title', t('commands.dip'))
+      .text(mode.t('labels.dip'))
+      .attr('title', mode.t('commands.dip'))
       .attr('data-i18n', '[title]modes.manual.commands.dip;modes.manual.labels.dip')
       .addClass('sub-option dip')
       .appendTo($t);
