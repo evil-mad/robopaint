@@ -8,6 +8,7 @@ module.exports = function(paper) {
   // Emulate PaperScript "Globals" as needed
   var Point = paper.Point;
   var Path = paper.Path;
+  var view = paper.view;
 
   paper.utils = {
 
@@ -94,7 +95,9 @@ module.exports = function(paper) {
     },
 
     // Order a layers children by top left travel path from tip to tail, reversing
-    // path order where needed, grouped by data.color.
+    // path order where needed, grouped by data.color. Only works with paths,
+    // not groups or compound paths as it needs everything on an even playing
+    // field to be reordered.
     travelSortLayer: function(layer) {
       var a = layer;
 
@@ -124,7 +127,8 @@ module.exports = function(paper) {
       // Move through each color group, then each point set for distance
       var drawIndex = 0; // Track the path index to insert paths into on the layer
       _.each(colorGroups, function(group){
-        var lastPoint = new Point(0, 0); // The last point to move from, start at the corner
+        var lastPoint = new Point(0, 0); // Last point, start at the corner
+        var lastPath = null; // The last path worked on for joining 0 dist paths
 
         while(group.length) {
           var c = paper.utils.closestPointInGroup(lastPoint, group);
@@ -141,8 +145,19 @@ module.exports = function(paper) {
             lastPoint = group[c.id].points[0];
           }
 
-          // Insert the path to the next spot in the action layer.
-          a.insertChild(drawIndex, group[c.id].path);
+
+          // If the distance between the lastPoint and the next closest point is
+          // 0, and our lastPoint is on a path, we can make this more efficient
+          // by joining the two paths.
+          if (c.dist === 0 && lastPath) {
+            // Combine lastPath with this path (remove the remainder)
+            lastPath.join(group[c.id].path);
+          } else { // Non-zero distance, add as separate path
+            // Insert the path to the next spot in the action layer.
+            a.insertChild(drawIndex, group[c.id].path);
+            lastPath = group[c.id].path;
+          }
+
           group.splice(c.id, 1); // Remove it from the list of paths
 
           drawIndex++;
