@@ -13,6 +13,9 @@
       "brush": "Brush",
       "pen": "Pen"
     },
+    "dialog": {
+      "confirmexit": "Are you sure you want to go?\n\nExiting this mode while printing will cancel all your jobs. Click OK to leave."
+    },
     "action": {
       "park": "Park Home",
       "parktitle": "Move the carriage back to the home position.",

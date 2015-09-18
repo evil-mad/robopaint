@@ -15,9 +15,6 @@
     "title": "Auto-paint",
     "subtitle": "Control"
   },
-  "dialog": {
-    "confirmexit": "Are you sure you want to go?\n\nExiting this mode while printing will cancel all your jobs. Click OK to leave."
-  },
   "status": {
     "initial": "Click to start painting your picture!",
     "park": "Move the carriage back to the home position",

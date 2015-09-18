@@ -74,12 +74,12 @@ mode.bindControls = function(){
       paper.resetAll(); // Cleanup paper portions
       mode.onCallbackEvent('autoPaintComplete');
       mode.run([
-        ['clear'],
-        ['resume'],
-        ['park'],
+        'clear',
+        'resume',
+        'park',
         ['status', i18n.t('modes.print.status.cancelled'), true],
         ['progress', 0, 1],
-        ['localclear']
+        'localclear'
         // As a nice reminder, localclear MUST be last, otherwise the commands
         // after it will be cleared before being sent :P
       ], true); // As this is a forceful cancel, shove to the front of the queue
@@ -181,13 +181,10 @@ mode.bindControls = function(){
 // Warn the user on close about cancelling jobs.
 mode.onClose = function(callback) {
   if (buffer.length) {
-    var r = confirm(t('modes.print.dialog.confirmexit'));
+    var r = confirm(i18n.t('common.dialog.confirmexit'));
     if (r == true) {
-      run([
-        ['clear'],
-        ['park'],
-        ['clearlocal']
-      ]);
+      // As this is a forceful cancel, shove to the front of the queue
+      mode.run(['clear', 'park', 'clearlocal'], true);
       callback(); // The user chose to close.
     }
   } else {

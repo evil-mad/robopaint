@@ -353,6 +353,20 @@ function responsiveResize(){
 }
 
 
+// Warn the user on close about cancelling jobs.
+mode.onClose = function(callback) {
+  if (buffer.length) {
+    var r = confirm(i18n.t('common.dialog.confirmexit'));
+    if (r == true) {
+      // As this is a forceful cancel, shove to the front of the queue
+      mode.run(['clear', 'park', 'clearlocal'], true);
+      callback(); // The user chose to close.
+    }
+  } else {
+    callback(); // Close, as we have nothing the user is waiting on.
+  }
+}
+
 // Actual pen update event
 mode.onPenUpdate = function(botPen){
   paper.canvas.drawPoint.move(botPen.absCoord, botPen.lastDuration);
