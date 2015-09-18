@@ -101,6 +101,8 @@ module.exports = function(paper) {
     travelSortLayer: function(layer) {
       var a = layer;
 
+      if (a.children.count <= 1) return; // This doesn't need to be run
+
       // 1. Move through all paths, group into colors
       // 2. Move through each group, convert list of paths into sets of first and
       //    last segment points, ensure groups are sorted by luminosity.
