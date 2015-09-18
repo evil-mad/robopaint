@@ -81,6 +81,7 @@ mode.bindControls = function() {
       lineHeight:parseFloat($('#lineheight').val() / 4),
       hCenter: parseInt($('#hcenter').val()),
       vCenter: parseInt($('#vcenter').val()),
+      rotation: parseInt($('#rotation').val()),
       textAlign: $('#textalign input:checked').val()
     });
   }).val('futural'); // Set default font

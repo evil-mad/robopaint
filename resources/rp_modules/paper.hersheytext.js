@@ -24,7 +24,8 @@ module.exports = function(paper) {
       lineHeight: 15,
       hCenter: 0,
       vCenter: 0,
-      textAlign: 'left'
+      textAlign: 'left',
+      rotation: 0
     }, options);
 
     if (options.layer) {
@@ -104,6 +105,8 @@ module.exports = function(paper) {
         line.position.x = chars.bounds.width;
       });
     }
-  }
 
+    // Rotation!
+    chars.rotate(options.rotation);
+  }
 };
