@@ -15,6 +15,8 @@ cncserver.state = {
   buffer: [], // Holds a copy of cncserver's internal command buffer
   media: '', // What we think is currently on the brush
   mediaTarget: '', // What we "want" to paint with
+  // True if buffer paused till we've sent all local commands to its buffer
+  pausingTillEmpty: false,
   process: {
     name: 'idle',
     waiting: false,
@@ -118,11 +120,13 @@ function bufferUpdateEvent(b){
     cncserver.state.process.max = 1;
     cncserver.progress({val: 0, max: 1});
   } else { // At least one item in buffer
-    // Update the progress bar
-    cncserver.progress({
-      val: cncserver.state.process.max - cncserver.state.buffer.length,
-      max: cncserver.state.process.max
-    });
+    // Update the progress bar (if not trying to empty the local buffer)
+    if (!cncserver.state.pausingTillEmpty) {
+      cncserver.progress({
+        val: cncserver.state.process.max - cncserver.state.buffer.length,
+        max: cncserver.state.process.max
+      });
+    }
   }
 }
 

@@ -196,6 +196,10 @@ module.exports = function(paper) {
       //  * data.type: either "fill" or "stroke"
 
       var runColor;
+      // Wait for all these commands to stream in before starting to actually
+      // run them. This ensures a smooth start.
+      run(['pausetillemptystart'], true);
+
       _.each(layer.children, function(path){
         // If the color doesn't match, be sure to wash & change it
         if (path.data.color !== runColor) {
@@ -222,6 +226,11 @@ module.exports = function(paper) {
         ['status', i18n.t('libs.autocomplete')],
         ['callbackname', 'autoPaintComplete']
       ]);
+
+      // This tells pause Till Empty that we're ready to start checking for
+      // local buffer depletion. We can't check sooner as we haven't finished
+      // sending all the data yet!
+      run(['pausetillemptyfinish'], true);
     }
   }
 };

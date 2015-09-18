@@ -104,6 +104,7 @@
     "error": "Couldn't connect!",
     "success": "Connected!",
     "disconnect": "Bot Disconnected!",
+    "pausetillempty": "Streaming all commands before starting to prevent slowdown...",
     "button": {
       "continue": "Continue in Simulation mode",
       "retry": "Try to Reconnect"
