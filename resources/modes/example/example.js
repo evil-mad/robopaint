@@ -92,13 +92,20 @@ mode.bindControls = function() {
 
   // Bind save functionality
   $('#save').click(function() {
-    //cncserver.canvas.saveSVG($('#export').html());
+    robopaint.svg.save(
+      robopaint.svg.wrap(paper.canvas.actionLayer.exportSVG({asString: true}))
+    );
   });
 
   // Bind print functionality
   $('#print').click(function() {
+    // Auto Paint requires everything on the layer be ungrouped, so we ungroup
+    // everything first, then autoPaint.
     paper.utils.ungroupAllGroups(paper.canvas.actionLayer);
     paper.utils.autoPaint(paper.canvas.actionLayer);
+
+    // The ungrouped elements aren't terribly useful, so we can just delete them
+    // then re-render them by triggering a fontselect change.
     paper.canvas.actionLayer.removeChildren();
     $('#fontselect').change();
   });

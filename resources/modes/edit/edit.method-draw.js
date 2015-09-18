@@ -38,8 +38,8 @@ mode.pageInitReady = function() {
     }
 
     // Load last drawing
-    if (localStorage["svgedit-default"]) {
-      var loadResult = methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+    if (!robopaint.svg.isEmpty()) {
+      var loadResult = methodDraw.canvas.setSvgString(robopaint.svg.load());
     } else {
       methodDraw.canvas.undoMgr.resetUndoStack();
       // Set zoom to fit empty canvas at init
@@ -68,7 +68,6 @@ function removeElements() {
   $('#tool_export').remove();
   $('#palette').hide();
 }
-
 
 // Add in extra Method Draw elements
 function addElements() {
@@ -256,7 +255,7 @@ mode.onMessage = function(channel, data) {
   switch (channel) {
     // SVG has been pushed into localStorage, and main suggests you do something
     case 'loadSVG':
-      methodDraw.canvas.setSvgString(localStorage["svgedit-default"]);
+      methodDraw.canvas.setSvgString(robopaint.svg.load());
       break;
     case 'updateMediaSet': // Colors changed
       updateColorSet();
@@ -365,7 +364,7 @@ function saveBeforeQuit() {
     }
   }
 
-  window.localStorage.setItem('svgedit-default', methodDraw.canvas.svgCanvasToString());
+  robopaint.svg.save(methodDraw.canvas.svgCanvasToString());
 }
 
 // Takes all content and ensures it's centered and sized to fit exactly within

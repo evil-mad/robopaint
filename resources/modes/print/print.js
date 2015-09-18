@@ -30,8 +30,8 @@ mode.pageInitReady = function () {
 
 // Trigger load init resize only after paper has called this function.
 function paperLoadedInit() {
-  if (localStorage['svgedit-default']) {
-    paper.canvas.loadSVG(localStorage['svgedit-default']);
+  if (!robopaint.svg.isEmpty()) {
+    paper.canvas.loadSVG(robopaint.svg.load());
   }
 
   // With Paper ready, send a single up to fill values for buffer & pen.
@@ -60,7 +60,7 @@ mode.onMessage = function(channel, data) {
     case 'loadSVG':
       paper.resetAll();
       mode.run('status', ''); // TODO: Can we do better for the user here?
-      paper.canvas.loadSVG(localStorage['svgedit-default']);
+      paper.canvas.loadSVG(robopaint.svg.load());
       break;
   }
 };

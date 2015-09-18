@@ -81,7 +81,26 @@ rpRequire('cnc_api', function(){
   });
 });
 
-// Add the generic mode for body drop shadow and basic button formatting.
+// Add in a small API for getting and setting the SVG content, as the storage
+// may change, but the API shouldn't need to.
+robopaint.svg = {
+  wrap: function(inner) {
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' +
+    robopaint.canvas.width + '" height= "' + robopaint.canvas.height + '">' +
+    inner + '</svg>';
+  },
+  isEmpty: function() {
+    return localStorage['svgedit-default'] == false;
+  },
+  load: function() {
+    return localStorage['svgedit-default'];
+  },
+  save: function(svgData) {
+    localStorage['svgedit-default'] = svgData;
+  }
+}
+
+// Add the generic mode CSS for body drop shadow and basic button formatting.
 $('<link>').attr({
   href: robopaint.appPath + "resources/styles/modes.css",
   rel: "stylesheet"
