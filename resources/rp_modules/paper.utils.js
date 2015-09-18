@@ -179,8 +179,15 @@ module.exports = function(paper) {
         }
       });
 
-      // TODO: Extend the last point to account for brush bend
-      //robopaint.settings.strokeovershoot;
+
+      // Extend the last point to account for brush bend
+      if (robopaint.settings.strokeovershoot > 0) {
+        var point = path.lastSegment.point;
+        var m = robopaint.settings.strokeovershoot * 4;
+        point = point.add(path.getTangentAt(path.length).multiply(m));
+        mode.run('move', {x: point.x, y: point.y});
+      }
+
       mode.run('up');
     },
 
