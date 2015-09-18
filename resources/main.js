@@ -356,6 +356,10 @@ function responsiveResize() {
  * Initialize the Socket.IO websocket connection
  */
 function initSocketIO(){
+  // Set base CNC Server API wrapper access location
+  if (!robopaint.cncserver.api) robopaint.cncserver.api = {};
+  robopaint.cncserver.api.server = robopaint.utils.getAPIServer(robopaint.settings);
+
   // Add Socket.IO include now that we know where from and the server is running
   var path = robopaint.cncserver.api.server.protocol +
     '://' + robopaint.cncserver.api.server.domain + ':' +
