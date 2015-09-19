@@ -100,6 +100,11 @@ robopaint.svg = {
   }
 }
 
+// Add an API for pausing CNCServer till all commands are fully buffered.
+robopaint.pauseTillEmpty = function(starting) {
+  ipc.sendToHost('cncserver', 'pauseTillEmpty', starting);
+}
+
 // Add the generic mode CSS for body drop shadow and basic button formatting.
 $('<link>').attr({
   href: robopaint.appPath + "resources/styles/modes.css",
