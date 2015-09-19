@@ -366,6 +366,9 @@ function preloadComplete() {
     if (!robopaint.canvas || !window.paper) return;
   }
 
+  // Make sure we start with a clean slate.
+  mode.run(['clear', 'resume']);
+
   if (_.isFunction(mode.bindControls)) mode.bindControls();
   if (_.isFunction(mode.pageInitReady)) mode.pageInitReady();
   console.log('RobPaint Mode APIs Preloaded & Ready!');
