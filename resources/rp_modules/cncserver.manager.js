@@ -167,8 +167,48 @@ $(robopaint).on('settingsUpdate', function(){
 });
 
 // Handle CNCServer requests from mode windows.
-function handleClientCmd() {
-  console.log('CNC clientcmd', args);
+function handleClientCmd(type, data) {
+  switch(type) {
+    case 'pauseTillEmpty':
+      if (data === true) { // Starting
+        if (!cncserver.state.pausingTillEmpty) {
+          cncserver.state.pausingTillEmpty = true;
+          cncserver.api.buffer.pause();
+          console.log('Pause START');
+        }
+      } else { // Finishing (initialize check)
+        if (cncserver.state.pausingTillEmpty) {
+          console.log('Pause FINISH');
+          var max = cncserver.sendBuffer.length;
+          var last = max;
+          var val = 0;
+          cncserver.status(robopaint.t('status.pausetillempty'));
+          cncserver.progress({max: max, val: val});
+          cncserver.state.pausingTillEmpty = true;
+          var poll = setInterval(function () {
+            console.log('Pause CHECK', cncserver.sendBuffer.length);
+            if (cncserver.sendBuffer.length === 2) {
+              console.log(cncserver.sendBuffer);
+            }
+            if (cncserver.sendBuffer.length === 0) { // Sendbuffer is empty! Resume.
+              cncserver.api.buffer.resume(function(){
+                clearInterval(poll);
+                cncserver.state.pausingTillEmpty = false;
+                console.log('Pause DONE');
+              });
+            } else {
+              val+= last - cncserver.sendBuffer.length;
+              last = cncserver.sendBuffer.length;
+              cncserver.progress({val: val});
+            }
+          }, 200);
+        }
+      }
+      break;
+    default:
+      console.log('CNC clientcmd', args);
+  }
+
 }
 
 

@@ -13,7 +13,7 @@ var cncserver = robopaint.cncserver;
 
 // Buffer of commands to send out: This is just a localized buffer to ensure
 // That commands sent very quickly get sent out in the correct order.
-var sendBuffer = [];
+var sendBuffer = cncserver.sendBuffer = [];
 var running = false;
 var lastPoint = {};
 
@@ -122,45 +122,6 @@ function sendNext() {
         sendNext();
       });
       break;
-    case "pausetillemptystart":
-      // Pause the cncserver buffer till we've finished streaming to it.
-      // Execution is a bit slow and jittery until this completes.
-      if (cncserver.state.pausingTillEmpty) {
-        sendNext(); // Skip invalid
-      } else {
-        api.buffer.pause(function(){
-          cncserver.state.pausingTillEmpty = true;
-          sendNext();
-        });
-      }
-      break;
-    case "pausetillemptyfinish":
-      // Start checking for when the buffer is to be empty
-      if (!cncserver.state.pausingTillEmpty) {
-        sendNext(); // Skip invalid
-      } else {
-        var max = sendBuffer.length;
-        var last = max;
-        var val = 0;
-        cncserver.status(robopaint.t('status.pausetillempty'));
-        cncserver.progress({max: max, val: val});
-        cncserver.state.pausingTillEmpty = true;
-        var poll = setInterval(function () {
-          if (sendBuffer.length === 0) { // Sendbuffer is empty! Resume.
-            api.buffer.resume(function(){
-              clearInterval(poll);
-              cncserver.state.pausingTillEmpty = false;
-            });
-          } else {
-            val+= last - sendBuffer.length;
-            last = sendBuffer.length;
-            cncserver.progress({val: val});
-          }
-        }, 200);
-
-        sendNext();
-      }
-      break;
     case "resume":
       api.buffer.resume(function(){
         cncserver.pushToMode('fullyResumed');
@@ -171,7 +132,7 @@ function sendNext() {
       api.buffer.clear(sendNext);
       break;
     case "localclear":
-      sendBuffer = [];
+      sendBuffer = cncserver.sendBuffer = [];
       sendNext();
       break;
     case "resetdistance":
