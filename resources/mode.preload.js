@@ -46,6 +46,8 @@
  *     * mode.onFullyResumed() & mode.onFullyPaused(): A mode can run pause or
  *         resume, but doesn't know when this happens until these are called.
  *     * mode.onMessage(channel, data): For any undefined gen events, wraps ipc.
+ *     * mode.fullCancel(message): Standardized full cancel, buffer clear and
+ *         park with passed status message.
  **/
 "use strict";
 
@@ -337,6 +339,20 @@ mode.run = function(){
 // Add a shortcut T that doesn't require the mode prefix
 mode.t = function(t,x) {
   return i18n.t('modes.' + mode.robopaint.name + '.' + t, x);
+}
+
+// Add a api for standardizing forced full cancel procedure with park.
+mode.fullCancel = function(message) {
+  mode.run([
+    'clear',
+    'resume',
+    'park',
+    ['status', message, true],
+    ['progress', 0, 1],
+    'localclear'
+    // As a nice reminder, localclear MUST be last, otherwise the commands
+    // after it will be cleared before being sent :P
+  ], true); // As this is a forceful cancel, shove to the front of the queue
 }
 
 function handleModeClose(returnChannel) {
