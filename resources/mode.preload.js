@@ -17,6 +17,9 @@
  * - cncserver: Just the clientside API wrappers for cncserver.
  * - robopaint: A limited version of the robopaint object. Contains:
  *        settings (read only), utils, canvas, cncserver.
+ * - robopaint.pauseTillEmpty(init) : Tell RoboPaint to pause the cncserver
+ *        buffer until after pauseTillEmpty(false) has been called, and the
+ *        local push buffer to the main buffer has been emptied.
  * - mode: Package of the current mode, with path, and utility functions.
  *    * mode.run({mixed}): Emulation IPC passthrough of original commander
  *        API shortcut. Allows immediate queuing of ~500 cmds/sec to CNCServer.
