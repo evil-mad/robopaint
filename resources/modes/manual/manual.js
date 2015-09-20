@@ -92,11 +92,9 @@ mode.bindControls = function() {
   $('#cancel').click(function(){
     var cancelPrint = confirm(mode.t("status.confirm"));
     if (cancelPrint) {
-      unBindEvents(function(){
-        robopaint.switchMode('home', function(){
-          robopaint.switchMode('manual');
-        });
-      });
+      paper.resetAll(); // Cleanup paper portions
+      mode.onCallbackEvent('autoPaintComplete');
+      mode.fullCancel(mode.t('status.cancelled'));
     }
   });
 

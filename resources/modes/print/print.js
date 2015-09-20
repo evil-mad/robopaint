@@ -73,16 +73,7 @@ mode.bindControls = function(){
     if (cancelPrint) {
       paper.resetAll(); // Cleanup paper portions
       mode.onCallbackEvent('autoPaintComplete');
-      mode.run([
-        'clear',
-        'resume',
-        'park',
-        ['status', i18n.t('modes.print.status.cancelled'), true],
-        ['progress', 0, 1],
-        'localclear'
-        // As a nice reminder, localclear MUST be last, otherwise the commands
-        // after it will be cleared before being sent :P
-      ], true); // As this is a forceful cancel, shove to the front of the queue
+      mode.fullCancel(mode.t('status.cancelled'));
     }
   });
 
