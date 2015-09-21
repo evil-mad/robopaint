@@ -6,10 +6,21 @@
  "use strict";
 var _ = require('underscore');
 
+// Settings template: pass any of these options in with the first setup argument
+// to override. Second argument then becomes completion callback.
+// These values are subject to change by global robopaint.settings defaults, See
+// those values for current values.
 var settings = {
-  traceIterationMultiplier: 2,
-  lineWidth: 10,
-  flattenResolution: 15
+  path: null, // Pass a path object to only stroke that object.
+  // Otherwise everything will be traced for strokes.
+  traceIterationMultiplier: 2, // Amount of work done in each frame.
+  lineWidth: 10, // The size of the visual representation of the stroke line.
+  flattenResolution: 15, // Stroke polygonal conversion resolution
+  strokeAllFilledPaths: true, // Stroke non-stroked filled paths?
+  checkFillOcclusion: true, // Check for occlusion on fills?
+  checkStrokeOcclusion: true, // Check for occlusion on other strokes?
+  closeFilledPaths: true, // Close all filled paths? Pertains to above.
+  ignoreSameColorStroke: true // Ignores occlusion for same color strokes.
 };
 
 // General state variables (reset via shutdown below)
@@ -37,7 +48,26 @@ module.exports = function(paper) {
     settings: settings,
 
     // Copy the needed parts for tracing (all paths with strokes) and their fills
-    setup: function (callback) {
+    setup: function (overrides, callback) {
+      if (_.isFunction(overrides)) callback = overrides; // No overrides
+
+      // Get global Settings
+      var set = robopaint.settings;
+
+      var setMap = { // Map global settings to local stroke module settings.
+        traceIterationMultiplier: 2, // TODO: <<
+        lineWidth: 10, // TODO: <<
+        flattenResolution: set.strokeprecision * 4,
+        strokeAllFilledPaths: true, // TODO: <<
+        checkFillOcclusion: true, // TODO: <<
+        checkStrokeOcclusion: true, // TODO: <<
+        closeFilledPaths: true, // TODO: <<
+        ignoreSameColorStroke: true // TODO: <<
+      }
+
+      // Merge in local settings, global settings, and passed overrides.
+      settings = _.extend(settings, setMap, overrides);
+
       paper.stroke.complete = callback;
       var tmp = paper.canvas.tempLayer;
       tmp.activate();
@@ -45,7 +75,14 @@ module.exports = function(paper) {
 
       // Move through all child items in the mainLayer and copy them into temp
       for (var i = 0; i < paper.canvas.mainLayer.children.length; i++) {
-        paper.canvas.mainLayer.children[i].copyTo(tmp);
+        var path = paper.canvas.mainLayer.children[i];
+        var t = path.copyTo(tmp);
+
+        // If this is the only path we'll be tacing...
+        if (settings.path === path) {
+          // Mark the new temp path copy.
+          t.data.targetPath = true;
+        }
       }
 
       // Ungroup all groups copied
@@ -61,6 +98,10 @@ module.exports = function(paper) {
         path.fillColor = path.fillColor ? snapColor(path.fillColor) : null;
         path.strokeWidth = settings.lineWidth;
 
+        if (settings.path && !path.data.targetPath) {
+          path.opacity = 0;
+        }
+
         // Close stroke paths with fill to ensure they fully encompass the filled
         // color (only when they have a fillable color);
         if (!path.closed) {
@@ -73,7 +114,14 @@ module.exports = function(paper) {
       });
 
       // Keep the user up to date with what's going on.
-      traceChildrenMax = tmp.children.length;
+      if (settings.path) {
+        // We have to deal with all the paths, but we're only stroking one.
+        traceChildrenMax = 1;
+        maxLen = settings.path.length;
+      } else {
+        traceChildrenMax = tmp.children.length;
+      }
+
       mode.run([
         ['status', i18n.t('libs.spool.stroke', {id: '1/' + traceChildrenMax}), true],
         ['progress', 0, maxLen]
@@ -110,6 +158,7 @@ module.exports = function(paper) {
       lastGood = false;
       lastItem = null;
       totalLength = 0;
+      settings.path = null; // Only kept per setup run.
     }
   };
 
@@ -127,6 +176,15 @@ module.exports = function(paper) {
     }
 
     var cPath = tmp.children[0]; // 0 is always current because we delete it when done!
+
+    // I've we're only tracing one path, delete any we encounter that aren't it.
+    // This allows for seamless path occlusion tracing without side effects.
+    if (settings.path) {
+      if (!cPath.data.targetPath) {
+        cPath.remove();
+        return true;
+      }
+    }
 
     // Ignore white paths (color id 8)
     // TODO: This should probably be handled depending on number of colors in the
