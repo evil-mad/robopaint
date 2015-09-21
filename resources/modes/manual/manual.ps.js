@@ -47,16 +47,17 @@ function onMouseDown(event)  {
   // Delete specific items for debugging
   if (event.item) {
     if (event.item.children) {
-      paper.utils.ungroupAllGroups(paper.mainLayer);
+      paper.utils.ungroupAllGroups(paper.canvas.mainLayer);
     } else {
-      event.item.remove();
+      paper.canvas.mainLayer.opacity = 0.2;
+      paper.stroke.setup({path: event.item});
     }
   }
 
 }
 
 // Render the "action" layer, this is actually what will become the motion path
-// send to the bot.
+// sent to the bot.
 paper.renderMotionPaths = function (callback) {
   paper.canvas.mainLayer.opacity = 0.1;
   paper.canvas.tempLayer.opacity = 0.3;

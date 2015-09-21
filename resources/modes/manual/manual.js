@@ -61,7 +61,7 @@ mode.onMessage = function(channel, data) {
     case 'loadSVG':
       paper.resetAll();
       mode.run('status', ''); // TODO: Can we do better for the user here?
-      paper.canvas.loadSVG(mode.svg.load());
+      paper.canvas.loadSVG(robopaint.svg.load());
       break;
     case 'updateMediaSet':
       buildColorSet();
