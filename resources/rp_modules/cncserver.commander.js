@@ -133,6 +133,12 @@ function sendNext() {
       break;
     case "localclear":
       sendBuffer = cncserver.sendBuffer = [];
+
+      // If we're starting to pause till empty when this is called...
+      if (cncserver.state.pausingTillEmpty) {
+        // Clear the flag status, it should shut down on its own.
+        cncserver.state.pausingTillEmpty = false;
+      }
       sendNext();
       break;
     case "resetdistance":
