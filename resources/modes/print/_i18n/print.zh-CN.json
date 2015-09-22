@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "release": "0.9.6",
+    "target": "zh-CN",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "info": {
+    "title": "自动喷漆",
+    "description": "绘画模式：打印您的绘图！",
+    "word": "印",
+    "detail": "自动绘制一个给定的格式良好的SVG文件。"
+  },
+  "control": {
+    "title": "汽车漆",
+    "subtitle": "控制"
+  },
+  "status": {
+    "initial": "点击开始画你的照片！",
+    "ready": "点击开始画你的照片！",
+    "pause": "立即暂停目前的行动",
+    "resume": "点击恢复运营",
+    "park": "移动托架回到起始位置",
+    "cancelled": "帆布复位，后台打印和打印取消。",
+    "confirm": "您确定要取消当前的打印作业和复位（例如，开始新的打印作业）？"
+  }
+}

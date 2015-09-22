@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "ur",
     "creator": "techninja via GoogleTranslate"
   },
@@ -17,7 +17,14 @@
     "hcent": "افقی مرکز:",
     "vcent": "عمودی مرکز:",
     "wrap": "چوڑائی لپیٹ:",
-    "text": "ہیلو دنیا!"
+    "text": "ہیلو دنیا!",
+    "rotation": "گھماؤ:",
+    "spacewidth": "خلائی چوڑائی:",
+    "lineheight": "لائن اونچائی:",
+    "align": "متن سیدھ:",
+    "left": "بائیں",
+    "right": "دائیں",
+    "center": "سینٹر"
   },
   "buttons": {
     "save": "موجودہ ڈرائنگ کے طور پر اس کو بچانے کے لئے کلک کریں.",

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "zh-CN",
     "creator": "techninja via GoogleTranslate"
   },
@@ -18,7 +18,9 @@
     "debug": "调试",
     "park": "公园后填充/行程",
     "full": "满",
-    "dip": "倾角"
+    "dip": "倾角",
+    "tools": "工具",
+    "disabled": "停用对此绘制模式。"
   },
   "tools": {
     "water1": "水1",
@@ -59,5 +61,8 @@
     "calibrate": "左上",
     "checktitle": "如果不加以控制，跟踪将依靠唯一的道路形状，忽略路径的重叠。",
     "calibratetitle": "定位刷中心在左上角进行校准。"
+  },
+  "dialog": {
+    "confirmexit": "你确定你要到哪里去？\n\n退出该模式下打印时，将取消所有的作业。点击确定退出​​。"
   }
 }

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "pt",
     "creator": "techninja via GoogleTranslate"
   },
@@ -21,6 +21,13 @@
     "hcent": "Centro Horizontal:",
     "vcent": "Centro Vertical:",
     "wrap": "Enrole Largura:",
-    "text": "Olá Mundo!"
+    "text": "Olá Mundo!",
+    "spacewidth": "Espaço Largura:",
+    "lineheight": "Altura da linha:",
+    "rotation": "Rotação:",
+    "align": "Alinhamento de Texto:",
+    "left": "Esquerda",
+    "center": "Centro",
+    "right": "Certo"
   }
 }

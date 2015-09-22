@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "release": "0.9.6",
+    "target": "pt",
+    "creator": "techninja via GoogleTranslate"
+  },
+  "info": {
+    "title": "Pintura automática",
+    "description": "Pintura Mode: Imprima o desenho!",
+    "word": "Imprimir",
+    "detail": "Pintar automaticamente um determinado arquivo SVG bem formado."
+  },
+  "control": {
+    "title": "Auto-paint",
+    "subtitle": "Ao controle"
+  },
+  "status": {
+    "initial": "Clique para começar a pintar a sua foto!",
+    "ready": "Clique para começar a pintar a sua foto!",
+    "pause": "Momentaneamente pausar operações atuais",
+    "park": "Mova o carro de volta para a posição inicial",
+    "resume": "Clique para retomar as operações",
+    "confirm": "Tem certeza de que deseja cancelar o trabalho de impressão atual e redefinir (por exemplo, para iniciar um novo trabalho de impressão)?",
+    "cancelled": "Redefinição de lona, ​​spooling e impressão cancelado."
+  }
+}

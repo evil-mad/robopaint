@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "de",
     "creator": "techninja via GoogleTranslate"
   },
@@ -18,7 +18,9 @@
     "record": "Rekord",
     "park": "Park nach Füll- / Kontur",
     "full": "Voll",
-    "dip": "Tauchen"
+    "dip": "Tauchen",
+    "tools": "Tools",
+    "disabled": "Für diese Zeichnung-Modus deaktiviert."
   },
   "tools": {
     "water1": "Wasser 1",
@@ -59,5 +61,8 @@
     "checktitle": "Wenn deaktiviert, werden Rückverfolgung nur auf Pfadform verlassen, ohne auf Weg überlappen.",
     "calibrate": "Oben links",
     "calibratetitle": "Positionieren Sie den Pinsel Zentrum in der linken oberen Ecke zur Kalibrierung."
+  },
+  "dialog": {
+    "confirmexit": "Sind Sie sicher, Sie gehen wollen?\n\nVerlassen Sie diesen Modus während des Druckvorgangs werden alle Ihre Aufträge zu stornieren. Klicken Sie auf OK, um zu verlassen."
   }
 }

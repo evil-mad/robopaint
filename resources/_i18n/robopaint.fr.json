@@ -63,6 +63,9 @@
       "control": "Contrôle",
       "status": "Statut",
       "progress": "Les progrès actuels"
+    },
+    "dialog": {
+      "confirmexit": "Etes-vous sûr que vous voulez aller?\n\nQuitter ce mode en cours d'impression pour annuler tous vos travaux. Cliquez sur OK pour quitter."
     }
   },
   "status": {
@@ -75,7 +78,20 @@
     "button": {
       "continue": "Continuer en simulation",
       "retry": "Essayer de se reconnecter"
-    }
+    },
+    "connecting": "Connexion à Robot ...",
+    "pausing": "Pause processus actuel ...",
+    "connected": "Connexion réussie!",
+    "resuming": "Reprise processus actuel ...",
+    "resumed": "Dessin repris ...",
+    "paused": "Pause. Cliquez sur Reprendre pour continuer.",
+    "parking": "Parking ...",
+    "unlocking": "Déverrouillage des moteurs ...",
+    "parkfail": "Vous ne pouvez pas Park, déjà stationné",
+    "parked": "Garé succès",
+    "unlocked": "Motors déverrouillées! Placez-les dans la maison coin quand fait",
+    "wait": "S'il vous plaît patienter pendant exécuté processus complet ...",
+    "pausetillempty": "Streaming toutes les commandes avant de commencer à prévenir ralentissement ..."
   },
   "nav": {
     "toolbar": {
@@ -318,6 +334,10 @@
     "autofill": "Chemin de remplissage __id __...",
     "autostroke": "Chemin caressant __id __...",
     "autocomplete": "Peinture automatique complet!",
-    "subrefill": "Obtenir la peinture puis en dessinant sous-chemin __num__"
+    "subrefill": "Obtenir la peinture puis en dessinant sous-chemin __num__",
+    "spool": {
+      "fill": "Tracing remplir chemin __id __...",
+      "stroke": "Tracing chemin de course __id __..."
+    }
   }
 }

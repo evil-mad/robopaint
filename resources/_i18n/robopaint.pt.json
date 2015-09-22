@@ -63,6 +63,9 @@
       "control": "Controle",
       "status": "Estado",
       "progress": "O progresso atual"
+    },
+    "dialog": {
+      "confirmexit": "Você tem certeza que quer ir?\n\nAo sair deste modo durante a impressão irá cancelar todos os seus trabalhos. Clique em OK para sair."
     }
   },
   "status": {
@@ -75,7 +78,20 @@
     "button": {
       "continue": "Continuar no modo de Simulação",
       "retry": "Tentar se reconectar"
-    }
+    },
+    "connected": "Conectado com sucesso!",
+    "connecting": "Ligar a robô ...",
+    "pausing": "Pausa na atual processo ...",
+    "paused": "Fez uma pausa. Clique retomar para continuar.",
+    "resuming": "Retomando processo atual ...",
+    "resumed": "Desenho retomada ...",
+    "parking": "Estacionamento ...",
+    "parked": "Estacionado com sucesso",
+    "unlocking": "Motores Desbloqueio ...",
+    "parkfail": "Não pode estacionar, já estacionado",
+    "wait": "Por favor aguarde enquanto executados processos completa ...",
+    "unlocked": "Motors desbloqueado! Coloque no canto casa quando feito",
+    "pausetillempty": "Streaming de todos os comandos antes de começar a evitar desaceleração ..."
   },
   "nav": {
     "toolbar": {
@@ -318,6 +334,10 @@
     "autofill": "Enchendo caminho __id __...",
     "autostroke": "Acariciando caminho __id __...",
     "autocomplete": "Pintura automática Complete!",
-    "subrefill": "Obtendo pintura em seguida, desenho sub-caminho __num__"
+    "subrefill": "Obtendo pintura em seguida, desenho sub-caminho __num__",
+    "spool": {
+      "stroke": "Rastreamento caminho traçado __id __...",
+      "fill": "Rastreamento preencher caminho __id __..."
+    }
   }
 }

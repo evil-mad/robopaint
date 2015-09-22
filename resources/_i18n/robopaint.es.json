@@ -63,7 +63,10 @@
     },
     "water": "Agua",
     "substrate": "Blanco / Papel",
-    "transparent": "Transparente"
+    "transparent": "Transparente",
+    "dialog": {
+      "confirmexit": "¿Seguro que quieres ir?\n\nSalir de este modo durante la impresión se cancelará todos sus trabajos. Haga clic en Aceptar para salir."
+    }
   },
   "status": {
     "start": "Puesta en marcha...",
@@ -75,7 +78,20 @@
     "button": {
       "continue": "Continuar en el modo de simulación",
       "retry": "Intente volver a conectar"
-    }
+    },
+    "connecting": "Conexión al robot ...",
+    "connected": "Conectado con éxito!",
+    "pausing": "Haciendo una pausa actual proceso ...",
+    "resuming": "Reanudación actual proceso ...",
+    "paused": "En pausa. Haga clic en Reanudar para continuar.",
+    "resumed": "Dibujo reanudó ...",
+    "parking": "Estacionamiento...",
+    "parked": "Estacionado con éxito",
+    "parkfail": "No se puede aparcar, ya estacionado",
+    "unlocking": "Motores desbloqueo ...",
+    "unlocked": "Motores desbloqueados! Coloque en la esquina casa cuando se hace",
+    "wait": "Por favor, espere mientras se ejecuta procesos completa ...",
+    "pausetillempty": "Streaming todos los comandos antes de comenzar a prevenir desaceleración ..."
   },
   "nav": {
     "toolbar": {
@@ -318,6 +334,10 @@
     "washing": "Hacer un lavado cepillo completo ...",
     "reinked": "Continuando a pintar con __media__",
     "autofill": "Camino Llenado __id __...",
-    "subrefill": "Conseguir la pintura y luego dibujo subtrayecto __num__"
+    "subrefill": "Conseguir la pintura y luego dibujo subtrayecto __num__",
+    "spool": {
+      "stroke": "Rastreo de ruta de carrera __id __...",
+      "fill": "Rastreo de llenar ruta __id __..."
+    }
   }
 }

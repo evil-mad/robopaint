@@ -63,6 +63,9 @@
       "control": "控制",
       "status": "状态",
       "progress": "目前的进展"
+    },
+    "dialog": {
+      "confirmexit": "你确定你要到哪里去？\n\n退出该模式下打印时，将取消所有的作业。点击确定退出​​。"
     }
   },
   "status": {
@@ -75,7 +78,20 @@
     "button": {
       "continue": "继续在模拟模式",
       "retry": "尝试重新连接"
-    }
+    },
+    "connecting": "连接到机器人......",
+    "pausing": "暂停当前​​进程...",
+    "connected": "连接成功！",
+    "paused": "暂停。点击继续，继续。",
+    "resuming": "恢复当前进程...",
+    "parking": "停车...",
+    "resumed": "图纸恢复...",
+    "parked": "停放成功地",
+    "parkfail": "不能停，停已",
+    "unlocking": "解锁电机...",
+    "wait": "而执行的过程中完成，请稍候...",
+    "unlocked": "汽车解锁！放置在家中的角落里完成时",
+    "pausetillempty": "流的所有命令开始，以防止经济放缓之前..."
   },
   "nav": {
     "toolbar": {
@@ -318,6 +334,10 @@
     "autofill": "填充路径__id __...",
     "autostroke": "抚摸路径__id __...",
     "autocomplete": "自动喷漆完成！",
-    "subrefill": "获得油漆然后画子路径__num__"
+    "subrefill": "获得油漆然后画子路径__num__",
+    "spool": {
+      "fill": "追踪填写路径__id __...",
+      "stroke": "跟踪描边路径__id __..."
+    }
   }
 }

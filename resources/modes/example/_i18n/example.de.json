@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "de",
     "creator": "techninja via GoogleTranslate"
   },
@@ -17,7 +17,14 @@
     "hcent": "Horizontale Mitte:",
     "vcent": "Vertical Center:",
     "wrap": "Wickeln Breite:",
-    "text": "Hallo Welt!"
+    "text": "Hallo Welt!",
+    "spacewidth": "Raum Breite:",
+    "lineheight": "Zeilenhöhe:",
+    "rotation": "Rotation:",
+    "right": "Recht",
+    "center": "Zentrum",
+    "align": "Textausrichtung:",
+    "left": "Links"
   },
   "buttons": {
     "save": "Klicken Sie auf, dies als die aktuelle Zeichnung zu speichern.",

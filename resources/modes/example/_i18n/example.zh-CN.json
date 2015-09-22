@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "zh-CN",
     "creator": "techninja via GoogleTranslate"
   },
@@ -21,6 +21,13 @@
     "hcent": "卧式中心：",
     "vcent": "垂直中心：",
     "wrap": "包装宽度：",
-    "text": "你好世界！"
+    "text": "你好世界！",
+    "spacewidth": "空间宽度：",
+    "lineheight": "线高度：",
+    "align": "文本对齐方式：",
+    "left": "剩下",
+    "rotation": "旋转：",
+    "center": "中央",
+    "right": "对"
   }
 }

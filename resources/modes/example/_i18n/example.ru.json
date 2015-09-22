@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "ru",
     "creator": "techninja via GoogleTranslate"
   },
@@ -21,6 +21,13 @@
     "scale": "Масштаб:",
     "wrap": "Оберните Ширина:",
     "vcent": "Вертикальный центр:",
-    "text": "Привет мир!"
+    "text": "Привет мир!",
+    "spacewidth": "Космическая Ширина:",
+    "lineheight": "Высота линии:",
+    "rotation": "Вращение:",
+    "align": "Выравнивание текста:",
+    "left": "Слева",
+    "right": "Правильно",
+    "center": "Центр"
   }
 }

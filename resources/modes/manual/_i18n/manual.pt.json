@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "pt",
     "creator": "techninja via GoogleTranslate"
   },
@@ -18,7 +18,9 @@
     "debug": "Depurar",
     "park": "Park, depois de preenchimento / curso",
     "dip": "Mergulho",
-    "full": "Completo"
+    "full": "Completo",
+    "tools": "Ferramentas",
+    "disabled": "Desativada para este modo de desenho."
   },
   "tools": {
     "water1": "Água 1",
@@ -59,5 +61,8 @@
     "calibrate": "Top Left",
     "checktitle": "Se nada for feito, o rastreio vai contar com apenas o formato da trajetória, ignorando sobreposição caminho.",
     "calibratetitle": "Posicione o centro da escova no canto superior esquerdo para a calibração."
+  },
+  "dialog": {
+    "confirmexit": "Você tem certeza que quer ir?\n\nAo sair deste modo durante a impressão irá cancelar todos os seus trabalhos. Clique em OK para sair."
   }
 }

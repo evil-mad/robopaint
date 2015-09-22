@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "fr",
     "creator": "techninja via GoogleTranslate"
   },
@@ -21,6 +21,13 @@
     "hcent": "Centre horizontale:",
     "vcent": "Centre verticale:",
     "wrap": "Enveloppez Largeur:",
-    "text": "Bonjour Le Monde!"
+    "text": "Bonjour Le Monde!",
+    "spacewidth": "Largeur de l'espace:",
+    "lineheight": "Hauteur de la ligne:",
+    "align": "Alignement du texte:",
+    "rotation": "Rotation:",
+    "right": "Droit",
+    "left": "Gauche",
+    "center": "Centre"
   }
 }

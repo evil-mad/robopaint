@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "es",
     "creator": "techninja via GoogleTranslate"
   },
@@ -11,7 +11,14 @@
     "title": "Procesador de texto",
     "hcent": "Centro horizontal:",
     "spacing": "Char espaciado:",
-    "text": "Hola Mundo!"
+    "text": "Hola Mundo!",
+    "spacewidth": "Ancho del espacio:",
+    "lineheight": "Altura de la línea:",
+    "rotation": "Rotación:",
+    "left": "Izquierda",
+    "align": "Alineación del texto:",
+    "center": "Centro",
+    "right": "Correcto"
   },
   "buttons": {
     "print": "Haga clic para guardar y pasar al modo de impresión.",

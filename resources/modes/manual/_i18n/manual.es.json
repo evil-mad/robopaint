@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "es",
     "creator": "techninja via GoogleTranslate"
   },
@@ -52,12 +52,17 @@
     "machine": "Máquina",
     "park": "Park después de llenado / derrame cerebral",
     "full": "Completo",
-    "dip": "Inmersión"
+    "dip": "Inmersión",
+    "tools": "Instrumentos",
+    "disabled": "Desactivado para este modo de dibujo."
   },
   "info": {
     "description": "Modo Manual: Personaliza tu impresión",
     "detail": "Al igual que Auto-pintura, pero permite un mayor control sobre qué elementos están pintados, y un número de otras opciones.",
     "title": "Pintura Manual",
     "word": "Manual"
+  },
+  "dialog": {
+    "confirmexit": "¿Seguro que quieres ir?\n\nSalir de este modo durante la impresión se cancelará todos sus trabajos. Haga clic en Aceptar para salir."
   }
 }

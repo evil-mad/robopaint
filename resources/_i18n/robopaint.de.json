@@ -63,6 +63,9 @@
       "control": "Steuerung",
       "status": "Status",
       "progress": "Aktuelle Fortschritte"
+    },
+    "dialog": {
+      "confirmexit": "Sind Sie sicher, Sie gehen wollen?\n\nVerlassen Sie diesen Modus während des Druckvorgangs werden alle Ihre Aufträge zu stornieren. Klicken Sie auf OK, um zu verlassen."
     }
   },
   "status": {
@@ -75,7 +78,20 @@
     "button": {
       "continue": "Weiter im Simulationsmodus",
       "retry": "Versuchen Sie, wieder anschließen"
-    }
+    },
+    "connected": "Erfolgreich verbunden!",
+    "connecting": "Anschluss an Roboter ...",
+    "pausing": "Pausieren der aktuellen Prozess ...",
+    "resumed": "Zeichnung wieder aufgenommen ...",
+    "paused": "Machte eine Pause. Klicken Sie auf Fortsetzen, um fortzufahren.",
+    "resuming": "Wiederaufnahme der aktuellen Prozess ...",
+    "parking": "Parkplatz ...",
+    "parked": "Erfolgreich geparkt",
+    "parkfail": "Kann nicht Park, bereits geparkt",
+    "wait": "Bitte warten ausgeführten Prozesse komplette ...",
+    "unlocked": "Motors freigeschaltet! Legen Sie im Haus Ecke, wenn Sie fertig",
+    "unlocking": "Unlocking Motoren ...",
+    "pausetillempty": "Streaming alle Befehle vor Beginn der Verlangsamung zu vermeiden ..."
   },
   "nav": {
     "toolbar": {
@@ -318,6 +334,10 @@
     "reinked": "Die weitere Zusammenarbeit mit __media__ malen",
     "autostroke": "Streicheln Weg __id __...",
     "autocomplete": "Automatische Farb Complete!",
-    "subrefill": "Anreise Farbe dann Ziehen Unterpfad __num__"
+    "subrefill": "Anreise Farbe dann Ziehen Unterpfad __num__",
+    "spool": {
+      "stroke": "Tracing Hubweg __id __...",
+      "fill": "Tracing füllen Pfad __id __..."
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "hi",
     "creator": "techninja via GoogleTranslate"
   },
@@ -21,6 +21,13 @@
     "hcent": "क्षैतिज केंद्र:",
     "vcent": "कार्यक्षेत्र केंद्र:",
     "wrap": "चौड़ाई लपेटें:",
-    "text": "हैलो वर्ल्ड!"
+    "text": "हैलो वर्ल्ड!",
+    "spacewidth": "अंतरिक्ष चौड़ाई:",
+    "lineheight": "ऊंची लाईन:",
+    "rotation": "रोटेशन:",
+    "align": "पाठ्य संरेखण:",
+    "center": "केंद्र",
+    "left": "बाएं",
+    "right": "सही"
   }
 }

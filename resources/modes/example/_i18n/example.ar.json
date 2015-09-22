@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "release": "0.9.3",
+    "release": "0.9.6",
     "target": "ar",
     "creator": "techninja via GoogleTranslate"
   },
@@ -11,7 +11,14 @@
     "hcent": "مركز الأفقي:",
     "scale": "على نطاق و:",
     "spacing": "شار التباعد:",
-    "title": "العارض النص"
+    "title": "العارض النص",
+    "spacewidth": "عرض الفضاء:",
+    "rotation": "دوران:",
+    "align": "محاذاة النص:",
+    "lineheight": "خط الطول:",
+    "left": "اليسار",
+    "center": "مركز",
+    "right": "الصحيح"
   },
   "buttons": {
     "print": "انقر لحفظ والانتقال إلى وضع الطباعة.",
