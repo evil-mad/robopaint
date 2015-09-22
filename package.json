@@ -14,7 +14,12 @@
     "jquery": "^2.1.4",
     "paper": "^0.9.24",
     "qtip2": "^2.2.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "robopaint-mode-edit": "^0.9.6",
+    "robopaint-mode-print": "^0.9.6",
+    "robopaint-mode-manual": "^0.1.0",
+    "robopaint-mode-example": "^0.8.0",
+    "robopaint-mode-spiral": "^0.1.0"
   },
   "repository": {
     "type": "git",
