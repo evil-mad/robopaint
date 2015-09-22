@@ -5,49 +5,8 @@
  * Globals made here are invisible to the window, but vars added to window will
  * become globals in the window. A generic mode CSS file is also added.
  *
- * Modes will be provided the following window "globals":
- * - i18n: The full i18next CommonJS client module, loaded with the modes full
- *          translation set, and the RP central translations for common strings.
- * - app: The electron app object from the main process.
- * - rpRequire: The helper function for adding RP "modules", external libraries,
- *              and any otthaer cothode o
- * - ipc: The Inter Process Communication module for sending events and messages
- *        to/from the main window process. Most of this is managed here, but
- *        having this globally available makes custom comms possible.
- * - cncserver: Just the clientside API wrappers for cncserver.
- * - robopaint: A limited version of the robopaint object. Contains:
- *        settings (read only), utils, canvas, cncserver.
- * - robopaint.pauseTillEmpty(init) : Tell RoboPaint to pause the cncserver
- *        buffer until after pauseTillEmpty(false) has been called, and the
- *        local push buffer to the main buffer has been emptied.
- * - mode: Package of the current mode, with path, and utility functions.
- *    * mode.run({mixed}): Emulation IPC passthrough of original commander
- *        API shortcut. Allows immediate queuing of ~500 cmds/sec to CNCServer.
- *    * mode.settings: An object with setters/getters to manage storing this
- *        modes specific settings.
- *    * mode.settings.$manage(selectors): A full settings management system for
- *        form elements. List the selectors for each input element you want to
- *        track, and from one call this will load, track changes & save all
- *        values automagically keyed on the elements ID!
- *
- *    This is also where event callbacks should be defined, full list here:
- *     * mode.translateComplete(): Called whenever translate is done. Happens on
- *         init, and after every language change.
- *     * mode.onPenUpdate(actualPen): Called when the bot actually moves the
- *         the object will contain the full CNCServer pen object of where it
- *         should or will be after the "lastDuration" key value.
- *     * mode.onCallbackEvent(name): When a "callbackname" is run into the
- *         buffer and eventually run, this will fire with the name given.
- *     * mode.bindControls(): A handly function to store all your control button
- *         bindings, called when the page is fully loaded & translation is done.
- *     * mode.onClose(callback): Called whenever the user attempts to either
- *         change the mode, or close the application. If implemented, the user
- *         can only close or change the mode once "callback" has been called.
- *     * mode.onFullyResumed() & mode.onFullyPaused(): A mode can run pause or
- *         resume, but doesn't know when this happens until these are called.
- *     * mode.onMessage(channel, data): For any undefined gen events, wraps ipc.
- *     * mode.fullCancel(message): Standardized full cancel, buffer clear and
- *         park with passed status message.
+ * For complete documentation on what this file provides for the Mode API
+ * @see MODES.README.md
  **/
 "use strict";
 
