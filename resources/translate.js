@@ -80,19 +80,23 @@ function initializeTranslation() {
   });
 
   // Load all mode translation files
-  fs.readdirSync(appPath + 'resources/modes/').forEach(function(folder) {
+  fs.readdirSync(appPath + 'node_modules/').forEach(function(folder) {
     try {
       // Ignore files that have extentions (we only want directories).
       if (folder.indexOf(".") == -1) {
-        var fullPath = appPath + 'resources/modes/' + folder + '/_i18n/';
+        var fullPath = appPath + 'node_modules/' + folder + '/';
+        var p = require(fullPath + 'package.json');
+
         //  Iterate over language files in mode's i18n folder
-        fs.readdirSync(fullPath).forEach(function(file) {
-          if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
-            //  Add the data to the global i18n translation array
-            var data = require(fullPath + file);
-            resources[data._meta.target].translation['modes'][folder] = data;
-          }
-        });
+        if (p.type === 'robopaint_mode') {
+          fs.readdirSync(fullPath + '_i18n/').forEach(function(file) {
+            if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
+              //  Add the data to the global i18n translation array
+              var data = require(fullPath + '_i18n/' + file);
+              resources[data._meta.target].translation['modes'][p.robopaint.name] = data;
+            }
+          });
+        }
        }
   } catch(e) {
     // Catch and report errors to the console
