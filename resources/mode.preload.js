@@ -180,6 +180,8 @@ if (mode.robopaint.dependencies) {
       case 'underscore':
         window._ = _;
         break;
+      case 'qtip':
+        $.qtip = require('qtip2');
       case 'paper':
         console.log('Loading Paper');
         rpRequire('paper', preloadComplete);
