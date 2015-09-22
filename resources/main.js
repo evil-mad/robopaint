@@ -622,7 +622,7 @@ function getColorsets() {
  * Load all modes within the application
  */
 function loadAllModes(){
-  var modesDir = appPath + 'resources/modes/';
+  var modesDir = appPath + 'node_modules/';
   var files = fs.readdirSync(modesDir);
   var modes = {};
   var modeDirs = [];
@@ -652,7 +652,7 @@ function loadAllModes(){
     // This a good file? if so, lets make it ala mode!
     if (package.type === "robopaint_mode" && _.has(package.robopaint, 'index')) {
       // TODO: Add FS checks to see if its index file actually exists
-      package.root = appPath + 'resources/modes/' + modeDirs[i] + '/';
+      package.root = modesDir + modeDirs[i] + '/';
       package.index = package.root + package.robopaint.index;
       modes[package.robopaint.name] = package;
     }
