@@ -17,10 +17,11 @@ var settings = {
   lineWidth: 10, // The size of the visual representation of the stroke line.
   flattenResolution: 15, // Stroke polygonal conversion resolution
   strokeAllFilledPaths: true, // Stroke non-stroked filled paths?
+  strokeNoStrokePaths: true, // Stroke non-stroke non-filled paths?
+  closeFilledPaths: false, // Close all filled paths? Pertains to above.
   checkFillOcclusion: true, // Check for occlusion on fills?
-  checkStrokeOcclusion: true, // Check for occlusion on other strokes?
-  closeFilledPaths: true, // Close all filled paths? Pertains to above.
-  ignoreSameColorStroke: true // Ignores occlusion for same color strokes.
+  checkStrokeOcclusion: false, // Check for occlusion on other strokes?
+  ignoreSameColor: false // Ignore trace occlusion for same color.
 };
 
 // General state variables (reset via shutdown below)
@@ -59,10 +60,11 @@ module.exports = function(paper) {
         lineWidth: 10, // TODO: <<
         flattenResolution: set.strokeprecision * 4,
         strokeAllFilledPaths: true, // TODO: <<
+        strokeNoStrokePaths: true, // TODO: <<
+        closeFilledPaths: false, // TODO: <<
         checkFillOcclusion: true, // TODO: <<
-        checkStrokeOcclusion: true, // TODO: <<
-        closeFilledPaths: true, // TODO: <<
-        ignoreSameColorStroke: true // TODO: <<
+        checkStrokeOcclusion: false, // TODO: <<
+        ignoreSameColor: false // TODO: <<
       }
 
       // Merge in local settings, global settings, and passed overrides.
@@ -88,24 +90,58 @@ module.exports = function(paper) {
       // Ungroup all groups copied
       paper.utils.ungroupAllGroups(tmp);
 
+      // Shortcut hasColor
+      var hasColor = paper.utils.hasColor;
+
        // Move through each temp item to prep them
       var maxLen = 0;
-      _.each(tmp.children, function(path){
-        maxLen += path.length;
-        path.strokeColor = (path.strokeColor && path.strokeWidth) ? snapColor(path.strokeColor) : snapColor(path.fillColor);
-        path.data.color = snapColorID(path.strokeColor, path.opacity);
-        path.data.name = path.name;
-        path.fillColor = path.fillColor ? snapColor(path.fillColor) : null;
-        path.strokeWidth = settings.lineWidth;
+      _.each(tmp.children, function(path) {
 
+        // Change stroke action depending on path "color type".
+        var doStroke = true; // Assume we're stroking the path
+        switch(paper.utils.getPathColorType(path)) {
+          case 1: // Type 1: Stroked filled shape
+            path.fillColor = snapColor(path.fillColor);
+          case 2: // Type 2: Stroked non-filled shape
+            path.strokeColor = snapColor(path.strokeColor)
+            break;
+          case 3: // Type 3: Filled no stroke shape
+            path.fillColor = snapColor(path.fillColor);
+            if (settings.strokeAllFilledPaths) {
+              path.strokeColor = snapColor(path.fillColor);
+            } else {
+              path.strokeWidth = 0; // Ensure it's ignored later
+              doStroke = false;
+            }
+            break;
+          case 4: // Type 4: No fill, no stroke shape (invisible)
+            if (settings.strokeNoStrokePaths) {
+              path.strokeColor = snapColor(path.strokeColor)
+            } else {
+              path.strokeWidth = 0; // Ensure it's ignored later
+              doStroke = false;
+            }
+            break;
+        }
+
+        // If we're actually stroking this path, make it visible with a stroke
+        // width and add its length to the max for checking progress.
+        if (doStroke) {
+          path.data.color = snapColorID(path.strokeColor, path.opacity);
+          path.data.name = path.name;
+          path.strokeWidth = settings.lineWidth;
+          maxLen += path.length;
+        }
+
+        // If only stroking one path, visually hide all the other paths.
         if (settings.path && !path.data.targetPath) {
           path.opacity = 0;
         }
 
         // Close stroke paths with fill to ensure they fully encompass the filled
         // color (only when they have a fillable color);
-        if (!path.closed) {
-          if (path.fillColor !== null) {
+        if (!path.closed && settings.closeFilledPaths) {
+          if (hasColor(path.fillColor)) {
             if (snapColorID(path.fillColor) !== 'color8') {
               path.closed = true;
             }
@@ -113,7 +149,7 @@ module.exports = function(paper) {
         }
       });
 
-      // Keep the user up to date with what's going on.
+      // Keep the user up to date with what's going on...
       if (settings.path) {
         // We have to deal with all the paths, but we're only stroking one.
         traceChildrenMax = 1;
@@ -186,6 +222,14 @@ module.exports = function(paper) {
       }
     }
 
+    // If the path we're meant to trace doesn't have a stroke width, skip it.
+    // This is how the setup process marks paths that are meant to be used, but
+    // not actually stroked.
+    if (!cPath.strokeWidth) {
+      cPath.remove();
+      return true;
+    }
+
     // Ignore white paths (color id 8)
     // TODO: This should probably be handled depending on number of colors in the
     // media (you can have more pens than 8), paper color might not be white.
@@ -221,8 +265,8 @@ module.exports = function(paper) {
       return true;
     }
 
-    // Last path!
-    if (tmp.children.length === 1) {
+    // Last path! (or completely ignoring occlusion)
+    if (tmp.children.length === 1 || (!settings.checkStrokeOcclusion && !settings.checkFillOcclusion)) {
       tp.add(cPath.getPointAt(cPathPos));
     } else { // Not the last path...
 
@@ -235,7 +279,33 @@ module.exports = function(paper) {
       // touches another stroke width without intersecting the actual path
       // will cause closest intersection connection issues.
       var h = tmp.hitTest(testPoint);
-      if (h.item === cPath) { // We're on the current path! Add a point
+
+      // Standard fill/stroke checking: if the hit result item is the same as
+      // our current path, keep going!
+      var continueStroke = (h.item === cPath);
+
+      // Continue the stroke if we're not checking fills.
+      if (!continueStroke && !settings.checkFillOcclusion && h.type === 'fill') {
+        continueStroke = true;
+      }
+
+      // Continue the stroke if we're not checking strokes.
+      if (!continueStroke && !settings.checkStrokeOcclusion && h.type === 'stroke') {
+        continueStroke = true;
+      }
+
+      // We don't check for a no stroke no fill settings, as that would result
+      // in NO occlusion detection whatsoever, and that's covered above! ^^^^
+
+      // If it's the same color and we're ignoring same color, save it!
+      if (!continueStroke && ['fill', 'stroke'].indexOf(h.type) > -1 && settings.ignoreSameColor) {
+        if (h.item[h.type + 'Color'].toCSS() === cPath.strokeColor.toCSS()) {
+          continueStroke = true;
+        }
+      }
+
+      // If the above rules say we're to keep stroking.. lets go!
+      if (continueStroke) {
         // If we came off a bad part of the path, add the closest intersection
         if (!lastGood && lastItem && getClosestIntersection(cPath, lastItem, testPoint) && h.type !== 'stroke') {
           tp.add(getClosestIntersection(cPath, lastItem, testPoint));

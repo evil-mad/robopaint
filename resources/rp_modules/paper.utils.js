@@ -12,6 +12,44 @@ module.exports = function(paper) {
 
   paper.utils = {
 
+    // Check if a fill/stroke color is "real".
+    // Returns True if not null or fully transparent.
+    hasColor: function(color) {
+      if (color === null) {
+        return false;
+      } else {
+        return color.alpha !== 0;
+      }
+    },
+
+    // Return an integer for the "color type" of a path, defining how it's
+    // attributes combine to make it either filled, stroked, etc.
+    getPathColorType: function(path) {
+      var hasStroke = (path.strokeWidth !== 0 && paper.utils.hasColor(path.strokeColor));
+      var hasFill = paper.utils.hasColor(path.fillColor);
+
+      // Types of path coloring:
+      // 1. Has fill, has stroke (Stroked filled shape)
+      // 2. No fill, has stroke (Ftandard line, or closed empty shape)
+      // 3. Has fill, no stroke (Strokeless Filled shape)
+      // 4. No fill, No stroke (Invisible path!)
+      if (hasStroke && hasFill) {
+        return 1
+      }
+
+      if (hasStroke && !hasFill) {
+        return 2
+      }
+
+      if (!hasStroke && hasFill) {
+        return 3
+      }
+
+      if (!hasStroke && !hasFill) {
+        return 4;
+      }
+    },
+
     // Return true if the layer contains any groups at the top level
     layerContainsGroups: function (layer) {
       for(var i in layer.children) {
@@ -37,10 +75,17 @@ module.exports = function(paper) {
     // Snap the given color to the nearest tool ID
     // TODO: When refactoring media sets, pull tool names from definition.
     snapColorID: function (color, opacity) {
-      if (typeof opacity !== 'undefined' & opacity < 1) {
+      if ((typeof opacity !== 'undefined' && opacity < 1) ||
+          (color.alpha < 1 && color.alpha > 0)) {
         return 'water2';
       }
 
+      // If the color has alpha at this point, we need to reset that to 1 as the
+      // closest color matcher does not take opacity into account.
+      if (color.alpha !== 1) {
+        color = color.clone();
+        color.alpha = 1;
+      }
       return "color" + robopaint.utils.closestColor(color.toCSS(), robopaint.media.currentSet.colors);
     },
 
