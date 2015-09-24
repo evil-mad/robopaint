@@ -260,7 +260,7 @@ span.version {
   content: ' ';
   left: 10px;
   top: 3px;
-  background-image: url('../modes/print/images/paper_texture.png');
+  background-image: url('../images/paper_texture.png');
   display: block;
   position: absolute;
   width: 70px;
