@@ -5,13 +5,25 @@
 "use strict";
 var _ = require('underscore');
 
+// Settings template: pass any of these options in with the first setup argument
+// to override. Second argument then becomes completion callback.
+// These values are subject to change by global robopaint.settings defaults, See
+// those values for current values.
 var settings = {
-  traceIterationMultiplier: 2,
-  lineWidth: 10,
-  flattenResolution: 15,
-  angle: -155,
-  spacing: 13,
-  threshold: 40
+  path: null, // Pass a path object to only fill that object.
+  // Otherwise everything will be traced for fill.
+  traceIterationMultiplier: 2, // Amount of work done in each frame.
+  lineWidth: 10, // The size of the visual representation of the stroke line.
+  flattenResolution: 15, // Path overlay fill type trace resolution.
+  // Integer, representing fill type:
+  fillType: 0, // 0:Zig-Zag, 1:straight zig, 2:smoothed zig, 3:path overlay
+  // Pass a path object to be used for overlay fills:
+  overlayFillPath: null, // Otherwise uses giant spiral.
+  overlayFillAlignPath: true, // Align overlay fill to path, otherwise align to view.
+  angle: -155, // Dynamic line fill type line angle
+  randomizeAngle: false, // Randomize the angle above for dynamic line fill.
+  spacing: 13, // Dynamic line fill spacing nominally between each line.
+  threshold: 40 // Dynamic line grouping threshold
 };
 
 // General state variables (reset via shutdown below)
@@ -39,15 +51,43 @@ module.exports = function(paper) {
   paper.fill = {
     settings: settings,
 
-    setup: function (callback) {
-      paper.fill.complete = callback;
+    setup: function (overrides, callback) {
+      if (_.isFunction(overrides)) callback = overrides; // No overrides
+
+      // Get global Settings
+      var set = robopaint.settings;
+
+      var setMap = { // Map global settings to local stroke module settings.
+        traceIterationMultiplier: 2, // TODO: <<
+        lineWidth: 10, // TODO: <<
+        flattenResolution: set.fillprecision * 2,
+        fillType: 0, // TODO: <<
+        overlayFillPath: null, // TODO: <<
+        overlayFillAlignPath: true, // TODO: <<
+        angle: parseInt(set.fillangle) + 90,
+        randomizeAngle: false, // TODO: <<
+        spacing: parseInt(set.fillspacing),
+        threshold: 40 // Dynamic line grouping threshold
+      }
+
+      // Merge in local settings, global settings, and passed overrides.
+      settings = _.extend(settings, setMap, overrides);
+
+      paper.fill.complete = callback; // Assign callback
       var tmp = paper.canvas.tempLayer;
       tmp.activate();
       tmp.removeChildren(); // Clear it out
 
       // Move through all child items in the mainLayer and copy them into temp
       for (var i = 0; i < paper.canvas.mainLayer.children.length; i++) {
-        paper.canvas.mainLayer.children[i].copyTo(tmp);
+        var path = paper.canvas.mainLayer.children[i];
+        var t = path.copyTo(tmp);
+
+        // If this is the only path we'll be tacing...
+        if (settings.path === path) {
+          // Mark the new temp path copy.
+          t.data.targetPath = true;
+        }
       }
 
       // Ungroup all groups copied
@@ -56,7 +96,7 @@ module.exports = function(paper) {
       // Filter out non-fill paths, and ensure paths are closed.
       for(var i in tmp.children) {
         var path = tmp.children[i];
-        if (!path.fillColor) {
+        if (!paper.utils.hasColor(path.fillColor)) {
           path.remove();
         } else {
           path.closed = true;
@@ -84,13 +124,27 @@ module.exports = function(paper) {
             srcPath = tmp.insertChild(srcIndex, srcPath.subtract(destPath));
             srcPath.data.color = tmpPath.data.color;
             srcPath.data.name = tmpPath.data.name;
+            srcPath.data.targetPath = tmpPath.data.targetPath;
             tmpPath.remove(); // Remove the old srcPath
           }
         }
       }
 
       // Keep the user up to date
-      traceChildrenMax = tmp.children.length;
+      if (settings.path) {
+        // We have to deal with all the paths, but we're only filling one.
+        traceChildrenMax = 1;
+
+        // Hide the final paths for single path filling
+        _.each(tmp.children, function(path){
+          if (settings.path && !path.data.targetPath) {
+            path.opacity = 0;
+          }
+        });
+      } else {
+        traceChildrenMax = tmp.children.length;
+      }
+
       currentTraceChild = 1;
       mode.run([
         ['status', i18n.t('libs.spool.fill', {id: '1/' + traceChildrenMax}), true],
@@ -125,6 +179,7 @@ module.exports = function(paper) {
       cGroup;
       lines = [];
       totalSteps = 0;
+      settings.path = null; // Only kept per setup run.
     }
   };
 
@@ -141,7 +196,17 @@ module.exports = function(paper) {
     // TODO: This should probably be handled depending on number of colors in the
     // media (you can have more pens than 8), paper color might not be white.
     if (fillPath.data.color === 'color8') {
-      fillPath.remove(); return true;
+      fillPath.remove();
+      return true;
+    }
+
+    // I've we're only filling one path, delete any we encounter that aren't it.
+    // This allows for seamless path occlusion tracing without side effects.
+    if (settings.path) {
+      if (!fillPath.data.targetPath) {
+        fillPath.remove();
+        return true;
+      }
     }
 
     // Ignore 0 width/height fill paths.
@@ -176,9 +241,18 @@ module.exports = function(paper) {
           rotation: settings.angle + 90
         });
 
+        if (settings.debug) {
+          boundPath.strokeColor= 'black';
+          boundPath.strokeWidth= 2;
+          line.strokeColor = 'red';
+          line.strokeWidth = 2;
+          paper.view.update();
+        }
+
         // Find destination position on other side of circle
         pos = settings.angle + 360;  if (pos > 360) pos -= 360;
-        var destination = boundPath.getPointAt(pos * amt);
+        var len = Math.min(boundPath.length, pos * amt);
+        var destination = boundPath.getPointAt(len);
 
         // Find vector and vector length divided by line spacing to get # iterations.
         var vector = destination.subtract(line.position);
@@ -224,8 +298,10 @@ module.exports = function(paper) {
         }
 
         // Clean up our helper paths
-        line.remove();
-        boundPath.remove();
+        if (!settings.debug) {
+          line.remove();
+          boundPath.remove();
+        }
 
         break;
       case 1: // Grouping and re-grouping the lines

@@ -70,7 +70,7 @@ module.exports = function(paper) {
       // Merge in local settings, global settings, and passed overrides.
       settings = _.extend(settings, setMap, overrides);
 
-      paper.stroke.complete = callback;
+      paper.stroke.complete = callback; // Assign callback
       var tmp = paper.canvas.tempLayer;
       tmp.activate();
       tmp.removeChildren(); // Clear it out
