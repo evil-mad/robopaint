@@ -352,7 +352,7 @@ function preloadComplete() {
   }
 
   // Make sure we start with a clean slate.
-  mode.run(['clear', 'resume']);
+  mode.run(['clear', 'resume'], true);
 
   if (_.isFunction(mode.bindControls)) mode.bindControls();
   if (_.isFunction(mode.pageInitReady)) mode.pageInitReady();
