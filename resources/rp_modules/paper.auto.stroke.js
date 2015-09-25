@@ -61,9 +61,9 @@ module.exports = function(paper) {
         flattenResolution: set.strokeprecision * 4,
         strokeAllFilledPaths: true, // TODO: <<
         strokeNoStrokePaths: true, // TODO: <<
-        closeFilledPaths: false, // TODO: <<
+        closeFilledPaths: true, // TODO: <<
         checkFillOcclusion: true, // TODO: <<
-        checkStrokeOcclusion: false, // TODO: <<
+        checkStrokeOcclusion: true, // TODO: <<
         ignoreSameColor: false // TODO: <<
       }
 
