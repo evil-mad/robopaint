@@ -25,6 +25,9 @@ module.exports = function(paper) {
     // Return an integer for the "color type" of a path, defining how it's
     // attributes combine to make it either filled, stroked, etc.
     getPathColorType: function(path) {
+      // Sometimes SVG will save NaN as strokeWidth or other values :/
+      if (isNaN(path.strokeWidth)) path.strokeWidth = 0;
+
       var hasStroke = (path.strokeWidth !== 0 && paper.utils.hasColor(path.strokeColor));
       var hasFill = paper.utils.hasColor(path.fillColor);
 
