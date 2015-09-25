@@ -22,6 +22,27 @@ module.exports = function(paper) {
       }
     },
 
+    // Will return true if the given point is in either the top left or bottom
+    // right otuside the realm of the bound rect:
+    //         |
+    //   (true)| (false)
+    // ----------------+
+    //         | Bounds|
+    // (false) |(false)| (false)
+    //         +----------------
+    //         (false) | (true)
+    //                 |
+    pointBeyond: function(point, bounds){
+      // Outside top left
+      if (point.x < bounds.left && point.y < bounds.top ) return true;
+
+      // Outside bottom right
+      if (point.x > bounds.right && point.y > bounds.bottom ) return true;
+
+      // Otherwise, not.
+      return false;
+    },
+
     // Return an integer for the "color type" of a path, defining how it's
     // attributes combine to make it either filled, stroked, etc.
     getPathColorType: function(path) {
