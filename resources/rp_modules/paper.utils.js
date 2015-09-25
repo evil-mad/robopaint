@@ -15,7 +15,7 @@ module.exports = function(paper) {
     // Check if a fill/stroke color is "real".
     // Returns True if not null or fully transparent.
     hasColor: function(color) {
-      if (color === null) {
+      if (!color) {
         return false;
       } else {
         return color.alpha !== 0;
