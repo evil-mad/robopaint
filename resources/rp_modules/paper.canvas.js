@@ -142,11 +142,8 @@ module.exports = {
   paperLoad: function() {
     if (!paperLoaded) {
       paperLoaded = true;
-      paper.PaperScript.load($('<script>').attr({
-        type:"text/paperscript",
-        src: settings.paperScriptFile,
-        canvas: "paper-main"
-      })[0]);
+      if (!paper.utils) rpRequire('paper_utils')(paper);
+      paper.utils.loadDOM(settings.paperScriptFile, "paper-main");
     }
   },
 
@@ -159,14 +156,13 @@ module.exports = {
     var Layer = paper.Layer;
     var project = paper.project;
 
+    if (!paper.utils) rpRequire('paper_utils')(paper);
+
     // Namespace all accessible parts under paper.canvas
     paper.canvas = {};
 
     // Setup default layers
-    paper.canvas.mainLayer = project.getActiveLayer(); // SVG is imported to here
-    paper.canvas.tempLayer = new Layer(); // Temporary working layer
-    paper.canvas.actionLayer = new Layer(); // Actual movement paths & preview
-    paper.canvas.overlayLayer = new Layer(); // Overlay elements, like the pen position.
+    paper.utils.setupLayers();
 
     // Overlay layer is ready, add the drawpoint
     var drawPoint = paper.canvas.drawPoint = new Group({

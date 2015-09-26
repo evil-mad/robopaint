@@ -8,9 +8,31 @@ module.exports = function(paper) {
   // Emulate PaperScript "Globals" as needed
   var Point = paper.Point;
   var Path = paper.Path;
+  var Layer = paper.Layer;
   var view = paper.view;
+  var project = paper.project;
 
   paper.utils = {
+
+    // Load a paperscript file into the paperscope via DOM insertion & jQuery
+    loadDOM: function(file, canvas) {
+      paper.PaperScript.load($('<script>').attr({
+        type:"text/paperscript",
+        src: file,
+        canvas: canvas
+      })[0]);
+    },
+
+    // Setup the 4 default useful layers used all over the place. Assumes the
+    // current layer is intended to be the main layer.
+    setupLayers: function() {
+      if (!paper.canvas) paper.canvas = {};
+
+      paper.canvas.mainLayer = project.getActiveLayer(); // SVG is imported to here
+      paper.canvas.tempLayer = new Layer(); // Temporary working layer
+      paper.canvas.actionLayer = new Layer(); // Actual movement paths & preview
+      paper.canvas.overlayLayer = new Layer(); // Overlay elements, like the pen position.
+    },
 
     // Check if a fill/stroke color is "real".
     // Returns True if not null or fully transparent.
