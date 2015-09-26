@@ -22,6 +22,7 @@ var settings = {
   angle: -155, // Dynamic line fill type line angle
   randomizeAngle: false, // Randomize the angle above for dynamic line fill.
   spacing: 13, // Dynamic line fill spacing nominally between each line.
+  checkFillOcclusion: true, // Check for occlusion on fills?
   threshold: 40 // Dynamic line grouping threshold
 };
 
@@ -77,7 +78,8 @@ module.exports = function(paper) {
         angle: parseInt(set.fillangle) - 180,
         randomizeAngle: false, // TODO: <<
         spacing: parseInt(set.fillspacing),
-        threshold: 40 // Dynamic line grouping threshold
+        checkFillOcclusion: true, // TODO: <<
+        threshold: 40 // TODO: <<
       }
 
       // Merge in local settings, global settings, and passed overrides.
@@ -125,27 +127,30 @@ module.exports = function(paper) {
         }
       }
 
-      // Subtract each layer from the previous, again and again.
-      // Move through each preview layer child
-      for (var srcIndex = 0; srcIndex < tmp.children.length; srcIndex++) {
-        var srcPath = tmp.children[srcIndex];
-        srcPath.data.processed = true;
+      // Move through each preview layer child and subtract each layer from the
+      // previous, again and again, only if we're checking occlusion.
+      if (settings.checkFillOcclusion) {
+        for (var srcIndex = 0; srcIndex < tmp.children.length; srcIndex++) {
+          var srcPath = tmp.children[srcIndex];
+          srcPath.data.processed = true;
 
-        // Replace this path with a subtract for every intersecting path, starting
-        // at the current index (lower paths don't subtract from higher ones)
-        for (var destIndex = srcIndex; destIndex < tmp.children.length; destIndex++) {
-          var destPath = tmp.children[destIndex];
-          if (destIndex !== srcIndex) {
-            var tmpPath = srcPath; // Hold onto the original path
-            // Set the new srcPath to the subtracted one inserted at the same index
-            srcPath = tmp.insertChild(srcIndex, srcPath.subtract(destPath));
-            srcPath.data.color = tmpPath.data.color;
-            srcPath.data.name = tmpPath.data.name;
-            srcPath.data.targetPath = tmpPath.data.targetPath;
-            tmpPath.remove(); // Remove the old srcPath
+          // Replace this path with a subtract for every intersecting path, starting
+          // at the current index (lower paths don't subtract from higher ones)
+          for (var destIndex = srcIndex; destIndex < tmp.children.length; destIndex++) {
+            var destPath = tmp.children[destIndex];
+            if (destIndex !== srcIndex) {
+              var tmpPath = srcPath; // Hold onto the original path
+              // Set the new srcPath to the subtracted one inserted at the same index
+              srcPath = tmp.insertChild(srcIndex, srcPath.subtract(destPath));
+              srcPath.data.color = tmpPath.data.color;
+              srcPath.data.name = tmpPath.data.name;
+              srcPath.data.targetPath = tmpPath.data.targetPath;
+              tmpPath.remove(); // Remove the old srcPath
+            }
           }
         }
       }
+
 
       // Keep the user up to date
       if (settings.path) {
@@ -201,6 +206,9 @@ module.exports = function(paper) {
       if (spiralPath) {
         spiralPath.remove();
         spiralPath = null;
+      }
+
+      if (settings.fillType === 'overlay') {
         overlayPathPos = 0;
         lastGood = false;
         tracePaths = [];
@@ -215,7 +223,12 @@ module.exports = function(paper) {
     // 1. Assume line is ALWAYS bigger than the entire object
     // 2. If filled path, number of intersections will ALWAYS be multiple of 2
     // 3. Grouping pairs will always yield complete line intersections.
-    var fillPath = paper.canvas.tempLayer.children[0];
+    var fillPath = paper.canvas.tempLayer.firstChild;
+
+    // If we're not checking occlusion, we need to grab the top layer.
+    if (!settings.checkFillOcclusion && settings.fillType === 'overlay') {
+      fillPath = paper.canvas.tempLayer.lastChild;
+    }
 
     if (!fillPath) return false;
 
@@ -264,15 +277,16 @@ module.exports = function(paper) {
       overlayPath.strokeColor = "red";
     }
 
-    // Align to path or to view?
-    if (settings.overlayFillAlignPath) {
-      overlayPath.position = fillPath.position;
-    } else {
-      overlayPath.position = view.center;
-    }
+    // This happens only once per fillPath, at the very start:
+    if (overlayInts === null) {
+      // Align to path or to view?
+      if (settings.overlayFillAlignPath) {
+        overlayPath.position = fillPath.position;
+      } else {
+        overlayPath.position = view.center;
+      }
 
-    // Store the overlay intersections with the fill path
-    if (!overlayInts) {
+      // Save the intersections
       overlayInts = overlayPath.getIntersections(fillPath);
     }
 
@@ -318,11 +332,6 @@ module.exports = function(paper) {
     } else { // We're obstructed
       if (tp.segments.length) {
         tpIndex++; // Increment only if this path is used
-        // If we came off a good part of the path, add the intersection closest
-        if (lastGood) {
-          closestID = getClosestIntersectionID(testPoint, overlayInts);
-          tp.add(overlayInts[closestID].point);
-        }
       }
 
       lastGood = false;
