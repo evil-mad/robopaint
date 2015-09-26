@@ -5,6 +5,9 @@
 "use strict";
 var _ = require('underscore');
 
+// If we're not in a mode environment, set to false.
+var mode = (typeof window.mode === 'undefined') ? false : window.mode;
+
 // Settings template: pass any of these options in with the first setup argument
 // to override. Second argument then becomes completion callback.
 // These values are subject to change by global robopaint.settings defaults, See
@@ -168,10 +171,12 @@ module.exports = function(paper) {
       }
 
       currentTraceChild = 1;
-      mode.run([
-        ['status', i18n.t('libs.spool.fill', {id: '1/' + traceChildrenMax}), true],
-        ['progress', 0, traceChildrenMax * 2] // 2 steps for fill: lines & groups
-      ]);
+      if (mode) {
+        mode.run([
+          ['status', i18n.t('libs.spool.fill', {id: '1/' + traceChildrenMax}), true],
+          ['progress', 0, traceChildrenMax * 2] // 2 steps for fill: lines & groups
+        ]);
+      }
 
       // Begin the trace, write to the actionLayer
       paper.canvas.actionLayer.activate();
@@ -402,8 +407,10 @@ module.exports = function(paper) {
         tracePaths[tpIndex] = null;
       }
 
-      mode.run('status', i18n.t('libs.spool.fill', {id: currentTraceChild + '/' + traceChildrenMax}), true);
-      mode.run('progress', totalSteps);
+      if (mode) {
+        mode.run('status', i18n.t('libs.spool.fill', {id: currentTraceChild + '/' + traceChildrenMax}), true);
+        mode.run('progress', totalSteps);
+      }
     } else { // Next part of the path
       overlayPathPos+= settings.flattenResolution; // Increment the path position.
     }
@@ -581,7 +588,9 @@ module.exports = function(paper) {
         }
     }
 
-    mode.run('progress', totalSteps);
+    if (mode) {
+      mode.run('progress', totalSteps);
+    }
     return true;
   }
 
@@ -591,10 +600,12 @@ module.exports = function(paper) {
     lines = [];
 
     totalSteps++;
-    mode.run('progress', totalSteps);
-
     if (currentTraceChild !== traceChildrenMax) currentTraceChild++;
-    mode.run('status', i18n.t('libs.spool.fill', {id: currentTraceChild + '/' + traceChildrenMax}), true);
+
+    if (mode) {
+      mode.run('status', i18n.t('libs.spool.fill', {id: currentTraceChild + '/' + traceChildrenMax}), true);
+      mode.run('progress', totalSteps);
+    }
 
     cStep = 0;
 

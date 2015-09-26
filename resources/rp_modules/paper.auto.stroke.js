@@ -6,6 +6,9 @@
  "use strict";
 var _ = require('underscore');
 
+// If we're not in a mode environment, set to false.
+var mode = (typeof window.mode === 'undefined') ? false : window.mode;
+
 // Settings template: pass any of these options in with the first setup argument
 // to override. Second argument then becomes completion callback.
 // These values are subject to change by global robopaint.settings defaults, See
@@ -158,10 +161,12 @@ module.exports = function(paper) {
         traceChildrenMax = tmp.children.length;
       }
 
-      mode.run([
-        ['status', i18n.t('libs.spool.stroke', {id: '1/' + traceChildrenMax}), true],
-        ['progress', 0, maxLen]
-      ]);
+      if (mode) {
+        mode.run([
+          ['status', i18n.t('libs.spool.stroke', {id: '1/' + traceChildrenMax}), true],
+          ['progress', 0, maxLen]
+        ]);
+      }
 
       // Begin the trace, write to the actionLayer
       paper.canvas.actionLayer.activate();
@@ -330,7 +335,11 @@ module.exports = function(paper) {
 
     if (cPathPos === cPath.length) { // Path is done!
       if (currentTraceChild !== traceChildrenMax) currentTraceChild++;
-      mode.run('status', i18n.t('libs.spool.stroke', {id: currentTraceChild + '/' + traceChildrenMax}), true);
+
+      if (mode) {
+        mode.run('status', i18n.t('libs.spool.stroke', {id: currentTraceChild + '/' + traceChildrenMax}), true);
+      }
+
 
       cPath.remove();
       lastGood = false;
@@ -353,7 +362,9 @@ module.exports = function(paper) {
         totalLength+= settings.flattenResolution;
       }
 
-      mode.run('progress', totalLength);
+      if (mode) {
+        mode.run('progress', totalLength);
+      }
     }
 
     return true;
