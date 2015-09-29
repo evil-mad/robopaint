@@ -104,9 +104,6 @@ function startInitialization() {
   // Load the modes (adds to settings content)
   loadAllModes();
 
-  // Initalize Tooltips (after modes have been loaded)
-  initToolTips();
-
   // Bind settings controls
   bindSettingsControls();
 
@@ -117,6 +114,9 @@ function startInitialization() {
   // Load up initial settings!
   // @see scripts/main.settings.js
   loadSettings();
+
+  // Initalize Tooltips (after modes have been loaded)
+  initToolTips();
 
   // Bind all the functionality required for Remote Print mode
   // @see scripts/main.api.js
@@ -462,7 +462,7 @@ function continueModeChange() {
  * Initialize the toolTip configuration and binding
  */
 function initToolTips() {
-  $('#bar a.tipped, nav a').each(function() {
+  $("[title]:not([data-hasqtip])").each(function() {
     var $this = $(this);
     $this.qtip({
       style: {
