@@ -656,8 +656,8 @@ module.exports = function(paper) {
     var canvasBoundInts = line.getIntersections(canvasBounds);
     _.each(intersections, function(int) {
       // If the path intersection is out of bounds...
-      if (int.point.x < 0 || int.point.x > view.bounds.width ||
-          int.point.y < 0 || int.point.y > view.bounds.height) {
+      if (int.point.x < view.bounds.left || int.point.x > view.bounds.right ||
+          int.point.y < view.bounds.top || int.point.y > view.bounds.bottom) {
 
         // ...and only if the line intersects the boundary of the view:
         // Pick the closest boundary point add it as the incoming point.
