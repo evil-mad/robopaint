@@ -477,83 +477,6 @@ body.home #modalmask:before {
   opacity: 0.7;
 }
 
-body.home #settings {
-  display:none;
-  height: 70%;
-  box-shadow: 3px 3px 12px;
-  padding: 1em;
-  position: absolute;
-  width: 70%;
-  background-color: #aaa;
-  border-radius: 8px;
-  z-index: 15;
-}
-
-body.home #settings .disabled {
-  background-color: #eee;
-}
-
-body.home #settings .disabled label {
-  color: #888;
-}
-
-/* Colorset/custom color management interface */
-body.home #colorsets {
-  position: relative;
-}
-
-body.home #colorsets optgroup {
-  border-top: 1px solid black;
-}
-
-body.home #colorsets #colorset {
-  position: absolute;
-  top: 0;
-  right: 2em;
-  font-size: 0.9em;
-}
-
-body.home #colorsets ul {
-  list-style: none;
-}
-
-body.home #colorsets li label {
-  top: -0.5em;
-  position: relative;
-}
-
-body.home #colorsets span.color {
-  display: inline-block;
-  width: 45px;
-  height: 25px;
-  margin-right: 10px;
-  border-radius: 10px;
-}
-
-body.home #colorsets .left {
-  float: left;
-  width: 40%;
-}
-
-body.home #colorsets .right {
-  float: right;
-  width: 60%;
-}
-
-body.home #colorsets .meta {
-  margin-bottom: 0.5em;
-}
-
-body.home #colorsets .meta label {
-  font-weight: bold;
-  font-size: 14px;
-  font-style: italic;
-}
-
-body.home #colorsets .meta span {
-  font-size: 13px;
-  color: #444;
-}
 
 /* Print Mode Modal dialog */
 body.home #remoteprint-mask,
@@ -647,202 +570,12 @@ body.home #remoteprint-mask:before {
   padding: 7px 10px;
 }
 
-
 #remoteprint-window #details button.cancel:hover {
   background: linear-gradient(to bottom, #EC6D6D, #DD0000);
 }
 
 #remoteprint-window #details progress {
   width: 100%;
-}
-
-/* Connection options buttons specifics */
-body.home div.options button.normal {
-  font-size: 0.6em;
-}
-
-/* Settings Window Tabs */
-#settings h2 {
-  margin: 0;
-  margin-bottom: 7px;
-  margin-top: -6px;
-}
-
-#lang {
-  position: absolute;
-  right: 0;
-  top: 5px;
-}
-
-.dd-option label {
-  cursor: pointer;
-}
-
-.dd-option-selected {
-  background-color: #D3D3D3;
-}
-
-@media (max-height: 475px) {
-  .dd-option {
-    padding:8px;
-    font-size: 0.7em;
-  }
-}
-
-#settings-done {
-  position: absolute;
-  right: 1em;
-  top: 1em;
-}
-
-#settings-reset {
-  text-shadow: none;
-  font-weight: bold;
-  color: rgb(209, 24, 24);
-  position: absolute;
-  right: 1em;
-  top: 2.8em;
-  text-decoration: underline;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-#settings legend {
-  font-weight: bold;
-}
-
-#settings ul, ul.tabs {
-  padding: 0;
-  margin: 0;
-}
-
-#settings fieldset,
-#settings .settings-content > fieldset:last-child {
-  /* Default space between each defaut fieldset, and at the bottom of all
-  majors fieldsets for a particular settings tab */
-  margin-bottom: 0.5em;
-}
-
-#settings .settings-content > fieldset {
-  /* Space between each major fieldset */
-  margin-bottom: 1.5em;
-}
-
-#settings .settings-content > fieldset > legend {
-  font-size: 1.2em;
-}
-
-#settings fieldset > div {
- margin: 0.75em 0;
-}
-
-#settings fieldset > fieldset {
-  margin-top: 0.5em;
-}
-
-#settings fieldset > fieldset legend {
-  font-style: italic;
-}
-
-#settings fieldset >:nth-child(2) {
-  margin-top: 0;
-}
-
-#settings div.httpport label span {
-  font-size: 0.9em;
-  font-style: italic;
-}
-
-/* Custom styling for speed fieldset */
-#settings fieldset.speed {
-  margin-bottom: 1em;
-  padding-top: 0.75em;
-  padding-bottom: 0;
-}
-
-#settings fieldset.speed label {
-  display: block;
-  text-align: center;
-}
-
-#settings fieldset.speed input {
-  display: block;
-  width: 90%;
-}
-
-#settings fieldset.speed div {
-  float: left;
-  width: 48%;
-  margin: 0;
-}
-
-/* Custom styling for filltype fieldset */
-#settings fieldset.filltype {
-  float: right;
-  margin-top: -2.5em;
-}
-
-#settings fieldset.filltype div:last-child {
-  margin-bottom: 0;
-}
-
-#settings > div.settings-content {
-  border-radius: 0 10px;
-  padding:10px;
-  height: 75%;
-  overflow-y: auto;
-  background:#fff;
-}
-
-#settings aside {
-  text-indent: 1em;
-  color: #555;
-  font-size: smaller;
-  font-style: italic;
-  margin-bottom: 0.5em;
-}
-
-ul.tabs li {
-  list-style:none;
-  display:inline;
-}
-
-ul.tabs a {
-  padding:5px 10px;
-  display:inline-block;
-  background:#666;
-  color:#fff;
-  text-decoration:none;
-}
-
-ul.tabs a.active {
-  background:#fff;
-  color:#000;
-}
-
-#settings hr {
-  margin-top: 1.5em;
-  width: 80%;
-}
-
-#settings input[type=range] {
-  margin-left: 5px;
-  width: 50%;
-}
-
-#settings label.rangeval {
-  white-space: nowrap;
-  padding-left: 8px;
-  font-size: 0.9em;
-  font-weight: bold;
-  padding-bottom: 8px;
-  line-height: 30px;
-  vertical-align: bottom;
-}
-
-#settings #maxpaintdistance {
-  width: 35%;
 }
 
 /* qTip extra styles */
@@ -865,4 +598,26 @@ ul.tabs a.active {
   color: black !important;
   font-size: 1.4em;
   text-align: center;
+}
+
+/* Language selector */
+#lang {
+  position: absolute;
+  right: 0;
+  top: 5px;
+}
+
+.dd-option label {
+  cursor: pointer;
+}
+
+.dd-option-selected {
+  background-color: #D3D3D3;
+}
+
+@media (max-height: 475px) {
+  .dd-option {
+    padding:8px;
+    font-size: 0.7em;
+  }
 }
