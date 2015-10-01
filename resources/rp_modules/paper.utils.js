@@ -136,8 +136,20 @@ module.exports = function(paper) {
     },
 
     // Get the actual color of the nearest color to the one given.
-    snapColor: function (color) {
-      return robopaint.media.currentSet.colors[paper.utils.snapColorID(color).substr(-1)].color.HEX;
+    snapColor: function (color, opacity) {
+      var snapID = paper.utils.snapColorID(color, opacity);
+      var outColor;
+      // Switch between water and regular colors
+      if (snapID === 'water2') {
+        // TODO: Redo this when media sets get done.
+        // Make Water preview paths blue and transparent
+        outColor = new paper.Color('#256d7b');
+        outColor.alpha = 0.3;
+      } else {
+        outColor = new paper.Color(robopaint.media.currentSet.colors[snapID.substr(-1)].color.HEX);
+      }
+
+      return outColor;
     },
 
     // Get only the ID of closest point in an intersection array.

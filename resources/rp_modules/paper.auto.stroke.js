@@ -104,14 +104,14 @@ module.exports = function(paper) {
         var doStroke = true; // Assume we're stroking the path
         switch(paper.utils.getPathColorType(path)) {
           case 1: // Type 1: Stroked filled shape
-            path.fillColor = snapColor(path.fillColor);
+            path.fillColor = snapColor(path.fillColor, path.opacity);
           case 2: // Type 2: Stroked non-filled shape
-            path.strokeColor = snapColor(path.strokeColor)
+            path.strokeColor = snapColor(path.strokeColor, path.opacity)
             break;
           case 3: // Type 3: Filled no stroke shape
-            path.fillColor = snapColor(path.fillColor);
+            path.fillColor = snapColor(path.fillColor, path.opacity);
             if (settings.strokeAllFilledPaths) {
-              path.strokeColor = snapColor(path.fillColor);
+              path.strokeColor = snapColor(path.fillColor, path.opacity);
             } else {
               path.strokeWidth = 0; // Ensure it's ignored later
               doStroke = false;
@@ -119,7 +119,7 @@ module.exports = function(paper) {
             break;
           case 4: // Type 4: No fill, no stroke shape (invisible)
             if (settings.strokeNoStrokePaths) {
-              path.strokeColor = snapColor(path.strokeColor)
+              path.strokeColor = snapColor(path.strokeColor, path.opacity)
             } else {
               path.strokeWidth = 0; // Ensure it's ignored later
               doStroke = false;
@@ -145,7 +145,7 @@ module.exports = function(paper) {
         // color (only when they have a fillable color);
         if (!path.closed && settings.closeFilledPaths) {
           if (hasColor(path.fillColor)) {
-            if (snapColorID(path.fillColor) !== 'color8') {
+            if (snapColorID(path.fillColor, path.opacity) !== 'color8') {
               path.closed = true;
             }
           }
@@ -252,12 +252,6 @@ module.exports = function(paper) {
         strokeCap: 'round',
         miterLimit: 1
       });
-
-      // Make Water preview paths blue and transparent
-      if (tracePaths[tpIndex].data.color === 'water2') {
-        tracePaths[tpIndex].strokeColor = '#256d7b';
-        tracePaths[tpIndex].opacity = 0.5;
-      }
     }
 
     var tp = tracePaths[tpIndex];

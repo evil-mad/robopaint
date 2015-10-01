@@ -124,7 +124,7 @@ module.exports = function(paper) {
           path.closed = true;
           path.data.color = snapColorID(path.fillColor, path.opacity);
           path.data.name = path.name;
-          path.fillColor = snapColor(path.fillColor);
+          path.fillColor = snapColor(path.fillColor, path.opacity);
           path.strokeWidth = 0;
           path.strokeColor = null;
         }
