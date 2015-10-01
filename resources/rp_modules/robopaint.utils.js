@@ -289,6 +289,20 @@ var utils = {
   },
 
   /**
+   * Load a given CSS file into the DOM.
+   *
+   * @param {String} path
+   *   The full path (absolute would be preferred) of the CSS to add to the page
+   */
+  addStylesheet: function(path) {
+    var link = window.document.createElement('link');
+      link.type = 'text/css';
+      link.rel = 'stylesheet';
+      link.href = path;
+    window.document.head.appendChild(link);
+  },
+
+  /**
    * Move through every path element inside a given context and match its
    * stroke and fill color to a given colorset.
    *

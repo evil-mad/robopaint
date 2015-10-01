@@ -101,11 +101,7 @@ robopaint.media = {
     if (!setName) setName = robopaint.media.currentSet.baseClass;
     if (!robopaint.media.sets[setName]) return false;
 
-    var link = window.document.createElement('link');
-      link.type = 'text/css';
-      link.rel = 'stylesheet';
-      link.href = robopaint.media.sets[setName].styleSrc;
-    window.document.head.appendChild(link);
+    robopaint.utils.addStylesheet(robopaint.media.sets[setName].styleSrc);
     return true;
   },
 
