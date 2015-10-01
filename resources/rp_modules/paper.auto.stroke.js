@@ -24,7 +24,8 @@ var settings = {
   closeFilledPaths: false, // Close all filled paths? Pertains to above.
   checkFillOcclusion: true, // Check for occlusion on fills?
   checkStrokeOcclusion: false, // Check for occlusion on other strokes?
-  ignoreSameColor: false // Ignore trace occlusion for same color.
+  ignoreSameColor: false, // Ignore trace occlusion for same color.
+  ignoreTransparentOcclusion: true // Ignore trace occlusion for transparents.
 };
 
 // General state variables (reset via shutdown below)
@@ -59,15 +60,21 @@ module.exports = function(paper) {
       var set = robopaint.settings;
 
       var setMap = { // Map global settings to local stroke module settings.
-        traceIterationMultiplier: 2, // TODO: <<
-        lineWidth: 10, // TODO: <<
+        traceIterationMultiplier: parseInt(set.autostrokeiteration),
+        lineWidth: parseInt(set.autostrokewidth),
         flattenResolution: set.strokeprecision * 4,
-        strokeAllFilledPaths: true, // TODO: <<
-        strokeNoStrokePaths: true, // TODO: <<
-        closeFilledPaths: true, // TODO: <<
-        checkFillOcclusion: true, // TODO: <<
-        checkStrokeOcclusion: true, // TODO: <<
-        ignoreSameColor: false // TODO: <<
+        strokeAllFilledPaths: set.strokefills == true,
+        strokeNoStrokePaths: set.strokeinvisible == true,
+        closeFilledPaths: set.strokeclosefilled == true,
+        checkFillOcclusion: set.strokeocclusionfills == true,
+        checkStrokeOcclusion: set.strokeocclusionstoke == true,
+        ignoreSameColor: set.strokeocclusioncolor == true,
+        ignoreTransparentOcclusion: set.strokeocclusionwater == true
+      }
+
+      // No occlusion detection
+      if (!set.autostrokeocclusion) {
+        setMap.checkFillOcclusion = setMap.checkStrokeOcclusion = false;
       }
 
       // Merge in local settings, global settings, and passed overrides.
@@ -134,11 +141,12 @@ module.exports = function(paper) {
           path.data.name = path.name;
           path.strokeWidth = settings.lineWidth;
           maxLen += path.length;
+          path.originalOpacity = path.opacity;
         }
 
         // If only stroking one path, visually hide all the other paths.
         if (settings.path && !path.data.targetPath) {
-          path.opacity = 0;
+          //path.opacity = 0;
         }
 
         // Close stroke paths with fill to ensure they fully encompass the filled
@@ -300,6 +308,16 @@ module.exports = function(paper) {
       if (!continueStroke && ['fill', 'stroke'].indexOf(h.type) > -1 && settings.ignoreSameColor) {
         if (h.item[h.type + 'Color'].toCSS() === cPath.strokeColor.toCSS()) {
           continueStroke = true;
+        }
+      }
+
+      // If it's a transparent color and we're ignoring transparent color, save it!
+      if (!continueStroke && ['fill', 'stroke'].indexOf(h.type) > -1 && settings.ignoreTransparentOcclusion) {
+        var c = h.item[h.type + 'Color'];
+        if (paper.utils.hasColor(c)) {
+          if (h.item.originalOpacity < 1 || c.alpha < 1) {
+            continueStroke = true;
+          }
         }
       }
 
