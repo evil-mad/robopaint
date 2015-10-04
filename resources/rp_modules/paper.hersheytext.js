@@ -64,8 +64,8 @@ module.exports = function(paper) {
         };
 
         // Create the compound path as a group to retain subpath data.
-        lines[cLine].addChild(new Group());
-        var c = lines[cLine].lastChild;
+        var c = new Group();
+        lines[cLine].insertChild(0, c);
 
         // Use CompoundPath as a simple parser to get the subpaths, then add
         // them to our group and set the details in the subpath.
