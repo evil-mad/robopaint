@@ -71,7 +71,11 @@ function loadSettings() {
     fillspiralalign: 1,
     autofilliteration: 2,
     autofillwidth: 10,
-    fillocclusionfills: 1
+    fillocclusionfills: 1,
+
+    usewhite: 0,
+    prefillbuffer: 1,
+    optimizepath: 1
   };
 
   // Allow machine specific overrides of initial default settings

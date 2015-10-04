@@ -297,7 +297,10 @@ module.exports = function(paper) {
     // Actually handle a fully setup action layer to be streamed into the buffer
     // in the path and segment order they're meant to be streamed.
     autoPaint: function(layer) {
-      paper.utils.travelSortLayer(layer);
+      if (robopaint.utils.optimizepath) {
+        paper.utils.travelSortLayer(layer);
+      }
+
       var run = mode.run;
       // TODO: Pre-check to make sure the layer is fully ready, composed of only
       // completely open polygonal (linear) non-compound paths with no fill.
@@ -308,9 +311,11 @@ module.exports = function(paper) {
       //  * data.type: either "fill" or "stroke"
 
       var runColor;
-      // Wait for all these commands to stream in before starting to actually
-      // run them. This ensures a smooth start.
-      robopaint.pauseTillEmpty(true);
+      if (robopaint.settings.prefillbuffer) {
+        // Wait for all these commands to stream in before starting to actually
+        // run them. This ensures a smooth start.
+        robopaint.pauseTillEmpty(true);
+      }
 
       _.each(layer.children, function(path){
         // If the color doesn't match, be sure to wash & change it
@@ -339,10 +344,13 @@ module.exports = function(paper) {
         ['callbackname', 'autoPaintComplete']
       ]);
 
-      // This tells pause Till Empty that we're ready to start checking for
-      // local buffer depletion. We can't check sooner as we haven't finished
-      // sending all the data yet!
-      robopaint.pauseTillEmpty(false);
+
+      if (robopaint.settings.prefillbuffer) {
+        // This tells pause Till Empty that we're ready to start checking for
+        // local buffer depletion. We can't check sooner as we haven't finished
+        // sending all the data yet!
+        robopaint.pauseTillEmpty(false);
+      }
     }
   }
 };
