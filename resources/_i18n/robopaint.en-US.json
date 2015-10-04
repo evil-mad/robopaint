@@ -156,15 +156,11 @@
     }
   },
   "settings": {
-
-    "lang": {
-      "title": "Select a Language:"
-    },
-
     "tabs": {
-      "output": "Printing Style",
-      "common": "Basic Setup",
-      "advanced": "Advanced"
+      "output": "Style",
+      "media": "Tool",
+      "advanced": "Advanced",
+      "modes": "Modes"
     },
     "buttons": {
       "reset": {
@@ -177,7 +173,77 @@
         "hover": "Close the settings window"
       }
     },
+    "stroke": {
+      "enable": "Trace path strokes / outlines",
+      "enableinfo": "If disabled, no outlines/strokes will be traced in any automatic mode functionality.",
+      "fill": "Outline fills",
+      "fillinfo": "If enabled, an outline of the same color will be added for filled paths without a stroke.",
+      "invisible": "Stroke invisible paths",
+      "invisibleinfo": "If enabled, strokes will be added to all existing paths regardless of stroke width or color.",
+      "closefilled": "Close filled paths",
+      "closefilledinfo": "If enabled, unclosed filled paths will be outlined fully as if they were closed.",
+      "occlusionall": "Stroke occlusion / overlap detection",
+      "occlusionallinfo": "If disabled, all outlines / stroke tracing will ignore path overlap and layer order.",
+      "occfills": "Occlusion under fills",
+      "occfillsinfo": "If disabled, all outlines / stroke tracing will ignore filled color overlaps.",
+      "occstroke": "Occlusion under strokes",
+      "occstrokeinfo": "If disabled, all outlines / stroke tracing will ignore stroke overlaps.",
+      "occcolor": "Ignore occlusion under same color",
+      "occcolorinfo": "If enabled, all outlines / stroke tracing of the same collor as an overlapping fill or stroke will ignore occlusion.",
+      "occtrans": "Ignore occlusion under transparent fill or stroke",
+      "occtransinfo": "If enabled, all outlines / stroke tracing under transparent paths will ignore occlusion."
+    },
+    "fill": {
+      "enable": "Trace path fills",
+      "enableinfo": "If disabled, no fills will be traced in any automatic mode functionality.",
+      "dynamic": "Dynamic line fill options",
+      "group": {
+        "title": "Grouping Threshold:",
+        "info": "Minimum threshold for grouping dynamic line endings together into connected groups. Large value connects more groups, 0 will ensure no groups are made.",
+        "opt0": "None",
+        "opt20": "Small (20)",
+        "opt40": "Default (40)",
+        "opt60": "Medium (60)",
+        "opt80": "Huge (80)",
+        "opt100": "Giant (100)"
+      },
+      "hatch": "Add secondary hatch fill",
+      "hatchinfo": "If enabled, a secondary opposite angle fill will be added for each path. Will **not** match angle for random fill below.",
+      "random": "Randomize fill angle",
+      "randominfo": "If enabled, fill angle of different paths will be randomized.",
+      "overlay": "Spiral fill options",
+      "precisioninfo": "Primarily for spiral fill, this setting is also used for converting the zig-smooth into a polygonal line post processing.",
+      "align": "Align spiral fill to each path",
+      "aligninfo": "If enabled (spiral fill type only), the fill spiral will be centered on the fill path. If disabled, the spiral will align to the center of the canvas for every path.",
+      "occ": "Check for Occlusion",
+      "occinfo": "If disabled, all fill tracing will ignore filled color overlaps."
+    },
+    "trace": {
+      "title": "Trace Speed:",
+      "info": "The amount of work done for each frame. Higher iteration count should take less time overall, but update less often.",
+      "opt1": "Slow (1×)",
+      "opt2": "Default (2×)",
+      "opt4": "Quad (4×)",
+      "opt10": "Super (10×)",
+      "opt20": "Maximum (20×)",
+      "width": {
+        "title": "Preview line width:",
+        "info": "How large traced paths will appear in the live preview. Does not effect printing.",
+        "optneg1": "Automatic (set by implement)",
+        "opt1": "Minimum (1)",
+        "opt5": "Medium (5)",
+        "opt10": "Default (10)",
+        "opt20": "Wide (20)",
+        "opt30": "Extreme (30)"
+      }
+    },
     "output": {
+      "usewhite": "Use white media",
+      "usewhiteinfo": "If disabled, when your media settings contain a white color, it will be ignored when a white path exists to be traced.",
+      "prefill": "Prefill buffer",
+      "prefillinfo": "If enabled, all batch commands on supporting modes will be sent before the robot begins work. This should eliminate stuttering on start, though you have to wait longer before your work begins printing.",
+      "optimize": "Optimize path order",
+      "optimizeinfo": "If enabled, all automatic painting paths (fill and stroke) will be reordered according to color and proximity to previous path end. Paths will even be reversed to ensure lowest distance between work, but can take a very strange path if working with multiple lines of text.",
       "generaltitle": "General",
       "move": {
         "title": "Carriage Movement Speed:",
@@ -200,8 +266,8 @@
         "warningAll": "Water/Paint required. Printing Mode incompatible with this setting."
       },
       "showcolortext": {
-        "title": "Show color names:",
-        "detail": "When checked, color names will display on the paint palette for print colors, otherwise they will only be visible on hover."
+        "title": "Show color names",
+        "detail": "When enabled, color names will display on the paint palette for print colors, otherwise they will only be visible on hover."
       },
       "colorsets": {
         "title": "Installed Color Set:",
@@ -241,6 +307,7 @@
       },
       "strokeovershoot": {
         "title": "Stroke Overshoot:",
+        "optx": "(Automatic from Implement)",
         "opt0": "None (0)",
         "opt1": "Tiny (2mm)",
         "opt2": "Medium (5mm)",
@@ -249,22 +316,20 @@
         "opt5": "Unhelpful (20mm)",
         "detail": "The distance factor to move the brush beyond when lifting to make up for brush bend. Default is **5mm**."
       },
-      "filltitle": "Fill",
+      "render": {
+        "title": "Path Rendering",
+        "tab1": "Outline",
+        "tab2": "Fill",
+        "general": "Fill & Outline general"
+      },
       "filltype": {
         "title": "Type:",
-        "opt0": "Straight line",
-        "opt1": "Triangle line",
-        "opt2": "Sine line",
-        "opt3": "Center spiral",
-        "opt4": "TSP Squiggle"
+        "opt0": "Zig-Zag",
+        "opt1": "Zig-Zag Straight",
+        "opt2": "Zig-Zag Smooth",
+        "opt3": "Center spiral"
       },
-      "linefilltitle": "Line/Hatch Fills",
-      "fillangle": {
-        "title": "Line Angle:",
-        "opt0": "Horizontal (0°)",
-        "opt1": "Diagonal (45°)",
-        "opt2": "Vertical (90°)"
-      },
+      "fillangle": "Line fills angle:",
       "fillspacing": {
         "title": "Line Spacing:",
         "opt0": "Miniscule (1)",
@@ -282,11 +347,12 @@
         "opt3": "Default (14)",
         "opt4": "Coarse (21)",
         "opt5": "Very Coarse (35)"
-      },
-      "gapconnect": {
-        "title": "Connect small gaps:",
-        "detail": "Makes back and forth fills smoother by not lifting brush at edges."
       }
+    },
+    "media": {
+      "media": "Media",
+      "implements": "Implements",
+      "refill": "Refill media"
     },
     "common": {
       "servo": {
@@ -301,15 +367,15 @@
     "advanced": {
       "steppers": {
         "title": "X/Y Steppers",
-        "invertx": "Invert X axis:",
-        "inverty": "Invert Y axis:",
+        "invertx": "Invert X axis",
+        "inverty": "Invert Y axis",
         "invertdetail": "In case one of your motors moves backwards.",
         "buffer": {
           "title": "Buffer Smoothing:",
           "detail": "Removes time from API callback duration, forces buffering and smoothing out subsequent position calls. Default is **20 ms**. Negative values add extra delay. Only increase if printing is jittery.",
           "hover": "Move right for more offset (smooth), left for negative offset (jerky)"
         },
-        "swap": "Swap X for Y:",
+        "swap": "Swap X for Y",
         "swapdetail": "In case you've accidentally wired up Motor 1 where Motor 2 is supposed to go."
       },
       "misctitle": "Misc",
@@ -321,7 +387,7 @@
           "detail": "Allows properly configured remote applications to send graphics to RoboPaint to automatically be printed. For this to function outside this computer, the checkbox for \"Only allow connections from this computer\" below must be **unchecked**."
         }
       },
-      "openlast": "Open last design on startup:",
+      "openlast": "Open last design on startup",
       "bottype": {
         "title": "Type of printing bot connected:",
         "hover": "Supported Bot List",

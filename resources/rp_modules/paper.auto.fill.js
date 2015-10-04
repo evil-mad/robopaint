@@ -22,8 +22,9 @@ var settings = {
   // Pass a path object to be used for overlay fills:
   overlayFillPath: null, // Otherwise uses giant spiral.
   overlayFillAlignPath: true, // Align overlay fill to path, otherwise align to view.
-  angle: -155, // Dynamic line fill type line angle
+  angle: 28, // Dynamic line fill type line angle
   randomizeAngle: false, // Randomize the angle above for dynamic line fill.
+  hatch: false, // If true, runs twice at opposing angles
   spacing: 13, // Dynamic line fill spacing nominally between each line.
   checkFillOcclusion: true, // Check for occlusion on fills?
   threshold: 40 // Dynamic line grouping threshold
@@ -39,6 +40,7 @@ var cStep = 0; // Which fill step are we on?
 var cGroup; // The current line grouping
 var lines = []; // Lines to be regrouped during fill
 var totalSteps = 0; // Keep track of total step changes for user.
+var lastPath = null;
 
 // For overlay fill:
 var overlayPathPos = 0; // Position on current tracing path
@@ -72,24 +74,31 @@ module.exports = function(paper) {
       var set = robopaint.settings;
 
       var setMap = { // Map global settings to local stroke module settings.
-        traceIterationMultiplier: 2, // TODO: <<
-        lineWidth: 10, // TODO: <<
-        flattenResolution: set.fillprecision * 2,
-        fillType: 'zigzag', // TODO: <<
-        overlayFillPath: null, // TODO: <<
-        overlayFillAlignPath: true, // TODO: <<
-        angle: parseInt(set.fillangle) - 180,
-        randomizeAngle: false, // TODO: <<
-        spacing: parseInt(set.fillspacing),
-        checkFillOcclusion: true, // TODO: <<
-        threshold: 40 // TODO: <<
+        traceIterationMultiplier: parseInt(set.autofilliteration),
+        lineWidth: parseInt(set.autofillwidth),
+        flattenResolution: parseInt(set.fillprecision) * 2,
+        fillType: set.filltype,
+        overlayFillAlignPath: set.fillspiralalign == true,
+        angle: parseInt(set.fillangle),
+        randomizeAngle: set.fillrandomize == true,
+        hatch: set.fillhatch == true,
+        spacing: parseInt(set.fillspacing) * 2,
+        checkFillOcclusion: set.fillocclusionfills == true,
+        threshold: parseInt(set.fillgroupingthresh)
       }
 
       // Merge in local settings, global settings, and passed overrides.
       settings = _.extend(settings, setMap, overrides);
 
+      // TODO: I'm in denial that the only valid overlay path is a spiral...
+      // till then, i'm going to swap in overlay w/o a path for spiral :P
+      if (settings.fillType === 'spiral') {
+        settings.fillType = 'overlay';
+      }
+
       // Specific setup modifications for overlay mode
       if (settings.fillType === 'overlay') {
+        settings.hatch = false; // No hatch on overlay
         spiralPath = new Path(spiralPathM);
         spiralPath.scale(settings.spacing / 9); // Scale to match line spacing
         settings.traceIterationMultiplier = settings.traceIterationMultiplier * 2;
@@ -188,6 +197,14 @@ module.exports = function(paper) {
         if (runFillSpooling) { // Are we doing fills?
           if (!traceFillNext()){ // All paths complete?
             paper.fill.shutdown();
+
+            if (settings.hatch === true) {
+              settings.hatch = false;
+              settings.angle+= 90;
+              paper.fill.setup(_.extend({}, settings));
+              return;
+            }
+
             if (_.isFunction(paper.fill.complete)) {
               paper.fill.complete();
             }
@@ -206,6 +223,7 @@ module.exports = function(paper) {
       cGroup;
       lines = [];
       totalSteps = 0;
+      lastPath = null;
       settings.path = null; // Only kept per setup run.
 
       if (spiralPath) {
@@ -422,6 +440,16 @@ module.exports = function(paper) {
   function dynamicLineFillNext(fillPath, type) {
     var p = fillPath;
 
+    // Run once per unique fillPath
+    if (lastPath !== fillPath) {
+      lastPath = fillPath;
+
+      // Swap angle for random angle if randomizeAngle set.
+      if (settings.randomizeAngle) {
+        settings.angle = Math.ceil(Math.random() * 179);
+      }
+    }
+
     // Choose the iteration fill step
     switch (cStep) {
       case 0: // Adding initial fill lines
@@ -437,14 +465,14 @@ module.exports = function(paper) {
         var amt = boundPath.length/360;
 
         // Set source position to calculate iterations and create destination vector
-        var pos = amt * (settings.angle + 180);
+        var pos = amt * (settings.angle);
 
         // The actual line used to find the intersections
         // Ensure line is far longer than the diagonal of the object
         var line = new Path({
           segments: [new Point(0, 0), new Point(p.bounds.width + p.bounds.height, 0)],
           position: boundPath.getPointAt(pos),
-          rotation: settings.angle + 90
+          rotation: settings.angle - 90
         });
 
         if (settings.debug) {
@@ -456,7 +484,7 @@ module.exports = function(paper) {
         }
 
         // Find destination position on other side of circle
-        pos = settings.angle + 360;  if (pos > 360) pos -= 360;
+        pos = settings.angle + 180;  if (pos > 360) pos -= 360;
         var len = Math.min(boundPath.length, pos * amt);
         var destination = boundPath.getPointAt(len);
 

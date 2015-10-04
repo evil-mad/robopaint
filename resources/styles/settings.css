@@ -3,24 +3,17 @@
   @file Holds styles for RoboPaint global settings only.
 */
 
-body.home #settings {
-  display:none;
-  height: 70%;
-  box-shadow: 3px 3px 12px;
-  padding: 1em;
+#settings {
+  height: 100%;
+  top: -100%;
+  box-sizing: border-box;
+  padding: 1em 0;
   position: absolute;
-  width: 70%;
-  background-color: #aaa;
-  border-radius: 8px;
-  z-index: 15;
-}
-
-body.home #settings .disabled {
-  background-color: #eee;
-}
-
-body.home #settings .disabled label {
-  color: #888;
+  width: 100%;
+  z-index: 11;
+  transition: top 0.75s;
+  background-color: #efefef;
+  overflow: hidden;
 }
 
 /* Colorset/custom color management interface */
@@ -81,33 +74,46 @@ body.home #colorsets .meta span {
   color: #444;
 }
 
-#settings h2 {
+#settings > h2 {
+  padding-left: 1.1em;
   margin: 0;
   margin-bottom: 7px;
   margin-top: -6px;
 }
 
-#settings-done {
+#settings-logo {
+  float: left;
+  height: 1.2em;
+  margin-top: -3px;
+  margin-left: 1.8em;
+  margin-right: 0.7em;
+}
+
+/* Close/reset buttons */
+#settings div.buttons {
   position: absolute;
-  right: 1em;
-  top: 1em;
+  right: 3.7em;
+  top: 0;
+}
+
+#settings div.buttons button {
+  float: right;
+  margin-left: 1em;
+}
+
+#settings-done {
+  padding: 0.3em 0.8em;
 }
 
 #settings-reset {
+  line-height: 1.7em;
   text-shadow: none;
   font-weight: bold;
   color: rgb(209, 24, 24);
-  position: absolute;
-  right: 1em;
-  top: 2.8em;
   text-decoration: underline;
   background: none;
   border: none;
   cursor: pointer;
-}
-
-#settings legend {
-  font-weight: bold;
 }
 
 /* Settings Window Tabs */
@@ -116,6 +122,82 @@ body.home #colorsets .meta span {
   margin: 0;
 }
 
+ul.tabs li {
+  list-style:none;
+  display:inline;
+}
+
+ul.tabs a {
+  padding:5px 10px;
+  display:inline-block;
+  background:#666;
+  color:#fff;
+  text-decoration:none;
+}
+
+ul.tabs a.active {
+  background:#fff;
+  color:#000;
+}
+
+/* Left Chrome settings style tabs */
+#settings > div.settings-content {
+  padding:10px;
+  height: 100%;
+  overflow-y: auto;
+  background:#fff;
+  box-sizing: border-box;
+}
+
+#settings > ul.tabs {
+  padding-top: 1em;
+  padding-right: 1em;
+  float: left;
+  height: 100%;
+  background-color: white;
+}
+
+#settings > ul.tabs > li {
+  display: block;
+}
+
+#settings > ul.tabs > li a {
+  display: block;
+  padding-left: 1.5em;
+  color: #999;
+  font-size: 0.9em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: white;
+  cursor: pointer;
+  border-left: 7px solid transparent;
+}
+
+#settings > ul.tabs > li a.active {
+  color: rgb(70, 78, 90);
+  cursor: default;
+  border-left-color: rgb(78, 87, 100);
+}
+
+/* Tabs within tab content */
+#settings .settings-content ul.tabs li a {
+  background-color: #aaa;
+  color: #eee;
+  font-weight: bold;
+}
+
+#settings .settings-content ul.tabs li a.active {
+  background-color: #eee;
+  color: black;
+}
+
+#settings .settings-content .settings-content {
+  padding: 1em;
+  background-color: #eee;
+  margin: 0;
+}
+
+/* General settings element cleanup and styling */
 #settings fieldset,
 #settings .settings-content > fieldset:last-child {
   /* Default space between each defaut fieldset, and at the bottom of all
@@ -123,16 +205,38 @@ body.home #colorsets .meta span {
   margin-bottom: 0.5em;
 }
 
+#settings legend {
+  font-weight: bold;
+}
+
+#settings .disabled {
+  background-color: #eee;
+}
+
+#settings .disabled label {
+  color: #888;
+}
+
+
 #settings .settings-content > fieldset {
   /* Space between each major fieldset */
-  margin-bottom: 1.5em;
+  margin-bottom: 0.5em;
+  margin-top: 0.75em;
+  border: none;
+  border-top: 1px solid #CBCBCB;
+  padding-top: 1em;
 }
 
 #settings .settings-content > fieldset > legend {
   font-size: 1.2em;
+  padding-left: 0.5em;
+  margin-left: -13px;
+  padding-right: 1em;
+  padding-bottom: 1px;
 }
 
-#settings fieldset > div {
+#settings fieldset > div,
+#settings .settings-content .settings-content > div {
  margin: 0.75em 0;
 }
 
@@ -186,38 +290,12 @@ body.home #colorsets .meta span {
   margin-bottom: 0;
 }
 
-#settings > div.settings-content {
-  border-radius: 0 10px;
-  padding:10px;
-  height: 75%;
-  overflow-y: auto;
-  background:#fff;
-}
-
 #settings aside {
-  text-indent: 1em;
+  margin-left: 1.5em;
+  margin-top: 0.5em;
   color: #555;
   font-size: smaller;
-  font-style: italic;
-  margin-bottom: 0.5em;
-}
-
-ul.tabs li {
-  list-style:none;
-  display:inline;
-}
-
-ul.tabs a {
-  padding:5px 10px;
-  display:inline-block;
-  background:#666;
-  color:#fff;
-  text-decoration:none;
-}
-
-ul.tabs a.active {
-  background:#fff;
-  color:#000;
+  margin-bottom: 1em;
 }
 
 #settings hr {
@@ -226,8 +304,10 @@ ul.tabs a.active {
 }
 
 #settings input[type=range] {
+  top: 3px;
   margin-left: 5px;
   width: 50%;
+  position: relative;
 }
 
 #settings label.rangeval {
@@ -247,4 +327,110 @@ ul.tabs a.active {
 /* Connection options buttons specifics */
 body.home div.options button.normal {
   font-size: 0.6em;
+}
+
+/* Specifics for live fill/stroke preview */
+#render #settings-preview-wrapper {
+  float: right;
+  margin: 1em;
+  box-shadow: 3px 3px 14px 0px rgba(0,0,0,0.5);
+  width: 200px;
+  height: 400px;
+}
+
+#settings-preview-wrapper * {
+  background-image: url('../images/paper_texture.png');
+}
+
+#render .settings-content {
+  min-height: 400px;
+}
+
+/* Specialty Elements: Aside display placeholder targets */
+#settings .aside-show {
+  display: inline-block;
+  width: 1em; height: 1em;
+  color: white;
+  text-align: center;
+  margin-left: 0.5em;
+  background-color: rgba(0,0,0,.5);
+  border-radius: 1em;
+  cursor: default;
+}
+
+#settings .aside-show.open {
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+}
+
+/* Specialty Elements: iOS style checkboxes switches */
+input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+}
+
+input[type="checkbox"] + div {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  width: 2em;	height: 1em;
+  border: 2px solid rgba(0,0,0,.3);
+  border-radius: 999px;
+  background: white;
+  background-image: linear-gradient(90deg, #64bd63 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  background-origin: border-box;
+  background-clip: border-box;
+  overflow: hidden;
+  transition-duration: .2s;
+  transition-property: padding, width, background-position, text-indent;
+  font-size: 112%; /* change this and see how they adjust! */
+}
+
+input[type="checkbox"]:checked + div {
+  padding-left: 1em; width: 1em;
+  background-position: 0 0;
+  border: 2px solid #64bd63;
+}
+
+input[type="checkbox"] + div:before {
+  content: ' ';
+  float: left;
+  width: 1.65em; height: 1.65em;
+  margin: -.1em;
+  border: 1px solid rgba(0,0,0,.35);
+  border-radius: inherit;
+  background: white;
+  background-color: white;
+  box-shadow: 0 .1em .1em .1em hsla(0,0%,100%,.8) inset,
+              0 0 .5em rgba(0,0,0,.3);
+  color: white;
+  text-shadow: 0 -1px 1px rgba(0,0,0,.3);
+  text-indent: -2.5em;
+}
+
+input[type="checkbox"]:active + div:before {
+  background-color: #eee;
+}
+
+input[type="checkbox"]:focus + div {
+  box-shadow: 0 .1em .1em rgba(0,0,0,.2) inset,
+              0 .45em 0 .1em rgba(0,0,0,.05) inset,
+              0 0 .4em 1px rgba(255,0,0,.5);
+}
+
+input[type="checkbox"] + div:before,
+input[type="checkbox"] + div:after {
+  font: bold 60%/1.9 sans-serif;
+  text-transform: uppercase;
+}
+
+input[type="checkbox"] + div:after {
+  content: ' ';
+  float: left;
+  text-indent: .5em;
+  color: rgba(0,0,0,.45);
+  text-shadow: none;
 }

@@ -5,11 +5,12 @@
  * to a more centralized singluar configuration file ... but not yet. ;)
  */
 
-
 /**
  * Load settings from defaults/localStorage and push to elements
  */
 function loadSettings() {
+  loadPaperJS();
+
   var g = cncserver.conf.global;
   var b = cncserver.conf.bot;
 
@@ -31,23 +32,46 @@ function loadSettings() {
     paintspeed: parseFloat(b.get('speed:drawing')),
 
     // Robopaint specific defaults
-    filltype: 'line-straight',
-    fillangle: 0,
+
     penmode: 0,
     openlast: 0,
     showcolortext: 0,
     colorset: 'generic-standard',
     maxpaintdistance: 10805, // 48.2cm @ ~2.24mm per step
-    fillspacing: 10,
-    fillprecision: 14,
-    strokeovershoot: 5,
     tsprunnertype: 'OPT',
-    strokeprecision: 6,
     enabledmodes: {},
     remoteprint: 0,
     gapconnect: 1,
     refillmode: 0,
-    refillaction: 0
+    refillaction: 0,
+
+
+    autostrokeenabled: 1,
+    strokeprecision: 6,
+    strokeovershoot: 5,
+    strokefills: 1,
+    strokeinvisible: 0,
+    autostrokeiteration: 2,
+    autostrokeocclusion: 1,
+    strokeocclusionfills: 1,
+    strokeocclusionstoke: 1,
+    strokeocclusioncolor: 0,
+    strokeocclusionwater: 1,
+    autostrokewidth: 10,
+    strokeclosefilled: 1,
+
+    autofillenabled: 1,
+    filltype: 'zigzag',
+    fillangle: 28,
+    fillspacing: 10,
+    fillprecision: 14,
+    fillgroupingthresh: 40,
+    fillhatch: 0,
+    fillrandomize: 0,
+    fillspiralalign: 1,
+    autofilliteration: 2,
+    autofillwidth: 10,
+    fillocclusionfills: 1
   };
 
   // Allow machine specific overrides of initial default settings
@@ -179,9 +203,8 @@ function bindSettingsControls() {
     // which tab is active and its associated content
     var $active, $content, $links = $(this).find('a');
 
-    // If the location.hash matches one of the links, use that as the active tab.
-    // If no match is found, use the first link as the initial active tab.
-    $active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+    // Use the first link as the initial active tab.
+    $active = $($links[0]);
     $active.addClass('active');
     $content = $($active.attr('href'));
 
@@ -397,6 +420,37 @@ function bindSettingsControls() {
   $('#settings div.httpport label span').text(
     robopaint.utils.getIPs(robopaint.settings.httplocalonly)
   );
+
+
+  // Setup custom form element handlers
+  $('#settings input[type="checkbox"]').each(function(){
+    var $item = $(this);
+    // Add a div after each one for iOS CSS style checkboxes.
+    $item.after($('<div>').click(function(){
+      $item.click();
+    }));
+  });
+
+  // Add a target to see the aside details
+  $('#settings aside').each(function(){
+    var $aside = $(this);
+    $aside
+      .hide()
+      .siblings('label:last').after(
+        $('<span>')
+          .text('?')
+          .addClass('aside-show')
+          .click(function(){
+            if (!$aside.is('.open')) {
+              $(this).addClass('open').text('▼');
+              $aside.toggleClass('open', true).slideDown();
+            } else {
+              $(this).removeClass('open').text('?');
+              $aside.removeClass('open').slideUp();
+            }
+          })
+      );
+  });
 }
 
 function toggleDisableSetting(selector, toggle, message) {
@@ -423,9 +477,9 @@ function toggleDisableSetting(selector, toggle, message) {
  */
 function setSettingsWindow(toggle) {
   if (toggle) {
-    $('#settings').fadeIn('slow');
+    $('#settings').css('top', 0);
   } else {
-    $('#settings').fadeOut('slow');
+    $('#settings').css('top', '-100%');
   }
   setModal(toggle);
 }
@@ -530,4 +584,17 @@ function updateColorSetSettings() {
   for (var i in meta) {
     $('#colorsets .' + meta[i]).text(set[meta[i]]);
   }
+}
+
+// Manage PaperJS output for settings
+var paperLoaded = false;
+function loadPaperJS() {
+  if (paperLoaded) return;
+
+  paperLoaded = true;
+  rpRequire('paper', function(){
+    rpRequire('paper_utils')(paper);
+    paper.utils.loadDOM('scripts/settings.ps.js', 'settings-preview');
+    $('#render .renderpreview').change(paper.refreshPreview);
+  });
 }

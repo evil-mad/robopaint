@@ -323,14 +323,6 @@ robopaint.switchMode = function(mode, callback) {
  * Specialty JS window resize callback for responsive element adjustment
  */
 function responsiveResize() {
-  // Position settings window dead center
-  var $s = $('#settings');
-  var size = [$s.width(), $s.height()];
-  var win = [$(window).width(), $(window).height()];
-  $s.css({left: (win[0]/2) - (size[0]/2), top: (win[1]/2) - (size[1]/2)});
-  // Set height for inner settings content window, just remove tab and H2 height
-  $s.find('.settings-content').height($s.height() - 80);
-
   // Remote Print Window sizing
   if (robopaint.api.print.enabled) {
     var $rpWindow = $('#remoteprint-window');
