@@ -246,10 +246,12 @@ module.exports = {
       });
 
       // SVG Imports as a group, ungroup it.
-      var group = paper.canvas.mainLayer.children[0]
+      if (paper.canvas.mainLayer.children.length) {
+        var group = paper.canvas.mainLayer.children[0];
 
-      group.parent.addChildren(group.removeChildren());
-      group.remove();
+        group.parent.addChildren(group.removeChildren());
+        group.remove();
+      }
     }
 
     // Paper init is done, call the DOM loadedCallback
