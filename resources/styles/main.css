@@ -296,6 +296,42 @@ body.home #bar {
   padding-top: 5px;
 }
 
+#bar a {
+  text-decoration: none;
+  color: #333333;
+  font-size: 30px;
+  padding: 3px 5px;
+}
+
+#bar > a:hover {
+  text-shadow: 0 0 15px red;
+}
+
+body.home #bar a.selected,
+body.home #bar a:hover.selected{
+  border: 1px solid black;
+  border-bottom-width: 0;
+  margin-left: -1px;
+  background-color: rgb(92, 175, 255);
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  cursor: default;
+}
+
+#bar a.mode {
+  background-repeat: no-repeat;
+  background-size: 35px;
+  height: 34px;
+  width: 35px;
+  display: inline-block;
+  margin-right: 1px;
+  background-position: center 1px;
+}
+
+#bar #bar-home {
+  background-image: url('../images/icons/home.svg');
+}
+
 body.home #bar-help {
   font-weight: bold;
   color: #fff !important;
@@ -330,23 +366,6 @@ body.home #bar span.separator {
   padding-right: 7px;
   font-size: 26px;
   border-left: 1px solid rgb(68, 68, 68);
-}
-
-body.home #bar a {
-  text-decoration: none;
-  color: #333333;
-  font-size: 30px;
-}
-
-body.home #bar > a:hover {
-  text-shadow: 0 0 15px red;
-}
-
-body.home #bar a.selected,
-body.home #bar a:hover.selected{
-  color: #FFF;
-  text-shadow: 0 0 11px #710909;
-  cursor: default;
 }
 
 body.home #bar span.left {

@@ -679,8 +679,8 @@ function loadAllModes(){
       $('<a>')
         .attr('href', m.index)
         .attr('id', 'bar-' + m.robopaint.name)
-         // TODO: Add support for better icons
-        .addClass('mode tipped ' + m.robopaint.icon + (m.robopaint.core ? '' : ' hidden') )
+        .addClass('mode tipped ' + (m.robopaint.core ? '' : ' hidden') )
+        .css('background-image', "url('" +  m.root + m.robopaint.graphics.icon + "')")
         .attr('data-i18n', '[title]' + i18nStr + 'description')
         .attr('title', robopaint.t(i18nStr + 'description'))
         .html('&nbsp;')
