@@ -297,7 +297,7 @@ module.exports = function(paper) {
     // Actually handle a fully setup action layer to be streamed into the buffer
     // in the path and segment order they're meant to be streamed.
     autoPaint: function(layer) {
-      if (robopaint.utils.optimizepath) {
+      if (robopaint.settings.optimizepath) {
         paper.utils.travelSortLayer(layer);
       }
 
