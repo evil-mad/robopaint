@@ -192,7 +192,8 @@ function handleClientCmd(type, data) {
             } else {
               val+= last - cncserver.sendBuffer.length;
               last = cncserver.sendBuffer.length;
-              cncserver.progress({val: val});
+              cncserver.status(robopaint.t('status.pausetillempty') + ' ' + val + '/' + max);
+              cncserver.progress({val: val, max: max});
             }
           }, 200);
         }
