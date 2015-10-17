@@ -42,6 +42,13 @@ button.normal:focus {
   outline: none;
 }
 
+button.normal:disabled, button.normal:disabled:hover {
+  opacity: 0.5;
+  animation: none;
+  -webkit-animation: none;
+}
+
+
 /* Animation Keyframes */
 @-webkit-keyframes hover-pulse {
   0%   { box-shadow: 0 0 2px 5px red; }
