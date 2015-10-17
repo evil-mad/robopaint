@@ -317,6 +317,10 @@ module.exports = function(paper) {
         robopaint.pauseTillEmpty(true);
       }
 
+      // Add a callback for begin so we know when things have kicked off, which
+      // can definitely be later than expected if prefillbuffer is enabled.
+      run('callbackname', 'autoPaintBegin');
+
       _.each(layer.children, function(path){
         // If the color doesn't match, be sure to wash & change it
         if (path.data.color !== runColor) {
