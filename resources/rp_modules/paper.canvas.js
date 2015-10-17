@@ -106,7 +106,7 @@ module.exports = {
     // How much of the total size can fit in the area?
     var scale = {
       x: win.w / total.w,
-      y: win.h / total.h,
+      y: win.h / total.h
     };
 
     // Use the smallest
