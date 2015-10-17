@@ -15,9 +15,9 @@ therefore allows an infinite set of functionality to piggyback on the existing
 featureset and connectivity within RoboPaint.
 
 ## File Structure
-Modes have **two** minimum required files: `package.json` and some root
-`.html` file configured within it. That's it! Everything else about how the
-page works is dealt with inside the `package.json` and your html file.
+Modes have **three** minimum required files: `package.json`, a root
+`.html` file configured within it, and an ``. That's it! Everything else about
+how the page works is dealt with inside the `package.json` and your html file.
 
 ```javascript
 |mymode/
@@ -55,7 +55,6 @@ isn't written in stone.
     "core": false,  // If true, will be available by default. Otherwise it must be turned on manually.
     "debug": true,  // If true, the modes devtools window will open by default.
     "i18n": "native",  // The type of translation this mode supports. Either DOM or native, see below for details.
-    "icon": "icon-font", // ICON: TODO: Changing format soon...
     "index": "example.html", // The path to the HTML file to open relative to this folder
     "name": "example", // The machine name of the mode. Lowercase, no spaces, same as folder.
     "opensvg": false,  // Set to true if this mode cares about opening SVGs.
@@ -65,6 +64,15 @@ isn't written in stone.
       "jquery",
       "underscore",
       "mediasets"
+    ],
+    "graphics": {
+      "icon": "images/example_icon.svg", // Relative path to the color icon for the mode. Can be SVG or any other web format.
+      "previews": [
+        "images/example_preview.jpg" // Optional list of as many preview images of the output of the mode or screenshots.
+      ]
+    },
+    "persistentScripts": [
+      "example_persistent.js" // A list of scripts to be run persistently outside of the mode sandbox, in RoboPaint proper.
     ]
   }
 }
@@ -94,7 +102,7 @@ These are the minimum entries required for a mode. (Comments are for clarity and
 are not actually allowed in valid JSON.)
 ```javascript
 {
-  "_meta": {  // Meta information is for reference only, not used directly.
+  "_meta": {  // Meta information is for machine reference, not for translation.
     "creator": "myname",
     "target": "en-US",
     "release": "0.9.5",
