@@ -41,11 +41,11 @@ module.exports = function(paper) {
     var lines = [new Group()]; // Hold chars in lines
     var cLine = 0;
     _.each(t, function(char, index){
-      if (char.type === "space") {
+      if (char.type === "space" || char.type === "newline") {
         caretPos.x+= options.spaceWidth
 
         // Allow line wrap on space
-        if (caretPos.x > options.wrapWidth) {
+        if (caretPos.x > options.wrapWidth || char.type === "newline") {
           caretPos.x = 0;
           caretPos.y += options.lineHeight;
 
