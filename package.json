@@ -19,7 +19,8 @@
     "robopaint-mode-print": "*",
     "robopaint-mode-manual": "*",
     "robopaint-mode-example": "*",
-    "robopaint-mode-spiral": "*"
+    "robopaint-mode-spiral": "*",
+    "robopaint-mode-remote": "*"
   },
   "repository": {
     "type": "git",
