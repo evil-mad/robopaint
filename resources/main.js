@@ -623,6 +623,13 @@ function loadAllModes(){
       package.root = modesDir + modeDirs[i] + '/';
       package.index = package.root + package.robopaint.index;
       modes[package.robopaint.name] = package;
+
+      // Load any persistent scripts into the DOM
+      if (package.robopaint.persistentScripts) {
+        _.each(package.robopaint.persistentScripts, function(scriptPath){
+          $('<script>').attr('src', package.root + scriptPath).appendTo('head');
+        });
+      }
     }
   }
 
