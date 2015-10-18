@@ -669,19 +669,19 @@ function loadAllModes(){
         .html('&nbsp;')
     );
 
-    // Add the non-core settings checkbox for enabling
-    if (m.robopaint.core !== true) {
-      $('fieldset.advanced-modes aside:first').after($('<div>').append(
-        $('<label>')
-          .attr('for', m.robopaint.name + 'modeenable')
-          .attr('data-i18n', i18nStr + 'title')
-          .text(robopaint.t(i18nStr + 'title')),
-        $('<input>').attr({type: 'checkbox', id: m.robopaint.name + 'modeenable'}),
-        $('<aside>')
-          .attr('data-i18n', i18nStr + 'detail')
-          .text(robopaint.t(i18nStr + 'detail'))
-      ));
-    }
+    // Add every mode to for enabling/disabling
+    $('fieldset.advanced-modes aside:first').after($('<div>').append(
+      $('<label>')
+        .attr('for', m.robopaint.name + 'modeenable')
+        .attr('data-i18n', i18nStr + 'title')
+        .text(robopaint.t(i18nStr + 'title')),
+      $('<input>')
+        .attr({type: 'checkbox', id: m.robopaint.name + 'modeenable'})
+        .prop('checked', m.robopaint.core),
+      $('<aside>')
+        .attr('data-i18n', i18nStr + 'detail')
+        .text(robopaint.t(i18nStr + 'detail'))
+    ));
   }
 }
 
