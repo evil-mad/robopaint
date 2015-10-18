@@ -5,7 +5,6 @@
     <script type="text/javascript" src="scripts/lib/socket.io.js"></script>
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="scripts/main.settings.js"></script>
-    <script type="text/javascript" src="scripts/main.api.js"></script>
     <script type="text/javascript" src="translate.js"></script>
     <script type="text/javascript" src="scripts/lib/jquery.ddslick.min.js"></script>
 
@@ -38,30 +37,6 @@
 <a id="bar-translate" href="#">&nbsp;</a>
 <div id="modalmask"></div>
 <div id="settings">Loaded via jQuery...</div>
-
-<div id="remoteprint-window" class="hidden print">
-  <h3 data-i18n>remoteprint.title</h3>
-  <!-- Silly grouped icon thing... -->
-  <div class="icons">
-    <span class="icon-cloud-thunder" data-i18n="[title]remoteprint.icontitle.from">&nbsp;</span>
-    <span class="icon-shuffle" data-i18n="[title]remoteprint.icontitle.through">&nbsp;</span>
-    <span class="icon-print" data-i18n="[title]remoteprint.icontitle.to">&nbsp;</span>
-  </div>
-
-  <div id="preview-scale-container">
-    <svg id="preview" xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="1152">
-      <g id="cncserversvg" transform="translate(48,48)"></g>
-    </svg>
-    <fieldset id="details">
-      <legend data-i18n>remoteprint.details.title</legend>
-      <button disabled="disabled" id="pause" data-i18n>common.action.pause</button>
-      <div id="statusmessage"></div>
-      <progress title="Current progress" max="100" value="0"></progress>
-      <button class="normal cancel" data-i18n="[title]remoteprint.details.exit.title;remoteprint.details.exit.text">remoteprint.details.exit.text</button>
-    </fieldset>
-  </div>
-
-</div>
 
 <img id="loader" src="images/loading_spinner.svg"/>
 
