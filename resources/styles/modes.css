@@ -74,3 +74,81 @@ button.normal:disabled, button.normal:disabled:hover {
   50%  { box-shadow: 0 0 10px 5px #04aa1e; }
   100%  { box-shadow: 0 0 10px 10px #04aa1e; }
 }
+
+
+/* iOS style checkboxes switches - To use these add a DIV after the checkbox
+   with a click event to click the checkbox */
+input.fancy[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+}
+
+input.fancy[type="checkbox"]:disabled,
+input.fancy[type="checkbox"]:disabled + div {
+  opacity: 0.8;
+}
+
+input.fancy[type="checkbox"] + div {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  width: 2em;	height: 1em;
+  border: 2px solid rgba(0,0,0,.3);
+  border-radius: 999px;
+  background: white;
+  background-image: linear-gradient(90deg, #64bd63 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  background-origin: border-box;
+  background-clip: border-box;
+  overflow: hidden;
+  transition-duration: .2s;
+  transition-property: padding, width, background-position, text-indent;
+  font-size: 112%; /* change this and see how they adjust! */
+}
+
+input.fancy[type="checkbox"]:checked + div {
+  padding-left: 1em; width: 1em;
+  background-position: 0 0;
+  border: 2px solid #64bd63;
+}
+
+input.fancy[type="checkbox"] + div:before {
+  content: ' ';
+  float: left;
+  width: 1.65em; height: 1.65em;
+  margin: -.1em;
+  border: 1px solid rgba(0,0,0,.35);
+  border-radius: inherit;
+  background: white;
+  background-color: white;
+  box-shadow: 0 .1em .1em .1em hsla(0,0%,100%,.8) inset,
+              0 0 .5em rgba(0,0,0,.3);
+  color: white;
+  text-shadow: 0 -1px 1px rgba(0,0,0,.3);
+  text-indent: -2.5em;
+}
+
+input.fancy[type="checkbox"]:active + div:before {
+  background-color: #eee;
+}
+
+input.fancy[type="checkbox"]:focus + div {
+  box-shadow: 0 .1em .1em rgba(0,0,0,.2) inset,
+              0 .45em 0 .1em rgba(0,0,0,.05) inset,
+              0 0 .4em 1px rgba(255,0,0,.5);
+}
+
+input.fancy[type="checkbox"] + div:before,
+input.fancy[type="checkbox"] + div:after {
+  font: bold 60%/1.9 sans-serif;
+  text-transform: uppercase;
+}
+
+input.fancy[type="checkbox"] + div:after {
+  content: ' ';
+  float: left;
+  text-indent: .5em;
+  color: rgba(0,0,0,.45);
+  text-shadow: none;
+}
