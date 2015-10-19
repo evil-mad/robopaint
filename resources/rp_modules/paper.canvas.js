@@ -234,7 +234,7 @@ module.exports = {
     }
 
     // SVG data loading!
-    paper.canvas.loadSVG = function(svgData) {
+    paper.canvas.loadSVG = function(svgData, noUngroup) {
       paper.canvas.mainLayer.removeChildren();
       paper.canvas.tempLayer.removeChildren();
       paper.canvas.actionLayer.removeChildren();-
@@ -246,7 +246,7 @@ module.exports = {
       });
 
       // SVG Imports as a group, ungroup it.
-      if (paper.canvas.mainLayer.children.length) {
+      if (paper.canvas.mainLayer.children.length && !noUngroup) {
         var group = paper.canvas.mainLayer.children[0];
 
         group.parent.addChildren(group.removeChildren());
