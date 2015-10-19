@@ -125,8 +125,10 @@ module.exports = function(paper) {
       paper.utils.ungroupAllGroups(tmp);
 
       // Filter out non-fill paths, and ensure paths are closed.
-      for(var i in tmp.children) {
-        var path = tmp.children[i];
+
+      // If you modify the child list, you MUST operate on a COPY
+      var kids = _.extend([], tmp.children);
+      _.each(kids, function(path) {
         if (!paper.utils.hasColor(path.fillColor)) {
           path.remove();
         } else {
@@ -137,9 +139,9 @@ module.exports = function(paper) {
           path.strokeWidth = 0;
           path.strokeColor = null;
         }
-      }
+      });
 
-      // Move through each preview layer child and subtract each layer from the
+      // Move through each temp layer child and subtract each layer from the
       // previous, again and again, only if we're checking occlusion.
       if (settings.checkFillOcclusion) {
         for (var srcIndex = 0; srcIndex < tmp.children.length; srcIndex++) {
@@ -162,7 +164,6 @@ module.exports = function(paper) {
           }
         }
       }
-
 
       // Keep the user up to date
       if (settings.path) {
