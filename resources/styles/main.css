@@ -323,6 +323,7 @@ body.home #bar a:hover.selected{
   background-size: 35px;
   height: 34px;
   width: 35px;
+  margin-top: -1px;
   display: inline-block;
   margin-right: 1px;
   background-position: center 1px;
