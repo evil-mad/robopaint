@@ -387,9 +387,9 @@ function preloadComplete() {
 
 } catch(e) {
   console.error('Problem during mode load:' , e)
-  /*if (mode.robopaint.debug === true){
+  if (mode.robopaint.debug === true){
     ipc.sendToHost('modeReady'); // Tell RP main host to show the window anyway.
-  } else {*/
+  } else {
     ipc.sendToHost('modeLoadFail'); // Tell RP main host the mode should close.
-  //}
+  }
 }
