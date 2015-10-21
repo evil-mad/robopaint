@@ -249,6 +249,17 @@ function bindMainControls() {
     checkModeClose(false, e.target.id.split('-')[1]);
   });
 
+
+  // Bind calibrator parts =========================
+  $('#bar-calibrate').click(function(){
+    var $c = $('#calibrator');
+    if (!$c.data('visible')) {
+      $c.css('top', '45px').data('visible', true);
+    } else {
+      $c.css('top', '').data('visible', false);
+    }
+  });
+
   // Bind toolbar modal links =======================
   $('#bar a.modal').click(function(e){
     var modal = this.id.split('-')[1];
