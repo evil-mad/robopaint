@@ -11,7 +11,7 @@ var _ = require('underscore');
 // List of shortcuts and paths to RP modules and other libraries.
 var modules = {
   paper: {path: appPath + '/node_modules/paper/dist/paper-full', type: 'dom'},
-  cnc_api: {path: appPath + '/node_modules/cncserver/example/cncserver.client.api', type: 'dom'},
+  cnc_api: {path: appPath + '/node_modules/cncserver/example/cncserver.client.api', type: 'node'},
   utils: {name: 'robopaint.utils', type: 'node'},
   mediasets: {name: 'robopaint.mediasets', type: 'node'},
   manager: {name: 'cncserver.manager', type: 'node'},

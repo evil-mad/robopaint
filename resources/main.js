@@ -18,8 +18,6 @@ var app = remote.require('app');
 var appPath = app.getAppPath() + '/';
 var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
 
-rpRequire('cnc_api'); // Add the DOM CNCServer API wrapper
-
 // Setup and hide extraneous menu items for Mac Menu
 if (process.platform === "darwin") {
   // TODO: Implement Menus!
@@ -69,6 +67,9 @@ var robopaint = {
     return appMode === "home" ? {robopaint: {}} : this.modes[appMode];
   }
 };
+
+// Add the Node CNCServer API wrapper
+rpRequire('cnc_api')(cncserver, robopaint.utils.getAPIServer(robopaint.settings));
 
 // currentBot lies outside of settings as it actually controls what settings will be loaded
 robopaint.currentBot = robopaint.utils.getCurrentBot();
@@ -324,10 +325,6 @@ function responsiveResize() {
  * Initialize the Socket.IO websocket connection
  */
 function initSocketIO(){
-  // Set base CNC Server API wrapper access location
-  if (!robopaint.cncserver.api) robopaint.cncserver.api = {};
-  robopaint.cncserver.api.server = robopaint.utils.getAPIServer(robopaint.settings);
-
   // Add Socket.IO include now that we know where from and the server is running
   var path = robopaint.cncserver.api.server.protocol +
     '://' + robopaint.cncserver.api.server.domain + ':' +

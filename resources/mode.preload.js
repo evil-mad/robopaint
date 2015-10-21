@@ -35,14 +35,13 @@ var robopaint = window.robopaint = {
 };
 
 robopaint.settings = robopaint.utils.getSettings();
-rpRequire('cnc_api', function(){
-  window.cncserver.api.server = robopaint.utils.getAPIServer(robopaint.settings);
-  robopaint.cncserver = window.cncserver;
-  robopaint.cncserver.api.settings.bot(function(b){
-    robopaint.canvas = robopaint.utils.getRPCanvas(b);
-    robopaint.currentBot = robopaint.utils.getCurrentBot(b);
-    preloadComplete(); // This should be the last thing to run in preload.
-  });
+window.cncserver = {};
+robopaint.cncserver = window.cncserver;
+rpRequire('cnc_api')(robopaint.cncserver, robopaint.utils.getAPIServer(robopaint.settings));
+robopaint.cncserver.api.settings.bot(function(b){
+  robopaint.canvas = robopaint.utils.getRPCanvas(b);
+  robopaint.currentBot = robopaint.utils.getCurrentBot(b);
+  preloadComplete();
 });
 
 // Add in a small API for getting and setting the SVG content, as the storage
