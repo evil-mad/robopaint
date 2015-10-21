@@ -55,7 +55,8 @@
       "park": "Park Inicio",
       "canceltitle": "Cancelar trabajo de impresión actual.",
       "pause": "Pausa",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "cancelconfirm": "¿Seguro que desea cancelar el trabajo actual?"
     },
     "implement": {
       "pen": "Pluma",
@@ -142,7 +143,9 @@
     "tabs": {
       "output": "Pintura Estilo",
       "common": "Configuración básica",
-      "advanced": "Avanzado"
+      "advanced": "Avanzado",
+      "media": "Herramienta",
+      "modes": "Modos"
     },
     "buttons": {
       "reset": {
@@ -212,7 +215,8 @@
         "opt3": "Largo (8mm)",
         "opt4": "Uff (13mm)",
         "opt5": "Poco útil (20mm)",
-        "detail": "El factor distancia para mover el pincel más allá al levantar para compensar la curvatura del cepillo. El valor predeterminado es **5 mm.**"
+        "detail": "El factor distancia para mover el pincel más allá al levantar para compensar la curvatura del cepillo. El valor predeterminado es **5 mm.**",
+        "optx": "(Automática desde Implementar)"
       },
       "filltitle": "Llenar",
       "filltype": {
@@ -264,7 +268,19 @@
         "opt1": "Inmersión individual en agua y pintura",
         "opt2": "Inmersión doble en agua y pintura",
         "detail": "Al rellenar pintura, obtener una gran cantidad de pintura (por defecto) o simplemente chapuzón en la pintura, ya sea una o dos veces."
-      }
+      },
+      "usewhite": "Utilice medios blancas",
+      "prefill": "Búfer prellenado",
+      "optimize": "Optimizar orden ruta",
+      "usewhiteinfo": "Si está desactivada, cuando la configuración de los medios contienen un color blanco, que se tendrá en cuenta cuando existe un camino blanco para ser rastreado.",
+      "render": {
+        "title": "Rendering Path",
+        "tab2": "Rellene",
+        "tab1": "contorno",
+        "general": "Llenar y esbozo general"
+      },
+      "prefillinfo": "Si se activa, se enviarán todos los comandos por lotes en los modos de apoyo antes de que el robot comienza a trabajar. Esto debería eliminar la tartamudez en el arranque, aunque tienes que esperar más tiempo antes de que su trabajo se inicia la impresión.",
+      "optimizeinfo": "Si se activa, todos los caminos de pintura automáticas (llenar y accidente cerebrovascular) se reordenan según el color y la proximidad a finales trayectoria anterior. Caminos incluso invertirse para asegurar la distancia menor entre el trabajo, pero si se trabaja con varias líneas de texto pueden tomar un camino muy extraño."
     },
     "common": {
       "servo": {
@@ -315,6 +331,75 @@
         "title": "Sólo permiten conexiones desde este equipo:",
         "detail": "Desactive esta para conectarse al servidor IPA CNC en RoboPaint de otros dispositivos. **El cambio requiere reiniciar la aplicación.**"
       }
+    },
+    "stroke": {
+      "enable": "Ruta traza acaricia / contornos",
+      "enableinfo": "Si está desactivada, no hay esquemas / accidentes cerebrovasculares se pueden rastrear en cualquier funcionalidad modo automático.",
+      "fill": "Rellenos de esquema",
+      "invisible": "Caminos invisibles Stroke",
+      "closefilled": "Cerrar caminos llenos",
+      "fillinfo": "Si está activado, se añadirá un esbozo del mismo color para los caminos llenos sin un derrame cerebral.",
+      "occlusionall": "Oclusión Carrera / detección de solapamiento",
+      "invisibleinfo": "Si se activa, se añadirán golpes para todos los caminos independientemente del grosor del trazo o color existentes.",
+      "closefilledinfo": "Si se activa, caminos rellenos sin cerrar se describen totalmente como si estuvieran cerrados.",
+      "occfills": "Oclusión bajo rellenos",
+      "occlusionallinfo": "Si está desactivada, todos los contornos / carrera trazado ignorará solapamiento ruta y el orden de las capas.",
+      "occstroke": "Oclusión bajo golpes",
+      "occfillsinfo": "Si está desactivada, todos los contornos / carrera trazado ignorará lleno de color se superpone.",
+      "occcolor": "No haga caso de la oclusión bajo mismo color",
+      "occstrokeinfo": "Si está desactivada, todas rastreo contornos / carrera ignorará trazo se superpone.",
+      "occtrans": "No haga caso de la oclusión en virtud de relleno o trazo transparente",
+      "occtransinfo": "Si se activa, todos rastreo contornos / carrera bajo caminos transparentes ignorará oclusión.",
+      "occcolorinfo": "Si se activa, todos los contornos / carrera trazado de la misma Collor como un relleno de superposición o un derrame cerebral ignorará oclusión."
+    },
+    "fill": {
+      "enable": "Ruta traza llena",
+      "dynamic": "Opciones de relleno de línea dinámico",
+      "group": {
+        "title": "La agrupación de Umbral:",
+        "opt0": "Ninguno",
+        "info": "Umbral mínimo para agrupar los finales de línea dinámicos juntos en grupos conectados. Valor grande conecta más grupos, 0 asegurará hay grupos se hacen.",
+        "opt20": "Pequeño (20)",
+        "opt40": "Por defecto (40)",
+        "opt60": "Medio (60)",
+        "opt100": "Gigante (100)",
+        "opt80": "Enorme (80)"
+      },
+      "enableinfo": "Si está desactivada, no hay rellenos se pueden rastrear en cualquier funcionalidad modo automático.",
+      "hatch": "Añadir relleno escotilla secundaria",
+      "random": "Randomize ángulo de llenado",
+      "hatchinfo": "Si está activado, se añadirá un relleno ángulo opuesto secundario para cada ruta. Will ** no ** ángulo de la altura de relleno al azar a continuación.",
+      "randominfo": "Si se activa, llenar ángulo de diferentes caminos se asignó al azar.",
+      "overlay": "Opciones de relleno Espiral",
+      "align": "Alinear relleno de caracol a cada ruta",
+      "occ": "Compruebe Oclusión",
+      "precisioninfo": "Principalmente para relleno espiral, este ajuste también se utiliza para convertir el zig-suave en un procesamiento posterior línea poligonal.",
+      "aligninfo": "Si está habilitado (espiral tipo de relleno solamente), la espiral de relleno se centrará en el camino de llenado. Si está desactivada, la espiral se alineará con el centro de la tela para cada ruta.",
+      "occinfo": "Si está desactivado, toda trazado relleno ignorará lleno de color se superpone."
+    },
+    "trace": {
+      "title": "Trazar Velocidad:",
+      "opt2": "Incumplimiento (2 ×)",
+      "opt1": "Lenta (1 ×)",
+      "info": "La cantidad de trabajo realizado para cada cuadro. Mayor número de iteraciones debería tomar menos tiempo en general, pero actualizar con menos frecuencia.",
+      "opt4": "Quad (4 ×)",
+      "opt10": "Súper (10 ×)",
+      "opt20": "Máximo (20 ×)",
+      "width": {
+        "title": "Vista previa de ancho de línea:",
+        "info": "Cómo grandes caminos trazados aparecerán en la vista previa en vivo. No afecta la impresión.",
+        "opt1": "Mínima (1)",
+        "optneg1": "Automático (establecido por la aplicación)",
+        "opt5": "Medio (5)",
+        "opt10": "Por defecto (10)",
+        "opt20": "Amplia (20)",
+        "opt30": "Extreme (30)"
+      }
+    },
+    "media": {
+      "media": "Medios",
+      "implements": "Implementa",
+      "refill": "Medios de recarga"
     }
   },
   "libs": {

@@ -57,7 +57,8 @@
       "pen": {
         "lower": "Basse Pen",
         "raise": "Levez Pen"
-      }
+      },
+      "cancelconfirm": "Etes-vous sûr que vous voulez annuler le travail en cours?"
     },
     "labels": {
       "control": "Contrôle",
@@ -142,7 +143,9 @@
     "tabs": {
       "output": "Style de Peinture",
       "common": "Standard",
-      "advanced": "Avancé"
+      "advanced": "Avancé",
+      "media": "Outil",
+      "modes": "Modes"
     },
     "buttons": {
       "reset": {
@@ -212,7 +215,8 @@
         "opt3": "Beaucoup (8mm)",
         "opt4": "Oh là là (13mm)",
         "opt5": "Vraiment? (20mm)",
-        "detail": "La distance nécessaire pour aller au-delà de la ligne lorsque vous soulevez la brosse pour tenir compte de la courbure dans les poils de la brosse . La valeur par défaut est **5mm**."
+        "detail": "La distance nécessaire pour aller au-delà de la ligne lorsque vous soulevez la brosse pour tenir compte de la courbure dans les poils de la brosse . La valeur par défaut est **5mm**.",
+        "optx": "(Automatique de mettre en œuvre)"
       },
       "filltitle": "Remplissage",
       "filltype": {
@@ -264,7 +268,19 @@
         "opt1": "Dip unique dans l'eau et la peinture",
         "opt2": "Double plongeon dans l'eau et la peinture",
         "detail": "Lors du remplissage de la peinture, obtenir beaucoup de peinture (par défaut) ou tout simplement rafraîchir dans la peinture une ou deux fois."
-      }
+      },
+      "usewhite": "Utiliser les médias blancs",
+      "prefill": "Tampon Prefill",
+      "optimize": "Optimiser ordre du chemin",
+      "render": {
+        "title": "Chemin Rendu",
+        "tab1": "Contour",
+        "tab2": "Remplir",
+        "general": "Remplir et aperçu général"
+      },
+      "usewhiteinfo": "Si elle est désactivée, lorsque vos paramètres de support contiennent une couleur blanche, elle sera ignorée quand un chemin blanc existe pour être tracée.",
+      "prefillinfo": "Si elle est activée, toutes les commandes de lots sur les modes de soutien seront envoyés avant le robot commence à travailler. Cela devrait éliminer le bégaiement au démarrage, si vous avez à attendre plus longtemps avant que votre travail commence à imprimer.",
+      "optimizeinfo": "Si elle est activée, tous les chemins automatiques de peinture (Remplissage et Contour) seront réorganisées en fonction de la couleur et la proximité de la fin de la trajectoire précédente. Chemins vont même être inversés pour assurer la plus faible distance entre le travail, mais peuvent prendre un chemin très étrange si vous travaillez avec plusieurs lignes de texte."
     },
     "common": {
       "servo": {
@@ -315,6 +331,75 @@
         "title": "Autoriser uniquement les connexions à partir de cet ordinateur:",
         "detail": "Décochez cette option pour connecter d'autres appareils au serveur CNC de RoboPaint. ** nota bene: le changement exige un redémarrage.**"
       }
+    },
+    "stroke": {
+      "enable": "Chemin de Trace coups / contours",
+      "fill": "Remplissages Outline",
+      "enableinfo": "Si elle est désactivée, aucun Outlines / coups seront tracés dans toute la fonctionnalité du mode automatique.",
+      "invisible": "Stroke chemins invisibles",
+      "closefilled": "Fermer chemins remplis",
+      "fillinfo": "Si elle est activée, un aperçu de la même couleur sera ajouté pour les chemins remplis sans un accident vasculaire cérébral.",
+      "occlusionall": "Occlusion de l'AVC / détection de chevauchement",
+      "occfills": "Occlusion sous remplissages",
+      "closefilledinfo": "Si elle est activée, les chemins remplis non fermées seront décrites pleinement que si elles ont été fermées.",
+      "occlusionallinfo": "Si elle est désactivée, tous les contours / AVC traçage ignorera chemin chevauchement et l'ordre des couches.",
+      "invisibleinfo": "Si elle est activée, les coups seront ajoutés à tous les chemins existants, indépendamment de la largeur du trait ou la couleur.",
+      "occfillsinfo": "Si elle est désactivée, tous les contours / AVC traçage ignorera rempli couleur chevauche.",
+      "occstroke": "Occlusion vertu coups",
+      "occcolor": "Ignorer occlusion vertu même couleur",
+      "occstrokeinfo": "Si elle est désactivée, tous les contours / AVC traçage va ignorer course chevauche.",
+      "occtrans": "Ignorer occlusion sous fond ou de contour transparent",
+      "occcolorinfo": "Si elle est activée, tous les contours / AVC traçage du même Collor comme un remplissage ou un AVC chevauchement ignorera occlusion.",
+      "occtransinfo": "Si elle est activée, tous les contours / AVC traçage vertu chemins transparentes ignorera occlusion."
+    },
+    "fill": {
+      "enable": "Chemin de Trace remplit",
+      "enableinfo": "Si elle est désactivée, aucun remplissages seront tracés dans toute la fonctionnalité du mode automatique.",
+      "dynamic": "Options de remplissage de ligne dynamique",
+      "group": {
+        "title": "Regroupement Seuil:",
+        "opt0": "Aucun",
+        "opt20": "Small (20)",
+        "info": "Seuil minimum pour le groupement des fins de ligne dynamiques ensemble dans des groupes connectés. Grande valeur relie plusieurs groupes, 0 veillera à aucun groupes sont constitués.",
+        "opt40": "Par défaut (40)",
+        "opt60": "Moyen (60)",
+        "opt80": "Immense (80)",
+        "opt100": "Géant (100)"
+      },
+      "hatch": "Ajouter remplissage hachuré secondaire",
+      "random": "Aléatoire angle de remplissage",
+      "hatchinfo": "Si elle est activée, un angle de remplissage opposée secondaire sera ajouté pour chaque trajet. ** NE ** angle de match pour remplissage aléatoire ci-dessous.",
+      "overlay": "Options de remplissage Spirale",
+      "randominfo": "Si elle est activée, remplissez angle de chemins différents seront randomisés.",
+      "align": "Alignez remplissage spirale pour chaque trajet",
+      "precisioninfo": "Principalement pour le remplissage spirale, ce paramètre est également utilisé pour convertir le zig-lisse dans un post-traitement de la ligne polygonale.",
+      "occ": "Vérifiez Occlusion",
+      "aligninfo": "Si elle est activée (spirale type de remplissage seulement), la spirale de remplissage sera centré sur le chemin de remplissage. Si elle est désactivée, la spirale va aligner au centre de la toile pour chaque chemin.",
+      "occinfo": "Si elle est désactivée, tout remplissage traçage ignorera rempli couleur chevauche."
+    },
+    "trace": {
+      "title": "Trace Vitesse:",
+      "opt1": "Lent (1 ×)",
+      "info": "La quantité de travail effectué pour chaque trame. Supérieur nombre d'itérations devrait prendre moins de temps ensemble, mais mettre à jour moins souvent.",
+      "opt2": "Par défaut (2 x)",
+      "opt4": "Quad (4 ×)",
+      "opt10": "Super (10 ×)",
+      "opt20": "Maximum (20 x)",
+      "width": {
+        "title": "Aperçu ligne largeur:",
+        "optneg1": "Automatique (fixé par la mise en œuvre)",
+        "info": "Comment les grands sentiers tracés apparaissent dans l'aperçu en direct. Ne pas effectuer l'impression.",
+        "opt1": "Minimum (1)",
+        "opt5": "Moyen (5)",
+        "opt10": "Par défaut (10)",
+        "opt20": "Large (20)",
+        "opt30": "Extreme (30)"
+      }
+    },
+    "media": {
+      "media": "Médiatique",
+      "implements": "Outillages",
+      "refill": "Recharge médias"
     }
   },
   "libs": {

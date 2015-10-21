@@ -57,7 +57,8 @@
       "pen": {
         "raise": "Levante Pen",
         "lower": "Lower Pen"
-      }
+      },
+      "cancelconfirm": "Tem certeza de que deseja cancelar o trabalho atual?"
     },
     "labels": {
       "control": "Controle",
@@ -142,7 +143,9 @@
     "tabs": {
       "output": "Estilo de impressão",
       "common": "Configuração básica",
-      "advanced": "Avançado"
+      "advanced": "Avançado",
+      "media": "Ferramenta",
+      "modes": "Modos"
     },
     "buttons": {
       "reset": {
@@ -212,7 +215,8 @@
         "opt3": "Longer (8mm)",
         "opt4": "Caramba (13mm)",
         "opt5": "Inúteis (20mm)",
-        "detail": "O fator de distância para mover o pincel além ao levantar para compensar escova curva. O padrão é 5 milímetros ** **."
+        "detail": "O fator de distância para mover o pincel além ao levantar para compensar escova curva. O padrão é 5 milímetros ** **.",
+        "optx": "(Automatic do Implemento)"
       },
       "filltitle": "Preencher",
       "filltype": {
@@ -264,7 +268,19 @@
         "opt2": "Duplo mergulho em água e pintura",
         "opt1": "Dip Individual em água e tinta",
         "detail": "Ao reabastecer pintura, recebo um monte de tinta (padrão) ou simplesmente mergulhar na pintura uma ou duas vezes."
-      }
+      },
+      "usewhite": "Use mídia branco",
+      "prefill": "Tampão Prefill",
+      "optimize": "Otimizar ordem de caminho",
+      "usewhiteinfo": "Se desativado, quando suas configurações de mídia contêm uma cor branca, ele será ignorado quando existe um caminho branco para ser rastreado.",
+      "render": {
+        "title": "Caminho Rendering",
+        "tab1": "Esboço",
+        "tab2": "Preencher",
+        "general": "Preencha & esboço geral"
+      },
+      "prefillinfo": "Se ativado, todos os comandos em lotes sobre os modos de apoio serão enviados antes que o robô começa a trabalhar. Isso deve eliminar a gagueira na partida, mas você tem que esperar mais tempo para que o trabalho começa a imprimir.",
+      "optimizeinfo": "Se ativado, todos os caminhos automáticas de pintura (preencher e acidente vascular cerebral) serão reajustados de acordo com a cor ea proximidade de fim de caminho anterior. Caminhos vai mesmo ser revertida para garantir menor distância entre o trabalho, mas pode tomar um caminho muito estranho se trabalhar com várias linhas de texto."
     },
     "common": {
       "servo": {
@@ -315,6 +331,75 @@
         "title": "Só permitir conexões a partir deste computador:",
         "detail": "Desmarque essa para se conectar à API CNCServer em RoboPaint de outros dispositivos. ** Mudança requer reinicialização App. **"
       }
+    },
+    "stroke": {
+      "enable": "Caminho de rastreamento Strokes / contornos",
+      "fill": "Preenchimentos de Contorno",
+      "invisible": "AVC caminhos invisíveis",
+      "enableinfo": "Se desativada, não há esboços / cursos será traçado em qualquer funcionalidade modo automático.",
+      "fillinfo": "Se ativado, um esboço da mesma cor será adicionado para caminhos cheias sem um acidente vascular cerebral.",
+      "closefilled": "Fechar caminhos cheios",
+      "invisibleinfo": "Se ativado, os cursos serão adicionadas a todos os caminhos existentes, independentemente da largura do traço ou cor.",
+      "closefilledinfo": "Se ativado, não fechadas caminhos preenchidos serão delineadas totalmente como se eles estavam fechados.",
+      "occlusionall": "Oclusão tempos / detecção de sobreposição",
+      "occlusionallinfo": "Se desativado, todos traçado contornos / curso irá ignorar sobreposição caminho e ordem camada.",
+      "occfills": "Oclusão sob preenchimentos",
+      "occstroke": "Oclusão sob golpes",
+      "occfillsinfo": "Se desativado, todos traçado contornos / curso irá ignorar cheio cor sobreposições.",
+      "occstrokeinfo": "Se desativado, todos traçado contornos / curso irá ignorar acidente vascular cerebral se sobrepõe.",
+      "occcolor": "Ignorar oclusão sob mesma cor",
+      "occtrans": "Ignorar oclusão sob preenchimento transparente ou acidente vascular cerebral",
+      "occtransinfo": "Se ativado, todos traçado contornos / curso sob caminhos transparentes irá ignorar oclusão.",
+      "occcolorinfo": "Se ativado, todos traçado contornos / curso do mesmo Collor como um preenchimento de sobreposição ou acidente vascular cerebral irá ignorar oclusão."
+    },
+    "fill": {
+      "enable": "Caminho de rastreamento preenche",
+      "dynamic": "Opções de preenchimento de linha dinâmico",
+      "enableinfo": "Se desativada, não há preenchimentos será traçado em qualquer funcionalidade modo automático.",
+      "group": {
+        "title": "Agrupando Threshold:",
+        "opt0": "Nenhum",
+        "info": "Limite mínimo para o agrupamento de finais de linha dinâmicas juntos em grupos conectados. Grande valor conecta mais grupos, 0 irá garantir que não haja grupos são feitas.",
+        "opt40": "Padrão (40)",
+        "opt20": "Pequeno (20)",
+        "opt60": "Meio (60)",
+        "opt80": "Enorme (80)",
+        "opt100": "Gigante (100)"
+      },
+      "hatch": "Adicionar preenchimento escotilha secundário",
+      "random": "Randomize ângulo de preenchimento",
+      "hatchinfo": "Se ativado, um preenchimento ângulo oposto secundário será adicionado para cada caminho. Will ** não ** ângulo jogo para preenchimento aleatório abaixo.",
+      "overlay": "Opções de preenchimento Espiral",
+      "randominfo": "Se ativado, preencher ângulo de diferentes caminhos serão distribuídos aleatoriamente.",
+      "align": "Alinhar preenchimento espiral para cada caminho",
+      "occ": "Verifique para Oclusão",
+      "occinfo": "Se desativada, todas traçado preenchimento irá ignorar cheio cor sobreposições.",
+      "precisioninfo": "Principalmente para preenchimento espiral, essa configuração também é usado para converter o zig-suave em uma poligonal de processamento de linha post.",
+      "aligninfo": "Se ativado (espiral tipo de preenchimento apenas), a espiral de preenchimento será centrado no caminho de preenchimento. Se desativada, a espiral vai alinhar ao centro da tela para cada caminho."
+    },
+    "trace": {
+      "title": "Seguir a velocidade:",
+      "info": "A quantidade de trabalho feito para cada quadro. Contagem de iteração superior deve levar menos tempo no geral, mas atualizar com menos frequência.",
+      "opt1": "Lenta (1 ×)",
+      "opt2": "Padrão (2 x)",
+      "opt4": "Quad (4 ×)",
+      "opt10": "Super (10 ×)",
+      "opt20": "Máxima (20 ×)",
+      "width": {
+        "title": "Pré-visualização largura da linha:",
+        "optneg1": "Automático (ajustado por implementar)",
+        "info": "Como grandes caminhos traçados aparecerá na visualização ao vivo. Não afeta a impressão.",
+        "opt1": "Mínimo (1)",
+        "opt10": "Padrão (10)",
+        "opt5": "Médio (5)",
+        "opt20": "Wide (20)",
+        "opt30": "Extrema (30)"
+      }
+    },
+    "media": {
+      "media": "Mídia",
+      "implements": "Implementos",
+      "refill": "Media Recarga"
     }
   },
   "libs": {

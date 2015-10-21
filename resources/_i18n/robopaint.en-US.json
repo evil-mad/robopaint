@@ -29,6 +29,7 @@
       "print": "Print",
       "cancel": "Cancel",
       "canceltitle": "Cancel current print job.",
+      "cancelconfirm": "Are you sure you want to cancel the current job?",
       "apply": "Apply",
       "done": "Done",
       "autocolor": "Auto Color",
@@ -118,8 +119,7 @@
       "home": "Home Screen",
       "edit": "Open, resize, and edit existing vector artwork.",
       "open": "Open an example design",
-      "printauto": "Printing Mode: Print your design!",
-      "printmanual": "Manual Mode: Customize your print",
+      "calibrate": "Calibrate height",
       "help": "Help! (Open web docs)",
       "settings": "Settings",
       "version": "v"
