@@ -109,6 +109,12 @@
     "success": "Connected!",
     "disconnect": "Bot Disconnected!",
     "pausetillempty": "Streaming all commands before starting to prevent slowdown...",
+    "modeproblem": {
+      "load": "Failed to load mode!",
+      "loaddetail": "Something went wrong when loading that mode, see the debug console for details.",
+      "loadconsole": "Toggle the console",
+      "loaddone": "OK"
+    },
     "button": {
       "continue": "Continue in Simulation mode",
       "retry": "Try to Reconnect"

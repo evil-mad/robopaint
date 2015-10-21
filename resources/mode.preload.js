@@ -10,6 +10,8 @@
  **/
 "use strict";
 
+try {
+
 var remote = require('remote');
 var path = require('path');
 var app = window.app = remote.require('app');
@@ -381,4 +383,13 @@ function preloadComplete() {
   if (_.isFunction(mode.pageInitReady)) mode.pageInitReady();
   console.log('RobPaint Mode APIs Preloaded & Ready!');
   ipc.sendToHost('modeReady'); // Tell RP main host to show the window.
+}
+
+} catch(e) {
+  console.error('Problem during mode load:' , e)
+  /*if (mode.robopaint.debug === true){
+    ipc.sendToHost('modeReady'); // Tell RP main host to show the window anyway.
+  } else {*/
+    ipc.sendToHost('modeLoadFail'); // Tell RP main host the mode should close.
+  //}
 }

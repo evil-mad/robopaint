@@ -149,26 +149,38 @@ function createSubwindow(callback) {
     preload: './mode.preload.js'
   })
     .appendTo('body')
-    .on('did-finish-load', fadeInWindow);
+    .on('did-get-response-details', function(){
+      // Open the mode's devtools when it's finished loading
+      if (robopaint.currentMode.robopaint.debug === true) {
+        $subwindow[0].openDevTools();
+      }
+    });
 
+  // Prevent default drag drop on modes.
   $subwindow[0].addEventListener('dragover', function(e) {
     e.preventDefault();
   });
 
+  // Log mode messages here if mode devtools isn't opened.
+  $subwindow[0].addEventListener('console-message', function(e) {
+    if (!$subwindow[0].isDevToolsOpened()){
+      console.log('MODE:', e.message);
+    }
+  });
+
+  // Hide the mode window then destroy it.
   $subwindow.hideMe = function(callback){
     $subwindow.fadeOut('slow', function(){
       destroySubwindow(callback);
     });
   };
 
+  // Make the mode window visible (should only happen when it's ready);
   $subwindow.showMe = function(callback){
     $subwindow
       .css('opacity', 0)
       .removeClass('hide')
       .css('opacity', 100)
-    if (robopaint.currentMode.robopaint.debug === true) {
-      $subwindow[0].openDevTools();
-    }
   };
 
   // Handle global channel message events from the mode (close/change/etc).
@@ -179,6 +191,26 @@ function createSubwindow(callback) {
         break;
       case 'modechange': // Mode has decided it's OK to change.
         continueModeChange();
+        break;
+      case 'modeReady':
+        $subwindow.showMe();
+        break;
+      case 'modeLoadFail':
+        robopaint.switchMode('home');
+
+        // Alert the user the mode failed with a non-modal messagebox
+        mainWindow.dialog({
+          t: 'MessageBox',
+          type: 'error',
+          message: i18n.t('status.modeproblem.load'),
+          cancelId: 1,
+          detail: i18n.t('status.modeproblem.loaddetail'),
+          buttons: [i18n.t('status.modeproblem.loadconsole'), i18n.t('status.modeproblem.loaddone')]
+        }, function(showDevtools) {
+          if (showDevtools === 0) {
+            mainWindow.toggleDevTools();
+          }
+        });
         break;
     }
   });
@@ -267,15 +299,6 @@ function bindMainControls() {
       case 'settings':
         // @see scripts/main.settings.js
         setSettingsWindow(true);
-        break;
-      case 'remoteprint':
-        // @see scripts/main.api.js
-        // TODO: Redo This part of Remoteprint
-        /*checkModeClose(function(){
-          robopaint.switchMode('home');
-          setRemotePrintWindow(true);
-        }, false, "home");*/
-
         break;
     }
 
@@ -529,15 +552,6 @@ function initQuickload() {
 
     return false;
   });
-}
-
-
-/**
- * "Public" helper function to fade in iframe when it's done loading
- */
-function fadeInWindow() {
-  console.log('FADEIN!');
-  $subwindow.showMe();
 }
 
 
