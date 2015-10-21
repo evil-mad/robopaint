@@ -14,13 +14,14 @@
     "jquery": "^2.1.4",
     "paper": "^0.9.24",
     "qtip2": "^2.2.0",
-    "underscore": "^1.8.3",
+    "request": "^2.65.0",
     "robopaint-mode-edit": "*",
-    "robopaint-mode-print": "*",
-    "robopaint-mode-manual": "*",
     "robopaint-mode-example": "*",
+    "robopaint-mode-manual": "*",
+    "robopaint-mode-print": "*",
+    "robopaint-mode-remote": "*",
     "robopaint-mode-spiral": "*",
-    "robopaint-mode-remote": "*"
+    "underscore": "^1.8.3"
   },
   "repository": {
     "type": "git",
