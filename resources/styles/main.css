@@ -348,6 +348,13 @@ body.home #bar-help:hover {
   color: #444 !important;
 }
 
+#bar #bar-calibrate {
+  width: 27px;
+  background-image: url('../images/icons/calibrate.svg');
+  display: inline-block;
+  background-repeat: no-repeat;
+}
+
 body.home #bar-translate {
   content: url('../images/icons/translation.svg');
   margin-bottom: -6px;
@@ -467,6 +474,7 @@ body.home #logo {
   left: 50%;
   margin-left: -128px;
   z-index: 0;
+  width: 256px;
 }
 
 body.home #loader {
@@ -640,4 +648,27 @@ body.home #remoteprint-mask:before {
     padding:8px;
     font-size: 0.7em;
   }
+}
+
+/* Height Calibrator Mini Window */
+#calibrator {
+  position: absolute;
+  right: 20px;
+  top: -165px;
+  background-color: rgba(166, 233, 230, 0.9);
+  border-radius: 1em;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  transition: top 0.6s;
+  overflow: hidden;
+  z-index: 6;
+}
+
+#calibrator, #calibrator .step {
+  width: 400px;
+  height: 200px;
+}
+
+#calibrator .step {
+  float: left;
 }
