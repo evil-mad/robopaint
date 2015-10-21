@@ -137,7 +137,7 @@ function startInitialization() {
  }
 }
 
-function createSubwindow() {
+function createSubwindow(callback) {
   if ($subwindow !== null) return;
 
   $subwindow = $('<webview>').attr({
@@ -157,8 +157,7 @@ function createSubwindow() {
 
   $subwindow.hideMe = function(callback){
     $subwindow.fadeOut('slow', function(){
-      destroySubwindow();
-      if (callback) callback();
+      destroySubwindow(callback);
     });
   };
 
@@ -185,12 +184,13 @@ function createSubwindow() {
   });
 
   $(robopaint).trigger('subwindowReady');
+  if (callback) callback();
 }
 
-function destroySubwindow() {
+function destroySubwindow(callback) {
   $subwindow.remove();
   $subwindow = null;
-  createSubwindow();
+  createSubwindow(callback);
 }
 
 /**
