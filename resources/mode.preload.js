@@ -20,6 +20,14 @@ var i18n = window.i18n = require('i18next-client');
 var $ = require('jquery');
 var _ = require('underscore');
 var rpRequire = window.rpRequire = require(appPath + '/resources/rp_modules/rp.require');
+// There are a number of async loads that must be complete before we can say
+// that mode preloading is actually done. Because of load race conditions, these
+// might load out of any kind of order, so each of these must be true before we
+// can reach the end of any preLoadComplete() call.
+var preloadCompleteAsyncChecklist = {
+  botLoaded: false,
+  mainLoaded: false
+};
 
 // Get our absolute mode path passed in the location hash, and get the mode's
 // package.json, and load it.
@@ -41,6 +49,8 @@ rpRequire('cnc_api')(robopaint.cncserver, robopaint.utils.getAPIServer(robopaint
 robopaint.cncserver.api.settings.bot(function(b){
   robopaint.canvas = robopaint.utils.getRPCanvas(b);
   robopaint.currentBot = robopaint.utils.getCurrentBot(b);
+
+  preloadCompleteAsyncChecklist.botLoaded = true;
   preloadComplete();
 });
 
@@ -142,7 +152,11 @@ if (mode.robopaint.dependencies) {
         $.qtip = require('qtip2');
       case 'paper':
         console.log('Loading Paper');
-        rpRequire('paper', preloadComplete);
+        preloadCompleteAsyncChecklist.paperLoaded = false;
+        rpRequire('paper', function(){
+          preloadCompleteAsyncChecklist.paperLoaded = true;
+          preloadComplete();
+        });
         break;
       default:
         rpRequire(modName);
@@ -342,13 +356,23 @@ function handleCNCServerMessages(name, data) {
   }
 }
 
+// Load in the modes custom main JS
+var mainHasLoaded = false;
+rpRequire({
+  path: path.join(mode.path.dir, mode.main),
+  type: 'dom'
+}, function(){
+  preloadCompleteAsyncChecklist.mainLoaded = true;
+  preloadComplete();
+})
+
 function preloadComplete() {
-  // If we need both of these before we're ready, they both load async so
-  // we need to check both before continuing to avoid race conditions.
-  // This may not actually be needed, but its technically possible.
-  if (mode.robopaint.dependencies && _.contains(mode.robopaint.dependencies, 'paper')) {
-    if (!robopaint.canvas || !window.paper) return;
-  }
+  // Only continue if the async load checklist has been completed.
+  var checkListComplete = true;
+  _.each(preloadCompleteAsyncChecklist, function(item){
+    if (!item) checkListComplete = false;
+  });
+  if (!checkListComplete) return;
 
   // Make sure we start with a clean slate.
   mode.run(['clear', 'resume'], true);
@@ -356,4 +380,5 @@ function preloadComplete() {
   if (_.isFunction(mode.bindControls)) mode.bindControls();
   if (_.isFunction(mode.pageInitReady)) mode.pageInitReady();
   console.log('RobPaint Mode APIs Preloaded & Ready!');
+  ipc.sendToHost('modeReady'); // Tell RP main host to show the window.
 }
