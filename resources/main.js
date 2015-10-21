@@ -148,13 +148,7 @@ function createSubwindow(callback) {
     disablewebsecurity: 'true',
     preload: './mode.preload.js'
   })
-    .appendTo('body')
-    .on('did-get-response-details', function(){
-      // Open the mode's devtools when it's finished loading
-      if (robopaint.currentMode.robopaint.debug === true) {
-        $subwindow[0].openDevTools();
-      }
-    });
+    .appendTo('body');
 
   // Prevent default drag drop on modes.
   $subwindow[0].addEventListener('dragover', function(e) {
@@ -181,6 +175,14 @@ function createSubwindow(callback) {
       .css('opacity', 0)
       .removeClass('hide')
       .css('opacity', 100)
+
+    // TODO: We tried to load this sooner, but it breaks jQuery very badly on
+    // require, especially on slower system. It's rumored this is a race
+    // condition with the document object not fully populated, but it's an
+    // Electron/Chromium bug for now.
+    if (robopaint.currentMode.robopaint.debug === true) {
+      $subwindow[0].openDevTools();
+    }
   };
 
   // Handle global channel message events from the mode (close/change/etc).
