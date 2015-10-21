@@ -237,7 +237,7 @@ function bindSettingsControls() {
   });
 
   // Catch all settings input changes
-  $('#settings input, #settings select').bind('change input', function(){
+  $('#settings input, #settings select').bind('change input', function(e){
     var $input = $(this);
     var pushKey = [];
     var pushVal = '';
@@ -273,7 +273,19 @@ function bindSettingsControls() {
 
         // Save settings
         cncserver.conf.bot.set('servo:presets:' + name, parseFloat($input.val()/10));
-        if (!initializing) cncserver.setHeight(name);
+
+        // On input with nothing in the buffer allow active change of the bot.
+        // On "change" of sliders, the user has finished sliding, we can reset
+        // the height back to UP. Allows changing while paused.
+        var state = robopaint.cncserver.state;
+        if (!initializing && (state.buffer.length === 0 || state.process.paused)) {
+          if (e.type === 'change') {
+            cncserver.setHeight('up', null, state.process.paused);
+          } else {
+            cncserver.setHeight(name, null, state.process.paused);
+          }
+        }
+
         robopaint.settings[this.id] = $input.val();
         break;
 
@@ -384,16 +396,6 @@ function bindSettingsControls() {
 
   // Done Button
   $('#settings-done').click(function(e) {
-    // Force the pen up when exiting...
-    if (appMode == 'print' || appMode == 'manual') {
-      // Unless we' have're probably printing something
-      if (robopaint.cncserver.state.buffer.length == 0) {
-        // Use the more abstracted API to allow sub-app callbacks to handle specifics
-        robopaint.cncserver.cmd.run('up');
-      }
-    } else {
-      robopaint.cncserver.cmd.run('up');
-    }
     setSettingsWindow(false);
   });
 
