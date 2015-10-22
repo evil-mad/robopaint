@@ -16,6 +16,7 @@ var mode = (typeof window.mode === 'undefined') ? false : window.mode;
 var settings = {
   path: null, // Pass a path object to only stroke that object.
   // Otherwise everything will be traced for strokes.
+  pathColor: null, // Pass the override color to replace the path color with.
   traceIterationMultiplier: 2, // Amount of work done in each frame.
   lineWidth: 10, // The size of the visual representation of the stroke line.
   flattenResolution: 15, // Stroke polygonal conversion resolution
@@ -94,6 +95,12 @@ module.exports = function(paper) {
         if (settings.path === path) {
           // Mark the new temp path copy.
           t.data.targetPath = true;
+
+          // And make sure to set its fill color!
+          if (settings.pathColor) {
+            t.strokeColor = paper.utils.snapColor(settings.pathColor);
+            t.strokeWidth = 10; // As long as it's something...
+          }
         }
       }
 
@@ -142,6 +149,11 @@ module.exports = function(paper) {
           path.strokeWidth = settings.lineWidth;
           maxLen += path.length;
           path.originalOpacity = path.opacity;
+
+          // Be sure to set the correct color/tool if given.
+          if (path.data.targetPath && settings.pathColor) {
+            path.data.color = settings.pathColor;
+          }
         }
 
         // If only stroking one path, visually hide all the other paths.
