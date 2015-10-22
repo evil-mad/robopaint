@@ -197,12 +197,16 @@ module.exports = function(paper) {
       for(var i = 0; i < settings.traceIterationMultiplier; i++) {
         if (runFillSpooling) { // Are we doing fills?
           if (!traceFillNext()){ // All paths complete?
+            // We toss the single path when we're done in shutdown, but we need
+            // it when we're running again for the hatch, so we hold onto it.
+            var tmpPath = settings.path;
+
             paper.fill.shutdown();
 
             if (settings.hatch === true) {
               settings.hatch = false;
               settings.angle+= 90;
-              paper.fill.setup(_.extend({}, settings));
+              paper.fill.setup(_.extend({}, settings, {path: tmpPath}), paper.fill.complete);
               return;
             }
 
