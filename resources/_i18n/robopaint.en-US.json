@@ -25,6 +25,7 @@
       "resume": "Resume",
       "stop": "Stop",
       "start": "Start",
+      "reset": "Reset",
       "save": "Save",
       "print": "Print",
       "cancel": "Cancel",
