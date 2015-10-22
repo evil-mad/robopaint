@@ -137,10 +137,18 @@ module.exports = function(paper) {
 
     // Get the actual color of the nearest color to the one given.
     snapColor: function (color, opacity) {
-      var snapID = paper.utils.snapColorID(color, opacity);
+      var snapID = "";
+
+      // Either we get a color object, or a snapID passed to get the color
+      if (typeof color === "string") {
+        snapID = color.replace('dip', '');
+      } else {
+        snapID = paper.utils.snapColorID(color, opacity);
+      }
+
       var outColor;
       // Switch between water and regular colors
-      if (snapID === 'water2') {
+      if (snapID.indexOf('water') !== -1) {
         // TODO: Redo this when media sets get done.
         // Make Water preview paths blue and transparent
         outColor = new paper.Color('#256d7b');
@@ -223,6 +231,12 @@ module.exports = function(paper) {
 
       // Put each path in the sorted colorGroups, with its first and last point
       _.each(a.children, function(path){
+        // If the color/tool defined isn't in the grouping, just stick it on the
+        // end.
+        if (path.data.color && !colorGroups[path.data.color]) {
+          colorGroups[path.data.color] = [];
+        }
+
         colorGroups[path.data.color].push({
           path: path,
           points: [path.firstSegment.point, path.lastSegment.point]
