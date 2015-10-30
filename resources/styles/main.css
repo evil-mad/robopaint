@@ -329,6 +329,10 @@ body.home #bar a:hover.selected{
   background-position: center 1px;
 }
 
+#bar a.mode.hidden {
+  display: none;
+}
+
 #bar #bar-home {
   background-image: url('../images/icons/home.svg');
 }
@@ -413,42 +417,6 @@ body.home h1.loading {
 body.home h1 span.message {
   font-size: 16px;
   display: block;
-}
-
-body.home nav {
-  position: absolute;
-  top: 73%;
-  -webkit-transform: translate(-50%,-50%);
-  left: 50%;
-  width: 75%;
-}
-
-body.home nav table {
-  width: 100%;
-}
-
-body.home nav a {
-  width: 121px;
-  height: 121px;
-  border-radius: 74px;
-  text-align: center;
-  border: 4px solid #aaa;
-  display: block;
-  margin: 0 auto;
-  color: black;
-  background-color: cornsilk;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.8em;
-  line-height: 4.1em;
-  overflow: hidden;
-}
-
-body.home nav a:hover,
-body.home nav a:focus {
-  background-color: #000000;
-  color: cornsilk;
-  border-color: #a6e3f4;
 }
 
 webview {
@@ -671,4 +639,64 @@ body.home #remoteprint-mask:before {
 
 #calibrator .step {
   float: left;
+}
+
+/* Crazy styles for the D3 Home viz mode selector */
+svg {
+  position: absolute;
+}
+
+.node.move {
+  cursor: move;
+}
+
+.node.disabled {
+  display: none;
+}
+
+.node rect {
+  fill: transparent;
+}
+
+.enter-mode, .enter-mode-bottom {
+  cursor: pointer;
+}
+
+.node.mode .circle {
+  fill: white;
+  mix-blend-mode: multiply;
+  stroke: blue;
+  stroke-width: 10px;
+  filter: url(#bubble-highlight);
+}
+
+.node.mode .mode-background {
+  fill: #ddd;
+}
+
+.node.logo circle,
+.node.logo rect {
+  fill: transparent;
+}
+
+.node .temp-rect {
+  fill: url(#grey-trans);
+}
+
+svg text {
+  font-family: sans-serif;
+  font-weight: bold;
+  cursor:default;
+}
+
+svg text.mode-name {
+  filter: url(#drop-shadow);
+}
+
+.node.mode.desat {
+  filter: url(#desat);
+}
+
+.node.fixed .circle {
+  fill: #f00;
 }

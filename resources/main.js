@@ -53,6 +53,7 @@ var cncserver = require('cncserver');
 var isModal = false;
 var initializing = false;
 var appMode = 'home';
+var homeVis = rpRequire('home');
 var $subwindow = null; // Placeholder for mode subwindow webview
 
 // Set the global scope object for any robopaint level details needed by other modes
@@ -245,7 +246,7 @@ function bindMainControls() {
       // Init sockets for data stream
       initSocketIO();
 
-      $('body.home nav').fadeIn('slow');
+      $('svg').fadeIn('slow');
       initializing = false;
     }
 
@@ -261,12 +262,6 @@ function bindMainControls() {
 
 
   window.onbeforeunload = onClose; // Catch close event
-
-  // Bind links for home screen central bubble nav links
-  $('nav a').click(function(e) {
-     $('#bar-' + e.target.id).click();
-    e.preventDefault();
-  });
 
   // Bind links for toolbar ===========================
   $('#bar a.mode').click(function(e) {
@@ -335,12 +330,12 @@ robopaint.switchMode = function(mode, callback) {
 
   switch (mode) {
     case 'home':
-      $('nav, #logo').fadeIn('slow');
+      $('svg').fadeIn('slow');
       $('#loader').hide();
       $subwindow.hideMe(callback);
       break;
     default:
-      $('nav, #logo').fadeOut('slow');
+      $('svg').fadeOut('slow');
       $('#loader').fadeIn();
       $subwindow.hideMe(function(){
         // Include the absolute root path so the mode can load its own info
@@ -392,7 +387,7 @@ function startSerial(){
 
         // If caught on startup...
         if (initializing) {
-          $('body.home nav').fadeIn('slow');
+          $('svg').fadeIn('slow');
           initializing = false;
         }
 
@@ -617,9 +612,6 @@ function loadAllModes(){
   var modes = {};
   var modeDirs = [];
 
-  // Externalize mode details for later use.
-  robopaint.modes = modes;
-
   // List all files, only add directories
   for(var i in files) {
     if (fs.statSync(modesDir + files[i]).isDirectory()) {
@@ -632,10 +624,15 @@ function loadAllModes(){
     var modeDir = modesDir + modeDirs[i] + '/';
     var package = {};
 
-    try {
-      package = require(modeDir + 'package.json');
-    } catch(e) {
-      // Silently fail on bad parse!
+    if (fs.existsSync(modeDir + 'package.json')) {
+      try {
+        package = require(modeDir + 'package.json');
+      } catch(e) {
+        console.error('Problem reading mode package:', e)
+        // Silently fail on bad parse!
+        continue;
+      }
+    } else {
       continue;
     }
 
@@ -660,26 +657,32 @@ function loadAllModes(){
     return (modes[b].robopaint.weight - modes[a].robopaint.weight)
   });
 
-  // Move through all approved modes based on mode weight and add DOM
+  // Build external robopaint.modes in correct order
+  robopaint.modes = _.chain(modes)
+    .sortBy(function(mode){ return mode.robopaint.weight; })
+    .indexBy(function(mode){ return mode.robopaint.name; })
+    .value();
 
-  $('nav').append($('<table>').append($('<tr>')));
+
+  // Grab enabled modes
+  var set = robopaint.utils.getSettings();
+  var enabledModes = {};
+
+  if (set) {
+    enabledModes = set.enabledmodes;
+  }
+
+  // Move through all approved modes based on mode weight and add DOM
   for(var i in order) {
-    var m = modes[order[i]];
-    // Add the nav bubble
-    var i18nStr = "modes." + m.robopaint.name + ".info.";
-    $('nav table tr').prepend(
-      $('<td>').append(
-        $('<a>')
-          .attr('href', m.index)
-          .attr('id', m.robopaint.name)
-          .attr('data-i18n', '[title]' + i18nStr + 'description;' + i18nStr + 'word')
-          .attr('title', robopaint.t(i18nStr + 'description'))
-          .css('display', (m.robopaint.core ? 'block' : 'none'))
-          .text(robopaint.t(i18nStr + 'word'))
-      )
-    );
+    var name = order[i];
+    var m = modes[name];
+
+    // This is the minimum enabled modes, other modes are enabled during
+    // settings load/apply when it gets around to it.
+    robopaint.modes[name].enabled = !_.isUndefined(enabledModes[name]) ? enabledModes[name] : !!m.robopaint.core;
 
     // Add the toolbar link icon
+    var i18nStr = "modes." + m.robopaint.name + ".info.";
     $('#bar-home').after(
       $('<a>')
         .attr('href', m.index)
@@ -705,6 +708,8 @@ function loadAllModes(){
         .text(robopaint.t(i18nStr + 'detail'))
     ));
   }
+
+  homeVis.modesLoaded();
 }
 
 

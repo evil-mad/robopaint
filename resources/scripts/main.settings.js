@@ -246,9 +246,12 @@ function bindSettingsControls() {
     // Update available modes
     if (this.id.indexOf('modeenable') !== -1) {
       var name = this.id.replace('modeenable', '');
-      robopaint.settings.enabledmodes[name] = $input.is(':checked');
-      $('#' + name + ', #bar-' + name).toggle(robopaint.settings.enabledmodes[name]);
-      responsiveResize();
+      var enabled = $input.is(':checked');
+      robopaint.settings.enabledmodes[name] = enabled;
+      $('#bar-' + name).toggle(robopaint.settings.enabledmodes[name]);
+      robopaint.modes[name].enabled = enabled;
+      homeVis.modeStatus(name, enabled);
+
       if (!initializing) {
         robopaint.utils.saveSettings(robopaint.settings);
         $(robopaint).trigger('settingsUpdate');
