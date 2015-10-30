@@ -331,12 +331,12 @@ robopaint.switchMode = function(mode, callback) {
   switch (mode) {
     case 'home':
       $('svg').fadeIn('slow');
-      $('#loader').hide();
+      $('#loader').css('opacity', 0);
       $subwindow.hideMe(callback);
       break;
     default:
       $('svg').fadeOut('slow');
-      $('#loader').fadeIn();
+      $('#loader').css('opacity', 1);
       $subwindow.hideMe(function(){
         // Include the absolute root path so the mode can load its own info
         $subwindow.attr('src', $target.attr('href') + '#' + encodeURIComponent(robopaint.currentMode.root + 'package.json'));
