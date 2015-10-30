@@ -248,7 +248,7 @@ function bindSettingsControls() {
       var name = this.id.replace('modeenable', '');
       var enabled = $input.is(':checked');
       robopaint.settings.enabledmodes[name] = enabled;
-      $('#bar-' + name).toggle(robopaint.settings.enabledmodes[name]);
+      $('#bar-' + name).toggleClass('hidden', !enabled);
       robopaint.modes[name].enabled = enabled;
       homeVis.modeStatus(name, enabled);
 
