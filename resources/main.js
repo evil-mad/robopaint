@@ -689,8 +689,8 @@ function loadAllModes(){
         .attr('id', 'bar-' + m.robopaint.name)
         .addClass('mode tipped ' + (robopaint.modes[name].enabled ? '' : ' hidden') )
         .css('background-image', "url('" +  m.root + m.robopaint.graphics.icon + "')")
-        .attr('data-i18n', '[title]' + i18nStr + 'description')
-        .attr('title', robopaint.t(i18nStr + 'description'))
+        .attr('data-i18n', '[title]' + i18nStr + 'use')
+        .attr('title', robopaint.t(i18nStr + 'use'))
         .html('&nbsp;')
     );
 
@@ -698,8 +698,8 @@ function loadAllModes(){
     $('fieldset.advanced-modes aside:first').after($('<div>').append(
       $('<label>')
         .attr('for', m.robopaint.name + 'modeenable')
-        .attr('data-i18n', i18nStr + 'title')
-        .text(robopaint.t(i18nStr + 'title')),
+        .attr('data-i18n', i18nStr + 'name')
+        .text(robopaint.t(i18nStr + 'name')),
       $('<input>')
         .attr({type: 'checkbox', id: m.robopaint.name + 'modeenable'})
         .prop('checked', m.robopaint.core),

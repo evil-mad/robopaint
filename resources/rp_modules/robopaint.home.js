@@ -166,8 +166,9 @@ function buildNodeList() {
       id: m.name,
       icon: mode.root + m.graphics.icon,
       radius: mode.robopaint.core ? coreRadius : modeRadius,
-      name: i18n.t('modes.' + m.name + '.info.title'),
+      name: i18n.t('modes.' + m.name + '.info.use'),
       detail: i18n.t('modes.' + m.name + '.info.detail'),
+      title: i18n.t('modes.' + m.name + '.info.name'),
       imgs: (function(){
         var o=[]; _.each(m.graphics.previews, function(p){
           o.push(mode.root + p);
