@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://watercolorbot.com/media.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "id": "http://watercolorbot.com/media.json/name",
+      "type": "string",
+      "title": "Base English Name",
+      "minLength": 1,
+      "default": "Media Name"
+    },
+    "machineName": {
+      "id": "http://watercolorbot.com/media.json/machineName",
+      "type": "string",
+      "minLength": 3,
+      "title": "Machine Name",
+      "pattern": "[a-z0-9_]+",
+      "default": "media_machine_name"
+    },
+    "color": {
+      "id": "http://watercolorbot.com/media.json/color",
+      "type": "object",
+      "properties": {
+        "providesColor": {
+          "id": "http://watercolorbot.com/implement/allowsMedia",
+          "title": "Provides color?",
+          "type": "boolean",
+          "default": true
+        },
+        "display": {
+          "id": "http://watercolorbot.com/media.json/color/display",
+          "type": "string",
+          "minLength": 7,
+          "default": "#000000",
+          "format": "color",
+          "title": "Display Color"
+        },
+        "match": {
+          "id": "http://watercolorbot.com/media.json/color/match",
+          "type": "string",
+          "minLength": 7,
+          "default": "#000000",
+          "format": "color",
+          "title": "Match to Color"
+        }
+      },
+    },
+    "refill": {
+      "id": "http://watercolorbot.com/media.json/refill",
+      "type": "object",
+      "properties": {
+        "allowRefill": {
+          "id": "http://watercolorbot.com/media.json/refill/allowRefill",
+          "title": "Allow Refill?",
+          "type": "boolean",
+          "default": true
+        },
+        "refillType": {
+          "id": "http://watercolorbot.com/media.json/refill/refillType",
+          "type": "string",
+          "title": "Refill Type",
+          "enum": [
+            "none",
+            "waterfull,colorfull",
+            "waterdip,colorfull",
+            "waterdip,colordip",
+            "waterfull",
+            "colorfull",
+            "colordip"
+          ]
+        },
+        "refillGroupingName": {
+          "id": "http://watercolorbot.com/media.json/refill/refillGroupingName",
+          "type": "string",
+          "default": "",
+          "title": "Refill grouping machine name (if this refillable media comes with others)"
+        },
+        "refillIndex": {
+          "id": "http://watercolorbot.com/media.json/refill/refillIndex",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7,
+          "default": 0,
+          "format": "number",
+          "title": "Refill position index"
+        },
+
+      },
+    },
+    "limitType": {
+      "id": "http://watercolorbot.com/media.json/limitType",
+      "type": "array",
+      "title": "Limit to implement types:",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "brush",
+          "pen",
+          "refillpen",
+          "engraver",
+          "wax",
+          "laser",
+          "extruder",
+          "other"
+        ]
+      }
+    },
+    "mediaType": {
+      "id": "http://watercolorbot.com/media.json/type",
+      "type": "string",
+      "default": "drypaint",
+      "title": "Media Type",
+      "enum": [
+        "penink",
+        "dry",
+        "dryink",
+        "drypaint",
+        "wetpaint",
+        "water",
+        "wax",
+        "extruded"
+      ]
+    }
+  },
+  "required": [
+    "color",
+    "limitType",
+    "type"
+  ],
+  "form": [
+    "name",
+    "machineName",
+    "mediaType",
+    {
+      "type": "fieldset",
+      "title": "Color",
+      "items": [
+        "color.providesColor",
+        "color.display",
+        "color.match"
+      ]
+    },
+    {"key": "limitType", "type": "checkboxes"}
+  ]
+}

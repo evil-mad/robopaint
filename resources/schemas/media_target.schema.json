@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://watercolorbot.com/media_target.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "id": "http://watercolorbot.com/media_target.json/name",
+      "type": "string",
+      "title": "Base English Name",
+      "minLength": 1,
+      "default": "Media Target Name"
+    },
+    "machineName": {
+      "id": "http://watercolorbot.com/media_target.json/machineName",
+      "type": "string",
+      "minLength": 3,
+      "title": "Machine Name",
+      "pattern": "[a-z0-9_]+",
+      "default": "media_target_machine_name"
+    },
+    "targetType": {
+      "id": "http://watercolorbot.com/media_target.json/type",
+      "type": "array",
+      "title": "Media Type",
+      "enum": [
+        "paper",
+        "cloth",
+        "egg",
+        "metal",
+        "hotplate"
+      ]
+    },
+    "allowedMedia": {
+      "id": "http://watercolorbot.com/media_target.json/allowedMedia",
+      "type": "array",
+      "title": "Allowable Media",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "penink",
+          "dry",
+          "dryink",
+          "drypaint",
+          "wetpaint",
+          "water",
+          "wax",
+          "extruded"
+        ]
+      }
+    },
+    "allowedImplements": {
+      "id": "http://watercolorbot.com/media_target.json/allowedImplements",
+      "type": "array",
+      "title": "Allowable Implements",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "brush",
+          "pen",
+          "refillpen",
+          "engraver",
+          "wax",
+          "laser",
+          "extruder",
+          "other"
+        ]
+      }
+    },
+    "color": {
+      "id": "http://watercolorbot.com/media_target.json/color",
+      "type": "string",
+      "title": "Media Color",
+      "minLength": 1,
+      "default": "#FFFFFF",
+      "format": "color"
+    }
+  },
+  "required": [
+    "type",
+    "allowedMedia",
+    "allowedImplements",
+    "color"
+  ],
+  "form": [
+    "name",
+    "machineName",
+    "targetType",
+    {"key": "allowedImplements", "type": "checkboxes"},
+    {"key": "allowedMedia", "type": "checkboxes"}
+  ]
+}
