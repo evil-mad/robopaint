@@ -279,7 +279,17 @@ module.exports = function(paper) {
       fillPath = paper.canvas.tempLayer.lastChild;
     }
 
-    if (!fillPath) return false;
+    // If we're out of paths to fill, we're done!
+    if (!fillPath) {
+      // Before we're completely done, clean up any stray working paths we made
+      // that don't actually have any length (or use!);
+      var kids = _.extend([], paper.canvas.actionLayer.children);
+      _.each(kids, function(p){
+        if(!p.length) p.remove();
+      });
+
+      return false;
+    }
 
     // Ignore white paths (color id 8)
     // TODO: This should probably be handled depending on number of colors in the
