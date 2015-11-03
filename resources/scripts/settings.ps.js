@@ -61,12 +61,5 @@ paper.refreshPreview = function() {
   paper.fill.shutdown();
   paper.stroke.shutdown();
 
-
-  if (robopaint.settings.autostrokeenabled) {
-    paper.stroke.setup(function(){
-      if (robopaint.settings.autofillenabled) paper.fill.setup();
-    })
-  } else {
-    if (robopaint.settings.autofillenabled) paper.fill.setup();
-  }
+  paper.stroke.setup(paper.fill.setup);
 };
