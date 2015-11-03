@@ -628,6 +628,13 @@ module.exports = function(paper) {
               if (lastToFirst > lastToLast) {
                 cLine.reverse();
               }
+
+              // Add an extra point between the two ends being connected to keep
+              // smoothing from going to crazy.
+              if (type === 'zigsmooth') {
+                var midPoint = groupPoint.subtract(groupPoint.subtract(cLine.firstSegment.point).divide(2));
+                cGroup.add(midPoint);
+              }
             }
 
             // Join the current grouping and the next line
