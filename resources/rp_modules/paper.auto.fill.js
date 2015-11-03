@@ -223,6 +223,7 @@ module.exports = function(paper) {
 
             paper.fill.shutdown();
 
+            // For hatch, we just go run again with the same settings :)
             if (settings.hatch === true) {
               settings.hatch = false;
               settings.angle+= 90;
