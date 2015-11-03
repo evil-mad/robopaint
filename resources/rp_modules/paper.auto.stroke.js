@@ -17,6 +17,8 @@ var settings = {
   path: null, // Pass a path object to only stroke that object.
   // Otherwise everything will be traced for strokes.
   pathColor: null, // Pass the override color to replace the path color with.
+  noStroke: false, // If true, will exit and trigger callback immediately.
+  // ^ This option really only exists to allow overriding the global setting.
   traceIterationMultiplier: 2, // Amount of work done in each frame.
   lineWidth: 10, // The size of the visual representation of the stroke line.
   flattenResolution: 15, // Stroke polygonal conversion resolution
@@ -64,6 +66,7 @@ module.exports = function(paper) {
         traceIterationMultiplier: parseInt(set.autostrokeiteration),
         lineWidth: parseInt(set.autostrokewidth),
         flattenResolution: set.strokeprecision * 4,
+        noStroke: set.autostrokeenabled == false,
         strokeAllFilledPaths: set.strokefills == true,
         strokeNoStrokePaths: set.strokeinvisible == true,
         closeFilledPaths: set.strokeclosefilled == true,
@@ -80,6 +83,12 @@ module.exports = function(paper) {
 
       // Merge in local settings, global settings, and passed overrides.
       settings = _.extend(settings, setMap, overrides);
+
+      // Leave early if we're destined not to actually do anything here.
+      if (settings.noStroke) {
+        if (_.isFunction(callback)) callback();
+        return;
+      }
 
       paper.stroke.complete = callback; // Assign callback
       var tmp = paper.canvas.tempLayer;
