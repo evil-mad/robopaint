@@ -16,6 +16,8 @@ var settings = {
   path: null, // Pass a path object to only fill that object.
   // Otherwise everything will be traced for fill.
   pathColor: null, // Pass the override color to replace the path color with.
+  noFill: false, // If true, will exit and trigger callback immediately.
+  // ^ This option really only exists to allow overriding the global setting.
   traceIterationMultiplier: 2, // Amount of work done in each frame.
   lineWidth: 10, // The size of the visual representation of the stroke line.
   flattenResolution: 15, // Path overlay fill type trace resolution.
@@ -82,6 +84,7 @@ module.exports = function(paper) {
         overlayFillAlignPath: set.fillspiralalign == true,
         angle: parseInt(set.fillangle),
         randomizeAngle: set.fillrandomize == true,
+        noFill: set.autofillenabled == false,
         hatch: set.fillhatch == true,
         spacing: parseInt(set.fillspacing) * 2,
         checkFillOcclusion: set.fillocclusionfills == true,
@@ -90,6 +93,12 @@ module.exports = function(paper) {
 
       // Merge in local settings, global settings, and passed overrides.
       settings = _.extend(settings, setMap, overrides);
+
+      // Leave early if we're destined not to actually do anything here.
+      if (settings.noFill) {
+        if (_.isFunction(callback)) callback();
+        return;
+      }
 
       // TODO: I'm in denial that the only valid overlay path is a spiral...
       // till then, i'm going to swap in overlay w/o a path for spiral :P
