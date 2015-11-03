@@ -109,7 +109,7 @@
     "error": "Couldn't connect!",
     "success": "Connected!",
     "disconnect": "Bot Disconnected!",
-    "pausetillempty": "Streaming all commands before starting to prevent slowdown...",
+    "pausetillempty": "Streaming instructions to prevent slowdown...",
     "modeproblem": {
       "load": "Failed to load mode!",
       "loaddetail": "Something went wrong when loading that mode, see the debug console for details.",
