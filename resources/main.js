@@ -181,7 +181,7 @@ function createSubwindow(callback) {
     // require, especially on slower system. It's rumored this is a race
     // condition with the document object not fully populated, but it's an
     // Electron/Chromium bug for now.
-    if (robopaint.currentMode.robopaint.debug === true) {
+    if (robopaint.currentMode.robopaint.debug === true && robopaint.settings.rpdebug) {
       $subwindow[0].openDevTools();
     }
   };

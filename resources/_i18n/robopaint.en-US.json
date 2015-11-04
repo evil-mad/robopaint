@@ -360,6 +360,8 @@
         "swap": "Swap X for Y",
         "swapdetail": "In case you've accidentally wired up Motor 1 where Motor 2 is supposed to go."
       },
+      "debug": "RoboPaint Debug / Developer features",
+      "debugdetail": "If enabled, extra features for developers like devtools will be opened automatically for the main window, and for modes marked with debug true.",
       "misctitle": "Misc",
       "modes": {
         "title": "Modes",

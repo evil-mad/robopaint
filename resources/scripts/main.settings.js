@@ -32,7 +32,6 @@ function loadSettings() {
     paintspeed: parseFloat(b.get('speed:drawing')),
 
     // Robopaint specific defaults
-
     penmode: 0,
     openlast: 0,
     showcolortext: 0,
@@ -44,6 +43,7 @@ function loadSettings() {
     gapconnect: 1,
     refillmode: 0,
     refillaction: 0,
+    rpdebug: 0,
 
 
     autostrokeenabled: 1,
@@ -365,9 +365,10 @@ function bindSettingsControls() {
         }
     }
 
-    // Remoteprint mode click
-    if (this.id == 'remoteprint') {
-      $('#bar-remoteprint').toggle(robopaint.settings[this.id]);
+    // Enable only for debug windows (users can close them by hand).
+    if (this.id == 'rpdebug' && $input.is(':checked')) {
+      mainWindow.openDevTools();
+      if (appMode !== 'home') $subwindow[0].openDevTools();
     }
 
     // Update paint sets when changes made that would effect them
