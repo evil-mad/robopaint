@@ -235,6 +235,15 @@ module.exports = function(paper) {
         // end.
         if (path.data.color && !colorGroups[path.data.color]) {
           colorGroups[path.data.color] = [];
+        } else if (!path.data.color) {
+          // TODO: We -really- shouldn't be getting empty color IDs here, but it
+          // has been confirmed to happen on some very large/complex images.
+          // The line below keeps the error from killing the job, but assigns
+          // an arbitrary color, not what it might actually want. We'll need to
+          // throughly audit both auto.fill and auto.stroke to find out who's
+          // the culprit, and this can be removed... or at least a non-breaking
+          // error catch and cleanup put in place.
+          path.data.color = 'color0';
         }
 
         colorGroups[path.data.color].push({
