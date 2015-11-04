@@ -349,6 +349,46 @@ robopaint.switchMode = function(mode, callback) {
  * Specialty JS window resize callback for responsive element adjustment
  */
 function responsiveResize() {
+  var leftMax = $('#bar-load').offset().left + 50;
+  var rightMax = $('#bar-help').offset().left;
+  var w = $(window).width();
+  var $l = $('img.logo');
+  var $v = $('span.version');
+
+  // If the mode button pos is greater than half the width less 100px, adjust
+  // the logo.
+  if (leftMax > (w/2)-100) {
+    if (rightMax < leftMax + 150) {
+      // There's no room left for logo or version... goodbye!
+      $l.add($v).css('opacity', 0);
+    } else {
+      // Squeeze logo and version together
+      $l.css({
+        left: leftMax + 100,
+        width: 130,
+        top: 0,
+        opacity: 1
+      });
+
+      $v.css({
+        left: (leftMax - 89) + 32,
+        opacity: 1
+      });
+    }
+
+  } else {
+    $l.css({
+      left: '',
+      width: '',
+      top: '',
+      opacity: ''
+    });
+
+    $v.css({
+      left: '',
+      opacity: ''
+    });
+  }
 
 };
 

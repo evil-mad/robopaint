@@ -43,14 +43,8 @@ img.logo {
   left: 50%;
   top: 5px;
   width: 200px;
-}
-
-@media (max-width: 690px) {
-  img.logo {
-    top: 7px;
-    width: 126px;
-    margin-left: -32px;
-  }
+  opacity: 1;
+  transition: width 0.2s, opacity 0.5s;
 }
 
 span.version {
@@ -59,6 +53,8 @@ span.version {
   top: 28px;
   left: 50%;
   margin-left: 89px;
+  opacity: 1;
+  transition: left 0.3s, opacity 0.5s;
 }
 
 
