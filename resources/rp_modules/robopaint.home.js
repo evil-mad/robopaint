@@ -26,6 +26,9 @@ var modeNameTextPadding = 12; // Text padding around the fit text in the circle.
 var detailTextBox = [560, 128, -275, 40]; // w/h/x/y of detail text box.
 var detailTextPadding = 18; // Padding around detail text.
 var enterButton = [170, -15, 90]; // x/y/w&h of Mode Button
+var slideshowStartRange = [5, 15]; // Slideshow start time random range min/max.
+var slideshowTransition = 1000; // Slideshow transition time in ms.
+var slideshowHoldTime = 10; // Slideshow hold time ins seconds.
 
 // Adjusted during a resize later on
 var margin = [30, 40]; // l-R/T-B side combined margin
@@ -102,6 +105,7 @@ function initHome() {
   buildNodeList();
   buildSVGDefs();
   buildForceGraph();
+  initPreviewSlideshow();
   smoothForceWonkiness();
 }
 
@@ -355,6 +359,28 @@ function buildForceGraph() {
 
   // Remove anything that isn't the icon from the logo
   d3.selectAll('.logo .inner *:not(image), .logo > *:not(g)').remove();
+}
+
+function initPreviewSlideshow() {
+  // For every mode that has 2 or more previews...
+  _.each(robopaint.modes, function(mode) {
+    if (mode.robopaint.graphics.previews.length > 1) {
+      setTimeout(function() {
+        setInterval(function(){
+          d3.select('#' + mode.robopaint.name + ' .previews image:last-child')
+            .transition()
+            .duration(slideshowTransition)
+            .attr('opacity', 0)
+            .each("end", function(){
+              // After fading out, move it to the "bottom" and reset its opacity
+              d3.select(this)
+                .moveToBack()
+                .attr('opacity', 1);
+            });
+        }, slideshowHoldTime * 1000);
+      }, slideshowStartRange[0] + (Math.random() * slideshowStartRange[1]) * 1000);
+    }
+  });
 }
 
 function enterMode(name){
@@ -678,6 +704,15 @@ function buildSVGDefs() {
   d3.selection.prototype.moveToFront = function() {
     return this.each(function(){
       this.parentNode.appendChild(this);
+    });
+  };
+
+  d3.selection.prototype.moveToBack = function() {
+    return this.each(function() {
+      var firstChild = this.parentNode.firstChild;
+      if (firstChild) {
+        this.parentNode.insertBefore(this, firstChild);
+      }
     });
   };
 
