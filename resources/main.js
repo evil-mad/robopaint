@@ -289,6 +289,37 @@ function bindMainControls() {
     }
   });
 
+  var stepIndex = 0;
+  $('#calibrator button').click(function(){
+    var goNext = $(this).is('.next');
+
+    if (!goNext) stepIndex--;
+    if (goNext) stepIndex++;
+
+    switch(stepIndex) {
+      case 0:
+        break;
+      case 1:
+        cncserver.cmd.run([
+          'park',
+          ['move', {x:0, y:0}],
+          'down',
+          'unlock',
+          'zero'
+        ], true);
+        break;
+      case 2:
+        cncserver.cmd.run('up');
+        break;
+      case 3:
+        stepIndex = 0;
+        $('#bar-calibrate').click();
+        break;
+    }
+
+    $('#calibrator .wrapper').css('left', -(stepIndex * 400));
+  })
+
   // Bind toolbar modal links =======================
   $('#bar a.modal').click(function(e){
     var modal = this.id.split('-')[1];

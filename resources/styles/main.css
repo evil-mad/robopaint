@@ -696,8 +696,40 @@ body.home #remoteprint-mask:before {
   height: 200px;
 }
 
+#calibrator .wrapper {
+  width: 1200px;
+  height: 200px;
+  position: absolute;
+  top:0;
+  left: 0;
+  transition: left 0.5s;
+}
+
 #calibrator .step {
   float: left;
+  padding: 0.5em 1em;
+  box-sizing: border-box;
+}
+
+#calibrator h2 {
+  font-size: 1em;
+}
+
+#calibrator h3 {
+  font-size: 0.9em;
+  font-weight: normal;
+}
+
+#calibrator button.back {
+  float: left;
+}
+
+#calibrator button.next {
+  float: right;
+}
+
+#calibrator button.done {
+  /* TODO: Make it GREEN! */
 }
 
 /* Crazy styles for the D3 Home viz mode selector */

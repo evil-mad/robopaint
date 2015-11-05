@@ -124,7 +124,6 @@
   "nav": {
     "toolbar": {
       "home": "Home Screen",
-      "edit": "Open, resize, and edit existing vector artwork.",
       "open": "Open an example design",
       "calibrate": "Calibrate height",
       "help": "Help! (Open web docs)",
@@ -135,6 +134,27 @@
       "edit": "Create",
       "printauto": "Print",
       "printmanual": "Manual"
+    }
+  },
+  "calibrator": {
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "done": "Close"
+    },
+    "steps": {
+      "intro": {
+        "detail": "Before you can start making art, you must ensure your drawing tool is the right position above your drawing surface.",
+        "instruction": "Make sure your robot's holder is empty, then click the button to begin calibration."
+      },
+      "unlock": {
+        "detail": "The carriage has been moved to the top left of the drawing area, the motors have been unlocked, and the tool holder is in the lowest position.",
+        "instruction": "Once ready, insert your tool to its lowest expected position and tighten it completely, then click next."
+      },
+      "finish": {
+        "detail": "The tool should now be up and above any obstacles or the drawing surface. If not, you may need to adjust the height in advanced settings.",
+        "instruction": "You're done! Move the carriage by hand to the parking position and you can start making art."
+      }
     }
   },
   "settings": {
