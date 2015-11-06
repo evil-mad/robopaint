@@ -754,11 +754,16 @@ svg {
 }
 
 .node.mode .circle {
+  cursor: help;
   fill: white;
   mix-blend-mode: multiply;
   stroke: blue;
   stroke-width: 10px;
   filter: url(#bubble-highlight);
+}
+
+.node.mode.selected .circle {
+  cursor: not-allowed;
 }
 
 .node.mode .mode-background {
