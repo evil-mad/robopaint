@@ -785,7 +785,8 @@ svg text {
   cursor:default;
 }
 
-svg text.mode-name {
+svg text.mode-name,
+svg text.mode-title {
   filter: url(#drop-shadow);
 }
 

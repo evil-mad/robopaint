@@ -25,6 +25,7 @@ var modeBackgroundSize = [570, 400]; // Size for the background coverup.
 var modeNameTextPadding = 12; // Text padding around the fit text in the circle.
 var detailTextBox = [560, 128, -275, 40]; // w/h/x/y of detail text box.
 var detailTextPadding = 18; // Padding around detail text.
+var titleTextCircle = [-50, -140, 140]; // x/y/r of title text box.
 var enterButton = [170, -15, 90]; // x/y/w&h of Mode Button
 var slideshowStartRange = [5, 15]; // Slideshow start time random range min/max.
 var slideshowTransition = 1000; // Slideshow transition time in ms.
@@ -294,6 +295,24 @@ function buildForceGraph() {
     .attr('class', 'mode-detail')
     .call(wrapText, 'mode-detail', {padding: detailTextPadding});
 
+
+  // Title Text
+  inner.append("circle")
+    .attr('class', 'temp-circle')
+    .attr('stroke', 'black')
+    .attr('cx', titleTextCircle[0])
+    .attr('cy', titleTextCircle[1])
+    .attr('r', titleTextCircle[2]);
+
+  inner.append("text")
+    .text(function(d) { return d.title })
+    .attr('opacity', 1)
+    .attr('class', 'mode-title')
+    .call(wrapText, 'mode-title', {
+      padding: 15,
+      align: 'left',
+      size: [30, 35]
+    });
 
   // This goes over the top of everything (except the buttons)
   node.append("path")
