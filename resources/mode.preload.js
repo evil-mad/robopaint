@@ -60,6 +60,8 @@ robopaint.cncserver.api.settings.bot(function(b){
 // may change, but the API shouldn't need to.
 robopaint.svg = {
   wrap: function(inner) {
+    if (!inner) inner = '';
+
     return '<svg xmlns="http://www.w3.org/2000/svg" width="' +
     robopaint.canvas.width + '" height= "' + robopaint.canvas.height + '">' +
     inner + '</svg>';
@@ -68,7 +70,13 @@ robopaint.svg = {
     return localStorage['svgedit-default'] == false;
   },
   load: function() {
-    return localStorage['svgedit-default'];
+    var svg = localStorage['svgedit-default'];
+
+    // If svg is empty/invalid, return at minimum a base SVG wrapper.
+    if (typeof svg === 'undefined' || svg === '') {
+      svg = robopaint.svg.wrap();
+    }
+    return svg;
   },
   save: function(svgData) {
     localStorage['svgedit-default'] = svgData;
