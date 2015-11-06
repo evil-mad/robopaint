@@ -225,7 +225,7 @@ function buildForceGraph() {
     .text(function(d) { return d.name })
     .attr('opacity', 0)
     .attr('class', 'mode-name')
-    .call(wrapText, 'mode-name', modeNameTextPadding);
+    .call(wrapText, 'mode-name', {padding: modeNameTextPadding});
 
 
   // Group for the preview images to go into
@@ -292,7 +292,8 @@ function buildForceGraph() {
     .text(function(d) { return d.detail })
     .attr('opacity', 0)
     .attr('class', 'mode-detail')
-    .call(wrapText, 'mode-detail', detailTextPadding);
+    .call(wrapText, 'mode-detail', {padding: detailTextPadding});
+
 
   // This goes over the top of everything (except the buttons)
   node.append("path")
@@ -399,7 +400,7 @@ function smoothForceWonkiness() {
 }
 
 // Requires text be right above wrap element
-function wrapText(elems, name, padding) {
+function wrapText(elems, name, options) {
   _.each(elems[0], function(text){
     var d = text.__data__;
 
@@ -409,8 +410,9 @@ function wrapText(elems, name, padding) {
       .container("#" + d.id + ' .' + name)
       .resize(true)
       .valign("middle")
-      .padding(padding)
       .align('center')
+      .padding(5)
+      .config(options)
       .draw();
 
     // Remove Rectangle...
