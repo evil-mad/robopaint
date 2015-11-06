@@ -744,7 +744,7 @@ function buildSVGDefs() {
   // in blur
   filter.append("feGaussianBlur")
     .attr("in", "SourceAlpha")
-    .attr("stdDeviation", 2)
+    .attr("stdDeviation", 6)
     .attr("result", "blur");
 
   // translate output of Gaussian blur to the right and downwards with 2px
@@ -770,6 +770,11 @@ function buildSVGDefs() {
 
   var feMerge = filter.append("feMerge");
 
+  feMerge.append("feMergeNode");
+  feMerge.append("feMergeNode");
+  feMerge.append("feMergeNode");
+  feMerge.append("feMergeNode");
+  feMerge.append("feMergeNode");
   feMerge.append("feMergeNode");
   feMerge.append("feMergeNode")
     .attr("in", "SourceGraphic");
