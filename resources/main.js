@@ -488,7 +488,11 @@ function startSerial(){
  * if applicable depending on mode status
  */
 function onClose(e) {
-  if (!document.hasFocus()) return true;
+  // Allow for quick refresh loads only with devtools opened.
+  if (mainWindow.isDevToolsOpened()) {
+    if (!document.hasFocus()) return true;
+  }
+
   checkModeClose(true);
   e.preventDefault();
   return false;
@@ -511,8 +515,11 @@ function checkModeClose(isGlobal, destination) {
 
   if ($subwindow[0] && appMode !== 'home') {
     $subwindow[0].send(isGlobal ? 'globalclose' : 'modechange');
-  } else {
+  } else if (destination){
     continueModeChange();
+  } else if (!destination && appMode === 'home'){
+    // Without a destination on home mode, we're just closing directly.
+    mainWindow.destroy();
   }
 }
 
