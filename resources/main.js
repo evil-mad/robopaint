@@ -15,7 +15,8 @@ window.i18n = require('i18next-client');
 var remote = require('remote');
 var mainWindow = remote.getCurrentWindow();
 var app = remote.require('app');
-var appPath = app.getAppPath() + '/';
+var path = require('path');
+var appPath = path.join(app.getAppPath(), '/');
 var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
 
 // Setup and hide extraneous menu items for Mac Menu
@@ -428,10 +429,10 @@ function responsiveResize() {
  */
 function initSocketIO(){
   // Add Socket.IO include now that we know where from and the server is running
-  var path = robopaint.cncserver.api.server.protocol +
+  var serverPath = robopaint.cncserver.api.server.protocol +
     '://' + robopaint.cncserver.api.server.domain + ':' +
     robopaint.cncserver.api.server.port;
-  robopaint.socket = io(path);
+  robopaint.socket = io(serverPath);
   $(robopaint).trigger('socketIOComplete');
 }
 
@@ -573,7 +574,7 @@ function initToolTips() {
 function initQuickload() {
   var $load = $('#bar-load');
   var $loadList = $('#loadlist');
-  var paths = [appPath + 'resources/svgs'];
+  var paths = [path.join(appPath, 'resources/svgs')];
 
   // TODO: Support user directories off executable
   // This is imagined as secondary dropdown folder to list SVG files from a
@@ -601,8 +602,8 @@ function initQuickload() {
       var s = svgs[i];
       var name = s.split('.')[0].replace(/_/g, ' ');
       $('<li>').append(
-        $('<a>').data('file', paths[0] + '/' + s).attr('href', '#').append(
-          $('<img>').attr('src', paths[0] + '/' + s),
+        $('<a>').data('file', path.join(paths[0], s)).attr('href', '#').append(
+          $('<img>').attr('src', path.join(paths[0], s)),
           $('<span>').text(name)
         )
       ).appendTo($loadList);
@@ -685,7 +686,7 @@ function getColorsets() {
  * Load all modes within the application
  */
 function loadAllModes(){
-  var modesDir = appPath + 'node_modules/';
+  var modesDir = path.join(appPath, 'node_modules/');
   var files = fs.readdirSync(modesDir);
   var modes = {};
   var modeDirs = [];
@@ -699,12 +700,12 @@ function loadAllModes(){
 
   // Move through each mode package JSON file...
   for(var i in modeDirs) {
-    var modeDir = modesDir + modeDirs[i] + '/';
+    var modeDir = path.join(modesDir, modeDirs[i]);
     var package = {};
 
-    if (fs.existsSync(modeDir + 'package.json')) {
+    if (fs.existsSync(path.join(modeDir, 'package.json'))) {
       try {
-        package = require(modeDir + 'package.json');
+        package = require(path.join(modeDir, 'package.json'));
       } catch(e) {
         console.error('Problem reading mode package:', e)
         // Silently fail on bad parse!
@@ -717,14 +718,14 @@ function loadAllModes(){
     // This a good file? if so, lets make it ala mode!
     if (package.type === "robopaint_mode" && _.has(package.robopaint, 'index')) {
       // TODO: Add FS checks to see if its index file actually exists
-      package.root = modesDir + modeDirs[i] + '/';
-      package.index = package.root + package.robopaint.index;
+      package.root = path.join(modesDir, modeDirs[i], '/');
+      package.index = path.join(package.root, package.robopaint.index);
       modes[package.robopaint.name] = package;
 
       // Load any persistent scripts into the DOM
       if (package.robopaint.persistentScripts) {
         _.each(package.robopaint.persistentScripts, function(scriptPath){
-          $('<script>').attr('src', package.root + scriptPath).appendTo('head');
+          $('<script>').attr('src', path.join(package.root, scriptPath)).appendTo('head');
         });
       }
     }
@@ -760,13 +761,23 @@ function loadAllModes(){
     robopaint.modes[name].enabled = !_.isUndefined(enabledModes[name]) ? enabledModes[name] : !!m.robopaint.core;
 
     // Add the toolbar link icon
+
+    // This monstrosity is to ensure no matter where it lives, we can find the
+    // correct relative path to put in the background image location. This is
+    // especially picky on windows as the absolute backslashes are mangled on
+    // URI encode and will be flipped at the end via the global replace.
+    var iconURI = path.relative(
+      path.join(appPath, 'resources'),
+      path.join(m.root, m.robopaint.graphics.icon)
+    ).replace(/\\/g, '/');
+
     var i18nStr = "modes." + m.robopaint.name + ".info.";
     $('#bar-home').after(
       $('<a>')
         .attr('href', m.index)
         .attr('id', 'bar-' + m.robopaint.name)
         .addClass('mode tipped ' + (robopaint.modes[name].enabled ? '' : ' hidden') )
-        .css('background-image', "url('" +  m.root + m.robopaint.graphics.icon + "')")
+        .css('background-image', "url('" +  iconURI + "')")
         .attr('data-i18n', '[title]' + i18nStr + 'use')
         .attr('title', robopaint.t(i18nStr + 'use'))
         .html('&nbsp;')
