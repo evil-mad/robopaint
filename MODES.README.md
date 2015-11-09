@@ -16,8 +16,9 @@ featureset and connectivity within RoboPaint.
 
 ## File Structure
 Modes have **three** minimum required files: `package.json`, a root
-`.html` file configured within it, and an ``. That's it! Everything else about
-how the page works is dealt with inside the `package.json` and your html file.
+`.html` file configured within it, and a base translation file under `_i18n/`.
+That's it! Everything else that deals with how the page works is within the
+`package.json` and your html file.
 
 ```javascript
 |mymode/
@@ -32,15 +33,15 @@ how the page works is dealt with inside the `package.json` and your html file.
 ```
 
 We recommend simply copying one of the existing modes that comes with RoboPaint,
-and renaming the folder and the other files. RoboPaint support full translation,
-so we also highly recommend designing your app to take full advantage of this.
+and renaming the folder and the other files. RoboPaint supports full
+translation, so we also highly recommend designing your app to take full
+advantage of this, even if you don't have translations of your text strings.
 
 ## File Format: package.json
 Though not exactly a node module, we take a cue from NPM and use the "open"
 format for `package.json` to hold all top level mode configuration. See the
-comments below for explanation on the non-obvious keys. It's expected the module
-to be loaded via `npm install`, but how it gets into where RoboPaint can read it
-isn't written in stone.
+comments below for explanation on the non-obvious keys. A mode is added via
+RoboPaint package.json dependency or through direct `npm install`.
 
 
 ```javascript
@@ -163,6 +164,17 @@ globally available makes custom comms possible.
     buffer until after pauseTillEmpty(false) has been called, and the
     local push buffer to the main buffer has been emptied. This ensures a
     perfectly smooth start to printing.
+    * `robopaint.svg` : A set of utility functions for managing the "loaded" SVG
+    data storage. This data storage is used directly by modes that open SVG
+    and is cleared at startup if "load last image" is unchecked in settings.
+    Includes the following methods:
+      * `svg.save(data)`: Save the given SVG text data, will overwrite any
+      existing data without warning, so use with caution.
+      * `svg.wrap(inner)`: Wrap the given inner SVG XML text data in a correctly
+      namespaced and canvas sized header and footer.
+      * `svg.load()`: Load the currently saved SVG text data. If empty, will
+      return empty valid SVG text from the wrap function above.
+      * `svg.isEmpty()`: Returns boolean `true` if there is no data saved.
  * `mode`: JSON Package of the current mode, with `path`, and utility functions:
     * `mode.run({mixed})`: Emulation IPC passthrough of original commander
     API shortcut. Allows immediate queuing of ~500 cmds/sec to CNCServer, no
@@ -179,6 +191,8 @@ globally available makes custom comms possible.
 
 **The mode object is also where event callback functions should be defined, full
 supported list here:**
+As always, look to the base modes for precise implementation examples and common
+use cases.
  * `mode.translateComplete()`: Called whenever translate is done. Happens on
  init, and after every language change.
  * `mode.onPenUpdate(actualPen)`: Called when the bot actually moves, the
