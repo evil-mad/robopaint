@@ -345,7 +345,7 @@ function bindSettingsControls() {
 
         // No nothing!
         toggleDisableSetting(
-          '#maxpaintdistance',
+          '#maxpaintdistance, #refillmode, #refillaction, #maxpaint',
           $input.val() != 3,
           robopaint.t('settings.output.penmode.warningAll')
         );
