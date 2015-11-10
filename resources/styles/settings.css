@@ -225,6 +225,7 @@ ul.tabs a.active {
   border: none;
   border-top: 1px solid #CBCBCB;
   padding-top: 1em;
+  position: relative;
 }
 
 #settings .settings-content > fieldset > legend {
