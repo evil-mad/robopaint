@@ -212,7 +212,7 @@
       "hatch": "Add secondary hatch fill",
       "hatchinfo": "If enabled, a secondary 90° opposite angle fill will be added for each path.",
       "random": "Randomize hatch angle",
-      "randominfo": "If enabled, fill angle of different paths will be randomized.",
+      "randominfo": "If enabled, each object will be filled with paths at a random angle, instead of the above value.",
       "overlay": "Spiral fill options",
       "precisioninfo": "Primarily for spiral fill, this setting is also used for converting the zig-smooth into a polygonal line post processing.",
       "align": "Align spiral fill to each path",
