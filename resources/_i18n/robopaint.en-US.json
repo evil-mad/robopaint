@@ -176,8 +176,8 @@
       }
     },
     "stroke": {
-      "enable": "Trace path strokes / outlines",
-      "enableinfo": "If disabled, no outlines/strokes will be traced in any automatic mode functionality.",
+      "enable": "Trace path strokes and outlines",
+      "enableinfo": "Allow robopaint to trace along paths and outlines automatically.",
       "fill": "Outline fills",
       "fillinfo": "If enabled, an outline of the same color will be added for filled paths without a stroke.",
       "invisible": "Stroke invisible paths",
