@@ -461,6 +461,92 @@ body.home #modalmask:before {
   opacity: 0.7;
 }
 
+/* Mode browser in settings dialog */
+.advanced-modes .modebox {
+  padding-bottom: 3em;
+}
+
+
+#settings-modes .advanced-modes .modebox.disabled {
+  background-color: transparent;
+}
+.advanced-modes .modebox.disabled img {
+  -webkit-filter: grayscale(1);
+}
+
+.advanced-modes .modebox.disabled .icon {
+  opacity: 0.5;
+}
+
+.advanced-modes .modebox.disabled {
+  color: rgb(115, 119, 122) !important;
+}
+
+.advanced-modes .modebox > * {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.advanced-modes .modebox h3 {
+  font-size: 16px;
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 17px;
+  margin-top: 2px;
+}
+
+.advanced-modes .modebox img.icon {
+  width: 64px;
+  padding-right: 20px;
+}
+
+.advanced-modes .modebox .details {
+  max-width: 50%;
+}
+
+.advanced-modes .modebox .details label {
+  font-weight: 700;
+  font-size: 20px;
+  color: rgb(48, 57, 66);
+  cursor: pointer;
+}
+
+.advanced-modes .modebox .details label span.ver {
+  font-weight: normal;
+  color: rgb(115, 119, 122);
+  font-size: 15px;
+  padding-left: 40px;
+}
+
+.advanced-modes .modebox .switch {
+  font-size: 1.5em;
+  position: absolute;
+  left: 100px;
+  top: -40px;
+  transform: translate(-50%, 0);
+  z-index: 1;
+}
+
+.advanced-modes .modebox .previews {
+  margin-top: 35px;
+  width: 200px;
+  height: 150px;
+  position: relative;
+}
+
+.advanced-modes .modebox .previews img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 150px;
+  background-color: rgb(240, 240, 240);
+  border: 1px solid rgb(240, 240, 240);
+  object-fit: contain;
+  cursor: e-resize;
+}
+
+
 /* Loading Spinner */
 #loader {
   left: 50%;

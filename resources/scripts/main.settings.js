@@ -251,6 +251,7 @@ function bindSettingsControls() {
       $('#bar-' + name).toggleClass('hidden', !enabled);
       robopaint.modes[name].enabled = enabled;
       homeVis.modeStatus(name, enabled);
+      $(this).parents('.modebox').toggleClass('disabled', !enabled);
 
       if (!initializing) {
         robopaint.utils.saveSettings(robopaint.settings);

@@ -782,23 +782,74 @@ function loadAllModes(){
         .attr('title', robopaint.t(i18nStr + 'use'))
         .html('&nbsp;')
     );
-
-    // Add every mode to for enabling/disabling
-    $('fieldset.advanced-modes aside:first').after($('<div>').append(
-      $('<label>')
-        .attr('for', m.robopaint.name + 'modeenable')
-        .attr('data-i18n', i18nStr + 'name')
-        .text(robopaint.t(i18nStr + 'name')),
-      $('<input>')
-        .attr({type: 'checkbox', id: m.robopaint.name + 'modeenable'})
-        .prop('checked', m.robopaint.core),
-      $('<aside>')
-        .attr('data-i18n', i18nStr + 'detail')
-        .text(robopaint.t(i18nStr + 'detail'))
-    ));
   }
 
+  // Add every mode to for enabling/disabling
+  buildSettingsModeView();
+
+  // Trigger modesLoaded for the home screen visualization.
   homeVis.modesLoaded();
+}
+
+
+function buildSettingsModeView() {
+  _.each(robopaint.modes, function(mode){
+    var m = mode.robopaint;
+    var i18nStr = "modes." + m.name + ".info.";
+
+    var $modeBox = $('<div>').attr('class', 'modebox' + (!mode.enabled ? ' disabled' : ''));
+
+    // Add the Icon
+    $modeBox.append(
+      $('<img>')
+        .addClass('icon')
+        .attr('src', path.join(mode.root, m.graphics.icon))
+    );
+
+    var $details = $('<div>').addClass('details').appendTo($modeBox);
+
+    $details.append(
+      $('<label>')
+        .attr('for', m.name + 'modeenable')
+        .attr('data-i18n', i18nStr + 'name')
+        .html(robopaint.t(i18nStr + 'name') + '<span class="ver">' + mode.version + '</span>'),
+      $('<h3>')
+        .attr('data-i18n', i18nStr + 'use')
+        .text(robopaint.t(i18nStr + 'use')),
+      $('<div>')
+        .attr('data-i18n', i18nStr + 'detail')
+        .text(robopaint.t(i18nStr + 'detail'))
+    );
+
+    // Add in the preview image container
+    var $previews = $('<div>').addClass('previews').appendTo($modeBox);
+
+    // Add the enable switch
+    $previews.append($('<div>').addClass('switch').append(
+        $('<input>')
+          .attr({type: 'checkbox', id: m.name + 'modeenable'})
+          .prop('checked', mode.enabled)
+      )
+    );
+
+    // Add the preview images (if any).
+    _.each(m.graphics.previews, function(imgPath){
+       $previews.append(
+         $('<img>')
+          .attr('src', path.join(mode.root, imgPath))
+          .click(function(){
+            if (m.graphics.previews.length > 1) {
+              $(this).fadeOut('slow', function(){
+                $(this).prependTo($(this).parent()).show();
+              });
+            }
+          })
+       );
+    })
+
+
+    $('fieldset.advanced-modes').append($modeBox);
+  });
 }
 
 
