@@ -198,7 +198,7 @@
     "fill": {
       "enable": "Trace path fills",
       "enableinfo": "If disabled, no fills will be traced in any automatic mode functionality.",
-      "dynamic": "Dynamic line fill options",
+      "dynamic": "Hatch options",
       "group": {
         "title": "Grouping Threshold:",
         "info": "Minimum threshold for grouping dynamic line endings together into connected groups. Large value connects more groups, 0 will ensure no groups are made.",
@@ -211,7 +211,7 @@
       },
       "hatch": "Add secondary hatch fill",
       "hatchinfo": "If enabled, a secondary 90° opposite angle fill will be added for each path.",
-      "random": "Randomize fill angle",
+      "random": "Randomize hatch angle",
       "randominfo": "If enabled, fill angle of different paths will be randomized.",
       "overlay": "Spiral fill options",
       "precisioninfo": "Primarily for spiral fill, this setting is also used for converting the zig-smooth into a polygonal line post processing.",
@@ -326,14 +326,14 @@
       },
       "filltype": {
         "title": "Type:",
-        "opt0": "Zig-Zag",
-        "opt1": "Zig-Zag Straight",
-        "opt2": "Zig-Zag Smooth",
+        "opt0": "Hatch (Zig-zag)",
+        "opt1": "Hatch (Straight)",
+        "opt2": "Hatch (Smooth)",
         "opt3": "Center spiral"
       },
-      "fillangle": "Line fills angle:",
+      "fillangle": "Hatch angle:",
       "fillspacing": {
-        "title": "Line Spacing:",
+        "title": "Hatch line spacing:",
         "opt0": "Miniscule (1)",
         "opt1": "Tiny (5)",
         "opt2": "Default (10)",
