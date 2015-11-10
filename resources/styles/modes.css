@@ -83,9 +83,16 @@ input.fancy[type="checkbox"] {
 	opacity: 0;
 }
 
-input.fancy[type="checkbox"]:disabled,
 input.fancy[type="checkbox"]:disabled + div {
   opacity: 0.8;
+}
+
+input.fancy[type="checkbox"]:disabled + div {
+  background-image: linear-gradient(90deg, #add5ac 50%, transparent 50%);
+}
+
+input.fancy[type="checkbox"]:disabled:checked + div {
+  border: 2px solid #add5ac;
 }
 
 input.fancy[type="checkbox"] + div {
