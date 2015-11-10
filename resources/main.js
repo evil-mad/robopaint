@@ -812,7 +812,7 @@ function buildSettingsModeView() {
       $('<label>')
         .attr('for', m.name + 'modeenable')
         .attr('data-i18n', i18nStr + 'name')
-        .html(robopaint.t(i18nStr + 'name') + '<span class="ver">' + mode.version + '</span>'),
+        .html(robopaint.t(i18nStr + 'name')),
       $('<h3>')
         .attr('data-i18n', i18nStr + 'use')
         .text(robopaint.t(i18nStr + 'use')),
@@ -826,8 +826,10 @@ function buildSettingsModeView() {
 
     // Add the enable switch
     $previews.append($('<div>').addClass('switch').append(
+        $('<span>').addClass('ver').text('v' + mode.version),
         $('<input>')
           .attr({type: 'checkbox', id: m.name + 'modeenable'})
+          .prop('disabled', m.core)
           .prop('checked', mode.enabled)
       )
     );
@@ -837,6 +839,7 @@ function buildSettingsModeView() {
        $previews.append(
          $('<img>')
           .attr('src', path.join(mode.root, imgPath))
+          .toggleClass('multi', m.graphics.previews.length > 1)
           .click(function(){
             if (m.graphics.previews.length > 1) {
               $(this).fadeOut('slow', function(){
@@ -846,7 +849,6 @@ function buildSettingsModeView() {
           })
        );
     })
-
 
     $('fieldset.advanced-modes').append($modeBox);
   });
