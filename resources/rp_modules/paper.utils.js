@@ -132,7 +132,17 @@ module.exports = function(paper) {
         color = color.clone();
         color.alpha = 1;
       }
-      return "color" + robopaint.utils.closestColor(color.toCSS(), robopaint.media.currentSet.colors);
+
+      var closestColorID = robopaint.utils.closestColor(color.toCSS(), robopaint.media.currentSet.colors);
+
+      // Skip white paint if selected and setting is enabled.
+      if (robopaint.media.currentSet.colors[closestColorID].key === 'white') {
+        if (robopaint.settings.skipwhite) {
+          // Change ID to "skipped" id 8
+          closestColorID = 8;
+        }
+      }
+      return "color" + closestColorID;
     },
 
     // Get the actual color of the nearest color to the one given.

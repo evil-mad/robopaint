@@ -240,8 +240,8 @@
       }
     },
     "output": {
-      "usewhite": "Use white media",
-      "usewhiteinfo": "If disabled, when your media settings contain a white color, it will be ignored when a white path exists to be traced.",
+      "skipwhite": "Skip White Paint",
+      "skipwhiteinfo": "When your media settings (paint colors) contain white, ignore any paths that would be painted in that color. You may want to turn this off when painting on a background that is not white.",
       "prefill": "Prefill buffer",
       "prefillinfo": "If enabled, all batch commands on supporting modes will be sent before the robot begins work. This should eliminate stuttering on start, though you have to wait longer before your work begins printing.",
       "optimize": "Optimize path order",

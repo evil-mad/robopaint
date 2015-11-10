@@ -73,7 +73,7 @@ function loadSettings() {
     autofillwidth: 10,
     fillocclusionfills: 1,
 
-    usewhite: 0,
+    skipwhite: 1,
     prefillbuffer: 1,
     optimizepath: 1
   };

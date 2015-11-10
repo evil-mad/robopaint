@@ -55,6 +55,7 @@ robopaint.media = {
             var r = robopaint.utils.colorStringToArray(h);
             colorsOut.push({
               name: robopaint.t("colorsets.colors." + name),
+              key: name,
               color: {
                 HEX: h,
                 RGB: r,
