@@ -201,7 +201,7 @@
       "dynamic": "Hatch options",
       "group": {
         "title": "Grouping Threshold:",
-        "info": "Minimum threshold for grouping dynamic line endings together into connected groups. Large value connects more groups, 0 will ensure no groups are made.",
+        "info": "Minimum threshold for grouping hatch line endings together into connected groups. Large value connects more groups with fewer tool lifts, 0 will ensure no groups are made.",
         "opt0": "None",
         "opt20": "Small (20)",
         "opt40": "Default (40)",
