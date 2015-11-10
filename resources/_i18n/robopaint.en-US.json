@@ -185,7 +185,7 @@
       "closefilled": "Close filled paths",
       "closefilledinfo": "If enabled, unclosed filled paths will be outlined fully as if they were closed.",
       "occlusionall": "Stroke occlusion / overlap detection",
-      "occlusionallinfo": "If disabled, all outlines / stroke tracing will ignore path overlap and layer order.",
+      "occlusionallinfo": "If disabled, all outlines / stroke tracing will ignore path overlap and layer order. Stroke Precision value above will improve the precision of overlap detection.",
       "occfills": "Occlusion under fills",
       "occfillsinfo": "If disabled, all outlines / stroke tracing will ignore filled color overlaps.",
       "occstroke": "Occlusion under strokes",
