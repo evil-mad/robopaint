@@ -217,19 +217,7 @@ module.exports = function(paper) {
       for(var i = 0; i < settings.traceIterationMultiplier; i++) {
         if (runFillSpooling) { // Are we doing fills?
           if (!traceFillNext()){ // All paths complete?
-            // We toss the single path when we're done in shutdown, but we need
-            // it when we're running again for the hatch, so we hold onto it.
-            var tmpPath = settings.path;
-
             paper.fill.shutdown();
-
-            // For hatch, we just go run again with the same settings :)
-            if (settings.hatch === true) {
-              settings.hatch = false;
-              settings.angle+= 90;
-              paper.fill.setup(_.extend({}, settings, {path: tmpPath}), paper.fill.complete);
-              return;
-            }
 
             if (_.isFunction(paper.fill.complete)) {
               paper.fill.complete();
@@ -481,7 +469,8 @@ module.exports = function(paper) {
       lastPath = fillPath;
 
       // Swap angle for random angle if randomizeAngle set.
-      if (settings.randomizeAngle) {
+      if (settings.randomizeAngle && !p.data.randomAngleSet) {
+        p.data.randomAngleSet = true;
         settings.angle = Math.ceil(Math.random() * 179);
       }
     }
@@ -668,7 +657,22 @@ module.exports = function(paper) {
   function finishFillPath(fillPath) {
     cFillIndex = 0;
     cSubIndex = 0;
+    cStep = 0;
     lines = [];
+
+    // For hatch, we just go run again and skip deletion.
+    if (settings.hatch === true) {
+      // Start the second (last) hatch fill on the same fillpath by not
+      // deleting it.
+      if (!fillPath.data.lastHatch) {
+        fillPath.data.lastHatch = true;
+        settings.angle+= 90;
+        return;
+      }
+
+      // If we're at this point, the fill path is done and we can just let it
+      // continue normally.
+    }
 
     totalSteps++;
     if (currentTraceChild !== traceChildrenMax) currentTraceChild++;
@@ -677,8 +681,6 @@ module.exports = function(paper) {
       mode.run('status', i18n.t('libs.spool.fill', {id: currentTraceChild + '/' + traceChildrenMax}), true);
       mode.run('progress', totalSteps);
     }
-
-    cStep = 0;
 
     fillPath.remove(); // Actually remove the path (not needed anymore)
   }

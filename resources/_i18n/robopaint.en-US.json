@@ -210,7 +210,7 @@
         "opt100": "Giant (100)"
       },
       "hatch": "Add secondary hatch fill",
-      "hatchinfo": "If enabled, a secondary opposite angle fill will be added for each path. Will **not** match angle for random fill below.",
+      "hatchinfo": "If enabled, a secondary 90° opposite angle fill will be added for each path.",
       "random": "Randomize fill angle",
       "randominfo": "If enabled, fill angle of different paths will be randomized.",
       "overlay": "Spiral fill options",
