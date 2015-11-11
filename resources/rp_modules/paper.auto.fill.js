@@ -4,6 +4,7 @@
  */
 "use strict";
 var _ = require('underscore');
+var ClipperLib = rpRequire('clipper');
 
 // If we're not in a mode environment, set to false.
 var mode = (typeof window.mode === 'undefined') ? false : window.mode;
@@ -26,6 +27,7 @@ var settings = {
   overlayFillPath: null, // Otherwise uses giant spiral.
   overlayFillAlignPath: true, // Align overlay fill to path, otherwise align to view.
   angle: 28, // Dynamic line fill type line angle
+  insetAmount: 0, // Amount to negatively offset the fill path.
   randomizeAngle: false, // Randomize the angle above for dynamic line fill.
   hatch: false, // If true, runs twice at opposing angles
   spacing: 13, // Dynamic line fill spacing nominally between each line.
@@ -60,6 +62,7 @@ module.exports = function(paper) {
   // Emulate PaperScript "Globals" as needed
   var Point = paper.Point;
   var Path = paper.Path;
+  var CompoundPath = paper.CompoundPath;
   var view = paper.view;
 
   // Shortcuts for long lines.
@@ -87,6 +90,7 @@ module.exports = function(paper) {
         noFill: set.autofillenabled == false,
         hatch: set.fillhatch == true,
         spacing: parseInt(set.fillspacing) * 2,
+        insetAmount: set.fillinset,
         checkFillOcclusion: set.fillocclusionfills == true,
         threshold: parseInt(set.fillgroupingthresh)
       }
@@ -176,13 +180,19 @@ module.exports = function(paper) {
               var tmpPath = srcPath; // Hold onto the original path
               // Set the new srcPath to the subtracted one inserted at the same index
               srcPath = tmp.insertChild(srcIndex, srcPath.subtract(destPath));
-              srcPath.data.color = tmpPath.data.color;
-              srcPath.data.name = tmpPath.data.name;
-              srcPath.data.targetPath = tmpPath.data.targetPath;
+              srcPath.data = _.extend({}, tmpPath.data);
               tmpPath.remove(); // Remove the old srcPath
             }
           }
         }
+      }
+
+      // Apply inset to these temp fill paths while we have them.
+      if (settings.insetAmount) {
+        kids = _.extend([], tmp.children);
+        _.each(kids, function(path) {
+          offsetPath(path, -settings.insetAmount);
+        });
       }
 
       // Keep the user up to date
@@ -713,6 +723,116 @@ module.exports = function(paper) {
     }
 
     return groupID;
+  }
+
+  /**
+   * Offset a paper path a given amount, either in or out. Returns a reference
+   * given to the output polygonal path created.
+   *
+   * @param {Path} inPath
+   *   Paper Path object to be converted to polygon and offsetted.
+   * @param {Number} amount
+   *   The amount to
+   * @return {Path}
+   *   Reference to the path object created, false if the output of the path
+   *   resulted in the eradication of the path.
+   */
+  window.offsetPath = offsetPath;
+  function offsetPath(inPath, amount) {
+    var scale = 100;
+    if (!amount) amount = 0;
+
+    // 1. Copy the input path and make it flatten to a polygon (or multiple gons).
+    // 2. Convert the polygon(s) points into the clipper array format.
+    // 3. Delete the temp path.
+    // 4. Run the paths array through the clipper offset.
+    // 5. Output and descale the paths as single compound path.
+
+    var p = inPath.clone();
+    var paths = [];
+
+    // Is this a compound path?
+    if (p.children) {
+      _.each(p.children, function(c, pathIndex) {
+        c.flatten(settings.flattenResolution);
+        paths[pathIndex] = [];
+        _.each(c.segments, function(s){
+          paths[pathIndex].push({
+            X: s.point.x,
+            Y: s.point.y,
+          });
+        })
+      });
+    } else { // Single path
+      paths[0] = [];
+      p.flatten(settings.flattenResolution);
+      _.each(p.segments, function(s){
+        paths[0].push({
+          X: s.point.x,
+          Y: s.point.y,
+        });
+      })
+    }
+
+    // Get rid of our temporary poly path
+    p.remove();
+
+    ClipperLib.JS.ScaleUpPaths(paths, scale);
+    // Possibly ClipperLib.Clipper.SimplifyPolygons() here
+    // Possibly ClipperLib.Clipper.CleanPolygons() here
+
+    var cleandelta = 0.1; // 0.1 should be the appropriate delta in different cases
+    paths = ClipperLib.JS.Clean(paths, cleandelta * scale);
+
+    var miterLimit = 2;
+    var arcTolerance = 0.25;
+    var co = new ClipperLib.ClipperOffset(miterLimit, arcTolerance);
+
+    // ClipperLib.EndType = {etOpenSquare: 0, etOpenRound: 1, etOpenButt: 2, etClosedPolygon: 3, etClosedLine : 4 };
+    co.AddPaths(paths, ClipperLib.JoinType.jtRound, ClipperLib.EndType.etClosedPolygon);
+    var offsetted_paths = new ClipperLib.Paths();
+    co.Execute(offsetted_paths, amount * scale);
+
+    // Scale down coordinates and draw ...
+    var pathString = paths2string(offsetted_paths, scale);
+    if (pathString) {
+      var inset = new CompoundPath(pathString);
+      inset.data = _.extend({}, inPath.data);
+      inset.set({
+        strokeColor: inPath.strokeColor,
+        strokeWidth: inPath.strokeWidth,
+        fillColor: inPath.fillColor
+      });
+
+      inPath.remove();
+      return inset;
+    } else {
+      inPath.remove();
+      return false;
+    }
+  }
+
+  /**
+   * Convert a ClipperLib paths array into an SVG path string.
+   * @param  {Array} paths
+   *   A Nested ClipperLib Paths array of point objects
+   * @param  {[type]} scale
+   *   The amount to scale the values back down from.
+   * @return {String}
+   *   A properly formatted SVG path "d" string.
+   */
+  function paths2string (paths, scale) {
+    var svgpath = "", i, j;
+    if (!scale) scale = 1;
+    for(i = 0; i < paths.length; i++) {
+      for(j = 0; j < paths[i].length; j++){
+        if (!j) svgpath += "M";
+        else svgpath += "L";
+        svgpath += (paths[i][j].X / scale) + ", " + (paths[i][j].Y / scale);
+      }
+      svgpath += "Z";
+    }
+    return svgpath;
   }
 
   // If any given intersections that are outside the view bounds, move them to the

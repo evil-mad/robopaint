@@ -12,6 +12,7 @@ var _ = require('underscore');
 var modules = {
   paper: {path: appPath + '/node_modules/paper/dist/paper-full', type: 'dom'},
   d3plus: {path: appPath + '/node_modules/d3plus/d3plus.full.min.js', type: 'dom'},
+  clipper: {path: appPath + '/resources/scripts/lib/clipper', type: 'node'},
   cnc_api: {path: appPath + '/node_modules/cncserver/example/cncserver.client.api', type: 'node'},
   home: {name: 'robopaint.home', type: 'node'},
   utils: {name: 'robopaint.utils', type: 'node'},

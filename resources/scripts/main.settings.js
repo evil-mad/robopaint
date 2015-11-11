@@ -69,6 +69,7 @@ function loadSettings() {
     fillhatch: 0,
     fillrandomize: 1,
     fillspiralalign: 1,
+    fillinset: 0,
     autofilliteration: 2,
     autofillwidth: 10,
     fillocclusionfills: 1,

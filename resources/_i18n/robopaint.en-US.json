@@ -214,6 +214,8 @@
       "random": "Randomize hatch angle",
       "randominfo": "If enabled, each object will be filled with paths at a random angle, instead of the above value.",
       "overlay": "Spiral fill options",
+      "inset": "Fill inset amount",
+      "insetinfo": "The amount that the rendered fill path should pull away from the edge of the fill shape border. Applies to all fill types.",
       "precisioninfo": "Primarily for spiral fill, this setting is also used for converting the zig-smooth into a polygonal line post processing.",
       "align": "Align spiral fill to each path",
       "aligninfo": "If enabled (spiral fill type only), the fill spiral will be centered on the fill path. If disabled, the spiral will align to the center of the canvas for every path.",
