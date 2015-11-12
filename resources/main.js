@@ -747,7 +747,7 @@ function loadAllModes(){
   var set = robopaint.utils.getSettings();
   var enabledModes = {};
 
-  if (set) {
+  if (set && set.enabledmodes) {
     enabledModes = set.enabledmodes;
   }
 
@@ -758,12 +758,7 @@ function loadAllModes(){
 
     // This is the minimum enabled modes, other modes are enabled during
     // settings load/apply when it gets around to it.
-    if (_.isUndefined(enabledModes)) { // No settings at all
-      robopaint.modes[name].enabled = !!m.robopaint.core;
-    } else {
-      robopaint.modes[name].enabled = !_.isUndefined(enabledModes[name]) ? enabledModes[name] : !!m.robopaint.core;
-    }
-
+    robopaint.modes[name].enabled = !_.isUndefined(enabledModes[name]) ? enabledModes[name] : !!m.robopaint.core;
 
     // Add the toolbar link icon
 
