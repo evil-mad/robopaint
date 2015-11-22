@@ -110,10 +110,9 @@ are not actually allowed in valid JSON.)
     "basetype": "mode"
   },
   "info": {
-    "word": "Print", // The word to be placed in the bubble navigation
-    "description": "My mode!", // Text to show show on mode button hover
-    "title": "My Mode Title", // If not core, will show in settings with checkbox to enable
-    "detail": "Lots of detail text" // If not core, will show in settings below title
+    "name": "My Example mode", // 2 to 5 words that make up the "name" of the mode
+    "use": "Make Example Art", // 2 to 4 words that describe what the mode does, shows up in home screen bubble preview.
+    "detail": "Lots of detail text" // Describe the mode in detail, as much text as you need.
   },
   "myi18nsection": { // Optional standard i18next translation key:value structure...
      "mystring": "My string" // Available for translation at modes.[modename].myi18nsection.mystring
