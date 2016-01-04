@@ -21,6 +21,10 @@ body {
 }
 
 /* Attempt some kind of button standardization */
+button {
+  font-family: sans-serif;
+}
+
 button.normal {
   text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
   border-radius: 7px;
