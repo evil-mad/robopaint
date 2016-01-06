@@ -38,7 +38,7 @@ function loadSettings() {
     colorset: 'generic-standard',
     maxpaintdistance: 10805, // 48.2cm @ ~2.24mm per step
     tsprunnertype: 'OPT',
-    enabledmodes: {},
+    enabledmodes: {print: true, edit: true},
     remoteprint: 0,
     gapconnect: 1,
     refillmode: 0,
