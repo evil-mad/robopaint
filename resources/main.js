@@ -829,7 +829,6 @@ function buildSettingsModeView() {
         $('<span>').addClass('ver').text('v' + mode.version),
         $('<input>')
           .attr({type: 'checkbox', id: m.name + 'modeenable'})
-          .prop('disabled', m.core)
           .prop('checked', mode.enabled)
       )
     );
