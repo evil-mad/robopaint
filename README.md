@@ -33,6 +33,31 @@ Control your bot with a simple web app leveraging everything already written for
 RoboPaint!
  * Allows programatic (including remote) painting and drawing via the high level [RoboPaint API](https://github.com/evil-mad/robopaint-mode-remote/blob/master/API.md), the low level [cncserver API](https://github.com/techninja/cncserver/blob/master/API.md), or the simplified (HTTP get-only) [Scratch API](https://github.com/techninja/cncserver/blob/master/SCRATCH.API.md)
 
+## Projects:
+RoboPaint is made of modes that are their very own independent projects! This
+project repository holds all the code to manage the modes, global settings,
+running the API, and the connection to a robot. The modes are their own web
+applications that run (almost) completely on their own through the mode API.
+
+Here's a list of all the modes that currently ship with RoboPaint. If you have
+an issue or a feature to add to any of these, open it in the mode's own project
+instead of this one.
+* **[Edit mode](https://github.com/evil-mad/robopaint-mode-edit)**
+  * For creating/editing/importing SVG art that will be saved to a shared
+  location that modes can use as they choose.
+* **[Print Mode](https://github.com/evil-mad/robopaint-mode-print)**
+  * An automatic paint mode meant to handle most SVG art easily and without much
+  customization
+* **[Remote Print Mode](https://github.com/evil-mad/robopaint-mode-remote)**
+  * Allow for high level sending of SVGs for printing directly with or without
+  user interaction via an API.
+* **[Spiral Mode (experimental)](https://github.com/techninja/robopaint-mode-spiral)**
+  * A mode to take raster images and convert them into spiral art using adjusted
+  brush heights for luminosity.
+* **[Example Text Mode (experimental)](https://github.com/techninja/robopaint-mode-example)**
+  * An example mode for rendering text, and to show developers how to create a
+  mode using most of the available modules and API.
+
 ## Problems?
 ***Stuck on something?*** Submit an issue! Click the
 [issues tab](https://github.com/evil-mad/robopaint/issues) and see if someone
