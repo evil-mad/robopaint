@@ -270,8 +270,8 @@ function bindMainControls() {
 
     var $target = $(e.target);
 
-    // Don't do anything if already selected
-    if ($target.is('.selected')) {
+    // Don't do anything if already selected and not developer mode.
+    if ($target.is('.selected') && !robopaint.settings.rpdebug) {
       return false;
     }
 
@@ -348,7 +348,8 @@ function bindMainControls() {
  *   The mode's machine name. NOTE: Does no sanity checks!
  */
 robopaint.switchMode = function(mode, callback) {
-  if (appMode == mode) { // Don't switch modes if already there
+  // Don't switch modes if already there, unless debug mode on.
+  if (appMode == mode && !robopaint.settings.rpdebug) {
     return;
   }
 
