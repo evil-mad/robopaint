@@ -135,11 +135,17 @@ mode.settings = {
         }
       } else { // Otherwise, use it
         // Set loaded value (if any)
-        if (typeof v[key] !== 'undefined') $(this).val(v[key]);
+        if (typeof v[key] !== 'undefined') {
+          if (this.type === 'checkbox') {
+            $(this).prop('checked', v[key]);
+          } else {
+            $(this).val(v[key]);
+          }
+        }
 
         // Bind to catch change
         $(this).change(function(){
-          mode.settings.v[key] = this.value;
+          mode.settings.v[key] = this.type === 'checkbox' ? this.checked : this.value;
           mode.settings.save();
         }).change();
       }
