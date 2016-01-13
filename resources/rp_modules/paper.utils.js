@@ -377,6 +377,7 @@ module.exports = function(paper) {
       run([
         'wash',
         'park',
+        'up', // Ensure the last command sent is clean, see evil-mad/robopaint#250
         ['status', i18n.t('libs.autocomplete')],
         ['callbackname', 'autoPaintComplete']
       ]);
