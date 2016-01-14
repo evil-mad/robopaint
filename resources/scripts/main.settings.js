@@ -5,11 +5,12 @@
  * to a more centralized singluar configuration file ... but not yet. ;)
  */
 
-
 /**
  * Load settings from defaults/localStorage and push to elements
  */
 function loadSettings() {
+  loadPaperJS();
+
   var g = cncserver.conf.global;
   var b = cncserver.conf.bot;
 
@@ -31,34 +32,59 @@ function loadSettings() {
     paintspeed: parseFloat(b.get('speed:drawing')),
 
     // Robopaint specific defaults
-    filltype: 'line-straight',
-    fillangle: 0,
     penmode: 0,
     openlast: 0,
     showcolortext: 0,
     colorset: 'generic-standard',
-    maxpaintdistance: 8040,
-    fillspacing: 10,
-    fillprecision: 14,
-    strokeovershoot: 5,
+    maxpaintdistance: 10805, // 48.2cm @ ~2.24mm per step
     tsprunnertype: 'OPT',
-    strokeprecision: 6,
-    enabledmodes: {},
+    enabledmodes: {print: true, edit: true},
     remoteprint: 0,
     gapconnect: 1,
     refillmode: 0,
-    refillaction: 0
+    refillaction: 0,
+    rpdebug: 0,
+
+
+    autostrokeenabled: 1,
+    strokeprecision: 6,
+    strokeovershoot: 5,
+    strokefills: 1,
+    strokeinvisible: 0,
+    autostrokeiteration: 2,
+    autostrokeocclusion: 1,
+    strokeocclusionfills: 1,
+    strokeocclusionstoke: 1,
+    strokeocclusioncolor: 0,
+    strokeocclusionwater: 1,
+    autostrokewidth: 10,
+    strokeclosefilled: 1,
+
+    autofillenabled: 1,
+    filltype: 'zigsmooth',
+    fillangle: 28,
+    fillspacing: 10,
+    fillprecision: 14,
+    fillgroupingthresh: 40,
+    fillhatch: 0,
+    fillrandomize: 1,
+    fillspiralalign: 1,
+    fillinset: 0,
+    autofilliteration: 2,
+    autofillwidth: 10,
+    fillocclusionfills: 1,
+
+    skipwhite: 1,
+    prefillbuffer: 1,
+    optimizepath: 1
   };
 
   // Allow machine specific overrides of initial default settings
   settingsDefaultAlter(robopaint.settings);
 
-  // Set the visibility/enabled status of color/mediasets
-  verifyColorsetAbilities();
-
   // Are there existing settings from a previous run? Mesh them into the defaults
-  if (localStorage[settingsStorageKey()]) {
-    var s = getSettings();
+  if (localStorage[robopaint.utils.settingsStorageKey()]) {
+    var s = robopaint.utils.getSettings();
     for (var key in robopaint.settings) {
       if (typeof s[key] != 'undefined' && s[key] !== null) {
         robopaint.settings[key] = s[key];
@@ -87,7 +113,7 @@ function loadSettings() {
     $input.change();
   }
 
-  afterSettings();
+  $(robopaint).trigger('settingsComplete');
 }
 
 /**
@@ -129,84 +155,16 @@ function settingsDefaultAlter(settings) {
 
 }
 
-/**
- * Verify the abilities for a given bot to access/use a given set of media.
- * If no media types can be used by the current bot, the colorset pallette
- * will be completely hidden.
- */
-function verifyColorsetAbilities() {
-  var tools = robopaint.currentBot.data.tools;
-  var bot = robopaint.currentBot.type;
-
-  // Assume bot allows for all media types
-  var allowedMedia = {
-    watercolor: true,
-    pen: true,
-    engraver: true,
-    wax: true
-  };
-
-  // Only Eggbot supports engraver and wax right now
-  if (bot !== 'eggbot') {
-    allowedMedia.engraver = false;
-    allowedMedia.wax = false;
-  }
-
-  // Without color, no watercolor
-  if (!tools.color0) {
-    allowedMedia.watercolor = false;
-  }
-
-  // Without manual swap/resume, no pen
-  if (!tools.manualswap && !tools.manualresume) {
-    allowedMedia.pen = false;
-  }
-
-  robopaint.statedata.allowedMedia = allowedMedia;
-}
 
 /**
  * Called after settings have been loaded
  */
-function afterSettings() {
+$(robopaint).on('settingsComplete', function(){
   addSettingsRangeValues(); // Add in the range value displays
 
   // Clear last used image
   if (robopaint.settings.openlast == 0) delete localStorage["svgedit-default"];
-}
-
-/**
- * Actually retrieve settings from local storage
- */
-function getSettings() {
-  if (localStorage[settingsStorageKey()]) {
-    return JSON.parse(localStorage[settingsStorageKey()]);
-  } else {
-    return {};
-  }
-}
-
-/**
- * Get the settings key (based on bot type)
- *
- * @returns {String}
- *   Name of current bot specific settings key
- */
-function settingsStorageKey() {
-  var t = robopaint.currentBot.type;
-  if (t == 'watercolorbot') {
-    return 'cncserver-settings';
-  } else {
-    return t + '-settings';
-  }
-}
-
-/**
- * Actually save settings to local storage
- */
-function saveSettings() {
-  localStorage[settingsStorageKey()] = JSON.stringify(robopaint.settings);
-}
+});
 
 /**
  * Bind and callback functionality for any settings specific markup/controls
@@ -236,16 +194,13 @@ function bindSettingsControls() {
   $('select#bottype').val(robopaint.currentBot.type);
 
 
-
-  // Set robopaint global aspect ratio
   var b = botTypes[robopaint.currentBot.type].data;
-  robopaint.currentBot.data = b;
-  var aspect = (b.maxArea.height - b.workArea.top) / (b.maxArea.width - b.workArea.left);
-  robopaint.canvas = {
-    width: 1152, // "Trusted" width to base transformations off of
-    height: Math.round(1152 * aspect),
-    aspect: aspect
-  };
+
+  // Re-init currentBot with full data and tools (also sets capabilities!)
+  robopaint.currentBot = robopaint.utils.getCurrentBot(b);
+
+  // Set robopaint global aspect ratio & margin
+  robopaint.canvas = robopaint.utils.getRPCanvas(b);
 
   // Setup settings group tabs
   $('ul.tabs').each(function(){
@@ -253,9 +208,8 @@ function bindSettingsControls() {
     // which tab is active and its associated content
     var $active, $content, $links = $(this).find('a');
 
-    // If the location.hash matches one of the links, use that as the active tab.
-    // If no match is found, use the first link as the initial active tab.
-    $active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+    // Use the first link as the initial active tab.
+    $active = $($links[0]);
     $active.addClass('active');
     $content = $($active.attr('href'));
 
@@ -284,7 +238,7 @@ function bindSettingsControls() {
   });
 
   // Catch all settings input changes
-  $('#settings input, #settings select').bind('change input', function(){
+  $('#settings input, #settings select').bind('change input', function(e){
     var $input = $(this);
     var pushKey = [];
     var pushVal = '';
@@ -293,10 +247,17 @@ function bindSettingsControls() {
     // Update available modes
     if (this.id.indexOf('modeenable') !== -1) {
       var name = this.id.replace('modeenable', '');
-      robopaint.settings.enabledmodes[name] = $input.is(':checked');
-      $('#' + name + ', #bar-' + name).toggle(robopaint.settings.enabledmodes[name]);
-      responsiveResize();
-      if (!initializing) saveSettings();
+      var enabled = $input.is(':checked');
+      robopaint.settings.enabledmodes[name] = enabled;
+      $('#bar-' + name).toggleClass('hidden', !enabled);
+      robopaint.modes[name].enabled = enabled;
+      homeVis.modeStatus(name, enabled);
+      $(this).parents('.modebox').toggleClass('disabled', !enabled);
+
+      if (!initializing) {
+        robopaint.utils.saveSettings(robopaint.settings);
+        $(robopaint).trigger('settingsUpdate');
+      }
       return;
     }
 
@@ -305,7 +266,7 @@ function bindSettingsControls() {
       case 'colorset':
         // Disabled select properties can't be read with val(), so we use
         // selectedIndex as an always working option.
-        robopaint.settings[this.id] = $input.find('option')[$input.prop('selectedIndex')].value;
+        robopaint.settings[this.id] = $input.find('option:selected').val();
         break;
       case 'servoup':
       case 'servopaint':
@@ -317,7 +278,19 @@ function bindSettingsControls() {
 
         // Save settings
         cncserver.conf.bot.set('servo:presets:' + name, parseFloat($input.val()/10));
-        if (!initializing) cncserver.setHeight(name);
+
+        // On input with nothing in the buffer allow active change of the bot.
+        // On "change" of sliders, the user has finished sliding, we can reset
+        // the height back to UP. Allows changing while paused.
+        var state = robopaint.cncserver.state;
+        if (!initializing && (state.buffer.length === 0 || state.process.paused)) {
+          if (e.type === 'change') {
+            cncserver.setHeight('up', null, state.process.paused);
+          } else {
+            cncserver.setHeight(name, null, state.process.paused);
+          }
+        }
+
         robopaint.settings[this.id] = $input.val();
         break;
 
@@ -373,7 +346,7 @@ function bindSettingsControls() {
 
         // No nothing!
         toggleDisableSetting(
-          '#maxpaintdistance',
+          '#maxpaintdistance, #refillmode, #refillaction, #maxpaint',
           $input.val() != 3,
           robopaint.t('settings.output.penmode.warningAll')
         );
@@ -394,28 +367,21 @@ function bindSettingsControls() {
         }
     }
 
-    // Remoteprint mode click
-    if (this.id == 'remoteprint') {
-      $('#bar-remoteprint').toggle(robopaint.settings[this.id]);
+    // Enable only for debug windows (users can close them by hand).
+    if (this.id == 'rpdebug' && $input.is(':checked')) {
+      mainWindow.openDevTools();
+      if (appMode !== 'home') $subwindow[0].openDevTools();
     }
 
     // Update paint sets when changes made that would effect them
     if (this.id == 'colorset' || this.id == 'showcolortext') {
       updateColorSetSettings();
-      if ($subwindow[0]) {
-        if ($subwindow[0].contentWindow.updateColorSet) {
-          $subwindow[0].contentWindow.updateColorSet();
-        }
-      }
+      cncserver.pushToMode('updateMediaSet');
     }
 
     // Update visibility of paintsets on penmode change
     if (this.id == 'penmode') {
-      if ($subwindow[0]) {
-        if ($subwindow[0].contentWindow.responsiveResize) {
-          $subwindow[0].contentWindow.responsiveResize();
-        }
-      }
+      cncserver.pushToMode('updatePenMode');
     }
 
     // If there's a key to override for CNC server, set it
@@ -428,21 +394,14 @@ function bindSettingsControls() {
       }
     }
 
-    if (!initializing) saveSettings();
+    if (!initializing) {
+      robopaint.utils.saveSettings(robopaint.settings);
+      $(robopaint).trigger('settingsUpdate');
+    }
   });
 
   // Done Button
   $('#settings-done').click(function(e) {
-    // Force the pen up when exiting...
-    if (appMode == 'print' || appMode == 'manual') {
-      // Unless we' have're probably printing something
-      if ($subwindow[0].contentWindow.cncserver.state.buffer.length == 0) {
-        // Use the more abstracted API to allow sub-app callbacks to handle specifics
-        robopaint.cncserver.api.pen.up();
-      }
-    } else {
-      cncserver.setHeight('up');
-    }
     setSettingsWindow(false);
   });
 
@@ -461,7 +420,7 @@ function bindSettingsControls() {
       // Disable any non-core modes
       $('.advanced-modes input').prop('checked', false).change();
 
-      delete localStorage[settingsStorageKey()];
+      robopaint.utils.clearSettings();
 
       cncserver.loadGlobalConfig();
       cncserver.loadBotConfig();
@@ -473,6 +432,37 @@ function bindSettingsControls() {
   $('#settings div.httpport label span').text(
     robopaint.utils.getIPs(robopaint.settings.httplocalonly)
   );
+
+
+  // Setup custom form element handlers
+  $('#settings input[type="checkbox"]').each(function(){
+    var $item = $(this);
+    // Add a div after each one for iOS CSS style checkboxes.
+    $item.after($('<div>').click(function(){
+      $item.click();
+    }));
+  });
+
+  // Add a target to see the aside details
+  $('#settings aside').each(function(){
+    var $aside = $(this);
+    $aside
+      .hide()
+      .siblings('label:last').after(
+        $('<span>')
+          .text('?')
+          .addClass('aside-show')
+          .click(function(){
+            if (!$aside.is('.open')) {
+              $(this).addClass('open').text('▼');
+              $aside.toggleClass('open', true).slideDown();
+            } else {
+              $(this).removeClass('open').text('?');
+              $aside.removeClass('open').slideUp();
+            }
+          })
+      );
+  });
 }
 
 function toggleDisableSetting(selector, toggle, message) {
@@ -499,9 +489,9 @@ function toggleDisableSetting(selector, toggle, message) {
  */
 function setSettingsWindow(toggle) {
   if (toggle) {
-    $('#settings').fadeIn('slow');
+    $('#settings').css('top', 0);
   } else {
-    $('#settings').fadeOut('slow');
+    $('#settings').css('top', '-100%');
   }
   setModal(toggle);
 }
@@ -526,8 +516,8 @@ function addSettingsRangeValues() {
           num = Math.round(num / 10) * 10;
           break;
         case "maxpaintdistance":
-          // Display as Centimeters (16.6667 mm per step!)
-          num = Math.round((num / 166.7) * 10) / 10;
+          // Display as Centimeters (2.24076923 mm per step!)
+          num = Math.round((num / 224.076923) * 10) / 10;
           num = robopaint.t('common.metric.cm', {count: num}) + ' / ' +
             robopaint.t('common.imperial.in', {count: (Math.round((num / 2.54) * 10) / 10)});
           dosep = false;
@@ -580,9 +570,9 @@ function addSettingsRangeValues() {
  * Update/render currently selected colorset in settings window
  */
 function updateColorSetSettings() {
-  if (!robopaint.statedata.colorsets) return; // Don't run too early
+  if (!robopaint.media.sets) return; // Don't run too early
 
-  var set = robopaint.statedata.colorsets[robopaint.settings.colorset];
+  var set = robopaint.media.currentSet;
   if (!set) return; // Don't run if the set is invalid
 
   var $colors = $('#colorsets .colors');
@@ -606,4 +596,17 @@ function updateColorSetSettings() {
   for (var i in meta) {
     $('#colorsets .' + meta[i]).text(set[meta[i]]);
   }
+}
+
+// Manage PaperJS output for settings
+var paperLoaded = false;
+function loadPaperJS() {
+  if (paperLoaded) return;
+
+  paperLoaded = true;
+  rpRequire('paper', function(){
+    rpRequire('paper_utils')(paper);
+    paper.utils.loadDOM('scripts/settings.ps.js', 'settings-preview');
+    $('#render .renderpreview').change(paper.refreshPreview);
+  });
 }

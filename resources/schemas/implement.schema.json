@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://watercolorbot.com/implement.json",
+  "type": "object",
+  "properties": {
+    "allowsMedia": {
+      "id": "http://watercolorbot.com/implement.json/allowsMedia",
+      "title": "Allow media?",
+      "type": "boolean",
+      "default": true,
+      "format": "checkbox"
+    },
+    "outputDimensions": {
+      "id": "http://watercolorbot.com/implement.json/outputDimensions",
+      "type": "object",
+      "properties": {
+        "width": {
+          "id": "http://watercolorbot.com/implement.json/outputDimensions/width",
+          "type": "integer",
+          "title": "Width",
+          "default": 5,
+          "minimum": 0.01,
+          "maximum": 200,
+          "format": "number"
+        },
+        "height": {
+          "id": "http://watercolorbot.com/implement.json/outputDimensions/height",
+          "type": "integer",
+          "title": "Height",
+          "default": 5,
+          "minimum": 0.01,
+          "maximum": 200,
+          "format": "number"
+        },
+        "length": {
+          "id": "http://watercolorbot.com/implement.json/outputDimensions/length",
+          "type": "integer",
+          "title": "Length",
+          "default": 5,
+          "minimum": 0.01,
+          "maximum": 100,
+          "format": "number"
+        }
+      }
+    },
+    "rigidity": {
+      "id": "http://watercolorbot.com/implement.json/rigidity",
+      "type": "number",
+      "title": "Rigidity",
+      "default": 0.5,
+      "minimum": 0,
+      "maximum": 1,
+      "multipleOf": 0.1,
+      "format": "range"
+    },
+    "angle": {
+      "id": "http://watercolorbot.com/implement.json/angle",
+      "type": "integer",
+      "title": "Angle",
+      "default": 180,
+      "minimum": 0,
+      "maximum": 360,
+      "format": "range"
+    },
+    "shape": {
+      "id": "http://watercolorbot.com/implement.json/shape",
+      "type": "string",
+      "title": "Shape",
+      "minLength": 1,
+      "default": "round",
+      "enum": [
+        "flat",
+        "round",
+        "filbert",
+        "fan",
+        "angle",
+        "mop",
+        "rigger"
+      ]
+    },
+    "name": {
+      "id": "http://watercolorbot.com/implement.json/name",
+      "type": "string",
+      "title": "Base English Name",
+      "minLength": 1,
+      "default": "Implement Name"
+    },
+    "machineName": {
+      "id": "http://watercolorbot.com/implement.json/machineName",
+      "type": "string",
+      "minLength": 3,
+      "pattern": "[a-z0-9_]+",
+      "title": "Machine Name",
+      "default": "implement_machine_name"
+    },
+    "implementType": {
+      "id": "http://watercolorbot.com/implement.json/type",
+      "type": "string",
+      "title": "Type",
+      "minLength": 1,
+      "default": "brush",
+      "enum": [
+        "brush",
+        "pen",
+        "refillpen",
+        "engraver",
+        "wax",
+        "laser",
+        "extruder",
+        "other"
+      ]
+    }
+  },
+  "required": [
+    "allowsMedia",
+    "outputDimensions",
+    "rigidity",
+    "angle",
+    "shape",
+    "name",
+    "machineName",
+    "type"
+  ],
+  "form": [
+    "name",
+    "machineName",
+    "allowsMedia",
+    "implementType",
+    {
+      "type": "fieldset",
+      "title": "Dimensions",
+      "items": [
+        {"key": "outputDimensions.width", "append": "mm"},
+        {"key": "outputDimensions.height", "append": "mm"},
+        {"key": "outputDimensions.length", "append": "mm"}
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Details",
+      "items": [
+        {"key": "rigidity", "type": "range", "step": 0.1},
+        {"key": "angle", "type": "range", "step": 1},
+        "shape"
+      ]
+    }
+  ]
+}

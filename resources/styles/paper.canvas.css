@@ -1,0 +1,45 @@
+@charset "UTF-8";
+/*
+  @file Holds ALL styles for Paper.js mode canvas
+*/
+
+#paper-canvas-container {
+  position: absolute;
+}
+
+#paper-back {
+  background-image: url('../images/paper_texture.png');
+  border: 1px solid #ddd;
+  box-shadow: 0 0 38px -2px rgba(0,0,0,0.3);
+  position: absolute;
+}
+
+#paper-main {
+  position: relative;
+}
+
+#paper-shadow {
+  position: absolute;
+  z-index: -5;
+  margin: 2px auto;
+}
+
+#paper-shadow:before, #paper-shadow:after {
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 15px;
+  left: 10px;
+  width: 50%;
+  top: 80%;
+  max-width:485px;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 15px 10px rgba(0, 0, 0, 0.6);
+  transform: rotate(-3deg);
+}
+
+#paper-shadow:after {
+  transform: rotate(3deg);
+  right: 10px;
+  left: auto;
+}

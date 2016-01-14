@@ -20,22 +20,22 @@ function initializeTranslation() {
   fs.readdirSync(i18nPath).forEach(function(file) {
     // Get contents of the language file.
     try {
-      var data = JSON.parse(fs.readFileSync(i18nPath + file , 'utf8'));
+      var data = require(i18nPath + file);
 
       // Create new option in the pulldown language list, with the text being
       // the language's name value is the two letter language code.
       $("#lang").append(
         $("<option>")
-          .text(data['_meta'].langname)
-          .attr('value', data['_meta'].target)
+          .text(data._meta.langname)
+          .attr('value', data._meta.target)
       );
 
       // Add the language to the resource list.
-      resources[data['_meta'].target] = { translation: data};
+      resources[data._meta.target] = { translation: data};
       //Create empty colorset key
-      resources[data['_meta'].target].translation['colorsets'] = {};
+      resources[data._meta.target].translation['colorsets'] = {};
       //Create empty modes key
-      resources[data['_meta'].target].translation['modes'] = {};
+      resources[data._meta.target].translation['modes'] = {};
 
       i += 1;
     } catch(e) {
@@ -49,8 +49,8 @@ function initializeTranslation() {
     // Iterate over global colorset i18n directory.
     fs.readdirSync(appPath + 'resources/colorsets/_i18n').forEach(function(file) {
       // Add each translation file to the global translate array.
-      var data = JSON.parse(fs.readFileSync(appPath + 'resources/colorsets/_i18n/' + file , 'utf8'));
-      resources[data['_meta'].target].translation['colorsets'] = data;
+      var data = require(appPath + 'resources/colorsets/_i18n/' + file);
+      resources[data._meta.target].translation['colorsets'] = data;
     });
   }catch(e) {
     // Catch and report errors to the console.
@@ -70,8 +70,8 @@ function initializeTranslation() {
         //  Iterate over language files in colorset's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {
           //  Add the data to the global i18n translation array
-          var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
-          resources[data['_meta'].target].translation['colorsets'][folder] = data;
+          var data = require(fullPath + file);
+          resources[data._meta.target].translation['colorsets'][folder] = data;
         });
        }
   } catch(e) {
@@ -80,19 +80,23 @@ function initializeTranslation() {
   });
 
   // Load all mode translation files
-  fs.readdirSync(appPath + 'resources/modes/').forEach(function(folder) {
+  fs.readdirSync(appPath + 'node_modules/').forEach(function(folder) {
     try {
       // Ignore files that have extentions (we only want directories).
       if (folder.indexOf(".") == -1) {
-        var fullPath = appPath + 'resources/modes/' + folder + '/_i18n/';
+        var fullPath = appPath + 'node_modules/' + folder + '/';
+        var p = require(fullPath + 'package.json');
+
         //  Iterate over language files in mode's i18n folder
-        fs.readdirSync(fullPath).forEach(function(file) {
-          if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
-            //  Add the data to the global i18n translation array
-            var data = JSON.parse(fs.readFileSync(fullPath + file , 'utf8'));
-            resources[data['_meta'].target].translation['modes'][folder] = data;
-          }
-        });
+        if (p.type === 'robopaint_mode') {
+          fs.readdirSync(fullPath + '_i18n/').forEach(function(file) {
+            if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
+              //  Add the data to the global i18n translation array
+              var data = require(fullPath + '_i18n/' + file);
+              resources[data._meta.target].translation['modes'][p.robopaint.name] = data;
+            }
+          });
+        }
        }
   } catch(e) {
     // Catch and report errors to the console
@@ -159,9 +163,9 @@ function initializeTranslation() {
     fallbackLng: 'en-US',
     lng: localStorage['robopaint-lang']
   }, function(t) {
-    robopaint.t = t;
+    robopaint.t = i18n.t;
     currentLang = localStorage['robopaint-lang'];
-    $('[data-i18n]').i18n();
+    i18n.translateObject($('body')[0]);
     setVersion();
 
     // Apply bolding to settings details text
@@ -208,9 +212,9 @@ function updateLang() {
   // Change the language on i18n, and reload the translation variable.
   i18n.setLng(
     localStorage['robopaint-lang'],
-    function(t) {
-      robopaint.t = t;
-      $('[data-i18n]').i18n();
+    function() {
+      robopaint.t = i18n.t;
+      i18n.translateObject($('body')[0]);
       setVersion();
 
       // Apply bolding to settings details text
@@ -221,83 +225,13 @@ function updateLang() {
       // Report language switch to the console
       console.info("Language Switched to: " + localStorage['robopaint-lang']);
 
-      $('input[type=range]').change(); // Update dynamic slider labels
+      // Update dynamic slider labels (not the servo ones though as they set
+      // pen height, which is not what we want to do).
+      $('input[type=range]:not(#servowash,#servopaint,#servoup)').change();
       getColorsets(); // Reload and reparse colorsets
 
       // Translate the mode if we're not on home
-      if (appMode !== 'home') translateMode();
+      cncserver.pushToMode('langChange');
     }
   );
-}
-
-
-/**
- * Translate a mode, in either native or DOM map format. Will also trigger
- * translateComplete() function on window object of mode.
- */
-function translateMode() {
-  var mode = robopaint.modes[appMode];
-
-  // DOM Map or native parsing?
-  if (mode.i18n == 'dom') {
-    var domFile = 'resources/' + mode.root + '_i18n/' + mode.name + '.map.json';
-    try {
-      var mappings = JSON.parse(fs.readFileSync(domFile , 'utf8'))['map'];
-      for (var selector in mappings) {
-        var $elements = $(selector, $subwindow.contents());
-
-        if ($elements.length === 0) {
-          console.debug("TranslationDOM Map selector not found:", selector);
-        }
-
-        // When creating DOM map and i18n for non-native modes, it helps to know
-        // which ones are done, and which aren't!
-        var debugExtra = ""; //"XXX";
-
-        // Replace text or specific attributes?
-        var i18nKey = mappings[selector];
-        if (typeof i18nKey === 'string') {
-          // Can't use .text() as it will replace child nodes!
-          $elements.each(function(){ // Just in case we select multiple elements.
-            $(this)
-              .contents()
-              .filter(function(){ return this.nodeType == 3; })
-              .first()
-              .replaceWith(robopaint.t(i18nKey) + debugExtra);
-          });
-        } else if (typeof i18nKey === 'object') {
-          for (var attr in i18nKey) {
-            $elements.each(function(){ // Just in case we select multiple elements.
-              if (attr === 'text') {
-                $(this)
-                  .contents()
-                  .filter(function(){ return this.nodeType == 3; })
-                  .first()
-                  .replaceWith(robopaint.t(i18nKey.text) + debugExtra);
-              } else {
-                $(this).attr(attr, robopaint.t(i18nKey[attr]) + debugExtra);
-              }
-            });
-          }
-        }
-     }
-
-    } catch(e) {
-      console.error('Bad DOM location file:' + domFile, e);
-    }
-  } else { // Native i18n parsing! (much simpler)
-    // Quick fix for non-reactive re-translate for modes
-    $('[data-i18n=""]', $subwindow.contents()).each(function() {
-      var $node = $(this);
-      if ($node.text().indexOf('.') > -1 && $node.attr('data-i18n') == "") {
-        $node.attr('data-i18n', $node.text());
-      }
-    });
-    $('[data-i18n]', $subwindow.contents()).i18n();
-  }
-
-  // If there's a window function for it, trigger mode translationComplete()
-  if (typeof $subwindow[0].contentWindow.translateComplete === 'function') {
-    $subwindow[0].contentWindow.translateComplete();
-  }
 }

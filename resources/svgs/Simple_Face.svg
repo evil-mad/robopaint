@@ -1,8 +1,10 @@
-<svg width="10.991148in" height="7.692468in" xmlns="http://www.w3.org/2000/svg">
+<svg width="11.986004in" height="8.695436in" xmlns="http://www.w3.org/2000/svg">
  <g>
-  <path id="svg_1" d="m165.870346,369.498718c0,-200.070679 162.057266,-362.127929 362.127945,-362.127929c200.070679,0 362.12793,162.05725 362.12793,362.127929c0,200.070679 -162.057251,362.12793 -362.12793,362.12793c-200.070526,0 -362.127945,-162.057251 -362.127945,-362.12793z" stroke-opacity="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="15" stroke="#000000" fill="#ffffff"/>
-  <path id="svg_2" d="m347.886566,199.86998l1.907776,150.568954" opacity="null" stroke-opacity="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="15" stroke="#000000" fill-opacity="null" fill="none"/>
-  <path id="svg_3" d="m664.271973,213.211349l3.810669,142.944382" opacity="null" stroke-opacity="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="15" stroke="#000000" fill-opacity="null" fill="none"/>
-  <path fill="#ffffff" d="m355.981079,495.050781c-5.718445,0 329.136658,-3.813934 329.1073,-1.061371c0.050476,1.06131 49.58252,166.876068 -120.044617,166.876068c-169.628693,-0.001587 -203.345917,-165.814697 -209.062683,-165.814697z" stroke-width="15" stroke="#000000" id="svg_4"/>
+  <g transform="matrix(1.13855 0 0 1.13855 -25.1501 -3.19109)" id="svg_5">
+   <path fill="#ffffff" stroke="#000000" stroke-width="15" stroke-linejoin="null" stroke-linecap="null" stroke-opacity="null" d="m165.870346,369.498718c0,-200.070679 162.057266,-362.127929 362.127945,-362.127929c200.070679,0 362.12793,162.05725 362.12793,362.127929c0,200.070679 -162.057251,362.12793 -362.12793,362.12793c-200.070526,0 -362.127945,-162.057251 -362.127945,-362.12793z" id="svg_1"/>
+   <path fill="none" fill-opacity="null" stroke="#000000" stroke-width="15" stroke-linejoin="null" stroke-linecap="null" stroke-opacity="null" opacity="null" d="m347.886566,199.86998l1.907776,150.568954" id="svg_2"/>
+   <path fill="none" fill-opacity="null" stroke="#000000" stroke-width="15" stroke-linejoin="null" stroke-linecap="null" stroke-opacity="null" opacity="null" d="m664.271973,213.211349l3.810669,142.944382" id="svg_3"/>
+   <path id="svg_4" stroke="#000000" stroke-width="15" d="m355.981079,495.050781c-5.718445,0 329.136658,-3.813934 329.1073,-1.061371c0.050476,1.06131 49.58252,166.876068 -120.044617,166.876068c-169.628693,-0.001587 -203.345917,-165.814697 -209.062683,-165.814697z" fill="#ffffff"/>
+  </g>
  </g>
 </svg>

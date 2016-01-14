@@ -13,6 +13,9 @@
       "brush": "Brush",
       "pen": "Pen"
     },
+    "dialog": {
+      "confirmexit": "Are you sure you want to go?\n\nExiting this mode while printing will cancel all your jobs. Click OK to leave."
+    },
     "action": {
       "park": "Park Home",
       "parktitle": "Move the carriage back to the home position.",
@@ -22,10 +25,12 @@
       "resume": "Resume",
       "stop": "Stop",
       "start": "Start",
+      "reset": "Reset",
       "save": "Save",
       "print": "Print",
       "cancel": "Cancel",
       "canceltitle": "Cancel current print job.",
+      "cancelconfirm": "Are you sure you want to cancel the current job?",
       "apply": "Apply",
       "done": "Done",
       "autocolor": "Auto Color",
@@ -79,15 +84,38 @@
     "autoinit": "Automatic Paint: __pathNum__ paths, __jobsNum__ jobs'",
     "autofill": "Filling path __id__...",
     "autostroke": "Stroking path __id__...",
-    "autocomplete": "Automatic Paint Complete!"
+    "autocomplete": "Automatic Paint Complete!",
+    "spool": {
+      "stroke": "Tracing stroke path __id__...",
+      "fill": "Tracing fill path __id__..."
+    }
   },
   "status": {
+    "connecting": "Connecting to robot...",
+    "connected": "Connected Successfully!",
+    "pausing": "Pausing current process...",
+    "paused": "Paused. Click resume to continue.",
+    "resuming": "Resuming current process...",
+    "resumed": "Drawing resumed...",
     "start": "Starting up...",
+    "parking": "Parking...",
+    "parked": "Parked succesfully",
+    "parkfail": "Can't Park, already parked",
+    "unlocking": "Unlocking motors...",
+    "wait": "Please wait while executed processes complete...",
+    "unlocked": "Motors unlocked! Place in home corner when done",
     "found": "Port found, connecting...",
     "question": "What do you want to do?",
     "error": "Couldn't connect!",
     "success": "Connected!",
     "disconnect": "Bot Disconnected!",
+    "pausetillempty": "Streaming instructions to prevent slowdown...",
+    "modeproblem": {
+      "load": "Failed to load mode!",
+      "loaddetail": "Something went wrong when loading that mode, see the debug console for details.",
+      "loadconsole": "Toggle the console",
+      "loaddone": "OK"
+    },
     "button": {
       "continue": "Continue in Simulation mode",
       "retry": "Try to Reconnect"
@@ -96,10 +124,8 @@
   "nav": {
     "toolbar": {
       "home": "Home Screen",
-      "edit": "Open, resize, and edit existing vector artwork.",
       "open": "Open an example design",
-      "printauto": "Printing Mode: Print your design!",
-      "printmanual": "Manual Mode: Customize your print",
+      "calibrate": "Calibrate height",
       "help": "Help! (Open web docs)",
       "settings": "Settings",
       "version": "v"
@@ -110,41 +136,33 @@
       "printmanual": "Manual"
     }
   },
-  "remoteprint": {
-    "title": "Remote Print Mode",
-    "icontitle": {
-      "from": "From the Client Application",
-      "through": "Through the Internet or your local network",
-      "to": "To your very own bot!"
+  "calibrator": {
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "done": "Close"
     },
-    "details": {
-      "title": "Details / Controls:",
-      "exit": {
-        "text": "Exit Remote Print Mode",
-        "title": "Cancel current operations and exit this mode."
+    "steps": {
+      "intro": {
+        "detail": "Before you can start making art, you must ensure your drawing tool is the right position above your drawing surface.",
+        "instruction": "Make sure your robot's holder is empty, then click the button to begin calibration."
+      },
+      "unlock": {
+        "detail": "The carriage has been moved to the top left of the drawing area, the motors have been unlocked, and the tool holder is in the lowest position.",
+        "instruction": "Once ready, insert your tool to its lowest expected position and tighten it completely, then click next."
+      },
+      "finish": {
+        "detail": "The tool should now be up and above any obstacles or the drawing surface. If not, you may need to adjust the height in advanced settings.",
+        "instruction": "You're done! Move the carriage by hand to the parking position and you can start making art."
       }
-    },
-    "api": {
-      "disabled": "The SVG import API is currently disabled. Enable it in settings and then click the button in the RoboPaint GUI.",
-      "busy": "Cannot add to queue during ongoing print job.",
-      "queued": "Queued for printing...",
-      "wait": "Waiting for design from client..."
-    },
-    "confirms": {
-      "welcome": "Hey there, welcome to Remote Print mode! This mode will turn RoboPaint into a graphics 'print server', ready to take an image from another application and print it immediately!\n\n* Images sent will only be received while this mode is on\n\n* Once an image is finished, this mode will exit\n\n* Before clicking OK, make sure your bot is completely setup and ready to go!\n\n* Click cancel if you're not quite ready to go. You can also exit anytime while in Remote Print mode",
-      "exit": "Are you sure you want to leave Remote Print mode?\n\n Any print processes and client applications will be cancelled/disconnected."
     }
   },
   "settings": {
-
-    "lang": {
-      "title": "Select a Language:"
-    },
-
     "tabs": {
-      "output": "Printing Style",
-      "common": "Basic Setup",
-      "advanced": "Advanced"
+      "output": "Style",
+      "media": "Tool",
+      "advanced": "Advanced",
+      "modes": "Modes"
     },
     "buttons": {
       "reset": {
@@ -157,7 +175,79 @@
         "hover": "Close the settings window"
       }
     },
+    "stroke": {
+      "enable": "Trace path strokes and outlines",
+      "enableinfo": "Allow robopaint to trace along paths and outlines automatically.",
+      "fill": "Outline fills",
+      "fillinfo": "If enabled, an outline of the same color will be added for filled paths without a stroke.",
+      "invisible": "Stroke invisible paths",
+      "invisibleinfo": "If enabled, strokes will be added to all existing paths regardless of stroke width or color.",
+      "closefilled": "Close filled paths",
+      "closefilledinfo": "If enabled, unclosed filled paths will be outlined fully as if they were closed.",
+      "occlusionall": "Stroke occlusion / overlap detection",
+      "occlusionallinfo": "If disabled, all outlines / stroke tracing will ignore path overlap and layer order. Stroke Precision value above will improve the precision of overlap detection.",
+      "occfills": "Occlusion under fills",
+      "occfillsinfo": "If disabled, all outlines / stroke tracing will ignore filled color overlaps.",
+      "occstroke": "Occlusion under strokes",
+      "occstrokeinfo": "If disabled, all outlines / stroke tracing will ignore stroke overlaps.",
+      "occcolor": "Ignore occlusion under same color",
+      "occcolorinfo": "If enabled, all outlines / stroke tracing of the same collor as an overlapping fill or stroke will ignore occlusion.",
+      "occtrans": "Ignore occlusion under transparent fill or stroke",
+      "occtransinfo": "If enabled, all outlines / stroke tracing under transparent paths will ignore occlusion."
+    },
+    "fill": {
+      "enable": "Trace path fills",
+      "enableinfo": "If disabled, no fills will be traced in any automatic mode functionality.",
+      "dynamic": "Hatch options",
+      "group": {
+        "title": "Grouping Threshold:",
+        "info": "Minimum threshold for grouping hatch line endings together into connected groups. Large value connects more groups with fewer tool lifts, 0 will ensure no groups are made.",
+        "opt0": "None",
+        "opt20": "Small (20)",
+        "opt40": "Default (40)",
+        "opt60": "Medium (60)",
+        "opt80": "Huge (80)",
+        "opt100": "Giant (100)"
+      },
+      "hatch": "Add secondary hatch fill",
+      "hatchinfo": "If enabled, a secondary 90° opposite angle fill will be added for each path.",
+      "random": "Randomize hatch angle",
+      "randominfo": "If enabled, each object will be filled with paths at a random angle, instead of the above value.",
+      "overlay": "Spiral fill options",
+      "inset": "Fill inset amount",
+      "insetinfo": "The amount that the rendered fill path should pull away from the edge of the fill shape border. Applies to all fill types.",
+      "precisioninfo": "Primarily for spiral fill, this setting is also used for converting the zig-smooth into a polygonal line post processing.",
+      "align": "Align spiral fill to each path",
+      "aligninfo": "If enabled (spiral fill type only), the fill spiral will be centered on the fill path. If disabled, the spiral will align to the center of the canvas for every path.",
+      "occ": "Check for Occlusion",
+      "occinfo": "If disabled, all fill tracing will ignore filled color overlaps."
+    },
+    "trace": {
+      "title": "Trace Speed:",
+      "info": "The amount of work done for each frame. Higher iteration count should take less time overall, but update less often.",
+      "opt1": "Slow (1×)",
+      "opt2": "Default (2×)",
+      "opt4": "Quad (4×)",
+      "opt10": "Super (10×)",
+      "opt20": "Maximum (20×)",
+      "width": {
+        "title": "Preview line width:",
+        "info": "How large traced paths will appear in the live preview. Does not effect printing.",
+        "optneg1": "Automatic (set by implement)",
+        "opt1": "Minimum (1)",
+        "opt5": "Medium (5)",
+        "opt10": "Default (10)",
+        "opt20": "Wide (20)",
+        "opt30": "Extreme (30)"
+      }
+    },
     "output": {
+      "skipwhite": "Skip White Paint",
+      "skipwhiteinfo": "When your media settings (paint colors) contain white, ignore any paths that would be painted in that color. You may want to turn this off when painting on a background that is not white.",
+      "prefill": "Prefill buffer",
+      "prefillinfo": "If enabled, all batch commands on supporting modes will be sent before the robot begins work. This should eliminate stuttering on start, though you have to wait longer before your work begins printing.",
+      "optimize": "Optimize path order",
+      "optimizeinfo": "If enabled, all automatic painting paths (fill and stroke) will be reordered according to color and proximity to previous path end. Paths will even be reversed to ensure lowest distance between work, but can take a very strange path if working with multiple lines of text.",
       "generaltitle": "General",
       "move": {
         "title": "Carriage Movement Speed:",
@@ -180,8 +270,8 @@
         "warningAll": "Water/Paint required. Printing Mode incompatible with this setting."
       },
       "showcolortext": {
-        "title": "Show color names:",
-        "detail": "When checked, color names will display on the paint palette for print colors, otherwise they will only be visible on hover."
+        "title": "Show color names",
+        "detail": "When enabled, color names will display on the paint palette for print colors, otherwise they will only be visible on hover."
       },
       "colorsets": {
         "title": "Installed Color Set:",
@@ -221,6 +311,7 @@
       },
       "strokeovershoot": {
         "title": "Stroke Overshoot:",
+        "optx": "(Automatic from Implement)",
         "opt0": "None (0)",
         "opt1": "Tiny (2mm)",
         "opt2": "Medium (5mm)",
@@ -229,24 +320,22 @@
         "opt5": "Unhelpful (20mm)",
         "detail": "The distance factor to move the brush beyond when lifting to make up for brush bend. Default is **5mm**."
       },
-      "filltitle": "Fill",
+      "render": {
+        "title": "Path Rendering",
+        "tab1": "Outline",
+        "tab2": "Fill",
+        "general": "Fill & Outline general"
+      },
       "filltype": {
         "title": "Type:",
-        "opt0": "Straight line",
-        "opt1": "Triangle line",
-        "opt2": "Sine line",
-        "opt3": "Center spiral",
-        "opt4": "TSP Squiggle"
+        "opt0": "Hatch (Zig-zag)",
+        "opt1": "Hatch (Straight)",
+        "opt2": "Hatch (Smooth)",
+        "opt3": "Center spiral"
       },
-      "linefilltitle": "Line/Hatch Fills",
-      "fillangle": {
-        "title": "Line Angle:",
-        "opt0": "Horizontal (0°)",
-        "opt1": "Diagonal (45°)",
-        "opt2": "Vertical (90°)"
-      },
+      "fillangle": "Hatch angle:",
       "fillspacing": {
-        "title": "Line Spacing:",
+        "title": "Hatch line spacing:",
         "opt0": "Miniscule (1)",
         "opt1": "Tiny (5)",
         "opt2": "Default (10)",
@@ -262,11 +351,12 @@
         "opt3": "Default (14)",
         "opt4": "Coarse (21)",
         "opt5": "Very Coarse (35)"
-      },
-      "gapconnect": {
-        "title": "Connect small gaps:",
-        "detail": "Makes back and forth fills smoother by not lifting brush at edges."
       }
+    },
+    "media": {
+      "media": "Media",
+      "implements": "Implements",
+      "refill": "Refill media"
     },
     "common": {
       "servo": {
@@ -281,27 +371,25 @@
     "advanced": {
       "steppers": {
         "title": "X/Y Steppers",
-        "invertx": "Invert X axis:",
-        "inverty": "Invert Y axis:",
+        "invertx": "Invert X axis",
+        "inverty": "Invert Y axis",
         "invertdetail": "In case one of your motors moves backwards.",
         "buffer": {
           "title": "Buffer Smoothing:",
           "detail": "Removes time from API callback duration, forces buffering and smoothing out subsequent position calls. Default is **20 ms**. Negative values add extra delay. Only increase if printing is jittery.",
           "hover": "Move right for more offset (smooth), left for negative offset (jerky)"
         },
-        "swap": "Swap X for Y:",
+        "swap": "Swap X for Y",
         "swapdetail": "In case you've accidentally wired up Motor 1 where Motor 2 is supposed to go."
       },
+      "debug": "RoboPaint Debug / Developer features",
+      "debugdetail": "If enabled, extra features for developers like devtools will be opened automatically for the main window, and for modes marked with debug true.",
       "misctitle": "Misc",
       "modes": {
         "title": "Modes",
-        "detail": "Enable or disable experimental RoboPaint modes",
-        "remoteprint": {
-          "title": "Remote paint:",
-          "detail": "Allows properly configured remote applications to send graphics to RoboPaint to automatically be printed. For this to function outside this computer, the checkbox for \"Only allow connections from this computer\" below must be **unchecked**."
-        }
+        "detail": "Enable or disable experimental RoboPaint modes"
       },
-      "openlast": "Open last design on startup:",
+      "openlast": "Open last design on startup",
       "bottype": {
         "title": "Type of printing bot connected:",
         "hover": "Supported Bot List",

@@ -1,14 +1,28 @@
 {
   "name": "robopaint",
-  "version": "0.9.6",
+  "version": "2.0.0-beta.1",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "resources/scripts/root/window-main.js",
   "author": "techninja",
   "stage": "development",
   "license": "MIT",
   "dependencies": {
-    "cncserver": "https://github.com/techninja/cncserver/tarball/master",
-    "fs-plus": "^2.8.1"
+    "cncserver": "~2.0.0",
+    "d3plus": "^1.8.0",
+    "fs-plus": "^2.8.1",
+    "hersheytext": "^0.5.1",
+    "i18next-client": "^1.10.2",
+    "jquery": "^2.1.4",
+    "paper": "^0.9.24",
+    "qtip2": "^2.2.0",
+    "request": "^2.65.0",
+    "robopaint-mode-edit": "*",
+    "robopaint-mode-example": "*",
+    "robopaint-mode-manual": "*",
+    "robopaint-mode-print": "*",
+    "robopaint-mode-remote": "*",
+    "robopaint-mode-spiral": "*",
+    "underscore": "^1.8.3"
   },
   "repository": {
     "type": "git",

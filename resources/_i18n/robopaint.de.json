@@ -57,12 +57,16 @@
       "pen": {
         "raise": "Heben Pen",
         "lower": "Lower Pen"
-      }
+      },
+      "cancelconfirm": "Sind Sie sicher, Sie wollen den aktuellen Auftrag abzubrechen?"
     },
     "labels": {
       "control": "Steuerung",
       "status": "Status",
       "progress": "Aktuelle Fortschritte"
+    },
+    "dialog": {
+      "confirmexit": "Sind Sie sicher, Sie gehen wollen?\n\nVerlassen Sie diesen Modus während des Druckvorgangs werden alle Ihre Aufträge zu stornieren. Klicken Sie auf OK, um zu verlassen."
     }
   },
   "status": {
@@ -75,7 +79,20 @@
     "button": {
       "continue": "Weiter im Simulationsmodus",
       "retry": "Versuchen Sie, wieder anschließen"
-    }
+    },
+    "connected": "Erfolgreich verbunden!",
+    "connecting": "Anschluss an Roboter ...",
+    "pausing": "Pausieren der aktuellen Prozess ...",
+    "resumed": "Zeichnung wieder aufgenommen ...",
+    "paused": "Machte eine Pause. Klicken Sie auf Fortsetzen, um fortzufahren.",
+    "resuming": "Wiederaufnahme der aktuellen Prozess ...",
+    "parking": "Parkplatz ...",
+    "parked": "Erfolgreich geparkt",
+    "parkfail": "Kann nicht Park, bereits geparkt",
+    "wait": "Bitte warten ausgeführten Prozesse komplette ...",
+    "unlocked": "Motors freigeschaltet! Legen Sie im Haus Ecke, wenn Sie fertig",
+    "unlocking": "Unlocking Motoren ...",
+    "pausetillempty": "Streaming alle Befehle vor Beginn der Verlangsamung zu vermeiden ..."
   },
   "nav": {
     "toolbar": {
@@ -126,7 +143,9 @@
     "tabs": {
       "output": "Drucken-Art",
       "common": "Grundeinstellungen",
-      "advanced": "Fortgeschritten"
+      "advanced": "Fortgeschritten",
+      "media": "Tool",
+      "modes": "Modes"
     },
     "buttons": {
       "reset": {
@@ -196,7 +215,8 @@
         "opt3": "Mehr (8 mm)",
         "opt4": "Huch (13 mm)",
         "opt5": "Wenig hilfreich (20mm)",
-        "detail": "Die Distanzfaktor, um die Bürste über beim Anheben, um Pinsel Bend machen oben zu verschieben. Der Standardwert ist 5 mm ** **."
+        "detail": "Die Distanzfaktor, um die Bürste über beim Anheben, um Pinsel Bend machen oben zu verschieben. Der Standardwert ist 5 mm ** **.",
+        "optx": "(Automatic von Implement)"
       },
       "filltitle": "Füllen",
       "filltype": {
@@ -248,7 +268,19 @@
         "opt1": "Single Bad im Wasser und Farbe",
         "opt2": "Double-Dip in Wasser und Farbe",
         "detail": "Beim Nachfüllen von Farbe, bekommen eine Menge von Farbe (Standard) oder nur dip in der Farbe entweder einmal oder zweimal."
-      }
+      },
+      "usewhite": "Verwenden Sie weißes Medien",
+      "prefill": "Prefill Puffer",
+      "optimize": "Optimieren Weg um",
+      "usewhiteinfo": "Wenn deaktiviert, wenn der Medieneinstellungen enthalten eine weiße Farbe, wird es ignoriert, wenn ein weißer Pfad vorhanden ist, um zurückverfolgt werden.",
+      "render": {
+        "tab1": "Umriss",
+        "title": "Pfad Rendering",
+        "tab2": "Füllen",
+        "general": "Fill & Skizzieren allgemeinen"
+      },
+      "prefillinfo": "Wenn aktiviert, werden alle Batch-Befehle auf die Unterstützung der Betriebsarten gesendet werden, bevor der Roboter Arbeit beginnt. Dies sollte das Stottern beim Start zu vermeiden, wenn Sie länger warten, bevor die Arbeit beginnt der Druck zu haben.",
+      "optimizeinfo": "Wenn aktiviert, werden alle automatischen Malerei Wege (zu füllen und Schlaganfall) nach Farbe und Nähe zum vorherigen Bahnende erst nachbestellt werden. Pfade werden sogar umgekehrt werden, um geringste Abstand zwischen der Arbeit zu gewährleisten, kann aber eine sehr seltsame Pfad, wenn Sie mit mehreren Textzeilen zu nehmen."
     },
     "common": {
       "servo": {
@@ -299,6 +331,75 @@
         "title": "Nur Verbindungen aus diesem Computer:",
         "detail": "Deaktivieren Sie diese Option, um die CNCServer API in RoboPaint von anderen Geräten zu verbinden. ** Veränderung erfordert App Neustart. **"
       }
+    },
+    "stroke": {
+      "enable": "Trace-Pfad Hübe / Konturen",
+      "fill": "Umriss Füllungen",
+      "enableinfo": "Wenn deaktiviert, werden keine Konturen / Striche in jeder Automatik-Modus-Funktionalität zurückverfolgt werden.",
+      "invisible": "Stroke unsichtbaren Pfaden",
+      "closefilled": "Schließen gefüllt Wege",
+      "fillinfo": "Wenn aktiviert, wird ein Umriss der gleichen Farbe für gefüllte Pfade ohne Strich hinzugefügt.",
+      "invisibleinfo": "Wenn aktiviert, werden Striche auf alle vorhandenen Wege unabhängig von der Strichbreite oder Farbe hinzugefügt werden.",
+      "occlusionall": "Stroke Okklusion / Überlappungserfassungs",
+      "closefilledinfo": "Wenn aktiviert, werden nicht geschlossene gefüllte Pfade vollständig beschrieben, als ob sie waren geschlossen werden.",
+      "occfills": "Occlusion unter Füllungen",
+      "occlusionallinfo": "Wenn deaktiviert, werden alle Konturen / Hub Abtastbahn Überschneidungen und Layer-Reihenfolge ignorieren.",
+      "occfillsinfo": "Wenn deaktiviert, werden alle Konturen / Hub Verfolgung gefüllt Farbe ignorieren überlappt.",
+      "occstroke": "Occlusion unter Striche",
+      "occstrokeinfo": "Wenn deaktiviert, alle Konturen / Hub Verfolgung ignoriert Schlaganfall überlappt.",
+      "occcolor": "Ignorieren Okklusion unter gleichen Farbe",
+      "occtrans": "Ignorieren Okklusion unter transparenten Fläche oder Kontur",
+      "occtransinfo": "Wenn aktiviert, werden alle Konturen / Hub-Tracing unter transparenten Pfade Okklusion zu ignorieren.",
+      "occcolorinfo": "Wenn aktiviert, werden alle Konturen / Hub Verfolgung des gleichen Collor als einer überlappenden Fläche oder Kontur Okklusion zu ignorieren."
+    },
+    "fill": {
+      "enable": "Trace-Pfad füllt",
+      "group": {
+        "title": "Gruppieren Schwelle:",
+        "opt0": "Keine",
+        "info": "Mindestschwelle für die Gruppierung der dynamischen Zeilenenden zusammen in Gruppen verbunden. Großer Wert verbindet mehrere Gruppen, 0 wird dafür sorgen, keine Gruppen vorgenommen werden.",
+        "opt20": "Klein (20)",
+        "opt40": "Standard (40)",
+        "opt80": "Huge (80)",
+        "opt60": "Medium (60)",
+        "opt100": "Giant (100)"
+      },
+      "enableinfo": "Wenn deaktiviert, werden keine Füllungen in jeder Automatik-Modus-Funktionalität zurückverfolgt werden.",
+      "dynamic": "Dynamische Zeilen-Füll-Optionen",
+      "hatch": "In Sekundär Ausräumen",
+      "random": "Randomize fill Winkel",
+      "hatchinfo": "Wenn aktiviert, wird eine sekundäre entgegengesetzten Winkel Füllung für jeden Pfad hinzugefügt werden. Will ** nicht ** Spiel Winkel für zufällige Füllung unten.",
+      "overlay": "Spiral fill Optionen",
+      "randominfo": "Wenn aktiviert, füllen Winkel unterschiedliche Wege werden randomisiert.",
+      "align": "Ausrichten Spiral Füllung auf jeden Pfad",
+      "occ": "Überprüfen Sie für Occlusion",
+      "aligninfo": "Wenn aktiviert (nur Spiral Fülltyp), wird die Füllung Spirale auf der Füllungspfad zentriert werden. Wenn deaktiviert, wird die Spirale in die Mitte der Leinwand für jeden Pfad auszurichten.",
+      "occinfo": "Wenn deaktiviert, werden alle satt Verfolgung gefüllt Farbe ignorieren überlappt.",
+      "precisioninfo": "In erster Linie für Spiralfüllung, wird diese Einstellung auch für die Umwandlung der Zick-glatt in eine polygonale Linie Nachbearbeitung verwendet."
+    },
+    "trace": {
+      "title": "Spuren Speed:",
+      "opt1": "Langsam (1 x)",
+      "opt2": "Default (2x)",
+      "info": "Der Arbeitsaufwand für jeden Rahmen durchgeführt. Höhere Iterationszähler sollte weniger Zeit Gesamt nehmen, aber aktualisieren seltener.",
+      "opt4": "Quad (4 x)",
+      "opt10": "Super (10 x)",
+      "width": {
+        "title": "Vorschau Linienbreite:",
+        "opt1": "Minimum (1)",
+        "opt10": "Standard (10)",
+        "optneg1": "Automatisch (durch Umsetzung eingestellt)",
+        "opt5": "Medium (5)",
+        "info": "Wie groß zurückzuführen Pfade werden in der Live-Vorschau angezeigt. Hat keinen Einfluss auf den Druck.",
+        "opt30": "Extreme (30)",
+        "opt20": "Wide (20)"
+      },
+      "opt20": "Maximum (20 x)"
+    },
+    "media": {
+      "media": "Medien",
+      "implements": "Implementiert",
+      "refill": "Refill Medien"
     }
   },
   "libs": {
@@ -318,6 +419,10 @@
     "reinked": "Die weitere Zusammenarbeit mit __media__ malen",
     "autostroke": "Streicheln Weg __id __...",
     "autocomplete": "Automatische Farb Complete!",
-    "subrefill": "Anreise Farbe dann Ziehen Unterpfad __num__"
+    "subrefill": "Anreise Farbe dann Ziehen Unterpfad __num__",
+    "spool": {
+      "stroke": "Tracing Hubweg __id __...",
+      "fill": "Tracing füllen Pfad __id __..."
+    }
   }
 }
