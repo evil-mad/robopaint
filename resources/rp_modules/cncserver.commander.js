@@ -98,7 +98,7 @@ function sendNext() {
       }
       break;
     case "power":
-      var setPower = cmd[1]; // Specific height
+      var setPower = cmd[1]; // Power from 0 to 1
       if (robopaint.cncserver.api.server.domain == "localhost") {
         robopaint.cncserver.setPen({power: setPower}, sendNext);
       } else {
