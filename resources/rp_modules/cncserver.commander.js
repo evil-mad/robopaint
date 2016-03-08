@@ -97,6 +97,14 @@ function sendNext() {
         api.pen.height(setHeight, sendNext, options);
       }
       break;
+    case "power":
+      var setPower = cmd[1]; // Power from 0 to 1
+      if (robopaint.cncserver.api.server.domain == "localhost") {
+        robopaint.cncserver.setPen({power: setPower}, sendNext);
+      } else {
+        api.pen.power(setPower, sendNext);
+      }
+      break;
     case "status":
       // Third argument: skipBuffer
       if (cmd[2] === true) { // Skipping buffer means just show it!
