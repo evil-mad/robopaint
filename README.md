@@ -1,6 +1,8 @@
 RoboPaint!
 =============
 
+[![Join the chat at https://gitter.im/evil-mad/robopaint](https://badges.gitter.im/evil-mad/robopaint.svg)](https://gitter.im/evil-mad/robopaint?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Software for drawing robots, and your
 [friendly painting robot kit, the WaterColorBot](http://watercolorbot.com)!
 
