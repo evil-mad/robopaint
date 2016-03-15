@@ -80,23 +80,17 @@ Want to help be a part of RoboPaint? Maybe spruce it up, or hack it to bits into
 your own thing? Here's a rough and tumble guide to getting set up:
 
 ### Pre-requisites
-#### Electron (v0.30.x)
+#### Electron (v0.34.x)
 RoboPaint is an HTML5/Node.js application that runs in
 [electron](https://electron.atom.io/). Though the main.html
 code may somewhat render in a regular browser window, it's still a node.js
-application that requires its low level file access and other APIs.
+application that requires its low level file access and other APIs. This is
+installed via `npm install` when run at the root.
 
-#### Install Io.js (2.4.x+) for node & npm
-Required for automated builds and installation content. Electron uses Node.js'
-little brother fork, io.js. See [iojs.org](http://iojs.org) for installation for
-your operating system. `npm` is installed along with it. If you already have
-node installed, you can probably go without switching to io.js as electron
-provides its own io.js implementation built in.
-
-#### Install Electron
-After node/io.js is installed, just run from your terminal/console
-`npm install -g electron-prebuilt` to install Electron on your path. When
-complete, just run `electron -v` to see the installed app version.
+#### Install Node (4.x+) for node & npm
+Required for automated builds and installation content. The build and
+dependency system all uses [node.js](http://nodejs.org). `npm` is installed
+along with it. If you already have node installed, you can skip this part.
 
 #### Build Tools!
 * CNC Server uses the node-serialport module, a low-level partially native
@@ -140,8 +134,9 @@ just run `npm install cncserver` from the project root and it should pull from
 the latest master.
 
 ### Running RoboPaint from source
-* Once Electron prebuilt is installed, just run `electron path/to/robopaint`,
-or `electron ./` if you're working directory is the root of the repo.
+* Assuming this is all working, get yourself to the root of the repo and simply
+run `npm start`, this will run it's local version of electron pointed at the
+repository root.
 * Remember: Alt+Ctrl+I to open the debug console, Ctl+R will reload if the
 console is open, and a reload only reloads the contents of the window, and will
 _**not**_ reload the application main process.
