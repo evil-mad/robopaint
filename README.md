@@ -98,7 +98,7 @@ module that needs to be built/compiled for every OS.
 * These are pre-compiled for each release in
 the [robopaint-build](https://github.com/evil-mad/robopaint-build/) repository,
 which you can easily use to replace the node_modules folder within
-`cncserver/node_modules/serialport/
+`cncserver/node_modules/serialport/`
 * *BUT*, if you're experimenting with new versions of modules, you're going to
 need to be able to build your own, so continue on.
 
