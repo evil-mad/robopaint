@@ -48,7 +48,7 @@ RoboPaint package.json dependency or through direct `npm install`.
 {
   "name": "robopaint-mode-example", // Universal namespace ID for NPM, should be in this format!
   "version": "0.8.0",
-  "type": "robopaint_mode", // If not equal to this, this package will be ignored.
+  "robopaint-type": "robopaint_mode", // If not equal to this, this package will be ignored.
   "main": "example.js",  // Used to inject your JS into the page at the correct time during preload. No need to include it in the HTML!
   "author": "techninja",
   "license": "MIT",
