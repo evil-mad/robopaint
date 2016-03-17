@@ -717,7 +717,7 @@ function loadAllModes(){
     }
 
     // This a good file? if so, lets make it ala mode!
-    if (package.robopaint-type === "robopaint_mode" && _.has(package.robopaint, 'index')) {
+    if (package.robopaint-type === "mode" && _.has(package.robopaint, 'index')) {
       // TODO: Add FS checks to see if its index file actually exists
       package.root = path.join(modesDir, modeDirs[i], '/');
       package.index = path.join(package.root, package.robopaint.index);
