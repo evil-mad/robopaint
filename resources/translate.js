@@ -88,7 +88,7 @@ function initializeTranslation() {
         var p = require(fullPath + 'package.json');
 
         //  Iterate over language files in mode's i18n folder
-        if (p.robopaint-type === 'mode') {
+        if (p['robopaint-type'] === 'mode') {
           fs.readdirSync(fullPath + '_i18n/').forEach(function(file) {
             if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
               //  Add the data to the global i18n translation array
