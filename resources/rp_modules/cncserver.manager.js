@@ -12,7 +12,8 @@ var isLocal;
 cncserver.state = {
   pen: {}, // The state of the pen/machine at the end of the buffer
   actualPen: {}, // The current state of the pen/machine
-  buffer: [], // Holds a copy of cncserver's internal command buffer
+  bufferList: [], // Holds a copy of cncserver's internal command buffer
+  bufferData: {},
   media: '', // What we think is currently on the brush
   mediaTarget: '', // What we "want" to paint with
   // True if buffer paused till we've sent all local commands to its buffer
@@ -88,10 +89,11 @@ function bufferUpdateEvent(b){
   // What KIND of buffer update is this?
   switch (b.type) {
     case 'complete':
-      // When local, this attaches cncserver.state.buffer to the actual in use
+      // When local, this attaches cncserver.state.buffer* to the actual in use
       // cncserver buffer object. When external, this is a reference instance
       // inside the Socket.io callback data object.
-      cncserver.state.buffer = b.buffer;
+      cncserver.state.bufferList = b.bufferList;
+      cncserver.state.bufferData = b.bufferData; // jshint ignore:line
     case 'vars':
       // Break out important buffer states into something with wider scope
       cncserver.state.process.busy = b.bufferRunning;
@@ -100,30 +102,36 @@ function bufferUpdateEvent(b){
     case 'add':
       // No need to actually edit the buffer when local as we have access to
       // the exact same buffer object in memory.
-      if (!isLocal) cncserver.state.buffer.unshift(b.item);
-      cncserver.state.process.max++
+      if (!isLocal) {
+        cncserver.state.bufferList.unshift(b.hash);
+        cncserver.state.bufferData[b.hash] = b.item;
+      }
+      cncserver.state.process.max++;
       break;
     case 'remove':
       // Again, when local, we don't need to do anything to the object we have
-      if (!isLocal) cncserver.state.buffer.pop();
+      if (!isLocal) {
+        var hash = cncserver.state.bufferList.pop();
+        delete cncserver.state.bufferData[hash];
+      }
       break;
   }
 
   // Send useful info to the mode
   cncserver.pushToMode('bufferUpdate', {
-    length: cncserver.state.buffer.length,
+    length: cncserver.state.bufferList.length,
     paused: cncserver.state.process.paused
   });
 
   // Empty buffer?
-  if (!cncserver.state.buffer.length) {
+  if (!cncserver.state.bufferList.length) {
     cncserver.state.process.max = 1;
     cncserver.progress({val: 0, max: 1});
   } else { // At least one item in buffer
     // Update the progress bar (if not trying to empty the local buffer)
     if (!cncserver.state.pausingTillEmpty) {
       cncserver.progress({
-        val: cncserver.state.process.max - cncserver.state.buffer.length,
+        val: cncserver.state.process.max - cncserver.state.bufferList.length,
         max: cncserver.state.process.max
       });
     }

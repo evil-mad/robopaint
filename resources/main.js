@@ -423,7 +423,7 @@ function responsiveResize() {
     });
   }
 
-};
+}
 
 /**
  * Initialize the Socket.IO websocket connection
@@ -444,6 +444,19 @@ function startSerial(){
   setMessage('status.start', 'loading');
 
   try {
+    // Load the runner in a webview preload...
+    var $runner = $('<webview>').attr({
+      border: 0,
+      class: 'hide',
+      nodeintegration: 'true',
+      src: '../node_modules/cncserver/runner.html',
+      disablewebsecurity: 'true',
+    }).appendTo('body');
+
+    $runner[0].addEventListener('console-message', function(e) {
+      console.log('RUNNER:', e.message);
+    });
+
     cncserver.start({
       botType: robopaint.currentBot.type,
       success: function() {
@@ -614,7 +627,7 @@ function initQuickload() {
   // Bind loadlist item click load
   $('a', $loadList).click(function(e) {
     $loadList.fadeOut('slow');
-    var fileContents = fs.readFileSync($(this).data('file'));
+    var fileContents = fs.readFileSync($(this).data('file'), 'utf-8');
 
     // Push the files contents into the localstorage object
     window.localStorage.setItem('svgedit-default', fileContents);
