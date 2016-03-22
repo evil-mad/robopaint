@@ -444,12 +444,12 @@ function startSerial(){
   setMessage('status.start', 'loading');
 
   try {
-    // Load the runner in a webview preload...
+    // Load the CNCServer serial runner in a webview...
     var $runner = $('<webview>').attr({
       border: 0,
       class: 'hide',
       nodeintegration: 'true',
-      src: '../node_modules/cncserver/runner.html',
+      src: '../node_modules/cncserver/runner/runner.html',
       disablewebsecurity: 'true',
     }).appendTo('body');
 
