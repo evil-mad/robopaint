@@ -444,21 +444,25 @@ function startSerial(){
   setMessage('status.start', 'loading');
 
   try {
-    // Load the CNCServer serial runner in a webview...
-    var $runner = $('<webview>').attr({
-      border: 0,
-      class: 'hide',
-      nodeintegration: 'true',
-      src: '../node_modules/cncserver/runner/runner.html',
-      disablewebsecurity: 'true',
-    }).appendTo('body');
+    // Load the CNCServer serial runner in a webview if not using node native...
+    if (!robopaint.settings.usenativerunner) {
+      var $runner = $('<webview>').attr({
+        border: 0,
+        class: 'hide',
+        nodeintegration: 'true',
+        src: '../node_modules/cncserver/runner/runner.html',
+        disablewebsecurity: 'true',
+      }).appendTo('body');
 
-    $runner[0].addEventListener('console-message', function(e) {
-      console.log('RUNNER:', e.message);
-    });
+      // Report runner messages direct to the main console.
+      $runner[0].addEventListener('console-message', function(e) {
+        console.log('RUNNER:', e.message);
+      });
+    }
 
     cncserver.start({
       botType: robopaint.currentBot.type,
+      localRunner: robopaint.settings.usenativerunner,
       success: function() {
         setMessage('status.found');
       },
