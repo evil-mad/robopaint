@@ -260,10 +260,14 @@ cncserver.status = function(msg, st) {
 cncserver.progress = function(p) {
   var $prog = $('#status progress');
 
-  if (typeof p.max !== 'undefined') $prog.attr('max', p.max)
+  if (typeof p.max !== 'undefined') {
+    $prog.attr('max', p.max);
+  }
   $prog.val(p.val);
+
+  $('#status .progress-wrapper label').text($prog.val() + '/' + $prog.attr('max'));
   popoutStatus();
-}
+};
 
 // TODO: Provide something for the parent script?
 module.exports = {};
