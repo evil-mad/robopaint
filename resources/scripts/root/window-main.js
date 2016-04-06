@@ -43,8 +43,8 @@ function windowInit() {
     // Create the main application window.
     mainWindow = new BrowserWindow({
       center: true,
-      'min-width': 600,
-      'min-height': 420,
+      minWidth: 600,
+      minHeight: 420,
       width: 980,
       height: 600,
       resizable: true,
@@ -55,11 +55,11 @@ function windowInit() {
     // Window wrapper for dialog (can't include module outside of this) :P
     mainWindow.dialog = function(options, callback) {
       return dialog['show' + options.t](mainWindow, options, callback);
-    }
+    };
 
     // Load the main html of the app.
     var p = path.join(app.getAppPath(), 'resources', 'main.html');
-    mainWindow.loadUrl('file://' + p);
+    mainWindow.loadURL('file://' + p);
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
