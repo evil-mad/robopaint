@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "cncserver": "~2.0.0",
-    "d3plus": "^1.8.0",
+    "d3plus": "^1.9.3",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
     "i18next-client": "^1.10.2",
