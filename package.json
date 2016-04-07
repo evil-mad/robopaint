@@ -16,7 +16,7 @@
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
     "i18next-client": "^1.10.2",
-    "jquery": "^2.1.4",
+    "jquery": "^2.2.3",
     "paper": "^0.9.24",
     "qtip2": "^2.2.0",
     "request": "^2.65.0",
