@@ -174,9 +174,8 @@ function createSubwindow(callback) {
   // Make the mode window visible (should only happen when it's ready);
   $subwindow.showMe = function(callback){
     $subwindow
-      .css('opacity', 0)
-      .removeClass('hide')
-      .css('opacity', 100)
+      .css('top', 40)
+      .css('opacity', 1);
 
     // TODO: We tried to load this sooner, but it breaks jQuery very badly on
     // require, especially on slower system. It's rumored this is a race
@@ -372,11 +371,15 @@ robopaint.switchMode = function(mode, callback) {
       $('#loader').css('opacity', 1);
       $subwindow.hideMe(function(){
         // Include the absolute root path so the mode can load its own info
-        $subwindow.attr('src', $target.attr('href') + '#' + encodeURIComponent(robopaint.currentMode.root + 'package.json'));
+        $subwindow
+          .attr('src', $target.attr('href') + '#' + encodeURIComponent(robopaint.currentMode.root + 'package.json'))
+          .css('opacity', 0)
+          .removeClass('hide')
+          .focus();
         if (callback) callback();
       });
   }
-}
+};
 
 /**
  * Specialty JS window resize callback for responsive element adjustment

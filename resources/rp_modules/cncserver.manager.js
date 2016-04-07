@@ -163,7 +163,7 @@ cncserver.pushToMode = function() {
   } catch(e) {
     // The above will fail whenever the window isn't ready. That's a fine fail.
   }
-}
+};
 
 // Send settings updates to modes
 $(robopaint).on('settingsUpdate', function(){
