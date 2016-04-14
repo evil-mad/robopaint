@@ -3,7 +3,7 @@
     "creator": "techninja",
     "target": "en-US",
     "langname": "English",
-    "release": "0.9.5"
+    "release": "2.0.0"
   },
   "common": {
     "transparent": "Transparent",
@@ -29,6 +29,7 @@
       "save": "Save",
       "print": "Print",
       "cancel": "Cancel",
+      "connect": "Connect",
       "canceltitle": "Cancel current print job.",
       "cancelconfirm": "Are you sure you want to cancel the current job?",
       "apply": "Apply",
@@ -88,6 +89,16 @@
     "spool": {
       "stroke": "Tracing stroke path __id__...",
       "fill": "Tracing fill path __id__..."
+    }
+  },
+  "external": {
+    "title": "External Server",
+    "address": "Enter the address and port to connect to:",
+    "status": {
+      "wait": "Waiting...",
+      "connect": "Connecting...",
+      "connected": "Connected!",
+      "error": "Connection failed. Check that your port/domain is correct and that this computer is connected to the same network."
     }
   },
   "status": {

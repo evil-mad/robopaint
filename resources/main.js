@@ -261,6 +261,39 @@ function bindMainControls() {
     startSerial();
   });
 
+  // Bind the external server connection button functionality
+  $('button.external').click(function(e){
+    if ($('div.external').is(':visible')){
+      $('div.external').slideUp('slow');
+    } else {
+      $('div.external').slideDown('slow');
+    }
+  });
+
+  robopaint.statedata.external = false;
+  $('button#external-go').click(function(e){
+    var $stat = $('#external-status');
+
+    $stat.text(robopaint.t('external.status.connect'));
+
+    // Setup the server location
+    robopaint.cncserver.api.server.domain = $('#external-domain').val();
+    robopaint.cncserver.api.server.port = $('#external-port').val();
+
+    // Try to get the pen status...
+    robopaint.cncserver.api.pen.stat(function(data) {
+      if (data === false) {
+        $stat.text(robopaint.t('external.status.error'));
+        robopaint.cncserver.api.server.domain = 'localhost';
+        robopaint.cncserver.api.server.port = '4242';
+      } else {
+        robopaint.statedata.external = true;
+        $stat.text(robopaint.t('external.status.connected'));
+        $options.slideUp('slow');
+        $('button.continue').click();
+      }
+    });
+  });
 
   window.onbeforeunload = onClose; // Catch close event
 
@@ -433,12 +466,14 @@ function responsiveResize() {
  * Initialize the Socket.IO websocket connection
  */
 function initSocketIO(){
+  if (robopaint.socket) robopaint.socket.destroy();
+
   // Add Socket.IO include now that we know where from and the server is running
-  var serverPath = robopaint.cncserver.api.server.protocol +
-    '://' + robopaint.cncserver.api.server.domain + ':' +
-    robopaint.cncserver.api.server.port;
-  robopaint.socket = io(serverPath);
+  var server = robopaint.cncserver.api.server;
+  var serverPath = server.protocol + '://' + server.domain + ':' + server.port;
+  robopaint.socket = io.connect(serverPath);
   $(robopaint).trigger('socketIOComplete');
+  return serverPath;
 }
 
 /**

@@ -87,7 +87,7 @@ function sendNext() {
       if (setHeight === null) setHeight = cmd[1]; // Specific height
       var options = {};
 
-      if (robopaint.cncserver.api.server.domain == "localhost") {
+      if (!robopaint.statedata.external) {
         options = {state: setHeight, ignoreTimeout: '1'};
         if (cmd[1] === true) options.skipBuffer = true;
         robopaint.cncserver.setPen(options, sendNext);
@@ -99,7 +99,7 @@ function sendNext() {
       break;
     case "power":
       var setPower = cmd[1]; // Power from 0 to 1
-      if (robopaint.cncserver.api.server.domain == "localhost") {
+      if (!robopaint.statedata.external) {
         robopaint.cncserver.setPen({power: setPower}, sendNext);
       } else {
         api.pen.power(setPower, sendNext);

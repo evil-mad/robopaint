@@ -431,6 +431,15 @@ body.home h1 span.message {
   display: block;
 }
 
+/* External server connection options */
+body.home div.external {
+  font-size: 0.6em;
+}
+
+body.home div.external status {
+  font-style: italic;
+}
+
 webview {
   position: absolute;
   bottom: 0;
