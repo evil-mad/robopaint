@@ -173,6 +173,7 @@ function createSubwindow(callback) {
 
   // Make the mode window visible (should only happen when it's ready);
   $subwindow.showMe = function(callback){
+    $('#loader').css('opacity', 0);
     $subwindow
       .css('top', 40)
       .css('opacity', 1);
