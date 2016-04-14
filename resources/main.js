@@ -177,15 +177,15 @@ function createSubwindow(callback) {
     $subwindow
       .css('top', 40)
       .css('opacity', 1);
+  };
 
-    // TODO: We tried to load this sooner, but it breaks jQuery very badly on
-    // require, especially on slower system. It's rumored this is a race
-    // condition with the document object not fully populated, but it's an
-    // Electron/Chromium bug for now.
+
+  // Open the devtools on dom-ready (the earliest they can be opened).
+  $subwindow[0].addEventListener('dom-ready', function(){
     if (robopaint.currentMode.robopaint.debug === true && robopaint.settings.rpdebug) {
       $subwindow[0].openDevTools();
     }
-  };
+  });
 
   // Handle global channel message events from the mode (close/change/etc).
   $subwindow[0].addEventListener('ipc-message', function(event){
@@ -319,7 +319,7 @@ function bindMainControls() {
     }
 
     $('#calibrator .wrapper').css('left', -(stepIndex * 400));
-  })
+  });
 
   // Bind toolbar modal links =======================
   $('#bar a.modal').click(function(e){
