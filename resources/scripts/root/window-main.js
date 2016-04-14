@@ -36,6 +36,8 @@ function windowInit() {
     //}
   });
 
+  app.commandLine.appendSwitch("disable-background-timer-throttling");
+
   // This method will be called when Electron has done everything
   // initialization and ready for creating browser windows.
   app.on('ready', function() {
