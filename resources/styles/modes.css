@@ -16,6 +16,10 @@ body:before {
   box-shadow: 0px 4px 9px rgba(0,0,0,.8);
 }
 
+body {
+  background-color: white;
+}
+
 /* Utility class for hiding stuff */
 .hidden {
   display: none;
