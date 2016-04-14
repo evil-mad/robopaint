@@ -6,7 +6,7 @@
   "author": "techninja",
   "stage": "development",
   "license": "MIT",
-  "electronVersion": "0.37.4",
+  "electronVersion": "0.37.5",
   "scripts": {
     "start": "electron ."
   },
@@ -34,6 +34,6 @@
   },
   "devDependencies": {
     "electron-rebuild": "^1.1.3",
-    "electron-prebuilt": "^0.37.4"
+    "electron-prebuilt": "0.37.5"
   }
 }
