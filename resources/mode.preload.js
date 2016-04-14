@@ -168,6 +168,7 @@ if (mode.robopaint.dependencies) {
         break;
       case 'qtip':
         $.qtip = require('qtip2');
+        break;
       case 'paper':
         console.log('Loading Paper');
         preloadCompleteAsyncChecklist.paperLoaded = false;
