@@ -472,6 +472,7 @@ function initSocketIO(){
   var server = robopaint.cncserver.api.server;
   var serverPath = server.protocol + '://' + server.domain + ':' + server.port;
   robopaint.socket = io.connect(serverPath);
+  cncserver.socket = robopaint.socket;
   $(robopaint).trigger('socketIOComplete');
   return serverPath;
 }
