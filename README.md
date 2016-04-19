@@ -29,8 +29,7 @@ invisible portions of paths aren't drawn.
  * Centralized codebase for all platforms allows for easy hacking.
  * [Scratch](http://scratch.mit.edu/) and [Snap](http://snap.berkeley.edu)
 support via [WaterColorBlocks](https://github.com/evil-mad/WaterColorBlocks).
- * Modular code addition via
-[RoboPaint Modes](https://github.com/evil-mad/robopaint/blob/master/resources/modes/README.md):
+ * Modular code addition via RoboPaint Modes:
 Control your bot with a simple web app leveraging everything already written for
 RoboPaint!
  * Allows programatic (including remote) painting and drawing via the high level [RoboPaint API](https://github.com/evil-mad/robopaint-mode-remote/blob/master/API.md), the low level [cncserver API](https://github.com/techninja/cncserver/blob/master/API.md), or the simplified (HTTP get-only) [Scratch API](https://github.com/techninja/cncserver/blob/master/SCRATCH.API.md)
