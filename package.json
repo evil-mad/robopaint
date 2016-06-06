@@ -11,7 +11,7 @@
     "start": "electron ."
   },
   "dependencies": {
-    "cncserver": "~2.0.0",
+    "cncserver": "2.5.0",
     "d3plus": "^1.9.3",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
