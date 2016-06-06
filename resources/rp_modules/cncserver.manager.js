@@ -93,7 +93,8 @@ function bufferUpdateEvent(b){
       // cncserver buffer object. When external, this is a reference instance
       // inside the Socket.io callback data object.
       cncserver.state.bufferList = b.bufferList;
-      cncserver.state.bufferData = b.bufferData; // jshint ignore:line
+      cncserver.state.bufferData = b.bufferData;
+      /* falls through */
     case 'vars':
       // Break out important buffer states into something with wider scope
       cncserver.state.process.busy = b.bufferRunning;
