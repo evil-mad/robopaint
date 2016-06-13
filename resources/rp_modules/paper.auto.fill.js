@@ -754,6 +754,9 @@ module.exports = function(paper) {
     // Is this a compound path?
     if (p.children) {
       _.each(p.children, function(c, pathIndex) {
+        if (c.segments.length <= 1 && c.closed) {
+          c.closed = false;
+        }
         c.flatten(settings.flattenResolution);
         paths[pathIndex] = [];
         _.each(c.segments, function(s){
