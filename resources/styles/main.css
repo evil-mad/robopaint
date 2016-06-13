@@ -90,6 +90,18 @@ span.version {
   width: 100%;
 }
 
+#status .progress-wrapper {
+  position: relative;
+}
+
+#status .progress-wrapper label {
+  font-size: 10px;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  bottom: 4px;
+}
+
 #statusmessage {
   font-size: 0.9em;
   height: 2em;
@@ -417,6 +429,15 @@ body.home h1.loading {
 body.home h1 span.message {
   font-size: 16px;
   display: block;
+}
+
+/* External server connection options */
+body.home div.external {
+  font-size: 0.6em;
+}
+
+body.home div.external status {
+  font-style: italic;
 }
 
 webview {

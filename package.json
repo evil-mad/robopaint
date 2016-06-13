@@ -1,22 +1,22 @@
 {
   "name": "robopaint",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "resources/scripts/root/window-main.js",
   "author": "techninja",
   "stage": "development",
   "license": "MIT",
-  "electronVersion": "0.34.2",
+  "electronVersion": "0.37.5",
   "scripts": {
     "start": "electron ."
   },
   "dependencies": {
-    "cncserver": "~2.0.0",
-    "d3plus": "^1.8.0",
+    "cncserver": "2.5.0",
+    "d3plus": "^1.9.3",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
     "i18next-client": "^1.10.2",
-    "jquery": "^2.1.4",
+    "jquery": "^2.2.3",
     "paper": "^0.9.24",
     "qtip2": "^2.2.0",
     "request": "^2.65.0",
@@ -34,6 +34,6 @@
   },
   "devDependencies": {
     "electron-rebuild": "^1.1.3",
-    "electron-prebuilt": "^0.34.2"
+    "electron-prebuilt": "0.37.5"
   }
 }

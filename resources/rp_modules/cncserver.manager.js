@@ -7,12 +7,12 @@ var _ = window._;
 var robopaint = window.robopaint;
 var cncserver = robopaint.cncserver;
 var modeWindow = {};
-var isLocal;
 
 cncserver.state = {
   pen: {}, // The state of the pen/machine at the end of the buffer
   actualPen: {}, // The current state of the pen/machine
-  buffer: [], // Holds a copy of cncserver's internal command buffer
+  bufferList: [], // Holds a copy of cncserver's internal command buffer
+  bufferData: {},
   media: '', // What we think is currently on the brush
   mediaTarget: '', // What we "want" to paint with
   // True if buffer paused till we've sent all local commands to its buffer
@@ -61,16 +61,9 @@ $(robopaint).on('settingsComplete', _.once(function(){
   if (!robopaint.cncserver.api) robopaint.cncserver.api = {};
   robopaint.cncserver.api.server = robopaint.utils.getAPIServer(robopaint.settings);
 
-  // Use direct buffer if local, otherwise rely on socket.io
-  if (robopaint.cncserver.api.server.domain == 'localhost') {
-    isLocal = true;
-    robopaint.cncserver.penUpdateTrigger = penUpdateEvent;
-    robopaint.cncserver.bufferUpdateTrigger = bufferUpdateEvent;
-  } else {
-    isLocal = false;
-    robopaint.socket.on('buffer update', bufferUpdateEvent);
-    robopaint.socket.on('pen update', penUpdateEvent);
-  }
+  // Use direct buffer always (somewhat ignored if not local).
+  robopaint.cncserver.penUpdateTrigger = penUpdateEvent;
+  robopaint.cncserver.bufferUpdateTrigger = bufferUpdateEvent;
 
   // TODO: replace with ServerConnect(?)
   cncserver.status(robopaint.t('status.connected'));
@@ -79,6 +72,14 @@ $(robopaint).on('settingsComplete', _.once(function(){
 // Bind the Stream event callbacks ===========================================
 // Bind socket connect
 $(robopaint).on('socketIOComplete', function(){
+  // If external, be sure to bind the pen and buffer update triggers.
+  if (robopaint.statedata.external) {
+    robopaint.socket.on('buffer update', bufferUpdateEvent);
+    robopaint.socket.on('pen update', penUpdateEvent);
+    console.log('EXTERNALLY BOUND');
+  } else {
+    console.log('INTERNALLY BOUND');
+  }
   robopaint.socket.on('message update', messageUpdateEvent);
   robopaint.socket.on('callback update', callbackEvent);
 });
@@ -88,10 +89,12 @@ function bufferUpdateEvent(b){
   // What KIND of buffer update is this?
   switch (b.type) {
     case 'complete':
-      // When local, this attaches cncserver.state.buffer to the actual in use
+      // When local, this attaches cncserver.state.buffer* to the actual in use
       // cncserver buffer object. When external, this is a reference instance
       // inside the Socket.io callback data object.
-      cncserver.state.buffer = b.buffer;
+      cncserver.state.bufferList = b.bufferList;
+      cncserver.state.bufferData = b.bufferData;
+      /* falls through */
     case 'vars':
       // Break out important buffer states into something with wider scope
       cncserver.state.process.busy = b.bufferRunning;
@@ -100,30 +103,36 @@ function bufferUpdateEvent(b){
     case 'add':
       // No need to actually edit the buffer when local as we have access to
       // the exact same buffer object in memory.
-      if (!isLocal) cncserver.state.buffer.unshift(b.item);
-      cncserver.state.process.max++
+      if (robopaint.statedata.external) {
+        cncserver.state.bufferList.unshift(b.hash);
+        cncserver.state.bufferData[b.hash] = b.item;
+      }
+      cncserver.state.process.max++;
       break;
     case 'remove':
       // Again, when local, we don't need to do anything to the object we have
-      if (!isLocal) cncserver.state.buffer.pop();
+      if (robopaint.statedata.external) {
+        var hash = cncserver.state.bufferList.pop();
+        delete cncserver.state.bufferData[hash];
+      }
       break;
   }
 
   // Send useful info to the mode
   cncserver.pushToMode('bufferUpdate', {
-    length: cncserver.state.buffer.length,
+    length: cncserver.state.bufferList.length,
     paused: cncserver.state.process.paused
   });
 
   // Empty buffer?
-  if (!cncserver.state.buffer.length) {
+  if (!cncserver.state.bufferList.length) {
     cncserver.state.process.max = 1;
     cncserver.progress({val: 0, max: 1});
   } else { // At least one item in buffer
     // Update the progress bar (if not trying to empty the local buffer)
     if (!cncserver.state.pausingTillEmpty) {
       cncserver.progress({
-        val: cncserver.state.process.max - cncserver.state.buffer.length,
+        val: cncserver.state.process.max - cncserver.state.bufferList.length,
         max: cncserver.state.process.max
       });
     }
@@ -155,7 +164,7 @@ cncserver.pushToMode = function() {
   } catch(e) {
     // The above will fail whenever the window isn't ready. That's a fine fail.
   }
-}
+};
 
 // Send settings updates to modes
 $(robopaint).on('settingsUpdate', function(){
@@ -231,7 +240,7 @@ cncserver.status = function(msg, st) {
     // If there's not a second error message, default it.
     if (msg.length == 1) msg.push(robopaint.t('libs.problem'));
 
-    $status.html((st == false) ? msg[1] : msg[0]);
+    $status.html(!st ? msg[1] : msg[0]);
   }
 
   // If stat var is actually set
@@ -239,23 +248,28 @@ cncserver.status = function(msg, st) {
     if (typeof st == 'string') {
       classname = st;
     } else {
-      classname = (st == false) ? 'error' : 'success'
+      classname = !st ? 'error' : 'success';
     }
 
   }
 
   $status.attr('class', classname); // Reset class to only the set class
-}
+};
 
 // Update global progress bar
 // TODO: integrate with OS ui taskbar UI progress
 cncserver.progress = function(p) {
   var $prog = $('#status progress');
 
-  if (typeof p.max !== 'undefined') $prog.attr('max', p.max)
-  $prog.val(p.val);
+  if (typeof p.max !== 'undefined') {
+    p.max = Math.round(p.max);
+    $prog.attr('max', p.max);
+  }
+  $prog.val(Math.round(p.val));
+
+  $('#status .progress-wrapper label').text($prog.val() + '/' + $prog.attr('max'));
   popoutStatus();
-}
+};
 
 // TODO: Provide something for the parent script?
 module.exports = {};

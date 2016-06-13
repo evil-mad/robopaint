@@ -10,7 +10,7 @@
 function initializeTranslation() {
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
-  $('#settings').html(fs.readFileSync(appPath + 'resources/main.settings.inc.html').toString());
+  $('#settings').html(fs.readFileSync(appPath + 'resources/main.settings.inc.html', 'utf-8').toString());
   var resources = {};
 
   // Get all available language JSON files from folders, add to the dropdown

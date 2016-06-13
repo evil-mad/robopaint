@@ -59,6 +59,11 @@ function sendNext() {
       var point = cncserver.utils.getPercentCoord(cmd[1]);
       point.ignoreTimeout = '1';
 
+      // For pen only mode, bypass the data callback.
+      if (parseInt(robopaint.settings.penmode) === 3) {
+        point.returnData = false;
+      }
+
       // Third argument: skipBuffer
       if (cmd[2] === true) point.skipBuffer = true;
       api.pen.move(point, moveCallback);
@@ -87,7 +92,7 @@ function sendNext() {
       if (setHeight === null) setHeight = cmd[1]; // Specific height
       var options = {};
 
-      if (robopaint.cncserver.api.server.domain == "localhost") {
+      if (!robopaint.statedata.external) {
         options = {state: setHeight, ignoreTimeout: '1'};
         if (cmd[1] === true) options.skipBuffer = true;
         robopaint.cncserver.setPen(options, sendNext);
@@ -99,7 +104,7 @@ function sendNext() {
       break;
     case "power":
       var setPower = cmd[1]; // Power from 0 to 1
-      if (robopaint.cncserver.api.server.domain == "localhost") {
+      if (!robopaint.statedata.external) {
         robopaint.cncserver.setPen({power: setPower}, sendNext);
       } else {
         api.pen.power(setPower, sendNext);

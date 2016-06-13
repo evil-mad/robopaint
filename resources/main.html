@@ -47,6 +47,17 @@
     <div>
       <button class="continue normal" data-i18n>status.button.continue</button>
       <button class="reconnect normal" data-i18n>status.button.retry</button>
+      <button class="external normal" data-i18n>external.title</button>
+      <div class="external hidden">
+        <h4 data-i18n>external.address</h4>
+        <div>
+          <input id="external-domain" type="text">:
+          <input id="external-port" type="number" value="4242">
+          <button id="external-go" class="normal" data-i18n>common.action.connect</button>
+        </div>
+        <label for="external-status" data-i18n>common.labels.status</label>
+        <status id="external-status" data-i18n>external.status.wait</status>
+      </div>
     </div>
   </div>
 </h1>
@@ -79,6 +90,7 @@
   <legend data-i18n>common.labels.status</legend>
   <div id="statusmessage"></div>
   <div class="progress-wrapper">
+    <label>0/0</label>
     <progress data-i18n="[title]common.labels.progress" max="100" value="0"></progress>
   </div>
 </div>

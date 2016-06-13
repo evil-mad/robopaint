@@ -75,7 +75,7 @@ function loadSettings() {
     fillocclusionfills: 1,
 
     skipwhite: 1,
-    prefillbuffer: 1,
+    usenativerunner: 0,
     optimizepath: 1
   };
 
@@ -283,7 +283,7 @@ function bindSettingsControls() {
         // On "change" of sliders, the user has finished sliding, we can reset
         // the height back to UP. Allows changing while paused.
         var state = robopaint.cncserver.state;
-        if (!initializing && (state.buffer.length === 0 || state.process.paused)) {
+        if (!initializing && (state.bufferList.length === 0 || state.process.paused)) {
           if (e.type === 'change') {
             cncserver.setHeight('up', null, state.process.paused);
           } else {

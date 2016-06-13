@@ -173,19 +173,19 @@ function createSubwindow(callback) {
 
   // Make the mode window visible (should only happen when it's ready);
   $subwindow.showMe = function(callback){
+    $('#loader').css('opacity', 0);
     $subwindow
-      .css('opacity', 0)
-      .removeClass('hide')
-      .css('opacity', 100)
+      .css('top', 40)
+      .css('opacity', 1);
+  };
 
-    // TODO: We tried to load this sooner, but it breaks jQuery very badly on
-    // require, especially on slower system. It's rumored this is a race
-    // condition with the document object not fully populated, but it's an
-    // Electron/Chromium bug for now.
+
+  // Open the devtools on dom-ready (the earliest they can be opened).
+  $subwindow[0].addEventListener('dom-ready', function(){
     if (robopaint.currentMode.robopaint.debug === true && robopaint.settings.rpdebug) {
       $subwindow[0].openDevTools();
     }
-  };
+  });
 
   // Handle global channel message events from the mode (close/change/etc).
   $subwindow[0].addEventListener('ipc-message', function(event){
@@ -261,6 +261,39 @@ function bindMainControls() {
     startSerial();
   });
 
+  // Bind the external server connection button functionality
+  $('button.external').click(function(e){
+    if ($('div.external').is(':visible')){
+      $('div.external').slideUp('slow');
+    } else {
+      $('div.external').slideDown('slow');
+    }
+  });
+
+  robopaint.statedata.external = false;
+  $('button#external-go').click(function(e){
+    var $stat = $('#external-status');
+
+    $stat.text(robopaint.t('external.status.connect'));
+
+    // Setup the server location
+    robopaint.cncserver.api.server.domain = $('#external-domain').val();
+    robopaint.cncserver.api.server.port = $('#external-port').val();
+
+    // Try to get the pen status...
+    robopaint.cncserver.api.pen.stat(function(data) {
+      if (data === false) {
+        $stat.text(robopaint.t('external.status.error'));
+        robopaint.cncserver.api.server.domain = 'localhost';
+        robopaint.cncserver.api.server.port = '4242';
+      } else {
+        robopaint.statedata.external = true;
+        $stat.text(robopaint.t('external.status.connected'));
+        $options.slideUp('slow');
+        $('button.continue').click();
+      }
+    });
+  });
 
   window.onbeforeunload = onClose; // Catch close event
 
@@ -319,7 +352,7 @@ function bindMainControls() {
     }
 
     $('#calibrator .wrapper').css('left', -(stepIndex * 400));
-  })
+  });
 
   // Bind toolbar modal links =======================
   $('#bar a.modal').click(function(e){
@@ -372,11 +405,15 @@ robopaint.switchMode = function(mode, callback) {
       $('#loader').css('opacity', 1);
       $subwindow.hideMe(function(){
         // Include the absolute root path so the mode can load its own info
-        $subwindow.attr('src', $target.attr('href') + '#' + encodeURIComponent(robopaint.currentMode.root + 'package.json'));
+        $subwindow
+          .attr('src', $target.attr('href') + '#' + encodeURIComponent(robopaint.currentMode.root + 'package.json'))
+          .css('opacity', 0)
+          .removeClass('hide')
+          .focus();
         if (callback) callback();
       });
   }
-}
+};
 
 /**
  * Specialty JS window resize callback for responsive element adjustment
@@ -423,18 +460,21 @@ function responsiveResize() {
     });
   }
 
-};
+}
 
 /**
  * Initialize the Socket.IO websocket connection
  */
 function initSocketIO(){
+  if (robopaint.socket) robopaint.socket.destroy();
+
   // Add Socket.IO include now that we know where from and the server is running
-  var serverPath = robopaint.cncserver.api.server.protocol +
-    '://' + robopaint.cncserver.api.server.domain + ':' +
-    robopaint.cncserver.api.server.port;
-  robopaint.socket = io(serverPath);
+  var server = robopaint.cncserver.api.server;
+  var serverPath = server.protocol + '://' + server.domain + ':' + server.port;
+  robopaint.socket = io.connect(serverPath);
+  cncserver.socket = robopaint.socket;
   $(robopaint).trigger('socketIOComplete');
+  return serverPath;
 }
 
 /**
@@ -444,8 +484,25 @@ function startSerial(){
   setMessage('status.start', 'loading');
 
   try {
+    // Load the CNCServer serial runner in a webview if not using node native...
+    if (!robopaint.settings.usenativerunner) {
+      var $runner = $('<webview>').attr({
+        border: 0,
+        class: 'hide',
+        nodeintegration: 'true',
+        src: '../node_modules/cncserver/runner/runner.html',
+        disablewebsecurity: 'true',
+      }).appendTo('body');
+
+      // Report runner messages direct to the main console.
+      $runner[0].addEventListener('console-message', function(e) {
+        console.log('RUNNER:', e.message);
+      });
+    }
+
     cncserver.start({
       botType: robopaint.currentBot.type,
+      localRunner: robopaint.settings.usenativerunner,
       success: function() {
         setMessage('status.found');
       },
@@ -614,7 +671,7 @@ function initQuickload() {
   // Bind loadlist item click load
   $('a', $loadList).click(function(e) {
     $loadList.fadeOut('slow');
-    var fileContents = fs.readFileSync($(this).data('file'));
+    var fileContents = fs.readFileSync($(this).data('file'), 'utf-8');
 
     // Push the files contents into the localstorage object
     window.localStorage.setItem('svgedit-default', fileContents);

@@ -8,6 +8,8 @@
  * For complete documentation on what this file provides for the Mode API
  * @see MODES.README.md
  **/
+/*jslint node: true */
+/*global window, location, localStorage */
 "use strict";
 
 try {
@@ -16,7 +18,7 @@ var remote = require('remote');
 var path = require('path');
 var app = window.app = remote.require('app');
 var fs = require('fs-plus');
-var ipc = window.ipc = require('ipc');
+var ipc = window.ipc = require('electron').ipcRenderer;
 var appPath = app.getAppPath();
 var i18n = window.i18n = require('i18next-client');
 var $ = require('jquery');
@@ -81,12 +83,12 @@ robopaint.svg = {
   save: function(svgData) {
     localStorage['svgedit-default'] = svgData;
   }
-}
+};
 
 // Add an API for pausing CNCServer till all commands are fully buffered.
 robopaint.pauseTillEmpty = function(starting) {
   ipc.sendToHost('cncserver', 'pauseTillEmpty', starting);
-}
+};
 
 // Add the generic mode CSS for body drop shadow and basic button formatting.
 $('<link>').attr({
@@ -166,6 +168,7 @@ if (mode.robopaint.dependencies) {
         break;
       case 'qtip':
         $.qtip = require('qtip2');
+        break;
       case 'paper':
         console.log('Loading Paper');
         preloadCompleteAsyncChecklist.paperLoaded = false;
@@ -300,7 +303,7 @@ function translateMode() {
     // Quick fix for non-reactive re-translate for modes
     $('[data-i18n=""]').each(function() {
       var $node = $(this);
-      if ($node.text().indexOf('.') > -1 && $node.attr('data-i18n') == "") {
+      if ($node.text().indexOf('.') > -1 && $node.attr('data-i18n') === "") {
         $node.attr('data-i18n', $node.text());
       }
     });
@@ -318,7 +321,7 @@ i18nInit();
 // Default Inter Process Comm message management:
 ipc.on('globalclose', function(){ handleModeClose('globalclose'); });
 ipc.on('modechange', function(){ handleModeClose('modechange'); });
-ipc.on('cncserver', function(args){ handleCNCServerMessages(args[0], args[1]); });
+ipc.on('cncserver', function(event, args){ handleCNCServerMessages(args[0], args[1]); });
 ipc.on('settingsUpdate', function(){ robopaint.settings = robopaint.utils.getSettings(); });
 
 // Add a limited CNCServer API interaction layer wrapper over IPC.
@@ -329,7 +332,7 @@ mode.run = function(){
 // Add a shortcut T that doesn't require the mode prefix
 mode.t = function(t,x) {
   return i18n.t('modes.' + mode.robopaint.name + '.' + t, x);
-}
+};
 
 // Add a api for standardizing forced full cancel procedure with park.
 mode.fullCancel = function(message) {
@@ -343,7 +346,7 @@ mode.fullCancel = function(message) {
     // As a nice reminder, localclear MUST be last, otherwise the commands
     // after it will be cleared before being sent :P
   ], true); // As this is a forceful cancel, shove to the front of the queue
-}
+};
 
 function handleModeClose(returnChannel) {
   // If the mode cares to make a fuss about pausing close, let it.
@@ -380,7 +383,7 @@ rpRequire({
 }, function(){
   preloadCompleteAsyncChecklist.mainLoaded = true;
   preloadComplete();
-})
+});
 
 function preloadComplete() {
   // Only continue if the async load checklist has been completed.
@@ -400,7 +403,7 @@ function preloadComplete() {
 }
 
 } catch(e) {
-  console.error('Problem during mode load:' , e)
+  console.error('Problem during mode load:' , e);
   if (mode.robopaint.debug === true){
     ipc.sendToHost('modeReady'); // Tell RP main host to show the window anyway.
   } else {
