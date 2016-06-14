@@ -313,6 +313,12 @@ module.exports = function(paper) {
       // will cause closest intersection connection issues.
       var h = tmp.hitTest(testPoint);
 
+      // Apparently sometimes hitTest can return undefined, so we default it to
+      // an object in that case so we don't have any direct failure below.
+      if (_.isUndefined(h)) {
+        h = {};
+      }
+
       // Standard fill/stroke checking: if the hit result item is the same as
       // our current path, keep going!
       var continueStroke = (h.item === cPath);
