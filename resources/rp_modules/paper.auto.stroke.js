@@ -127,24 +127,24 @@ module.exports = function(paper) {
         var doStroke = true; // Assume we're stroking the path
         switch(paper.utils.getPathColorType(path)) {
           case 1: // Type 1: Stroked filled shape
-            path.fillColor = snapColor(path.fillColor, path.opacity);
+            paper.utils.setPathOption(path, 'fillColor', snapColor(path.fillColor, path.opacity));
           case 2: // Type 2: Stroked non-filled shape
-            path.strokeColor = snapColor(path.strokeColor, path.opacity)
+            paper.utils.setPathOption(path, 'strokeColor', snapColor(path.strokeColor, path.opacity));
             break;
           case 3: // Type 3: Filled no stroke shape
-            path.fillColor = snapColor(path.fillColor, path.opacity);
+            paper.utils.setPathOption(path, 'fillColor', snapColor(path.fillColor, path.opacity));
             if (settings.strokeAllFilledPaths) {
-              path.strokeColor = snapColor(path.fillColor, path.opacity);
+              paper.utils.setPathOption(path, 'strokeColor', snapColor(path.fillColor, path.opacity));
             } else {
-              path.strokeWidth = 0; // Ensure it's ignored later
+              paper.utils.setPathOption(path, 'strokeWidth', 0); // Ensure it's ignored later
               doStroke = false;
             }
             break;
           case 4: // Type 4: No fill, no stroke shape (invisible)
             if (settings.strokeNoStrokePaths) {
-              path.strokeColor = snapColor(path.strokeColor, path.opacity)
+              paper.utils.setPathOption(path, 'strokeColor', snapColor(path.strokeColor, path.opacity));
             } else {
-              path.strokeWidth = 0; // Ensure it's ignored later
+              paper.utils.setPathOption(path, 'strokeWidth', 0); // Ensure it's ignored later
               doStroke = false;
             }
             break;
@@ -153,16 +153,21 @@ module.exports = function(paper) {
         // If we're actually stroking this path, make it visible with a stroke
         // width and add its length to the max for checking progress.
         if (doStroke) {
-          path.data.color = snapColorID(path.strokeColor, path.opacity);
-          path.data.name = path.name;
-          path.strokeWidth = settings.lineWidth;
-          maxLen += path.length;
-          path.originalOpacity = path.opacity;
+          var data = {
+            color: snapColorID(path.strokeColor, path.opacity),
+            name: path.name,
+            targetPath: path.data.targetPath,
+          };
 
           // Be sure to set the correct color/tool if given.
-          if (path.data.targetPath && settings.pathColor) {
-            path.data.color = settings.pathColor;
+          if (data.targetPath && settings.pathColor) {
+            data.color = settings.pathColor;
           }
+
+          paper.utils.setPathOption(path, 'data', data);
+          paper.utils.setPathOption(path, 'strokeWidth', settings.lineWidth);
+          path.originalOpacity = path.opacity;
+          maxLen += paper.utils.getPathLength(path);
         }
 
         // If only stroking one path, visually hide all the other paths.
