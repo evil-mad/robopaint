@@ -65,6 +65,32 @@ module.exports = function(paper) {
       return false;
     },
 
+    // Try to get a compound path's length.
+    getPathLength: function(path) {
+      if (_.isNumber(path.length)) return path.length;
+      var len = 0;
+      if (path.children) {
+        _.forEach(path.children, function(child) {
+          len += paper.utils.getPathLength(child);
+        });
+      }
+      return len;
+    },
+
+    // Try to set a compound path's option.
+    setPathOption: function(path, options) {
+      _.forEach(options, function(value, key){
+        path[key] = value;
+        if (path.children) {
+          _.forEach(path.children, function(child) {
+            var opt = {};
+            opt[key] = value;
+            paper.utils.setPathOption(child, opt);
+          });
+        }
+      });
+    },
+
     // Return an integer for the "color type" of a path, defining how it's
     // attributes combine to make it either filled, stroked, etc.
     getPathColorType: function(path) {

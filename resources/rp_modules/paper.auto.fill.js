@@ -151,17 +151,25 @@ module.exports = function(paper) {
         if (!paper.utils.hasColor(path.fillColor)) {
           path.remove();
         } else {
-          path.closed = true;
-          path.data.color = snapColorID(path.fillColor, path.opacity);
-          path.data.name = path.name;
-          path.fillColor = snapColor(path.fillColor, path.opacity);
-          path.strokeWidth = 0;
-          path.strokeColor = null;
+          var data = {
+            color: snapColorID(path.fillColor, path.opacity),
+            name: path.name,
+            targetPath: path.data.targetPath,
+          };
 
           // Be sure to set the correct color/tool if given.
-          if (path.data.targetPath && settings.pathColor) {
-            path.data.color = settings.pathColor;
+          if (data.targetPath && settings.pathColor) {
+            data.color = settings.pathColor;
           }
+
+          // Bulk set path options.
+          paper.utils.setPathOption(path, {
+            closed: true,
+            data: data,
+            fillColor: snapColor(path.fillColor, path.opacity),
+            strokeWidth: 0,
+            strokeColor: null,
+          });
         }
       });
 
@@ -589,6 +597,9 @@ module.exports = function(paper) {
           }
           if (type === 'zigsmooth' && cGroup) {
             cGroup.simplify();
+            if (cGroup.segments.length <= 1 && cGroup.closed) {
+              cGroup.closed = false;
+            }
             cGroup.flatten(settings.flattenResolution);
           }
 
@@ -610,6 +621,9 @@ module.exports = function(paper) {
           if (!p.contains(v.getPointAt(v.length/2)) || v.getIntersections(p).length > 3) {
             if (type === 'zigsmooth') {
               cGroup.simplify();
+              if (cGroup.segments.length <= 1 && cGroup.closed) {
+                cGroup.closed = false;
+              }
               cGroup.flatten(settings.flattenResolution);
             }
 
@@ -754,6 +768,9 @@ module.exports = function(paper) {
     // Is this a compound path?
     if (p.children) {
       _.each(p.children, function(c, pathIndex) {
+        if (c.segments.length <= 1 && c.closed) {
+          c.closed = false;
+        }
         c.flatten(settings.flattenResolution);
         paths[pathIndex] = [];
         _.each(c.segments, function(s){
