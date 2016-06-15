@@ -151,17 +151,25 @@ module.exports = function(paper) {
         if (!paper.utils.hasColor(path.fillColor)) {
           path.remove();
         } else {
-          path.closed = true;
-          path.data.color = snapColorID(path.fillColor, path.opacity);
-          path.data.name = path.name;
-          path.fillColor = snapColor(path.fillColor, path.opacity);
-          path.strokeWidth = 0;
-          path.strokeColor = null;
+          var data = {
+            color: snapColorID(path.fillColor, path.opacity),
+            name: path.name,
+            targetPath: path.data.targetPath,
+          };
 
           // Be sure to set the correct color/tool if given.
-          if (path.data.targetPath && settings.pathColor) {
-            path.data.color = settings.pathColor;
+          if (data.targetPath && settings.pathColor) {
+            data.color = settings.pathColor;
           }
+
+          // Bulk set path options.
+          paper.utils.setPathOption(path, {
+            closed: true,
+            data: data,
+            fillColor: snapColor(path.fillColor, path.opacity),
+            strokeWidth: 0,
+            strokeColor: null,
+          });
         }
       });
 
