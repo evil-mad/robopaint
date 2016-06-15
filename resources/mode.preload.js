@@ -17,13 +17,17 @@ try {
 var remote = require('remote');
 var path = require('path');
 var app = window.app = remote.require('app');
+var crypto = require('crypto');
 var fs = require('fs-plus');
 var ipc = window.ipc = require('electron').ipcRenderer;
 var appPath = app.getAppPath();
 var i18n = window.i18n = require('i18next-client');
 var $ = require('jquery');
 var _ = require('underscore');
-var rpRequire = window.rpRequire = require(appPath + '/resources/rp_modules/rp.require');
+var rpRequire = window.rpRequire = require(
+  appPath + '/resources/rp_modules/rp.require'
+);
+
 // There are a number of async loads that must be complete before we can say
 // that mode preloading is actually done. Because of load race conditions, these
 // might load out of any kind of order, so each of these must be true before we
@@ -49,7 +53,10 @@ var robopaint = window.robopaint = {
 robopaint.settings = robopaint.utils.getSettings();
 window.cncserver = {};
 robopaint.cncserver = window.cncserver;
-rpRequire('cnc_api')(robopaint.cncserver, robopaint.utils.getAPIServer(robopaint.settings));
+rpRequire('cnc_api')(
+  robopaint.cncserver,
+  robopaint.utils.getAPIServer(robopaint.settings)
+);
 robopaint.cncserver.api.settings.bot(function(b){
   robopaint.canvas = robopaint.utils.getRPCanvas(b);
   robopaint.currentBot = robopaint.utils.getCurrentBot(b);
@@ -61,6 +68,7 @@ robopaint.cncserver.api.settings.bot(function(b){
 // Add in a small API for getting and setting the SVG content, as the storage
 // may change, but the API shouldn't need to.
 robopaint.svg = {
+  cachePath: path.join(app.getPath('userData'), 'svg-cache'),
   wrap: function(inner) {
     if (!inner) inner = '';
 
@@ -69,7 +77,7 @@ robopaint.svg = {
     inner + '</svg>';
   },
   isEmpty: function() {
-    return localStorage['svgedit-default'] == false;
+    return localStorage['svgedit-default'] === false;
   },
   load: function() {
     var svg = localStorage['svgedit-default'];
@@ -81,6 +89,16 @@ robopaint.svg = {
     return svg;
   },
   save: function(svgData) {
+    // Save cache (if data):
+    if (svgData) {
+      var hash = crypto.createHash('md5').update(svgData).digest("hex");
+      var file = path.join(robopaint.svg.cachePath, hash + '.svg');
+      if (!fs.isFileSync(file)) {
+        fs.writeFileSync(file, svgData);
+      }
+    }
+
+    // Save data to localStorage.
     localStorage['svgedit-default'] = svgData;
   }
 };
