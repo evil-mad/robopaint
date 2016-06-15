@@ -78,13 +78,17 @@ module.exports = function(paper) {
     },
 
     // Try to set a compound path's option.
-    setPathOption: function(path, option, value) {
-      path[option] = value;
-      if (path.children) {
-        _.forEach(path.children, function(child) {
-          paper.utils.setPathOption(child, option, value);
-        });
-      }
+    setPathOption: function(path, options) {
+      _.forEach(options, function(value, key){
+        path[key] = value;
+        if (path.children) {
+          _.forEach(path.children, function(child) {
+            var opt = {};
+            opt[key] = value;
+            paper.utils.setPathOption(child, opt);
+          });
+        }
+      });
     },
 
     // Return an integer for the "color type" of a path, defining how it's
