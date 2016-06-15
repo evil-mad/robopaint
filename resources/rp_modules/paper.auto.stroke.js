@@ -127,24 +127,40 @@ module.exports = function(paper) {
         var doStroke = true; // Assume we're stroking the path
         switch(paper.utils.getPathColorType(path)) {
           case 1: // Type 1: Stroked filled shape
-            paper.utils.setPathOption(path, 'fillColor', snapColor(path.fillColor, path.opacity));
+            paper.utils.setPathOption(path, {
+              fillColor: snapColor(path.fillColor, path.opacity)
+            });
+            /* falls through */
+
           case 2: // Type 2: Stroked non-filled shape
-            paper.utils.setPathOption(path, 'strokeColor', snapColor(path.strokeColor, path.opacity));
+            paper.utils.setPathOption(path, {
+              strokeColor: snapColor(path.strokeColor, path.opacity)
+            });
             break;
+
           case 3: // Type 3: Filled no stroke shape
-            paper.utils.setPathOption(path, 'fillColor', snapColor(path.fillColor, path.opacity));
+            paper.utils.setPathOption(path, {
+              fillColor: snapColor(path.fillColor, path.opacity)
+            });
             if (settings.strokeAllFilledPaths) {
-              paper.utils.setPathOption(path, 'strokeColor', snapColor(path.fillColor, path.opacity));
+              paper.utils.setPathOption(path, {
+                strokeColor: snapColor(path.fillColor, path.opacity)
+              });
             } else {
-              paper.utils.setPathOption(path, 'strokeWidth', 0); // Ensure it's ignored later
+              // Ensure it's ignored later.
+              paper.utils.setPathOption(path, {strokeWidth: 0});
               doStroke = false;
             }
             break;
+
           case 4: // Type 4: No fill, no stroke shape (invisible)
             if (settings.strokeNoStrokePaths) {
-              paper.utils.setPathOption(path, 'strokeColor', snapColor(path.strokeColor, path.opacity));
+              paper.utils.setPathOption(path, {
+                strokeColor: snapColor(path.strokeColor, path.opacity)
+              });
             } else {
-              paper.utils.setPathOption(path, 'strokeWidth', 0); // Ensure it's ignored later
+              // Ensure it's ignored later.
+              paper.utils.setPathOption(path, {strokeWidth: 0});
               doStroke = false;
             }
             break;
@@ -164,8 +180,11 @@ module.exports = function(paper) {
             data.color = settings.pathColor;
           }
 
-          paper.utils.setPathOption(path, 'data', data);
-          paper.utils.setPathOption(path, 'strokeWidth', settings.lineWidth);
+          paper.utils.setPathOption(path, {
+            data: data,
+            strokeWidth: settings.lineWidth,
+          });
+
           path.originalOpacity = path.opacity;
           maxLen += paper.utils.getPathLength(path);
         }
@@ -175,7 +194,7 @@ module.exports = function(paper) {
           //path.opacity = 0;
         }
 
-        // Close stroke paths with fill to ensure they fully encompass the filled
+        // Close stroke paths w\fill to ensure they fully encompass the filled
         // color (only when they have a fillable color);
         if (!path.closed && settings.closeFilledPaths) {
           if (hasColor(path.fillColor)) {
