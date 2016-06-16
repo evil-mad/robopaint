@@ -139,7 +139,16 @@
       "calibrate": "Calibrate height",
       "help": "Help! (Open web docs)",
       "settings": "Settings",
+      "history": "SVG History",
       "version": "v"
+    },
+    "history": {
+      "none": "No Recent SVGs found.",
+      "delete": {
+        "message": "Delete this file from your history?",
+        "detail": "The SVG cache file will be removed from this list and from your computer, this cannot be undone.",
+        "confirm": "Delete"
+      }
     },
     "bubble": {
       "edit": "Create",

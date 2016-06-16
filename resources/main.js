@@ -16,6 +16,7 @@ var remote = require('remote');
 var mainWindow = remote.getCurrentWindow();
 var app = remote.require('app');
 var path = require('path');
+var bytes = require('bytes');
 var appPath = path.join(app.getAppPath(), '/');
 var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
 
@@ -124,6 +125,9 @@ function startInitialization() {
   // Load the quickload list
   initQuickload();
 
+  // Load the history list.
+  initHistoryload();
+
   // Prep the connection status overlay
   $stat = $('body.home h1');
   $options = $('.options', $stat);
@@ -198,6 +202,9 @@ function createSubwindow(callback) {
         break;
       case 'modeReady':
         $subwindow.showMe();
+        break;
+      case 'svgUpdate': // Mode has updated the shared SVG data.
+        robopaint.reloadHistory();
         break;
       case 'modeLoadFail':
         robopaint.switchMode('home');
@@ -643,12 +650,13 @@ function initQuickload() {
   var svgs = fs.readdirSync(paths[0]);
 
   // Bind Quick Load Hover
-  $load.click(function(e) {
+  $load.click(function() {
     if ($loadList.is(':visible')) {
       $loadList.fadeOut('slow');
     } else {
       $loadList.css('left', $load.offset().left + $load.width());
       $loadList.fadeIn('fast');
+      $('#history').fadeOut('fast');
     }
     return false;
   });
@@ -669,25 +677,131 @@ function initQuickload() {
   }
 
   // Bind loadlist item click load
-  $('a', $loadList).click(function(e) {
+  $('a', $loadList).click(function() {
     $loadList.fadeOut('slow');
-    var fileContents = fs.readFileSync($(this).data('file'), 'utf-8');
-
-    // Push the files contents into the localstorage object
-    window.localStorage.setItem('svgedit-default', fileContents);
-
-     // Tell the current mode that it happened.
-    cncserver.pushToMode('loadSVG');
-
-    // Switch to print default if the current mode doesn't support SVGs
-    if (robopaint.currentMode.robopaint.opensvg !== true) {
-      $('#bar-print').click();
-    }
-
+    robopaint.setModeSVG($(this).data('file'));
     return false;
   });
 }
 
+/**
+ * Simple wrapper for set the "current" SVG data for the current mode.
+ *
+ * @param  {string} svgFile
+ *   The file path to the XML/SVG string data to set.
+ * @return {undefined}
+ */
+robopaint.setModeSVG = function(svgFile) {
+  fs.readFile(svgFile, function(err, fileContents){
+    if (!err) {
+      // Push the files contents into the localstorage object
+      window.localStorage.setItem('svgedit-default', fileContents);
+
+      // Resave the cache and update the history list.
+      robopaint.utils.saveSVGCacheFile(fileContents);
+      robopaint.reloadHistory();
+
+      // Tell the current mode that it happened.
+      cncserver.pushToMode('loadSVG');
+
+      // Switch to print default if the current mode doesn't support SVGs
+      if (robopaint.currentMode.robopaint.opensvg !== true) {
+        $('#bar-print').click();
+      }
+    }
+  });
+};
+
+/**
+ * Initialize and bind the history Quickload file list functionality
+ */
+function initHistoryload() {
+  var $button = $('#bar-history');
+  var $historyList = $('#history');
+
+  // Bind click activate.
+  $button.click(function() {
+    if ($historyList.is(':visible')) {
+      $historyList.fadeOut('slow');
+    } else {
+      $historyList.css('left', $button.offset().left + $button.width());
+      $historyList.fadeIn('fast');
+      $('#loadlist').fadeOut('fast');
+    }
+    return false;
+  });
+
+  // Bind dynamic history item click load.
+  $historyList.on('click', 'a', function() {
+    $historyList.fadeOut('slow');
+    robopaint.setModeSVG($(this).data('file'));
+    return false;
+  });
+
+  robopaint.reloadHistory();
+}
+
+// Reload the history content list (called elsewhere during updates);
+robopaint.reloadHistory = function() {
+  var $historyList = $('#history');
+  var svgPath = robopaint.utils.getSVGCachePath();
+  var svgs = fs.readdirSync(svgPath);
+  svgs.sort(function(a, b) {
+    return fs.statSync(path.join(svgPath, b)).mtime.getTime() -
+          fs.statSync(path.join(svgPath, a)).mtime.getTime();
+  });
+
+  // Truncate the SVGs file list via the writable length property.
+  if (svgs.length > 50) {
+    svgs.length = 50;
+  }
+
+  // Load in SVG files for quick loading
+  if (svgs.length > 0) {
+    $historyList.html('');
+    for(var i in svgs) {
+      var svgFile = path.join(svgPath, svgs[i]);
+      var stats = fs.statSync(svgFile);
+      $('<li>').append(
+        $('<span>').addClass('delete').click(function(){
+          var $parent = $(this).parents('li');
+          mainWindow.dialog({
+            t: 'MessageBox',
+            type: 'warning',
+            message: i18n.t('nav.history.delete.message'),
+            cancelId: 0,
+            detail: i18n.t('nav.history.delete.detail'),
+            buttons: [
+              i18n.t('common.action.cancel'),
+              i18n.t('nav.history.delete.confirm')
+            ]
+          }, function(deleteFile) {
+            if (deleteFile === 1) {
+              var svgFile = $parent.find('a').data('file');
+              fs.unlink(svgFile, function(){
+                $parent.slideUp('fast', function(){
+                  $parent.remove();
+                  robopaint.reloadHistory();
+                });
+              });
+            }
+          });
+        }),
+        $('<a>').data('file', svgFile).attr('href', '#').append(
+          $('<img>').attr('src', svgFile),
+          $('<span>').text(stats.mtime),
+          $('<b>').text(bytes(stats.size))
+        )
+      ).appendTo($historyList);
+    }
+  } else {
+    // No history items!
+    $historyList.html(
+      '<li><h4 data-i18n="nav.history.none">' +
+      i18n.t('nav.history.none') + '</h4></li>'
+    );
+  }
+};
 
 /**
  * Fetches all colorsets available from the colorsets dir

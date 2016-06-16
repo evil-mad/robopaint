@@ -294,6 +294,121 @@ span.version {
   background-color: #ffb996;
 }
 
+/* History list */
+#bar-history {
+  width: 25px;
+  background-size: 38px;
+  background-image: url('../images/icons/history.svg');
+  display: inline-block;
+  margin-left: -13px;
+}
+
+#history {
+  box-shadow: 11px 11px 47px -1px rgba(0,0,0,0.52);
+  width: 282px;
+  background-color: #FFFFFF;
+  border: 1px solid #999999;
+  border-radius: 0 15px 15px 15px;
+  position: absolute;
+  top: -16px;
+  z-index: 1;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  max-height: 330px;
+  overflow-y: auto;
+  margin-left: 16px;
+}
+
+#history li {
+  position: relative;
+}
+
+#history li h4 {
+  text-align: center;
+}
+
+#history li a {
+  display: block;
+  position: relative;
+  padding: 4px 7px;
+  height: 70px;
+  font-weight: bold;
+}
+
+#history li a span {
+  font-size: 14px;
+  line-height: 14px;
+  display: block;
+  font-weight: normal;
+  margin-left: 6em;
+  margin-top: -2.6em;
+  width: 11em;
+}
+
+#history li a b {
+  position: absolute;
+  bottom: 1em;
+  right: 0.5em;
+  font-size: 10px;
+}
+
+#history span.delete {
+  transition: opacity 0.3s;
+  background-size: 25px;
+  background-image: url('../images/icons/delete.svg');
+  position: absolute;
+  top: 5px;
+  right: 0;
+  display: block;
+  width: 25px;
+  height: 25px;
+  z-index: 5;
+  cursor: pointer;
+  opacity: 0.2;
+}
+
+#history span.delete:hover {
+  opacity: 1;
+}
+
+#history li a img {
+  max-width: 65px;
+  max-height: 65px;
+  display: block;
+  z-index: 1;
+  left: 3px;
+  position: relative;
+  transform: translate(0, 50%);
+  top: -25%;
+}
+
+#history li a span:before {
+  content: ' ';
+  left: 10px;
+  top: 3px;
+  background-image: url('../images/paper_texture.png');
+  display: block;
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.75);
+}
+
+#history li a {
+  background-color: #EEF;
+}
+
+#history li:nth-child(even) a {
+  background-color: #FFF;
+}
+
+#history li a:hover {
+  z-index: 2;
+  box-shadow: 0px 0px 19px 5px rgba(255,124,54,1);
+  background-color: #ffb996;
+}
+
 /* Central home screen general styles */
 
 /* Central "tool" bar */
