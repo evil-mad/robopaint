@@ -17,7 +17,6 @@ try {
 var remote = require('remote');
 var path = require('path');
 var app = window.app = remote.require('app');
-var crypto = require('crypto');
 var fs = require('fs-plus');
 var ipc = window.ipc = require('electron').ipcRenderer;
 var appPath = app.getAppPath();
@@ -91,11 +90,8 @@ robopaint.svg = {
   save: function(svgData) {
     // Save cache (if data):
     if (svgData) {
-      var hash = crypto.createHash('md5').update(svgData).digest("hex");
-      var file = path.join(robopaint.svg.cachePath, hash + '.svg');
-      if (!fs.isFileSync(file)) {
-        fs.writeFileSync(file, svgData);
-      }
+      robopaint.utils.saveSVGCacheFile(svgData);
+      ipc.sendToHost('svgUpdate'); // Tell RP main about the update.
     }
 
     // Save data to localStorage.
@@ -389,6 +385,7 @@ function handleCNCServerMessages(name, data) {
       translateMode();
       break;
     default:
+      // Trigger Generic onMessage handler.
       if (_.isFunction(mode.onMessage)) mode.onMessage(name, data);
   }
 }

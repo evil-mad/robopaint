@@ -485,6 +485,37 @@ var utils = {
   },
 
   /**
+   * Return the path of where ot save the SVG cache files.
+   *
+   * @return {string}
+   *   Full path to the svg-cache folder in the user data directory.
+   */
+  getSVGCachePath: function () {
+    var remote = require('remote');
+    var app = remote.require('app');
+    return require('path').join(app.getPath('userData'), 'svg-cache');
+  },
+
+  /**
+   * Save SVG data as a hashed file in the cache folder.
+   *
+   * @param  {string} svgData
+   *   XML/SVG data to be saved & hashed.
+   *
+   * @return {undefined}
+   */
+  saveSVGCacheFile: function (svgData) {
+    if (svgData) {
+      var hash = require('crypto')
+                   .createHash('md5')
+                   .update(svgData)
+                   .digest("hex");
+      var file = require('path').join(robopaint.utils.getSVGCachePath(), hash + '.svg');
+      require('fs-plus').writeFileSync(file, svgData);
+    }
+  },
+
+  /**
    * Return the object required for the CNCServer DOM API wrapper server object
    */
   getAPIServer: function(settings) {
