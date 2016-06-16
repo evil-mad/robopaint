@@ -175,6 +175,11 @@ function createSubwindow(callback) {
     });
   };
 
+  // Hide the floating menus on focus.
+  $subwindow.on('focus', function(){
+    $('#history, #loadlist').fadeOut('fast');
+  });
+
   // Make the mode window visible (should only happen when it's ready);
   $subwindow.showMe = function(callback){
     $('#loader').css('opacity', 0);
