@@ -342,7 +342,8 @@
         "opt0": "Hatch (Zig-zag)",
         "opt1": "Hatch (Straight)",
         "opt2": "Hatch (Smooth)",
-        "opt3": "Center spiral"
+        "opt3": "Center spiral",
+        "opt4": "Cam (shape offset)"
       },
       "fillangle": "Hatch angle:",
       "fillspacing": {

@@ -123,6 +123,7 @@ module.exports = function(paper) {
           Point: paper.Point,
           Path: paper.Path,
           view: paper.view,
+          CompoundPath: paper.CompoundPath,
         });
       }
 
