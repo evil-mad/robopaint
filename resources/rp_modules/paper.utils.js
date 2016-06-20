@@ -3,7 +3,8 @@
  *  paper.js not tied to mode specific use that will be attached to the passed
  *  paper object under paper.utils
  */
-"use strict";
+/* globals _ */
+
 module.exports = function(paper) {
   // Emulate PaperScript "Globals" as needed
   var Point = paper.Point;
@@ -42,6 +43,123 @@ module.exports = function(paper) {
       } else {
         return color.alpha !== 0;
       }
+    },
+
+
+    /**
+     * Offset a paper path a given amount, either in or out. Returns a reference
+     * given to the output polygonal path created.
+     *
+     * @param {Path} inPath
+     *   Paper Path object to be converted to polygon and offsetted.
+     * @param {Number} amount
+     *   The amount to
+     * @param {Number} flattenResolution
+     *   Resolution to flatten to polygons.
+     * @return {Path}
+     *   Reference to the path object created, false if the output of the path
+     *   resulted in the eradication of the path.
+     */
+    offsetPath: function(inPath, amount, flattenResolution) {
+      var ClipperLib = rpRequire('clipper');
+      var scale = 100;
+      if (!amount) amount = 0;
+
+      // 1. Copy the input path & make it flatten to a polygon/multiple gons.
+      // 2. Convert the polygon(s) points into the clipper array format.
+      // 3. Delete the temp path.
+      // 4. Run the paths array through the clipper offset.
+      // 5. Output and descale the paths as single compound path.
+
+      var p = inPath.clone();
+      var paths = [];
+
+      // Is this a compound path?
+      if (p.children) {
+        _.each(p.children, function(c, pathIndex) {
+          c.flatten(flattenResolution);
+          paths[pathIndex] = [];
+          _.each(c.segments, function(s){
+            paths[pathIndex].push({
+              X: s.point.x,
+              Y: s.point.y,
+            });
+          });
+        });
+      } else { // Single path
+        paths[0] = [];
+        p.flatten(flattenResolution);
+        _.each(p.segments, function(s){
+          paths[0].push({
+            X: s.point.x,
+            Y: s.point.y,
+          });
+        });
+      }
+
+      // Get rid of our temporary poly path
+      p.remove();
+
+      ClipperLib.JS.ScaleUpPaths(paths, scale);
+      // Possibly ClipperLib.Clipper.SimplifyPolygons() here
+      // Possibly ClipperLib.Clipper.CleanPolygons() here
+
+      // 0.1 should be an appropriate delta for most cases.
+      var cleanDelta = 0.1;
+      paths = ClipperLib.JS.Clean(paths, cleanDelta * scale);
+
+      var miterLimit = 2;
+      var arcTolerance = 0.25;
+      var co = new ClipperLib.ClipperOffset(miterLimit, arcTolerance);
+
+      co.AddPaths(
+        paths,
+        ClipperLib.JoinType.jtRound,
+        ClipperLib.EndType.etClosedPolygon
+      );
+      var offsettedPaths = new ClipperLib.Paths();
+      co.Execute(offsettedPaths, amount * scale);
+
+      // Scale down coordinates and draw ...
+      var pathString = paper.utils.paths2string(offsettedPaths, scale);
+      if (pathString) {
+        var inset = new paper.CompoundPath(pathString);
+        inset.data = _.extend({}, inPath.data);
+        inset.set({
+          strokeColor: inPath.strokeColor,
+          strokeWidth: inPath.strokeWidth,
+          fillColor: inPath.fillColor
+        });
+
+        inPath.remove();
+        return inset;
+      } else {
+        inPath.remove();
+        return false;
+      }
+    },
+
+    /**
+     * Convert a ClipperLib paths array into an SVG path string.
+     * @param  {Array} paths
+     *   A Nested ClipperLib Paths array of point objects
+     * @param  {[type]} scale
+     *   The amount to scale the values back down from.
+     * @return {String}
+     *   A properly formatted SVG path "d" string.
+     */
+    paths2string: function(paths, scale) {
+      var svgpath = "", i, j;
+      if (!scale) scale = 1;
+      for(i = 0; i < paths.length; i++) {
+        for(j = 0; j < paths[i].length; j++){
+          if (!j) svgpath += "M";
+          else svgpath += "L";
+          svgpath += (paths[i][j].X / scale) + ", " + (paths[i][j].Y / scale);
+        }
+        svgpath += "Z";
+      }
+      return svgpath;
     },
 
     // Will return true if the given point is in either the top left or bottom
