@@ -102,13 +102,22 @@ function shapeFillPath(inPath) {
   if (cutPaths) {
     var pathString = jscut.cam.toSvgPathData(cutPaths, pxPerInch);
     var camPath = new g.CompoundPath(pathString);
-    camPath.data = _.extend({}, inPath.data);
-    camPath.data.campath = true;
-    camPath.bringToFront();
+    camPath.data = {
+      color: inPath.data.color,
+      name: inPath.data.name,
+      type: 'fill'
+    };
     camPath.scale(1, -1); // Flip vertically (clipper issue)
     camPath.position = new g.Point(camPath.position.x, -camPath.position.y);
-    camPath.strokeColor = 'red';
-    camPath.strokeWidth = 2;
+
+    // Make Water preview paths blue and transparent
+    if (inPath.data.color === 'water2') {
+      camPath.strokeColor = '#256d7b';
+      camPath.opacity = 0.5;
+    }
+
+    camPath.strokeColor = inPath.fillColor;
+    camPath.strokeWidth = g.settings.lineWidth;
 
     console.log(camPath);
     inPath.remove();

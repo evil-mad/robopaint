@@ -296,7 +296,7 @@ module.exports = function(paper) {
       // that don't actually have any length (or use!);
       var kids = _.extend([], paper.canvas.actionLayer.children);
       _.each(kids, function(p){
-        if(!p.length) p.remove();
+        if(!paper.utils.getPathLength(p)) p.remove();
       });
 
       return false;
