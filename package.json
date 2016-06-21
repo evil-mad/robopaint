@@ -17,7 +17,7 @@
     "hersheytext": "^0.5.1",
     "i18next-client": "^1.10.2",
     "jquery": "^2.2.3",
-    "paper": "^0.9.24",
+    "paper": "^0.9.25",
     "qtip2": "^2.2.0",
     "request": "^2.65.0",
     "robopaint-mode-edit": "*",

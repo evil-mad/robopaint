@@ -127,24 +127,40 @@ module.exports = function(paper) {
         var doStroke = true; // Assume we're stroking the path
         switch(paper.utils.getPathColorType(path)) {
           case 1: // Type 1: Stroked filled shape
-            path.fillColor = snapColor(path.fillColor, path.opacity);
+            paper.utils.setPathOption(path, {
+              fillColor: snapColor(path.fillColor, path.opacity)
+            });
+            /* falls through */
+
           case 2: // Type 2: Stroked non-filled shape
-            path.strokeColor = snapColor(path.strokeColor, path.opacity)
+            paper.utils.setPathOption(path, {
+              strokeColor: snapColor(path.strokeColor, path.opacity)
+            });
             break;
+
           case 3: // Type 3: Filled no stroke shape
-            path.fillColor = snapColor(path.fillColor, path.opacity);
+            paper.utils.setPathOption(path, {
+              fillColor: snapColor(path.fillColor, path.opacity)
+            });
             if (settings.strokeAllFilledPaths) {
-              path.strokeColor = snapColor(path.fillColor, path.opacity);
+              paper.utils.setPathOption(path, {
+                strokeColor: snapColor(path.fillColor, path.opacity)
+              });
             } else {
-              path.strokeWidth = 0; // Ensure it's ignored later
+              // Ensure it's ignored later.
+              paper.utils.setPathOption(path, {strokeWidth: 0});
               doStroke = false;
             }
             break;
+
           case 4: // Type 4: No fill, no stroke shape (invisible)
             if (settings.strokeNoStrokePaths) {
-              path.strokeColor = snapColor(path.strokeColor, path.opacity)
+              paper.utils.setPathOption(path, {
+                strokeColor: snapColor(path.strokeColor, path.opacity)
+              });
             } else {
-              path.strokeWidth = 0; // Ensure it's ignored later
+              // Ensure it's ignored later.
+              paper.utils.setPathOption(path, {strokeWidth: 0});
               doStroke = false;
             }
             break;
@@ -153,16 +169,24 @@ module.exports = function(paper) {
         // If we're actually stroking this path, make it visible with a stroke
         // width and add its length to the max for checking progress.
         if (doStroke) {
-          path.data.color = snapColorID(path.strokeColor, path.opacity);
-          path.data.name = path.name;
-          path.strokeWidth = settings.lineWidth;
-          maxLen += path.length;
-          path.originalOpacity = path.opacity;
+          var data = {
+            color: snapColorID(path.strokeColor, path.opacity),
+            name: path.name,
+            targetPath: path.data.targetPath,
+          };
 
           // Be sure to set the correct color/tool if given.
-          if (path.data.targetPath && settings.pathColor) {
-            path.data.color = settings.pathColor;
+          if (data.targetPath && settings.pathColor) {
+            data.color = settings.pathColor;
           }
+
+          paper.utils.setPathOption(path, {
+            data: data,
+            strokeWidth: settings.lineWidth,
+          });
+
+          path.originalOpacity = path.opacity;
+          maxLen += paper.utils.getPathLength(path);
         }
 
         // If only stroking one path, visually hide all the other paths.
@@ -170,7 +194,7 @@ module.exports = function(paper) {
           //path.opacity = 0;
         }
 
-        // Close stroke paths with fill to ensure they fully encompass the filled
+        // Close stroke paths w\fill to ensure they fully encompass the filled
         // color (only when they have a fillable color);
         if (!path.closed && settings.closeFilledPaths) {
           if (hasColor(path.fillColor)) {
@@ -307,6 +331,12 @@ module.exports = function(paper) {
       // touches another stroke width without intersecting the actual path
       // will cause closest intersection connection issues.
       var h = tmp.hitTest(testPoint);
+
+      // Apparently sometimes hitTest can return undefined, so we default it to
+      // an object in that case so we don't have any direct failure below.
+      if (_.isUndefined(h)) {
+        h = {};
+      }
 
       // Standard fill/stroke checking: if the hit result item is the same as
       // our current path, keep going!
