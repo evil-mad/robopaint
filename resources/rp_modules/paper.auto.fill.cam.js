@@ -102,24 +102,30 @@ function shapeFillPath(inPath) {
   if (cutPaths) {
     var pathString = jscut.cam.toSvgPathData(cutPaths, pxPerInch);
     var camPath = new g.CompoundPath(pathString);
-    camPath.data = {
-      color: inPath.data.color,
-      name: inPath.data.name,
-      type: 'fill'
-    };
     camPath.scale(1, -1); // Flip vertically (clipper issue)
     camPath.position = new g.Point(camPath.position.x, -camPath.position.y);
 
     // Make Water preview paths blue and transparent
-    if (inPath.data.color === 'water2') {
-      camPath.strokeColor = '#256d7b';
-      camPath.opacity = 0.5;
+    var isWater = inPath.data.color === 'water2';
+    if (isWater) {
+      g.paper.utils.setPathOption(camPath, {
+        opacity: 0.5,
+      });
     }
 
-    camPath.strokeColor = inPath.fillColor;
-    camPath.strokeWidth = g.settings.lineWidth;
+    g.paper.utils.setPathOption(camPath, {
+      data: {
+        color: inPath.data.color,
+        name: inPath.data.name,
+        type: 'fill',
+      },
+      strokeColor: isWater ? '#256d7b' : inPath.fillColor,
+      strokeWidth: g.settings.lineWidth,
+    });
 
-    console.log(camPath);
+    // Because we don't actually use compound paths in output, ungroup em.
+    camPath.parent.insertChildren(0, camPath.removeChildren());
+
     inPath.remove();
     g.view.update();
     return true;
