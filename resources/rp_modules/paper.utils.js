@@ -75,26 +75,32 @@ module.exports = function(paper) {
       var paths = [];
 
       // Is this a compound path?
-      if (p.children) {
-        _.each(p.children, function(c, pathIndex) {
-          c.flatten(flattenResolution);
-          paths[pathIndex] = [];
-          _.each(c.segments, function(s){
-            paths[pathIndex].push({
+      try {
+        if (p.children) {
+          _.each(p.children, function(c, pathIndex) {
+            c.flatten(flattenResolution);
+            paths[pathIndex] = [];
+            _.each(c.segments, function(s){
+              paths[pathIndex].push({
+                X: s.point.x,
+                Y: s.point.y,
+              });
+            });
+          });
+        } else { // Single path
+          paths[0] = [];
+          p.flatten(flattenResolution);
+          _.each(p.segments, function(s){
+            paths[0].push({
               X: s.point.x,
               Y: s.point.y,
             });
           });
-        });
-      } else { // Single path
-        paths[0] = [];
-        p.flatten(flattenResolution);
-        _.each(p.segments, function(s){
-          paths[0].push({
-            X: s.point.x,
-            Y: s.point.y,
-          });
-        });
+        }
+      } catch(e) {
+        console.error('Error flattening path for offset:', inPath.data.name, e);
+        p.remove();
+        return inPath;
       }
 
       // Get rid of our temporary poly path
