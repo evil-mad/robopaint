@@ -13,8 +13,10 @@ var modules = {
   paper: {path: appPath + '/node_modules/paper/dist/paper-full', type: 'dom'},
   d3plus: {path: appPath + '/node_modules/d3plus/d3plus.full.min.js', type: 'dom'},
   clipper: {path: appPath + '/resources/scripts/lib/clipper', type: 'node'},
+  jscut: {path: appPath + '/resources/scripts/lib/jscut_custom', type: 'node'},
   superdom: {path: appPath + '/resources/scripts/lib/jquery.superdom', type: 'dom'},
   cnc_api: {path: appPath + '/node_modules/cncserver/example/cncserver.client.api', type: 'node'},
+
   home: {name: 'robopaint.home', type: 'node'},
   utils: {name: 'robopaint.utils', type: 'node'},
   mediasets: {name: 'robopaint.mediasets', type: 'node'},
@@ -26,8 +28,12 @@ var modules = {
   canvas: {name: 'paper.canvas', type: 'node'},
   paper_hershey: {name: 'paper.hersheytext', type: 'node'},
   paper_utils: {name: 'paper.utils', type: 'node'},
+  auto_stroke: {name: 'paper.auto.stroke', type: 'node'},
   auto_fill: {name: 'paper.auto.fill', type: 'node'},
-  auto_stroke: {name: 'paper.auto.stroke', type: 'node'}
+
+  fill_algo_line: {name: 'paper.auto.fill.line', type: 'node'},
+  fill_algo_overlay: {name: 'paper.auto.fill.overlay', type: 'node'},
+  fill_algo_cam: {name: 'paper.auto.fill.cam', type: 'node'},
 };
 
 /**

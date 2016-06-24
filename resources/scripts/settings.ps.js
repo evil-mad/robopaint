@@ -1,6 +1,7 @@
 /**
  * @file Holds all RoboPaint settings paper autofill/stroke preview code.
  */
+/* globals rpRequire, paper, project, view */
 
 rpRequire('paper_utils')(paper);
 rpRequire('auto_stroke')(paper);
@@ -23,7 +24,7 @@ project.importSVG('images/settings_preview.svg', {
   expandShapes: true,
   onLoad: function(){
     // Size it to fit
-    var group = paper.canvas.mainLayer.children[0]
+    var group = paper.canvas.mainLayer.children[0];
     view.zoom = 0.5; // Zoom to 50%
     group.fitBounds(view.bounds);
     group.scale(0.95); // Make it a little smaller
