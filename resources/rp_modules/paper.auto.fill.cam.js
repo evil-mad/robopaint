@@ -2,16 +2,14 @@
  * @file Path fill algortihm module: Export function for running the dynamic
  * "cam" style offset fill utilizing the "clipper" and cam.js libraries.
  */
-/* globals _, rpRequire */
+/* globals _, rpRequire, i18n */
 
 var ClipperLib = rpRequire('clipper');
 var jscut = rpRequire('jscut')(ClipperLib);
 
-
 // Global variable holder.
 // TODO: Is there a better way to access/store module globals like this?
 var g = {};
-
 
 module.exports = {
   provides: ['cam'],
@@ -21,6 +19,10 @@ module.exports = {
     _.each(globals, function(value, key) {
       g[key] = value;
     });
+  },
+  getStepMax: function(pathCount) {
+    // One item = one step.
+    return pathCount;
   },
   reset: function() {
 
@@ -126,12 +128,35 @@ function shapeFillPath(inPath) {
     // Because we don't actually use compound paths in output, ungroup em.
     camPath.parent.insertChildren(0, camPath.removeChildren());
 
+
     inPath.remove();
     g.view.update();
+
+    // Iterate steps and update progress.
+    g.state.currentTraceChild++;
+    g.state.totalSteps++;
+    updateStatus();
+
     return true;
-  } else {
+  } else { // Too small to be filled.
+    // Iterate steps and update progress.
+    g.state.currentTraceChild++;
+    g.state.totalSteps++;
+    updateStatus();
+
     inPath.remove();
-    // Too small to be filled.
     return true;
+  }
+}
+
+function updateStatus() {
+  if (g.mode) {
+    g.mode.run('status',
+      i18n.t('libs.spool.fill', {
+        id: g.state.currentTraceChild + '/' + g.state.traceChildrenMax
+      }),
+      true
+    );
+    g.mode.run('progress', g.state.totalSteps);
   }
 }

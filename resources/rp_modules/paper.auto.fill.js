@@ -185,6 +185,20 @@ module.exports = function(paper) {
       // Move through each temp layer child and subtract each layer from the
       // previous, again and again, only if we're checking occlusion.
       if (settings.checkFillOcclusion) {
+        if (mode) {
+          mode.run([
+            [
+              'status',
+              i18n.t(
+                'libs.spool.fillOcclusion',
+                {id: '1/' + tmp.children.length}
+              ),
+              true
+            ],
+            ['progress', 0, tmp.children.length * tmp.children.length]
+          ]);
+        }
+        var occSteps = 0;
         for (var srcIndex = 0; srcIndex < tmp.children.length; srcIndex++) {
           var srcPath = tmp.children[srcIndex];
           srcPath.data.processed = true;
@@ -204,6 +218,22 @@ module.exports = function(paper) {
               srcPath.data = _.extend({}, tmpPath.data);
               tmpPath.remove(); // Remove the old srcPath
             }
+
+            occSteps++;
+            if (mode) mode.run('progress', occSteps);
+          }
+
+          if (mode) {
+            mode.run([
+              [
+                'status',
+                i18n.t(
+                  'libs.spool.fillOcclusion',
+                  {id: (srcIndex+1) + '/' + tmp.children.length}
+                ),
+                true
+              ]
+            ]);
           }
         }
       }
@@ -243,8 +273,7 @@ module.exports = function(paper) {
             i18n.t('libs.spool.fill', {id: '1/' + state.traceChildrenMax}),
             true
           ],
-          // 2 steps for fill: lines & groups.
-          ['progress', 0, state.traceChildrenMax * 2]
+          ['progress', 0, currentFillAlgo.getStepMax(state.traceChildrenMax)]
         ]);
       }
 

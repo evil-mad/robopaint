@@ -88,7 +88,8 @@
     "autocomplete": "Automatic Paint Complete!",
     "spool": {
       "stroke": "Tracing stroke path __id__...",
-      "fill": "Tracing fill path __id__..."
+      "fill": "Tracing fill path __id__...",
+      "fillOcclusion": "Processing fill occlusion __id__..."
     }
   },
   "external": {

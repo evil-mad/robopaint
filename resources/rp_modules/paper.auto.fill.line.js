@@ -24,6 +24,10 @@ module.exports = {
       g[key] = value;
     });
   },
+  getStepMax: function(pathCount) {
+    // 2 steps for fill: lines & groups.
+    return pathCount * 2;
+  },
   reset: function() {
     cFillIndex = 0;
     cSubIndex = 0;

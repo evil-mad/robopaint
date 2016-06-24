@@ -32,6 +32,10 @@ module.exports = {
     spiralPath.scale(g.settings.spacing / 9); // Scale to match line spacing
     g.settings.traceIterationMultiplier*= 2;
   },
+  getStepMax: function(pathCount) {
+    // 2 steps for fill: lines & groups.
+    return pathCount * 2;
+  },
   reset: function() {
     spiralPath.remove();
     spiralPath = null;
