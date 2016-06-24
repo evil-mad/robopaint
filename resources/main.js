@@ -619,6 +619,7 @@ function initToolTips() {
       },
       events: {
         render: function(event, api) {
+          if (!$this.data('i18n')) return;
           // Extract the title translation ID
           var transIDs = $this.data('i18n').split(';');
           var titleTransID = transIDs[0].split(']')[1];
