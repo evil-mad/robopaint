@@ -348,7 +348,7 @@
       },
       "fillangle": "Hatch angle:",
       "fillspacing": {
-        "title": "Hatch line spacing:",
+        "title": "Fill line spacing:",
         "opt0": "Miniscule (1)",
         "opt1": "Tiny (5)",
         "opt2": "Default (10)",
