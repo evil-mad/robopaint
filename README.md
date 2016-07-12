@@ -32,7 +32,7 @@ support via [WaterColorBlocks](https://github.com/evil-mad/WaterColorBlocks).
  * Modular code addition via RoboPaint Modes:
 Control your bot with a simple web app leveraging everything already written for
 RoboPaint!
- * Allows programatic (including remote) painting and drawing via the high level [RoboPaint API](https://github.com/evil-mad/robopaint-mode-remote/blob/master/API.md), the low level [cncserver API](https://github.com/techninja/cncserver/blob/master/API.md), or the simplified (HTTP get-only) [Scratch API](https://github.com/techninja/cncserver/blob/master/SCRATCH.API.md)
+ * Allows programatic (including remote) painting and drawing via the high level [RoboPaint API](https://github.com/evil-mad/robopaint-mode-remote/blob/master/API.md), the low level [cncserver API](https://github.com/techninja/cncserver/blob/master/API.md), or the simplified (HTTP get-only) [Scratch API](https://github.com/techninja/cncserver/blob/master/scratch/SCRATCH.API.md)
 
 ## Projects:
 RoboPaint is made of modes that are their very own independent projects! This
