@@ -743,6 +743,12 @@ function initHistoryload() {
     return false;
   });
 
+  var svgPath = robopaint.utils.getSVGCachePath();
+
+  if (!fs.existsSync(svgPath)) {
+    fs.mkdirSync(svgPath);
+  }
+
   robopaint.reloadHistory();
 }
 
