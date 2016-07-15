@@ -197,6 +197,9 @@ function dynamicLineFillNext(fillPath) {
         if (!p.contains(v.getPointAt(v.length/2)) || hitCount  > 3) {
           if (type === 'zigsmooth') {
             cGroup.simplify();
+            if (cGroup.segments.length <= 1 && cGroup.closed) {
+               cGroup.closed = false;
+            }
             cGroup.flatten(g.settings.flattenResolution);
           }
 
