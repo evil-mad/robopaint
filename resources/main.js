@@ -746,7 +746,6 @@ function initHistoryload() {
   var svgPath = robopaint.utils.getSVGCachePath();
 
   if (!fs.existsSync(svgPath)) {
-    console.log(`The SVG history dir, '${svgPath}', does not exist, creating it`);
     fs.mkdirSync(svgPath);
   }
 
