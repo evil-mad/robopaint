@@ -40,7 +40,7 @@ module.exports = {
 
     spiralPath.addSegments(makeSpiral(turns, spacing));
 
-    while (!spiralPointFinished(spiralPath.lastSegment, g.view.bounds)) {
+    while (!spiralPointFinished(spiralPath, g.view.bounds)) {
       spiralPath.addSegments(makeSpiral(turns * 2, spacing, turns));
       turns *= 2;
     }
@@ -67,8 +67,8 @@ module.exports = {
   }
 };
 
-function spiralPointFinished(segment, bounds) {
-  var spiralSize = segment.point.getDistance(bounds.bottomRight)
+function spiralPointFinished(spiral, bounds) {
+  var spiralSize = spiral.position.getDistance(spiral.lastSegment.point);
   var boundsSize = bounds.topLeft.getDistance(bounds.bottomRight);
   return spiralSize > boundsSize;
 }
