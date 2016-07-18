@@ -257,6 +257,10 @@ function overlayLineFillNext(fillPath) {
   } else { // Next part of the path
     // Increment the path position.
     overlayPathPos+= g.settings.flattenResolution;
+
+    if (overlayPathPos > overlayPath.length) {
+      overlayPathPos = overlayPath.length;
+    }
   }
 
   return true;
