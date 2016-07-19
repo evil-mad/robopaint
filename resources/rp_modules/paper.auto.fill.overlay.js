@@ -51,6 +51,14 @@ module.exports = {
       turns *= 2;
     }
 
+    if (g.settings.debug) {
+      var spiralSize = spiralPath.position.getDistance(spiralPath.lastSegment.point);
+      var predictedTurns = Math.ceil(boundsSize / (spacing * 2 * Math.PI)) + 1;
+      console.log(`Spiral generation finished with ${turns} turns, predicted ` +
+        `${predictedTurns} turns, ${spiralSize} spiral distance, and ` +
+        `${boundsSize} bounds distance`);
+    }
+
     spiralPath.smooth();
 
     // The last few segments are not spiralular so remove them
