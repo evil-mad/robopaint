@@ -2,10 +2,7 @@
  * @file Manage clientside state, messages, progress bar and status, and all
  * cncserver specific communication from modes to the one instance of the API.
  */
-var $ = window.$;
-var _ = window._;
-var robopaint = window.robopaint;
-var cncserver = robopaint.cncserver;
+/* globals $, _, robopaint, cncserver  */
 var modeWindow = {};
 
 cncserver.state = {
@@ -28,7 +25,7 @@ cncserver.state = {
 
 // When the subwindow has been (re)created.
 $(robopaint).on('subwindowReady', function(){
-  modeWindow = window.$subwindow[0]; // Set to actual webview
+  modeWindow = $subwindow[0]; // Set to actual webview
 
   // Bind for client messages
   modeWindow.addEventListener('ipc-message', function(event){

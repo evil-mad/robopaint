@@ -6,6 +6,7 @@
  * Only applies to specific API functions that require waiting for the bot to
  * finish, handles all API callbacks internally.
  */
+/* globals window, $ */
 
 var robopaint = window.robopaint;
 var _ = window._;
@@ -15,8 +16,6 @@ var cncserver = robopaint.cncserver;
 // That commands sent very quickly get sent out in the correct order.
 var sendBuffer = cncserver.sendBuffer = [];
 var running = false;
-var lastPoint = {};
-
 
 // Command iterator (sends the next command to be timed/queued by CNCserver)
 function sendNext() {
@@ -81,13 +80,17 @@ function sendNext() {
     case "media":
       cncserver.wcb.setMedia(cmd[1], sendNext, true);
       break;
+
     case "tool":
       api.tools.change(cmd[1], sendNext, {ignoreTimeout: '1'});
       break;
+
     case "up":
       setHeight = 0;
+      /* falls through */
     case "down":
       if (setHeight === null) setHeight = 1;
+      /* falls through */
     case "height":
       if (setHeight === null) setHeight = cmd[1]; // Specific height
       var options = {};
@@ -102,6 +105,7 @@ function sendNext() {
         api.pen.height(setHeight, sendNext, options);
       }
       break;
+
     case "power":
       var setPower = cmd[1]; // Power from 0 to 1
       if (!robopaint.statedata.external) {
@@ -110,6 +114,7 @@ function sendNext() {
         api.pen.power(setPower, sendNext);
       }
       break;
+
     case "status":
       // Third argument: skipBuffer
       if (cmd[2] === true) { // Skipping buffer means just show it!
@@ -119,6 +124,7 @@ function sendNext() {
         api.buffer.message(cmd[1], sendNext);
       }
       break;
+
     case "progress":
       // Shortcut for streaming progress updates from modes. Use sparingly.
       var p = {val: cmd[1]};
@@ -126,24 +132,29 @@ function sendNext() {
       cncserver.progress(p);
       sendNext();
       break;
+
     case "callbackname":
       api.buffer.callbackname(cmd[1], sendNext);
       break;
+
     case "pause":
       api.buffer.pause(function(){
         cncserver.pushToMode('fullyPaused');
         sendNext();
       });
       break;
+
     case "resume":
       api.buffer.resume(function(){
         cncserver.pushToMode('fullyResumed');
         sendNext();
       });
       break;
+
     case "clear":
       api.buffer.clear(sendNext);
       break;
+
     case "localclear":
       sendBuffer = cncserver.sendBuffer = [];
 
@@ -154,18 +165,23 @@ function sendNext() {
       }
       sendNext();
       break;
+
     case "resetdistance":
       api.pen.resetCounter(sendNext);
       break;
+
     case "zero":
       api.pen.zero(sendNext);
       break;
+
     case "unlock":
       api.motors.unlock(sendNext);
       break;
+
     case "wash":
       cncserver.wcb.fullWash(sendNext, cmd[1], true);
       break;
+
     case "park":
       options = {ignoreTimeout: '1'};
 
@@ -174,6 +190,7 @@ function sendNext() {
 
       api.pen.park(sendNext, options);
       break;
+
     default:
       console.debug('Queue shortcut not found:' + cmd);
       sendNext();
@@ -190,7 +207,7 @@ cncserver.cmd = {
 
       // Reverse the order of items added to the wrong end of the buffer
       if (reverse) arguments[0].reverse();
-      $.each(arguments[0], function(i, args){
+      $.each(arguments[0], function(i, args) {
         if (!reverse) {
           sendBuffer.unshift(args);
         } else {

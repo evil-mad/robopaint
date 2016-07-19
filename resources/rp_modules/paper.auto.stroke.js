@@ -198,7 +198,7 @@ module.exports = function(paper) {
         // color (only when they have a fillable color);
         if (!path.closed && settings.closeFilledPaths) {
           if (hasColor(path.fillColor)) {
-            if (snapColorID(path.fillColor, path.opacity) !== 'color8') {
+            if (snapColorID(path.fillColor, path.opacity) !== false) {
               path.closed = true;
             }
           }
@@ -288,11 +288,8 @@ module.exports = function(paper) {
       return true;
     }
 
-    // Ignore white paths (color id 8)
-    // TODO: This should probably be handled depending on number of colors in the
-    // media (you can have more pens than 8), paper color might not be white.
-    if (cPath.data.color === 'color8') {
-      console.log('REMOVE WHITE STROKE:', cPath);
+    // Ignore white/skip paths
+    if (cPath.data.color === false) {
       cPath.remove(); return true;
     }
 

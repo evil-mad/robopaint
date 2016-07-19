@@ -825,8 +825,8 @@ function getColorsets() {
     $('#colorset').append(
       $('<option>')
         .attr('value', setIndex)
-        .text(c.type + ' - ' + c.name)
-        .prop('selected', setIndex == robopaint.settings.colorset)
+        .text(c.media + ' - ' + c.type + ' - ' + c.name)
+        .prop('selected', setIndex === robopaint.settings.colorset)
         .prop('disabled', !c.enabled) // Disable unavailable options
     );
   });

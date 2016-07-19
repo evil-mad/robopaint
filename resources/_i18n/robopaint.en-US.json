@@ -86,6 +86,11 @@
     "autofill": "Filling path __id__...",
     "autostroke": "Stroking path __id__...",
     "autocomplete": "Automatic Paint Complete!",
+    "manual": {
+      "status": "Waiting for manual implement change...",
+      "notice": "Please insert the __color__ color, calibrate the height, then click continue to resume drawing.",
+      "resume": "Now drawing with __color__"
+    },
     "spool": {
       "stroke": "Tracing stroke path __id__...",
       "fill": "Tracing fill path __id__...",

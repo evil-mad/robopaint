@@ -2,6 +2,7 @@
  * @file Holds all Utility helper functions, must not be linked to anything
  * cncserver specific as every function should be atomic (at least to this file)
  */
+/* globals robopaint, _, $ */
 
 var utils = {
   /**
@@ -18,15 +19,14 @@ var utils = {
   rgbToHSL: function (color){
     if (!color) return false;
 
-    var r = color[0];
-    var g = color[1];
-    var b = color[2];
+    var r = color[0] / 255;
+    var g = color[1] / 255;
+    var b = color[2] / 255;
 
-    r /= 255, g /= 255, b /= 255;
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h, s, l = (max + min) / 2;
 
-    if(max == min){
+    if (max === min){
       h = s = 0; // achromatic
     }else{
       var d = max - min;
@@ -121,7 +121,7 @@ var utils = {
    */
   colorStringToArray: function(string) {
     // Quick sanity check
-    if (typeof string != 'string') {
+    if (typeof string !== 'string') {
       return null;
     }
 
@@ -131,7 +131,7 @@ var utils = {
 
       $.each(color, function(i, c){
         color[i] = Number(c);
-      })
+      });
 
       return color;
     } else if(string.indexOf('#') !== -1) {
@@ -161,17 +161,22 @@ var utils = {
    * @param {Array/String} source
    *   triplet array [r,g,b] or jQuery RGB string like "rgb(0,0,0)"
    * @param {Array} colors
-   *   Array of triplet arrays defining up to 7 colors, like [[r,g,b], [r,g,b], ...]
+   *   Array of colorset objects defining colors.
    * @return {Number}
-   *   The index in the colors array that best matches the incoming color
+   *   The index in the colors array that best matches the incoming color, -1
+   *   if white/background color is best match.
    */
   closestColor: function(source, colors){
-    if (typeof source == 'string'){
+    // Clone colors so we can compare with a "white" color in it.
+    colors = _.extend([], colors);
+    colors.push(robopaint.media.white);
+
+    if (typeof source === 'string'){
       source = utils.colorStringToArray(source);
     }
 
     // Assume false (white) if null
-    if (source == null || isNaN(source[0])){
+    if (source === null || isNaN(source[0])){
       source = utils.colorStringToArray('#FFFFFF');
     }
 
@@ -181,7 +186,7 @@ var utils = {
     var lowestIndex = 0;
     var lowestValue = 1000; // High value start is replaced immediately below
     var distance = 0;
-    for (var i=0; i < colors.length; i++){
+    for (var i = 0; i < colors.length; i++){
       var c = colors[i].color.YUV;
 
       // Color distance finder
@@ -197,6 +202,12 @@ var utils = {
         lowestIndex = i;
       }
     }
+
+    // If we picked the last color (our added white), force value to be -1.
+    if (lowestIndex === colors.length - 1) {
+      lowestIndex = -1;
+    }
+
     return lowestIndex;
   },
 
@@ -211,7 +222,7 @@ var utils = {
    *   The zero padded string
    */
   pad: function(str, max) {
-    if (typeof str == "number") str = String(str);
+    if (typeof str === "number") str = String(str);
     return str.length < max ? utils.pad("0" + str, max) : str;
   },
 
@@ -238,7 +249,7 @@ var utils = {
         height: $path.transformMatrix.d * bbox.height
         // TODO: Add X & Y?
       };
-    }
+    };
     if ($path[0].getTotalLength) {
       $path.maxLength = $path[0].getTotalLength(); // Shortcut!
     }
@@ -248,7 +259,7 @@ var utils = {
    * Get the distance between two points... Dude, it's Geometric!!
    *
    * @param {Object/Array} p1
-   *   The first point in array or simple object format like [0,0] or {x: 0, y:0}
+   *   The first point in array/object format like [0,0] or {x: 0, y:0}
    * @param {Object/Array} p1
    *   The second point in the same format
    * @return {Number}
@@ -260,8 +271,8 @@ var utils = {
       p2 = [p2.x, p2.y];
     }
 
-    var xdiff = Math.abs(p1[0]-p2[0]);
-    var ydiff = Math.abs(p1[1]-p2[1]);
+    var xdiff = Math.abs(p1[0] - p2[0]);
+    var ydiff = Math.abs(p1[1] - p2[1]);
     return Math.sqrt(xdiff*xdiff + ydiff*ydiff);
   },
 
@@ -277,8 +288,12 @@ var utils = {
     if (!path.pathSegList) return false;
 
     for (var i = 0; i < path.pathSegList.numberOfItems; i++) {
-      var letter = path.pathSegList.getItem(i).pathSegTypeAsLetter.toUpperCase();
-      if (letter != 'M' && letter != 'L') {
+      var letter = path
+        .pathSegList
+        .getItem(i)
+        .pathSegTypeAsLetter
+        .toUpperCase();
+      if (letter !== 'M' && letter !== 'L') {
         // Non-linear path segment! We're done here...
         return false;
       }
@@ -324,6 +339,7 @@ var utils = {
     $(recolorTypes, context).each(function(){
       var i = 0;
       var setColor = "";
+      var newColor = {};
 
       if ($(this).css('fill') !== "none") {
         if (!recover) {
@@ -331,14 +347,21 @@ var utils = {
           setColor = $(this).css('fill');
           $(this).data('oldColor', setColor);
           i = utils.closestColor(setColor, colors);
-          setColor = 'rgb(' + colors[i].color.RGB.join(',') + ')';
+
+          if (i === -1) {
+            newColor = robopaint.media.white;
+          } else {
+            newColor = colors[i];
+          }
+
+          setColor = 'rgb(' + newColor.color.RGB.join(',') + ')';
         } else {
           // Recover the old color
           setColor = $(this).data('oldColor');
         }
 
         // Set the new color!
-        $(this).css('fill', setColor)
+        $(this).css('fill', setColor);
       }
 
       if ($(this).css('stroke') !== "none") {
@@ -347,6 +370,13 @@ var utils = {
           setColor = $(this).css('stroke');
           $(this).data('oldStrokeColor', setColor);
           i = utils.closestColor(setColor, colors);
+
+          if (i === -1) {
+            newColor = robopaint.media.white;
+          } else {
+            newColor = colors[i];
+          }
+
           setColor = 'rgb(' + colors[i].color.RGB.join(',') + ')';
         } else {
           // Recover the old color
@@ -354,7 +384,7 @@ var utils = {
         }
 
         // Set the new color!
-        $(this).css('stroke', setColor)
+        $(this).css('stroke', setColor);
       }
     });
   },
@@ -371,13 +401,13 @@ var utils = {
     if (isLocal) {
       return "localhost";
     } else {
-      var os=require('os');
-      var ifaces=os.networkInterfaces();
+      var os = require('os');
+      var ifaces = os.networkInterfaces();
       var out = [];
 
       for (var dev in ifaces) {
         ifaces[dev].forEach(function(details){
-          if (details.family=='IPv4') {
+          if (details.family === 'IPv4') {
             out.push(details.address);
           }
         });
@@ -452,7 +482,7 @@ var utils = {
       extraKey = "";
     }
 
-    if (t == 'watercolorbot') {
+    if (t === 'watercolorbot') {
       return 'cncserver-' + extraKey + 'settings';
     } else {
       return t + '-' + extraKey + 'settings';

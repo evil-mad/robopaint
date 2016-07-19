@@ -1,6 +1,7 @@
 /*
  * @file exports a function for rendering Hersheytext onto a PaperScope Layer.
  */
+/* globals _, window */
 
 var hershey = window.hershey ? window.hershey : require('hersheytext');
 
@@ -16,7 +17,7 @@ module.exports = function(paper) {
 
   paper.renderText = function(text, options) {
     // Mesh in option defaults
-    options = $.extend({
+    options = _.extend({
       spaceWidth: 15,
       strokeWidth: 2,
       strokeColor: 'black',
@@ -35,14 +36,14 @@ module.exports = function(paper) {
     var t = hershey.renderTextArray(text, options);
     var caretPos = new Point(0, 50);
 
-    chars.remove()
+    chars.remove();
     chars = new Group(); // Hold output lines groups
 
     var lines = [new Group()]; // Hold chars in lines
     var cLine = 0;
     _.each(t, function(char, index){
       if (char.type === "space" || char.type === "newline") {
-        caretPos.x+= options.spaceWidth
+        caretPos.x+= options.spaceWidth;
 
         // Allow line wrap on space
         if (caretPos.x > options.wrapWidth || char.type === "newline") {
@@ -91,7 +92,9 @@ module.exports = function(paper) {
     });
 
     chars.addChildren(lines);
-    chars.position = view.center.add(new Point(options.hCenter, options.vCenter));
+    chars.position = view.center.add(
+      new Point(options.hCenter, options.vCenter)
+    );
     chars.scale(options.scale);
 
     // Align the lines
@@ -108,5 +111,5 @@ module.exports = function(paper) {
 
     // Rotation!
     chars.rotate(options.rotation);
-  }
+  };
 };

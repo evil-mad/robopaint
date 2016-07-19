@@ -2,6 +2,7 @@
  * @file Holds all Robopaint watercolorbot specific configuration and utility
  * functions.
  */
+/* globals window, mainWindow */
  var robopaint = window.robopaint;
  var cncserver = robopaint.cncserver;
 
@@ -15,7 +16,9 @@ cncserver.wcb = {
       case 2: // Dissallow water
         cncserver.status(
           robopaint.t('libs.ignorewash', {mode:
-            robopaint.t('settings.output.penmode.opt' + robopaint.settings.penmode)
+            robopaint.t(
+              'settings.output.penmode.opt' + robopaint.settings.penmode
+            )
           })
         );
         if (callback) callback(true);
@@ -50,7 +53,7 @@ cncserver.wcb = {
 
   // Get the name of paint/water/media on the brush
   getMediaName: function(toolName) {
-    if (typeof toolName != 'string') toolName = cncserver.state.media;
+    if (typeof toolName !== 'string') toolName = cncserver.state.media;
     if (toolName === "") return '';
 
     // TODO: There probably has to be a better way to do this.
@@ -66,10 +69,10 @@ cncserver.wcb = {
   // Wrapper for toolchange to manage pen mode logic
   setMedia: function(toolName, callback, fromSendBuffer){
     var name = cncserver.wcb.getMediaName(toolName).toLowerCase();
-    var mode = parseInt(robopaint.settings.penmode);
+    var mode = parseInt(robopaint.settings.penmode, 10);
 
     // Water change
-    if (name == "water") {
+    if (name === "water") {
       switch(mode) {
         case 3: // Dissallow all
         case 2: // Dissallow water
@@ -81,7 +84,7 @@ cncserver.wcb = {
           if (callback) callback(true);
           return;
       }
-    } else { // Color Change
+    } else if (toolName.indexOf('color') !== -1) { // Color Change
       switch(mode) {
         case 3: // Dissallow all
         case 1: // Dissallow paint
@@ -96,21 +99,28 @@ cncserver.wcb = {
     }
 
     // If we've gotten this far, we can make the change!
-
     // Save the targeted media (separate from media state)
     cncserver.state.mediaTarget = toolName;
 
-    // Visually show the selection
-    var idName = toolName.indexOf('dip') !== -1 ? toolName.slice(0, -3) : toolName;
-    $('nav#tools a.selected').removeClass('selected');
-    $('nav#tools #' + idName).addClass('selected');
+    if (toolName.indexOf('manualswap') !== -1) { // Manual Change
+      var swap = toolName.split('|');
+      // Spool into the buffer pen specific statuses and manualswap start.
+      cncserver.cmd.run([
+        ['status', robopaint.t('libs.manual.status', {color: name})],
+        'resetdistance',
+        ['tool', 'manualswap'], // Buffer will pause on this, till resume.
+        ['status', robopaint.t('libs.manual.resume', {color: name})]
+      ], fromSendBuffer);
+    } else {
+      // Spool into the buffer brush specific statuses and tool change.
+      cncserver.cmd.run([
+        ['status', robopaint.t('libs.inking', {media: name})],
+        'resetdistance',
+        ['tool', toolName],
+        ['status', robopaint.t('libs.inked', {media: name})]
+      ], fromSendBuffer);
+    }
 
-    cncserver.cmd.run([
-      ['status', robopaint.t('libs.inking', {media: name})],
-      'resetdistance',
-      ['tool', toolName],
-      ['status', robopaint.t('libs.inked', {media: name})]
-    ], fromSendBuffer);
 
     if (callback) callback();
   },
@@ -122,9 +132,11 @@ cncserver.wcb = {
 
     // Reset the counter for every mode on getMorePaint
     robopaint.cncserver.api.pen.resetCounter();
+    var penmode = parseInt(robopaint.settings.penmode, 10);
+    var refillaction = parseInt(robopaint.settings.refillaction, 10);
 
     // Change what happens here depending on penmode
-    switch(parseInt(robopaint.settings.penmode)) {
+    switch(penmode) {
       case 1: // Dissallow paint
         // TODO: Does this output the wrong target name if disallowed?
         cncserver.cmd.run([
@@ -158,7 +170,7 @@ cncserver.wcb = {
         if (callback) callback(true);
         break;
       default:
-        if (parseInt(robopaint.settings.refillaction) == 0) {
+        if (refillaction === 0) {
           cncserver.cmd.run([
             ['status', robopaint.t('libs.reinking', {media: name})],
             'resetdistance',
@@ -169,7 +181,7 @@ cncserver.wcb = {
             ['status', robopaint.t('libs.reinked', {media: name})],
             'down'
           ], true); // Add to the start (not the end) of the local buffer
-        } else if (parseInt(robopaint.settings.refillaction) == 1) {
+        } else if (parseInt(robopaint.settings.refillaction, 10) === 1) {
           cncserver.cmd.run([
             ['status', robopaint.t('libs.reinking', {media: name})],
             'resetdistance',
@@ -180,7 +192,7 @@ cncserver.wcb = {
             ['status', robopaint.t('libs.reinked', {media: name})],
             'down'
           ], true); // Add to the start (not the end) of the local buffer
-        } else if (parseInt(robopaint.settings.refillaction) == 2) {
+        } else if (refillaction === 2) {
           cncserver.cmd.run([
             ['status', robopaint.t('libs.reinking', {media: name})],
             'resetdistance',
@@ -197,14 +209,4 @@ cncserver.wcb = {
         if (callback) callback();
     }
   },
-
-  // Retrieve a fill path depending on config
-  getFillPath: function(options){
-    var ft = options.filltype;
-    if (ft == 'tsp') {
-      return $('#fill-spiral');
-    } else {
-      return $('#fill-' + ft);
-    }
-  }
 };

@@ -1,16 +1,14 @@
 /**
  * @file Robopaint->Mode->Paper.JS include module. Contains useful paper.js
- *  paper.js not tied to mode specific use that will be attached to the passed
- *  paper object under paper.utils
+ *  utilities not tied to mode specific use that will be attached to the passed
+ *  paper object under paper.utils.
  */
-/* globals _ */
+/* globals $, _, robopaint, mode, i18n */
 
 module.exports = function(paper) {
   // Emulate PaperScript "Globals" as needed
   var Point = paper.Point;
-  var Path = paper.Path;
   var Layer = paper.Layer;
-  var view = paper.view;
   var project = paper.project;
 
   paper.utils = {
@@ -29,10 +27,17 @@ module.exports = function(paper) {
     setupLayers: function() {
       if (!paper.canvas) paper.canvas = {};
 
-      paper.canvas.mainLayer = project.getActiveLayer(); // SVG is imported to here
-      paper.canvas.tempLayer = new Layer(); // Temporary working layer
-      paper.canvas.actionLayer = new Layer(); // Actual movement paths & preview
-      paper.canvas.overlayLayer = new Layer(); // Overlay elements, like the pen position.
+      // SVG is imported to here
+      paper.canvas.mainLayer = project.getActiveLayer();
+
+      // Temporary working layer
+      paper.canvas.tempLayer = new Layer();
+
+      // Actual movement paths & preview
+      paper.canvas.actionLayer = new Layer();
+
+      // Overlay elements, like the pen position.
+      paper.canvas.overlayLayer = new Layer();
     },
 
     // Check if a fill/stroke color is "real".
@@ -230,15 +235,15 @@ module.exports = function(paper) {
       // 3. Has fill, no stroke (Strokeless Filled shape)
       // 4. No fill, No stroke (Invisible path!)
       if (hasStroke && hasFill) {
-        return 1
+        return 1;
       }
 
       if (hasStroke && !hasFill) {
-        return 2
+        return 2;
       }
 
       if (!hasStroke && hasFill) {
-        return 3
+        return 3;
       }
 
       if (!hasStroke && !hasFill) {
@@ -268,12 +273,21 @@ module.exports = function(paper) {
       }
     },
 
-    // Snap the given color to the nearest tool ID
-    // TODO: When refactoring media sets, pull tool names from definition.
+    // Snap the given color to the nearest tool ID name.
     snapColorID: function (color, opacity) {
+      var penmode = parseInt(robopaint.settings.penmode, 10);
+
+      // Is the color/opacity transparent?
       if ((typeof opacity !== 'undefined' && opacity < 1) ||
           (color.alpha < 1 && color.alpha > 0)) {
-        return 'water2';
+
+        // If the penmode supports water, output that.
+        if (penmode === 0 || penmode === 1) {
+          return 'water2';
+        } else {
+          // If it doesn't, match to white/skip.
+          return false;
+        }
       }
 
       // If the color has alpha at this point, we need to reset that to 1 as the
@@ -283,16 +297,28 @@ module.exports = function(paper) {
         color.alpha = 1;
       }
 
-      var closestColorID = robopaint.utils.closestColor(color.toCSS(), robopaint.media.currentSet.colors);
+      var closestColorID = robopaint.utils.closestColor(
+        color.toCSS(), robopaint.media.currentSet.colors
+      );
+
+      // If the closest color is outside the range, skip it.
+      if (closestColorID === -1) {
+        return false;
+      }
 
       // Skip white paint if selected and setting is enabled.
       if (robopaint.media.currentSet.colors[closestColorID].key === 'white') {
         if (robopaint.settings.skipwhite) {
-          // Change ID to "skipped" id 8
-          closestColorID = 8;
+          return false;
         }
       }
-      return "color" + closestColorID;
+
+      // If pen/pencil mode, return a special ID with a color index in it.
+      if (penmode === 3) {
+        return "manualswap|" + closestColorID;
+      } else {
+        return "color" + closestColorID;
+      }
     },
 
     // Get the actual color of the nearest color to the one given.
@@ -306,6 +332,11 @@ module.exports = function(paper) {
         snapID = paper.utils.snapColorID(color, opacity);
       }
 
+      // If the closest color is a skip, just use white.
+      if (snapID === false) {
+        return new paper.Color(robopaint.media.white.color.HEX);
+      }
+
       var outColor;
       // Switch between water and regular colors
       if (snapID.indexOf('water') !== -1) {
@@ -314,7 +345,9 @@ module.exports = function(paper) {
         outColor = new paper.Color('#256d7b');
         outColor.alpha = 0.3;
       } else {
-        outColor = new paper.Color(robopaint.media.currentSet.colors[snapID.substr(-1)].color.HEX);
+        outColor = new paper.Color(
+          robopaint.media.currentSet.colors[snapID.substr(-1)].color.HEX
+        );
       }
 
       return outColor;
@@ -345,7 +378,7 @@ module.exports = function(paper) {
     },
 
 
-    // Find the closest point to a given source point from an array of point groups.
+    // Find the closest point to a given point from an array of point groups.
     closestPointInGroup: function (srcPoint, pathGroup) {
       var closestID = 0;
       var closestPointIndex = 0;
@@ -359,27 +392,31 @@ module.exports = function(paper) {
             closestID = index;
             closestPointIndex = pointIndex;
           }
-        })
+        });
       });
 
-      return {id: closestID, closestPointIndex: closestPointIndex, dist: closest};
+      return {
+        id: closestID,
+        closestPointIndex: closestPointIndex,
+        dist: closest
+      };
     },
 
-    // Order a layers children by top left travel path from tip to tail, reversing
-    // path order where needed, grouped by data.color. Only works with paths,
-    // not groups or compound paths as it needs everything on an even playing
-    // field to be reordered.
+    // Order a layers children by top left travel path from tip to tail,
+    // reversing path order where needed, grouped by data.color. Only works
+    // with paths, not groups or compound paths as it needs everything on an
+    // even playing field to be reordered.
     travelSortLayer: function(layer) {
       var a = layer;
 
       if (a.children.count <= 1) return; // This doesn't need to be run
 
       // 1. Move through all paths, group into colors
-      // 2. Move through each group, convert list of paths into sets of first and
-      //    last segment points, ensure groups are sorted by luminosity.
-      // 3. Find the point closest to the top left corner. If it's an end, reverse
-      //    the path associated, make the first point the next one to check, remove
-      //    the points from the group.
+      // 2. Move through each group, convert list of paths into sets of first
+      //    and last segment points, ensure groups are sorted by luminosity.
+      // 3. Find the point closest to the top left corner. If it's an end,
+      //    reverse the path associated, make the first point the next one to
+      //    check, remove the points from the group.
       // 4. Rinse and repeat!
 
       // Prep the colorGroups
@@ -387,7 +424,7 @@ module.exports = function(paper) {
       var colorGroups = {};
       _.each(sortedColors, function(tool) {
         colorGroups[tool] = [];
-      })
+      });
 
       // Put each path in the sorted colorGroups, with its first and last point
       _.each(a.children, function(path){
@@ -413,7 +450,7 @@ module.exports = function(paper) {
       });
 
       // Move through each color group, then each point set for distance
-      var drawIndex = 0; // Track the path index to insert paths into on the layer
+      var drawIndex = 0; // Track the path index to insert paths to on the layer
       _.each(colorGroups, function(group){
         var lastPoint = new Point(0, 0); // Last point, start at the corner
         var lastPath = null; // The last path worked on for joining 0 dist paths
@@ -432,7 +469,6 @@ module.exports = function(paper) {
             // Set last point to the start of the path (now the end)
             lastPoint = group[c.id].points[0];
           }
-
 
           // If the distance between the lastPoint and the next closest point is
           // 0, and our lastPoint is on a path, we can make this more efficient
@@ -480,6 +516,13 @@ module.exports = function(paper) {
     // Actually handle a fully setup action layer to be streamed into the buffer
     // in the path and segment order they're meant to be streamed.
     autoPaint: function(layer) {
+      // Run through and delete any paths without color/tool information.
+      _.each(_.extend([], layer.children), function(path){
+        if (path.data.color === false) {
+          path.remove();
+        }
+      });
+
       if (robopaint.settings.optimizepath) {
         paper.utils.travelSortLayer(layer);
       }
@@ -494,12 +537,6 @@ module.exports = function(paper) {
       //  * data.type: either "fill" or "stroke"
 
       var runColor;
-      if (robopaint.settings.prefillbuffer) {
-        // Wait for all these commands to stream in before starting to actually
-        // run them. This ensures a smooth start.
-        robopaint.pauseTillEmpty(true);
-      }
-
       // Add a callback for begin so we know when things have kicked off, which
       // can definitely be later than expected if prefillbuffer is enabled.
       run('callbackname', 'autoPaintBegin');
@@ -511,7 +548,7 @@ module.exports = function(paper) {
           run(['wash', ['media', runColor]]);
         }
 
-        var typeKey = 'stroke'
+        var typeKey = 'stroke';
         if (path.data.type === "fill") {
           typeKey = 'fill';
         }
@@ -519,7 +556,7 @@ module.exports = function(paper) {
         // If it doesn't have a name, default to an empty string.
         if (typeof path.data.name === 'undefined') path.data.name = '';
 
-        run('status', i18n.t('libs.auto' + typeKey, {id: path.data.name}))
+        run('status', i18n.t('libs.auto' + typeKey, {id: path.data.name}));
         paper.utils.runPath(path);
       });
 
@@ -527,18 +564,10 @@ module.exports = function(paper) {
       run([
         'wash',
         'park',
-        'up', // Ensure the last command sent is clean, see evil-mad/robopaint#250
+        'up', // Ensure last command sent is clean, see evil-mad/robopaint#250
         ['status', i18n.t('libs.autocomplete')],
         ['callbackname', 'autoPaintComplete']
       ]);
-
-
-      if (robopaint.settings.prefillbuffer) {
-        // This tells pause Till Empty that we're ready to start checking for
-        // local buffer depletion. We can't check sooner as we haven't finished
-        // sending all the data yet!
-        robopaint.pauseTillEmpty(false);
-      }
     }
-  }
+  };
 };

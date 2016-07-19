@@ -9,5 +9,15 @@
     "manufacturer": "Generic",
     "name": "Standard",
     "description": "Set of primary colors in standard order. Use for stock Crayola, store brand or movable primary color pans."
+  },
+  "generic-pen-single": {
+    "manufacturer": "Generic",
+    "name": "Single pen/pencil",
+    "description": "Single color, use when only one implement needed."
+  },
+  "generic-pen-multi": {
+    "manufacturer": "Generic",
+    "name": "Multi pen/pencil",
+    "description": "Standard set of primary color pens/pencils."
   }
 }

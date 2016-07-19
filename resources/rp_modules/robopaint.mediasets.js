@@ -2,6 +2,7 @@
  * @file Holds all Robopaint media / color set related loading, parsing, etc
  * functionality.
  */
+/* globals _, window */
 var robopaint = window.robopaint;
 var fs = require('fs-plus');
 
@@ -24,77 +25,79 @@ robopaint.media = {
 
     this.sets = {};
 
-    // Move through each colorset JSON definition file...
-    for(var i in sets) {
-      var set = sets[i];
-      var setDir = colorsetDir + set + '/';
+    // Save a universal white for color comparisons.
+    robopaint.media.white = robopaint.media.getColorsetColor(
+      '#FFFFFF', 'white'
+    );
 
+    // Move through each colorset JSON definition file...
+    _.each(sets, function(set) {
+      var setDir = colorsetDir + set + '/';
+      var fileSets = {};
 
       try {
-        var fileSets = require(setDir + set + '.json');
+        fileSets = require(setDir + set + '.json');
       } catch(e) {
         // Silently fail on bad parse!
-        continue;
+        return;
       }
 
        // Move through all colorsets in file
-      for(var s in fileSets) {
-        var c = fileSets[s];
-        var machineName = c.machineName;
+      _.each(fileSets, function(fileSet, fileSetKey) {
+        var machineName = fileSet.machineName;
+        var colorsOut = [];
 
         try {
-          // Add pure white to the end of the color set for auto-color
-          c.colors.push({'white': '#FFFFFF'});
-
           // Process Colors to avoid re-processing later
-          var colorsOut = [];
-          for (var i in c.colors){
-            var color = c.colors[i];
+          _.each(fileSet.colors, function(color){
             var name = Object.keys(color)[0];
-            var h = c.colors[i][name];
-            var r = robopaint.utils.colorStringToArray(h);
-            colorsOut.push({
-              name: robopaint.t("colorsets.colors." + name),
-              key: name,
-              color: {
-                HEX: h,
-                RGB: r,
-                HSL: robopaint.utils.rgbToHSL(r),
-                YUV: robopaint.utils.rgbToYUV(r)
-              }
-
-            });
-          }
+            colorsOut.push(robopaint.media.getColorsetColor(color[name], name));
+          });
         } catch(e) {
-          console.error("Parse error on colorset: " + s, e);
-          continue;
+          console.error("Parse error on colorset: " + fileSetKey, e);
+          return;
         }
+
         // Use the machine name and set name of the colorset to create translate
         // strings.
         var name  = "colorsets." + set + "." + machineName + ".name";
         var maker = "colorsets." + set + "." + machineName + ".manufacturer";
         var desc  = "colorsets." + set + "." + machineName + ".description";
-        var media = "colorsets.media." + c.media;
+        var media = "colorsets.media." + fileSet.media;
 
-        robopaint.media.sets[c.styles.baseClass] = {
+        robopaint.media.sets[machineName] = {
           name: robopaint.t(name),
           type: robopaint.t(maker),
-          weight: parseInt(c.weight),
+          weight: parseInt(fileSet.weight),
           description: robopaint.t(desc),
           media: robopaint.t(media),
-          enabled: robopaint.currentBot.allowedMedia[c.media],
-          baseClass: c.styles.baseClass,
+          enabled: robopaint.currentBot.allowedMedia[fileSet.media],
+          baseClass: fileSet.styles.baseClass,
           colors: colorsOut,
-          styleSrc: setDir + c.styles.src
+          styleSrc: setDir + fileSet.styles.src
         };
-      }
-    }
+      });
+    });
 
     this.setOrder = Object.keys(robopaint.media.sets).sort(function(a, b) {
-      return (robopaint.media.sets[a].weight - robopaint.media.sets[b].weight)
+      return (robopaint.media.sets[a].weight - robopaint.media.sets[b].weight);
     });
   },
 
+  // Get the colorset color object for a HEX color and machine name.
+  getColorsetColor: function(colorHex, name) {
+    var colorRGB = robopaint.utils.colorStringToArray(colorHex);
+    return {
+      name: robopaint.t("colorsets.colors." + name),
+      key: name,
+      color: {
+        HEX: colorHex,
+        RGB: colorRGB,
+        HSL: robopaint.utils.rgbToHSL(colorRGB),
+        YUV: robopaint.utils.rgbToYUV(colorRGB),
+      }
+    };
+  },
 
   // Add a stylesheet for the given media set to the page
   // TODO: fully document
@@ -109,6 +112,11 @@ robopaint.media = {
   // Always return the current media set, as defined in robopaint.settings
   get currentSet() {
     if (!this.sets) this.load();
+
+    // If the saved set doesn't exist anymore, default to generic.
+    if (!this.sets[robopaint.settings.colorset]) {
+      robopaint.settings.colorset = 'generic';
+    }
     return this.sets[robopaint.settings.colorset];
   },
 
@@ -117,14 +125,14 @@ robopaint.media = {
     var colorsort = [];
 
     // Use JS internal sort by slapping a zero padded value into an array
-    $.each(robopaint.media.currentSet.colors, function(index, color){
-      if (index != 8) { // Ignore white
-        colorsort.push(robopaint.utils.pad(color.color.YUV[0], 3) + '|' + 'color' + index);
-      }
+    _.each(robopaint.media.currentSet.colors, function(color, index){
+      colorsort.push(
+        robopaint.utils.pad(color.color.YUV[0], 3) + '|' + 'color' + index
+      );
     });
     colorsort.sort().reverse();
 
-    // Now extract the luminostiy from the array, and leave a clean list of colors
+    // Now extract the luminostiy from the array, and leave a clean color list.
     for(var i in colorsort){
       colorsort[i] = colorsort[i].split('|')[1];
     }
@@ -136,4 +144,4 @@ robopaint.media = {
 
     return colorsort;
   },
-}
+};

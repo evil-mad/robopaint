@@ -331,10 +331,8 @@ module.exports = function(paper) {
       return false;
     }
 
-    // Ignore white paths (color id 8)
-    // TODO: This should probably be handled depending on num of colors in the
-    // media (you can have more pens than 8), paper color might not be white.
-    if (fillPath.data.color === 'color8') {
+    // Ignore white/skip paths.
+    if (fillPath.data.color === false) {
       fillPath.remove();
       return true;
     }

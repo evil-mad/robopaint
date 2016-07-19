@@ -6,7 +6,7 @@
  */
 
 // TODO: Limit the number of random globals going on here. :P
-/* globals window, cncserver, robopaint, localStorage, $, initializing,
+/* globals window, _, cncserver, robopaint, localStorage, $, initializing,
 setModal, rpRequire, paper, homeVis, mainWindow, appMode, $subwindow, isModal,
  */
 
@@ -346,17 +346,19 @@ function bindSettingsControls() {
         pushVal = parseInt($input.val());
         break;
       case 'penmode':
+        var v = parseInt($input.val(), 10);
+
         // No paint?
-        toggleDisableSetting(
+        /*toggleDisableSetting(
           '#showcolortext, #colorset',
-          ($input.val() === 2 || $input.val() === 0),
+          (v === 2 || v === 0),
           robopaint.t('settings.output.penmode.warningPaint')
-        );
+        );*/
 
         // No nothing!
         toggleDisableSetting(
           '#maxpaintdistance, #refillmode, #refillaction, #maxpaint',
-          $input.val() !== 3,
+          v !== 3,
           robopaint.t('settings.output.penmode.warningAll')
         );
 
@@ -590,17 +592,16 @@ function updateColorSetSettings() {
 
   // Add Sortable color names/colors
   $colors.empty();
-  for (var i in set.colors) {
-    if (i === set.colors.length-1) break; // Ignore the last value
+  _.each(set.colors, function(color) {
     $('<li>')
       .append(
         $('<span>')
           .addClass('color')
-          .css('background-color', set.colors[i].color.HEX)
+          .css('background-color', color.color.HEX)
           .text(' '),
-        $('<label>').text(set.colors[i].name)
+        $('<label>').text(color.name)
       ).appendTo($colors);
-  }
+  });
 
   // Add metadata
   var meta = 'type name description media'.split(' ');
