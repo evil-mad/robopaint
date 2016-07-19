@@ -31,7 +31,7 @@ module.exports = {
     spiralPath = new g.Path();
 
     // The spacing value is double the value in the fill settings menu
-    // 10 is the default fill spacing in the fill settings menu
+    // 10 (20 here) is the default fill spacing in the fill settings menu
     var spacing = g.settings.spacing / 5;
 
     // Scale the number of turns by the space between turns of the spiral
