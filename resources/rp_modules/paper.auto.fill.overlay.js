@@ -34,9 +34,15 @@ module.exports = {
     // 10 (20 here) is the default fill spacing in the fill settings menu
     var spacing = g.settings.spacing / 5;
 
-    // Scale the number of turns by the space between turns of the spiral
-    // 250 is big enough for the WaterColorBot
-    var turns = Math.floor(250 / spacing);
+    // This is the diagonal distance of the area in which we will be filling
+    // paths. We will never be filling of g.view.bounds; by ensuring the radius of the
+    // spiral is larger than this distance we ensure that when we reach the end
+    // of the spiral we have checked the entire printable area.
+    var boundsSize = g.view.bounds.topLeft.getDistance(g.view.bounds.bottomRight);
+
+    // Estimate the number of turns based on the spacing and boundsSize
+    // Add 1 to compensate for the points we remove from the end
+    var turns = Math.ceil(boundsSize / (spacing * 2 * Math.PI)) + 1;
 
     spiralPath.addSegments(makeSpiral(turns, spacing));
 
