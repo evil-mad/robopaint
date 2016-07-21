@@ -155,7 +155,7 @@ function overlayLineFillNext(fillPath) {
     }
   }
 
-  var tp = tracePaths[tpIndex];
+  var tracePath = tracePaths[tpIndex];
 
   // Check if the current point matches the hittest
   var testPoint = overlayPath.getPointAt(overlayPathPos);
@@ -172,13 +172,13 @@ function overlayLineFillNext(fillPath) {
     // If we came off a bad part of the path, add the closest intersection
     if (!lastGood && overlayPathPos !== 0) {
       closestID = g.getClosestIntersectionID(testPoint, overlayInts);
-      tp.add(overlayInts[closestID].point);
+      tracePath.add(overlayInts[closestID].point);
     }
 
-    tp.add(testPoint);
+    tracePath.add(testPoint);
     lastGood = true;
   } else { // We're obstructed
-    if (tp.segments.length) {
+    if (tracePath.segments.length) {
       tpIndex++; // Increment only if this path is used
     }
 
@@ -253,10 +253,10 @@ function overlayLineFillNext(fillPath) {
     overlayInts = null;
     overlayPathPos = 0;
     g.state.totalSteps++;
-    if (tp.length > 0) { // Increment only if this path is used
+    if (tracePath.length > 0) { // Increment only if this path is used
       tpIndex++;
     } else { // If it wasn't used, can it so the next one gets a clean start.
-      tp.remove();
+      tracePath.remove();
       tracePaths[tpIndex] = null;
     }
 

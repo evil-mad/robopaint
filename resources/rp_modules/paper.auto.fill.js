@@ -14,7 +14,7 @@ var mode = (typeof window.mode === 'undefined') ? false : window.mode;
 // to override. Second argument then becomes completion callback.
 // These values are subject to change by global robopaint.settings defaults, See
 // those values for current values.
-var settings = {
+var settings = { debug: true,
   path: null, // Pass a path object to only fill that object.
   // Otherwise everything will be traced for fill.
   pathColor: null, // Pass the override color to replace the path color with.
