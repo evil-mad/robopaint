@@ -169,7 +169,8 @@ function overlayLineFillNext(fillPath) {
   var closestID = -1;
   // If the above rules say we're to keep filling.. lets go!
   if (continueStroke) {
-    // If we came off a bad part of the path, add the closest intersection
+    // If we were outside of fillPath then move inside it add the closest
+    // intersection to tracePath
     if (!lastGood && overlayPathPos !== 0) {
       closestID = g.getClosestIntersectionID(testPoint, overlayInts);
       tracePath.add(overlayInts[closestID].point);
