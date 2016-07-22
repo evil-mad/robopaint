@@ -223,23 +223,26 @@ function overlayLineFillNext(fillPath) {
 
   // If we didn't normally hit the path, cheat till we do!
   if (!continueStroke && !pathComplete) {
-    while (overlayPathPos < overlayPath.length && !continueStroke && !pathComplete) { // jshint ignore:line
-      overlayPathPos+= g.settings.flattenResolution;
-      testPoint = overlayPath.getPointAt(overlayPathPos);
-      h = tmp.hitTest(testPoint, {stroke: false, fill: true});
+    for (var i = 0; i < overlayInts.length; i++) {
+      overlayPathPos = spiralPath.getOffsetOf(overlayInts[i].point);
+
+      // Is the next step after this intersection inside the fillPath?
+      var testPoint = overlayPath.getPointAt(overlayPathPos + g.settings.flattenResolution);
+      var h = tmp.hitTest(testPoint, {stroke: false, fill: true});
       continueStroke = h ? (h.item === fillPath) : false;
 
-      if (g.settings.overlayFillAlignPath) {
-        pathComplete = g.paper.utils.pointBeyond(testPoint, fillPath.bounds);
-        if (pathComplete && g.settings.debug) {
-          console.log('Completed overlay fill via outside bounds (slow).');
-        }
+      // If it is then we found an intersection where the spiral enters the fillPath
+      if (continueStroke) {
+        // remove the intersections we do not need
+        overlayInts.splice(0, i - 1);
+        break;
       }
     }
 
-    // If we succeeded in finding the next spot, roll back one.
-    if (continueStroke) {
-      overlayPathPos-= g.settings.flattenResolution;
+    // We did not find any more intersections that brought us inside the path
+    if (!continueStroke && g.settings.debug) {
+      console.log('Completed overlay fill because no more intersections entered the path.');
+      pathComplete = true;
     }
   }
 
