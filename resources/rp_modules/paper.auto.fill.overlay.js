@@ -240,8 +240,10 @@ function overlayLineFillNext(fillPath) {
     }
 
     // We did not find any more intersections that brought us inside the path
-    if (!continueStroke && g.settings.debug) {
-      console.log('Completed overlay fill because no more intersections entered the path.');
+    if (!continueStroke) {
+      if (g.settings.debug) {
+        console.log('Completed overlay fill because no more intersections entered the path.');
+      }
       pathComplete = true;
     }
   }
