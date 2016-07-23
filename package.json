@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "cncserver": "2.5.1",
+    "cncserver": "2.6.0",
     "d3plus": "^1.9.3",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
@@ -34,7 +34,6 @@
     "url": "https://github.com/evil-mad/robopaint.git"
   },
   "devDependencies": {
-    "electron-rebuild": "^1.1.3",
     "electron-prebuilt": "0.37.5"
   }
 }
