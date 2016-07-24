@@ -42,6 +42,13 @@ var modePath = path.parse(decodeURIComponent(location.hash.substr(1)));
 var mode = window.mode = require(path.join(modePath.dir, 'package.json'));
 mode.path = modePath;
 
+// Load jQuery early if the mode asks for it.
+if (mode.robopaint.dependencies) {
+  if (mode.robopaint.dependencies.includes('jquery-early')) {
+    window.$ = window.jQuery = $;
+  }
+}
+
 // Load the central RP settings
 var robopaint = window.robopaint = {
   utils: rpRequire('utils'),
@@ -175,25 +182,26 @@ if (mode.robopaint.dependencies) {
   $(function(){
     _.each(mode.robopaint.dependencies, function(modName){
       switch (modName) {
+        case 'jquery-early':
         case 'jquery':
-        window.$ = window.jQuery = $;
-        break;
+          window.$ = window.jQuery = $;
+          break;
         case 'underscore':
-        window._ = _;
-        break;
+          window._ = _;
+          break;
         case 'qtip':
-        $.qtip = require('qtip2');
-        break;
+          $.qtip = require('qtip2');
+          break;
         case 'paper':
-        console.log('Loading Paper');
-        preloadCompleteAsyncChecklist.paperLoaded = false;
-        rpRequire('paper', function(){
-          preloadCompleteAsyncChecklist.paperLoaded = true;
-          preloadComplete();
-        });
-        break;
+          console.log('Loading Paper');
+          preloadCompleteAsyncChecklist.paperLoaded = false;
+          rpRequire('paper', function(){
+            preloadCompleteAsyncChecklist.paperLoaded = true;
+            preloadComplete();
+          });
+          break;
         default:
-        rpRequire(modName);
+          rpRequire(modName);
       }
     });
   });
