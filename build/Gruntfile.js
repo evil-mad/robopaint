@@ -52,7 +52,7 @@ module.exports = function(grunt) {
     electron: {
       macbuild: {
         options: {
-          name: appInfo.name,
+          name: appInfo.releaseInfo.appName,
           dir: './',
           out: 'build/dist',
           icon: 'build/resources/darwin/app.icns',
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
       },
       winbuild: {
         options: {
-          name: appInfo.releaseInfo.name,
+          name: appInfo.releaseInfo.appName,
           dir: './',
           out: 'build/dist',
           icon: 'build/resources/win32/app.ico',
@@ -83,11 +83,11 @@ module.exports = function(grunt) {
           'version-string': {
             CompanyName: appInfo.releaseInfo.company,
             LegalCopyright: appInfo.releaseInfo.copyright,
-            FileDescription: appInfo.name,
-            OriginalFilename: appInfo.name + '.exe',
+            FileDescription: appInfo.releaseInfo.appName,
+            OriginalFilename: appInfo.releaseInfo.appName + '.exe',
             FileVersion: appInfo.electronVersion,
             ProductVersion: appInfo.version,
-            ProductName: appInfo.name,
+            ProductName: appInfo.releaseInfo.appName,
             InternalName: appInfo.name,
           },
         }
@@ -110,27 +110,27 @@ module.exports = function(grunt) {
     },
     appdmg: {
       options: {
-        basepath: 'build/dist/' + appInfo.releaseInfo.name + '-darwin-x64',
-        title: 'Install ' + appInfo.releaseInfo.name,
+        basepath: 'build/dist/' + appInfo.name + '-darwin-x64',
+        title: 'Install ' + appInfo.releaseInfo.appName,
         icon: '../../resources/mac/app.icns',
         background: '../../resources/mac/dmg_back.png',
         'icon-size': 80,
         contents: [
           {x: 448, y: 344, type: 'link', path: '/Applications'},
-          {x: 192, y: 344, type: 'file', path: appInfo.releaseInfo.name +'.app'}
+          {x: 192, y: 344, type: 'file', path: appInfo.releaseInfo.appName +'.app'}
         ]
       },
       target: {
         dest:
           'build/dist/' +
-           appInfo.releaseInfo.name +
+           appInfo.releaseInfo.appName +
            '_Mac_v' + appInfo.version + '.dmg'
       }
     },
     'create-windows-installer': {
       64: {
         iconUrl: fileURL('build/resources/win32/app.ico'),
-        appDirectory: 'build/dist/' + appInfo.releaseInfo.name + '-win32-x64',
+        appDirectory: 'build/dist/' + appInfo.releaseInfo.appName + '-win32-x64',
         outputDirectory: 'build/dist/winstall64/',
         loadingGif: 'resources/win32/install_anim.gif',
         version: numericVersion,
@@ -138,7 +138,7 @@ module.exports = function(grunt) {
       },
       32: {
         iconUrl: fileURL('build/resources/win32/app.ico'),
-        appDirectory: 'build/dist/' + appInfo.releaseInfo.name + '-win32-ia32',
+        appDirectory: 'build/dist/' + appInfo.releaseInfo.appName + '-win32-ia32',
         outputDirectory: 'build/dist/winstall32/',
         loadingGif: 'resources/win32/install_anim.gif',
         version: numericVersion,
