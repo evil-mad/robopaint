@@ -11,9 +11,9 @@ $.qtip = require('qtip2');
 window.i18n = require('i18next-client');
 
 // Include global main node process connector objects.
-var remote = require('remote');
+var remote = require('electron').remote;
 var mainWindow = remote.getCurrentWindow();
-var app = remote.require('app');
+var app = remote.app;
 var path = require('path');
 var bytes = require('bytes');
 var appPath = path.join(app.getAppPath(), '/');

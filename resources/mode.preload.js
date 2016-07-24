@@ -14,9 +14,9 @@
 
 try {
 
-var remote = require('remote');
+var remote = require('electron').remote;
 var path = require('path');
-var app = window.app = remote.require('app');
+var app = window.app = remote.app;
 var fs = require('fs-plus');
 var ipc = window.ipc = require('electron').ipcRenderer;
 var appPath = app.getAppPath();
@@ -41,6 +41,13 @@ var preloadCompleteAsyncChecklist = {
 var modePath = path.parse(decodeURIComponent(location.hash.substr(1)));
 var mode = window.mode = require(path.join(modePath.dir, 'package.json'));
 mode.path = modePath;
+
+// Load jQuery early if the mode asks for it.
+if (mode.robopaint.dependencies) {
+  if (mode.robopaint.dependencies.includes('jquery-early')) {
+    window.$ = window.jQuery = $;
+  }
+}
 
 // Load the central RP settings
 var robopaint = window.robopaint = {
@@ -105,10 +112,12 @@ robopaint.pauseTillEmpty = function(starting) {
 };
 
 // Add the generic mode CSS for body drop shadow and basic button formatting.
-$('<link>').attr({
-  href: robopaint.appPath + "resources/styles/modes.css",
-  rel: "stylesheet"
-}).appendTo('head');
+$(function(){
+  $('<link>').attr({
+    href: robopaint.appPath + "resources/styles/modes.css",
+    rel: "stylesheet"
+  }).appendTo('head');
+});
 
 // Define the local settings getters/setters
 mode.settings = {
@@ -172,28 +181,31 @@ mode.settings.load();
 
 // Manage loading roboPaintDependencies from mode package config
 if (mode.robopaint.dependencies) {
-  _.each(mode.robopaint.dependencies, function(modName){
-    switch (modName) {
-      case 'jquery':
-        window.$ = window.jQuery = $;
-        break;
-      case 'underscore':
-        window._ = _;
-        break;
-      case 'qtip':
-        $.qtip = require('qtip2');
-        break;
-      case 'paper':
-        console.log('Loading Paper');
-        preloadCompleteAsyncChecklist.paperLoaded = false;
-        rpRequire('paper', function(){
-          preloadCompleteAsyncChecklist.paperLoaded = true;
-          preloadComplete();
-        });
-        break;
-      default:
-        rpRequire(modName);
-    }
+  $(function(){
+    _.each(mode.robopaint.dependencies, function(modName){
+      switch (modName) {
+        case 'jquery-early':
+        case 'jquery':
+          window.$ = window.jQuery = $;
+          break;
+        case 'underscore':
+          window._ = _;
+          break;
+        case 'qtip':
+          $.qtip = require('qtip2');
+          break;
+        case 'paper':
+          console.log('Loading Paper');
+          preloadCompleteAsyncChecklist.paperLoaded = false;
+          rpRequire('paper', function(){
+            preloadCompleteAsyncChecklist.paperLoaded = true;
+            preloadComplete();
+          });
+          break;
+        default:
+          rpRequire(modName);
+      }
+    });
   });
 }
 
@@ -392,12 +404,14 @@ function handleCNCServerMessages(name, data) {
 
 // Load in the modes custom main JS
 var mainHasLoaded = false;
-rpRequire({
-  path: path.join(mode.path.dir, mode.main),
-  type: 'dom'
-}, function(){
-  preloadCompleteAsyncChecklist.mainLoaded = true;
-  preloadComplete();
+$(function(){
+  rpRequire({
+    path: path.join(mode.path.dir, mode.main),
+    type: 'dom'
+  }, function(){
+    preloadCompleteAsyncChecklist.mainLoaded = true;
+    preloadComplete();
+  });
 });
 
 function preloadComplete() {
@@ -419,6 +433,7 @@ function preloadComplete() {
 
 } catch(e) {
   console.error('Problem during mode load:' , e);
+  console.trace();
   if (mode.robopaint.debug === true){
     ipc.sendToHost('modeReady'); // Tell RP main host to show the window anyway.
   } else {

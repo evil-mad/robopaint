@@ -6,7 +6,7 @@
   "author": "techninja",
   "stage": "development",
   "license": "MIT",
-  "electronVersion": "0.37.5",
+  "electronVersion": "1.0.2",
   "scripts": {
     "start": "electron ."
   },
@@ -34,6 +34,6 @@
     "url": "https://github.com/evil-mad/robopaint.git"
   },
   "devDependencies": {
-    "electron-prebuilt": "0.37.5"
+    "electron-prebuilt": "1.0.2"
   }
 }
