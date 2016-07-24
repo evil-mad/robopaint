@@ -3,8 +3,7 @@
  * various named shortcut robopaint specific CommonJS modules listed below.
  */
 
-var remote = require('remote');
-var app = remote.require('app');
+var app = require('electron').remote.app;
 var appPath = app.getAppPath();
 var _ = require('underscore');
 

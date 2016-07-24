@@ -491,8 +491,7 @@ var utils = {
    *   Full path to the svg-cache folder in the user data directory.
    */
   getSVGCachePath: function () {
-    var remote = require('remote');
-    var app = remote.require('app');
+    var app = require('electron').remote.app;
     return require('path').join(app.getPath('userData'), 'svg-cache');
   },
 

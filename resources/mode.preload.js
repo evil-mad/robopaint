@@ -14,9 +14,9 @@
 
 try {
 
-var remote = require('remote');
+var remote = require('electron').remote;
 var path = require('path');
-var app = window.app = remote.require('app');
+var app = window.app = remote.app;
 var fs = require('fs-plus');
 var ipc = window.ipc = require('electron').ipcRenderer;
 var appPath = app.getAppPath();
@@ -172,18 +172,19 @@ mode.settings.load();
 
 // Manage loading roboPaintDependencies from mode package config
 if (mode.robopaint.dependencies) {
-  _.each(mode.robopaint.dependencies, function(modName){
-    switch (modName) {
-      case 'jquery':
+  $(function(){
+    _.each(mode.robopaint.dependencies, function(modName){
+      switch (modName) {
+        case 'jquery':
         window.$ = window.jQuery = $;
         break;
-      case 'underscore':
+        case 'underscore':
         window._ = _;
         break;
-      case 'qtip':
+        case 'qtip':
         $.qtip = require('qtip2');
         break;
-      case 'paper':
+        case 'paper':
         console.log('Loading Paper');
         preloadCompleteAsyncChecklist.paperLoaded = false;
         rpRequire('paper', function(){
@@ -191,9 +192,10 @@ if (mode.robopaint.dependencies) {
           preloadComplete();
         });
         break;
-      default:
+        default:
         rpRequire(modName);
-    }
+      }
+    });
   });
 }
 
@@ -392,12 +394,14 @@ function handleCNCServerMessages(name, data) {
 
 // Load in the modes custom main JS
 var mainHasLoaded = false;
-rpRequire({
-  path: path.join(mode.path.dir, mode.main),
-  type: 'dom'
-}, function(){
-  preloadCompleteAsyncChecklist.mainLoaded = true;
-  preloadComplete();
+$(function(){
+  rpRequire({
+    path: path.join(mode.path.dir, mode.main),
+    type: 'dom'
+  }, function(){
+    preloadCompleteAsyncChecklist.mainLoaded = true;
+    preloadComplete();
+  });
 });
 
 function preloadComplete() {
@@ -419,6 +423,7 @@ function preloadComplete() {
 
 } catch(e) {
   console.error('Problem during mode load:' , e);
+  console.trace();
   if (mode.robopaint.debug === true){
     ipc.sendToHost('modeReady'); // Tell RP main host to show the window anyway.
   } else {

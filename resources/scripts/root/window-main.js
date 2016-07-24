@@ -1,7 +1,8 @@
-var app = require('app');  // Module to control application life.
+var app = require('electron').app;  // Module to control application life.
 var path = require('path');
-var BrowserWindow = require('browser-window');  // Module to create native browser window.
-var dialog = require('dialog');
+// Module to create native browser window.
+var BrowserWindow = require('electron').BrowserWindow;
+var dialog = require('electron').dialog;
 
 // Report crashes to our server.
 //require('crash-reporter').start();
