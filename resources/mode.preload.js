@@ -112,10 +112,12 @@ robopaint.pauseTillEmpty = function(starting) {
 };
 
 // Add the generic mode CSS for body drop shadow and basic button formatting.
-$('<link>').attr({
-  href: robopaint.appPath + "resources/styles/modes.css",
-  rel: "stylesheet"
-}).appendTo('head');
+$(function(){
+  $('<link>').attr({
+    href: robopaint.appPath + "resources/styles/modes.css",
+    rel: "stylesheet"
+  }).appendTo('head');
+});
 
 // Define the local settings getters/setters
 mode.settings = {
