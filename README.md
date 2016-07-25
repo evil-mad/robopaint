@@ -115,22 +115,21 @@ which will have the command line tools required for builds.
 as source to be built on the target machines, so you shouldn't have to install
 anything new for this at all.
 
-#### Building natively for Electron with `node-pre-gyp`
- 0. Run `npm install node-gyp node-pre-gyp -g` to install globally the node
-native builder. (ignore this if you already have them)
- 1. Pull down/clone your fork of the RoboPaint repository with git (or just
-download a zip of the files).
- 2. In your terminal/command line interface, go to that folder and run
-`npm install`
-   * This will run through all the required module dependencies and install/build
-them to the best of its ability.
+#### Building natively for Electron with `electron-rebuild`
+ 0. Pull down/clone your fork of the RoboPaint repository with git (or just
+  download a zip of the files).
+ 1. In your terminal/command line interface, go to that folder and run
+ `npm install` to install dependencies, then `npm install electron-rebuild`
+ to install electron-rebuild locally.
    * This will have built the node-serialport for io.js, but we actually need
 the binary created with electron headers, soo..
-   * Follow [Jed's instructions here](https://gist.github.com/jedthehumanoid/a7f8278e0a37d259adca)
-to build the binary correctly.
+   * Mac/Linux: run `node_modules/.bin/electron-rebuild`
+   * Windows: run `node_modules\.bin\electron-rebuild.cmd`
+   * You may see some errors, but it should re-compile everything that needs it.
 4. That's it! You should now be installed and ready to hack. To update CNC server
 just run `npm install cncserver` from the project root and it should pull from
-the latest master.
+the latest master, and you'll likely need to re-run `electron-rebuild`, or the
+fix script via `npm run fix-serialport`.
 
 ### Running RoboPaint from source
 * Assuming this is all working, get yourself to the root of the repo and simply
