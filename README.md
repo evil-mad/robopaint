@@ -79,27 +79,27 @@ Want to help be a part of RoboPaint? Maybe spruce it up, or hack it to bits into
 your own thing? Here's a rough and tumble guide to getting set up:
 
 ### Pre-requisites
-#### Electron (v0.34.x)
+#### Electron
 RoboPaint is an HTML5/Node.js application that runs in
 [electron](https://electron.atom.io/). Though the main.html
 code may somewhat render in a regular browser window, it's still a node.js
 application that requires its low level file access and other APIs. This is
 installed via `npm install` when run at the root.
 
-#### Install Node (4.x+) for node & npm
+#### Install Node for node & npm
 Required for automated builds and installation content. The build and
 dependency system all uses [node.js](http://nodejs.org). `npm` is installed
 along with it. If you already have node installed, you can skip this part.
 
 #### Build Tools!
-* CNC Server uses the node-serialport module, a low-level partially native
-module that needs to be built/compiled for every OS.
-* These are pre-compiled for each release in
-the [robopaint-build](https://github.com/evil-mad/robopaint-build/) repository,
-which you can easily use to replace the node_modules folder within
-`cncserver/node_modules/serialport/`
-* *BUT*, if you're experimenting with new versions of modules, you're going to
-need to be able to build your own, so continue on.
+* CNC Server uses the [node-serialport module](https://github.com/EmergingTechnologyAdvisors/node-serialport),
+a low-level partially native module that needs to be built/compiled for every
+OS. We've included the top four common OS & architecture combinations, so if
+your dev system is one of those, the file will be copied over after
+`npm install` and you should be in the clear to run immediately.
+* If you're experimenting with new versions of modules, or are running on a
+different arch/OS, you're going to need to be able to build your own, so
+continue on.
 
 ##### Windows
 * You'll need the free download version of

@@ -59,7 +59,9 @@ module.exports = function(grunt) {
           version: appInfo.electronVersion,
           platform: 'darwin',
           arch: 'x64',
-          sign: 'Developer ID Application: Evil Mad Science LLC',
+          'osx-sign': {
+            identity: 'Developer ID Application: Evil Mad Science LLC'
+          },
           ignore: buildIgnore,
           'app-version': appInfo.version,
           overwrite: true,
