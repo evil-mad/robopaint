@@ -17,12 +17,17 @@
     "company": "Evil Mad Scientist LLC",
     "appName": "RoboPaint",
     "copyright": "RoboPaint, WaterColorBot & EggBot names copyright © Evil Mad Scientist LLC, all rights reserved. Code under MIT free and open source license.",
-    "categories": ["Utility", "Graphics", "Education"]
+    "categories": [
+      "Utility",
+      "Graphics",
+      "Education"
+    ]
   },
   "dependencies": {
     "bytes": "^2.4.0",
     "cncserver": "2.6.1",
     "d3plus": "^1.9.3",
+    "fs-finder": "^1.8.1",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
     "i18next-client": "^1.10.2",
