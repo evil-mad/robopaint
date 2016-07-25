@@ -121,7 +121,7 @@ anything new for this at all.
  1. In your terminal/command line interface, go to that folder and run
  `npm install` to install dependencies, then `npm install electron-rebuild`
  to install electron-rebuild locally.
-   * This will have built the node-serialport for io.js, but we actually need
+   * This will have built the node-serialport for node, but we actually need
 the binary created with electron headers, soo..
    * Mac/Linux: run `node_modules/.bin/electron-rebuild`
    * Windows: run `node_modules\.bin\electron-rebuild.cmd`
