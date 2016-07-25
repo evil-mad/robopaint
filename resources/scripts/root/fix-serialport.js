@@ -13,7 +13,8 @@ var binFile = path.join('build', 'bin', 'serialport', dir, 'serialport.node');
 // If the source folder is there, find the destination and replace it.
 if (fs.existsSync(binFile)) {
   console.log('Placing pre-compiled binary for serialport...');
-  var badBin = finder.from('node_modules/').find('Release/serialport.node');
+  var badBin = finder.from('node_modules').find(path.join('Release', 'serialport.node'));
+  console.log(badBin[0]);
   try {
     fs.removeSync(badBin[0]);
     fs.createReadStream(binFile).pipe(fs.createWriteStream(badBin[0]));
