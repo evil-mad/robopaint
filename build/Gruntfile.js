@@ -132,18 +132,18 @@ module.exports = function(grunt) {
     },
     'create-windows-installer': {
       64: {
-        iconUrl: fileURL('build/resources/win32/app.ico'),
+        iconUrl: fileURL('build/resources/win/app.ico'),
         appDirectory: 'build/dist/' + appInfo.releaseInfo.appName + '-win32-x64',
         outputDirectory: 'build/dist/winstall64/',
-        loadingGif: 'build/resources/win32/install_anim.gif',
+        loadingGif: 'build/resources/win/install_anim.gif',
         version: numericVersion,
         authors: appInfo.releaseInfo.company,
       },
       32: {
-        iconUrl: fileURL('build/resources/win32/app.ico'),
+        iconUrl: fileURL('build/resources/win/app.ico'),
         appDirectory: 'build/dist/' + appInfo.releaseInfo.appName + '-win32-ia32',
         outputDirectory: 'build/dist/winstall32/',
-        loadingGif: 'build/resources/win32/install_anim.gif',
+        loadingGif: 'build/resources/win/install_anim.gif',
         version: numericVersion,
         authors: appInfo.releaseInfo.company,
       },
