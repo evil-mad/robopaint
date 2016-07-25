@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "cncserver": "2.6.0",
+    "cncserver": "2.6.1",
     "d3plus": "^1.9.3",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
