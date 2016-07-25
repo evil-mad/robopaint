@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build-win', 'Build the release application for windows.', function(){
     log('Running electon-packager for win build...');
-    grunt.task.run('electron:winbuild', 'build-win-icon');
+    grunt.task.run('build-win-flatten', 'electron:winbuild', 'build-win-icon');
 
     // If we're on Win32, go ahead and run create-windows-installer
     if (process.platform === 'win32') {
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('build-win-install', 'Create Windows Installer.', function(){
-    grunt.task.run('build-win-flatten', 'create-windows-installer:64', 'create-windows-installer:32', 'build-win-install-post');
+    grunt.task.run('create-windows-installer:64', 'create-windows-installer:32', 'build-win-install-post');
   });
 
 
