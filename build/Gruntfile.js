@@ -183,8 +183,6 @@ module.exports = function(grunt) {
     }
   });
 
-  console.log(appInfo.releaseInfo.categories);
-
   // Default task(s).
   grunt.registerTask('default', ['pre-build']);
 };
