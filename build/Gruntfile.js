@@ -165,14 +165,6 @@ module.exports = function(grunt) {
         ]
       },
 
-      linux32: {
-        options: {
-          arch: 'i386'
-        },
-        src: 'build/dist/' + appInfo.name + '-linux-ia32',
-        dest: 'build/dist/'
-      },
-
       linux64: {
         options: {
           arch: 'amd64'
