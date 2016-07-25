@@ -9,7 +9,8 @@
   "electronVersion": "1.0.2",
   "scripts": {
     "start": "electron .",
-    "fix-serialport": "node resources/scripts/root/fix-serialport.js"
+    "fix-serialport": "node resources/scripts/root/fix-serialport.js",
+    "postinstall": "npm run fix-serialport"
   },
   "releaseInfo": {
     "description": "Software for drawing robots, and your friendly painting robot kit the WaterColorBot! See more about the WaterColorBot @ http://watercolorbot.com or Fork & improve the project @ https://github.com/evil-mad/robopaint",
