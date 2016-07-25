@@ -3,9 +3,9 @@
   "version": "2.0.0",
   "license": "MIT",
   "author": {
-    "name" : "James Todd",
-    "email" : "james@tn42.com",
-    "url" : "http://evilmadscience.com"
+    "name": "James Todd",
+    "email": "james@tn42.com",
+    "url": "http://evilmadscience.com"
   },
   "homepage": "https://github.com/evil-mad/robopaint",
   "dependencies": {
