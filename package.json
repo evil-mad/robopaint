@@ -8,7 +8,8 @@
   "license": "MIT",
   "electronVersion": "1.0.2",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "fix-serialport": "node resources/scripts/root/fix-serialport.js"
   },
   "releaseInfo": {
     "description": "Software for drawing robots, and your friendly painting robot kit the WaterColorBot! See more about the WaterColorBot @ http://watercolorbot.com or Fork & improve the project @ https://github.com/evil-mad/robopaint",
