@@ -53,8 +53,22 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('build-win-install', 'Create Windows Installer.', function(){
-    grunt.task.run('create-windows-installer:64', 'create-windows-installer:32', 'build-win-install-post');
+    grunt.task.run('build-win-flatten', 'create-windows-installer:64', 'create-windows-installer:32', 'build-win-install-post');
   });
+
+
+  grunt.registerTask('build-win-flatten', 'Flatten the node_module directories', function(){
+    var flatten = require('flatten-packages');
+    var done = this.async();
+
+    // Without flattening, we can't fully build installer on windows.
+    log("Flattening node modules path structure...");
+    flatten('./', {}, function(){
+      log('Flatten complete!');
+      done();
+    });
+  });
+
 
   grunt.registerTask('build-win-install-post', 'Create Windows installer post cleanup.', function(){
     log('Cleanup windows install...');
