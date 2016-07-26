@@ -122,7 +122,10 @@ anything new for this at all.
  `npm install` to install dependencies, then `npm install electron-rebuild`
  to install electron-rebuild locally.
    * This will have built the node-serialport for node, but we actually need
-the binary created with electron headers, soo..
+the binary created with electron headers, so:
+   * First delete the compiled `serialport.node` file in
+`node_modules/cncserver/node_modules/serialport/build/Release/`, or whever `npm`
+happens to put the serialport module.
    * Mac/Linux: run `node_modules/.bin/electron-rebuild`
    * Windows: run `node_modules\.bin\electron-rebuild.cmd`
    * You may see some errors, but it should re-compile everything that needs it.
