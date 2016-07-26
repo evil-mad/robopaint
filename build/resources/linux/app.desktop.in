@@ -3,7 +3,7 @@ Name=<%= productName %>
 Comment=<%= description %>
 GenericName=<%= genericName %>
 Exec=<%= installDir %>/share/<%= name %>/<%= name %> %U
-Icon=<%= iconName %>
+Icon=/usr/share/pixmaps/robopaint.png
 Type=Application
 StartupNotify=true
 Categories=<%= categories %>;

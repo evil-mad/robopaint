@@ -155,6 +155,7 @@ module.exports = function(grunt) {
         description: appInfo.description,
         productDescription: appInfo.releaseInfo.description,
         genericName: 'Robot Controller',
+        icon: 'build/resources/app.png',
         section: 'graphics',
         priority: 'optional',
         version: numericVersion,
