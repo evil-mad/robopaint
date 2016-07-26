@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=<%= productName %>
-Comment=<%= description %>
-GenericName=<%= genericName %>
-Exec=<%= installDir %>/share/<%= name %>/<%= name %> %U
-Type=Application
-StartupNotify=true
-Categories=<%= categories %>;
-MimeType=text/plain;
