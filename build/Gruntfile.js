@@ -155,7 +155,6 @@ module.exports = function(grunt) {
         description: appInfo.description,
         productDescription: appInfo.releaseInfo.description,
         genericName: 'Robot Controller',
-        icon: 'build/resources/app.png',
         section: 'graphics',
         priority: 'optional',
         version: numericVersion,
@@ -170,6 +169,7 @@ module.exports = function(grunt) {
 
       linux64: {
         options: {
+          icon: 'build/resources/app.png',
           arch: 'amd64'
         },
         src: 'build/dist/' + appInfo.name + '-linux-x64',
