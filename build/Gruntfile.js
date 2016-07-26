@@ -100,7 +100,7 @@ module.exports = function(grunt) {
           name: appInfo.name,
           dir: './',
           out: 'build/dist',
-          icon: '/usr/share/pixmaps/robopaint.png',
+          icon: 'build/resources/app.png',
           ignore: buildIgnore,
           version: appInfo.electronVersion,
           platform: 'linux',
