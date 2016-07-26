@@ -104,7 +104,7 @@ module.exports = function(grunt) {
           ignore: buildIgnore,
           version: appInfo.electronVersion,
           platform: 'linux',
-          arch: 'x64,ia32',
+          arch: 'x64',
           'app-version': appInfo.version,
           overwrite: true,
           prune: true
