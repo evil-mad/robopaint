@@ -22,6 +22,7 @@ module.exports = function(grunt) {
 
     default:
       grunt.loadNpmTasks('grunt-electron-installer-debian');
+      grunt.loadNpmTasks('grunt-electron-installer-redhat');
       break;
   }
 
@@ -171,6 +172,27 @@ module.exports = function(grunt) {
         options: {
           icon: 'build/resources/app.png',
           arch: 'amd64'
+        },
+        src: 'build/dist/' + appInfo.name + '-linux-x64',
+        dest: 'build/dist/'
+      }
+    },
+    'electron-installer-redhat': {
+      options: {
+        name: appInfo.name,
+        productName: appInfo.releaseInfo.appName,
+        description: appInfo.description,
+        productDescription: appInfo.releaseInfo.description,
+        genericName: 'Robot Controller',
+        categories: appInfo.releaseInfo.categories,
+        version: numericVersion,
+        revision: appInfo.version.split('-')[1],
+      },
+
+      linux64: {
+        options: {
+          arch: 'x86_64',
+          icon: 'build/resources/app.png',
         },
         src: 'build/dist/' + appInfo.name + '-linux-x64',
         dest: 'build/dist/'

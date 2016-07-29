@@ -93,6 +93,6 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('build-lin', 'Build the release application for Linux', function(){
-    grunt.task.run('electron:linbuild', 'electron-installer-debian');
+    grunt.task.run('electron:linbuild', 'electron-installer-debian', 'electron-installer-redhat');
   });
 };
