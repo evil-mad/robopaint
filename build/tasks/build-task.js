@@ -10,7 +10,6 @@ module.exports = function(grunt) {
   var fsp = require('fs-plus');
   var path = require('path');
 
-
   grunt.registerTask('build-current-os', 'Build the release for the current OS', function(){
     switch (process.platform) {
       case 'win32':
@@ -29,7 +28,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build-win', 'Build the release application for windows.', function(){
     log('Running electon-packager for win build...');
-    grunt.task.run('build-win-flatten', 'electron:winbuild', 'build-win-icon');
+    grunt.task.run('build-win-flatten', 'electron:winbuild', 'build-win-bin', 'build-win-icon');
 
     // If we're on Win32, go ahead and run create-windows-installer
     if (process.platform === 'win32') {
@@ -39,6 +38,23 @@ module.exports = function(grunt) {
 
       grunt.task.run('build-win-install');
     }
+  });
+
+  grunt.registerTask('build-win-bin', 'Copy the correct binary per arch', function(){
+    ['ia32', 'x64'].forEach(function(arch){
+      var source = path.join(
+        'build', 'bin', 'serialport', 'win32-' + arch, 'serialport.node'
+      );
+
+      var dest = path.join(
+        'build', 'dist', 'robopaint-win32-' + arch, 'resources',
+        'app', 'node_modules', 'serialport', 'build', 'Release',
+        'serialport.node'
+      );
+
+      fs.removeSync(dest);
+      fs.createReadStream(source).pipe(fs.createWriteStream(dest));
+    });
   });
 
   grunt.registerTask('build-win-icon', 'Change out the icon on the built windows exe.', function(){
