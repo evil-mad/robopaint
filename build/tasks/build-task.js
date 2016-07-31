@@ -52,8 +52,8 @@ module.exports = function(grunt) {
         'serialport.node'
       );
 
-      fs.removeSync(dest);
-      fs.createReadStream(source).pipe(fs.createWriteStream(dest));
+      fs.rm(dest);
+      fsp.createReadStream(source).pipe(fsp.createWriteStream(dest));
     });
   });
 
