@@ -61,11 +61,21 @@ module.exports = function(grunt) {
     log('Changing windows executable icon...');
 
     var done = this.async();
-    var shellExePath = path.join('build', 'dist', conf('name') + '-win32-x64', conf('name') + '.exe');
-    var iconPath = path.resolve('resources', 'win', 'app.ico');
     var rcedit = require('rcedit');
+    var iconPath = path.resolve('build', 'resources', 'win', 'app.ico');
 
-    return rcedit(shellExePath, {icon: iconPath}, done);
+    ['ia32', 'x64'].map(function(arch) {
+      rcedit(
+        path.join(
+          'build',
+          'dist',
+          conf('name') + '-win32-' + arch,
+          conf('name') + '.exe'
+        ),
+        {icon: iconPath},
+        done
+      );
+    });
   });
 
   grunt.registerTask('build-win-install', 'Create Windows Installer.', function(){
