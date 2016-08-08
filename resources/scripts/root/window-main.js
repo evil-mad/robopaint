@@ -64,6 +64,9 @@ function windowInit() {
     var p = path.join(app.getAppPath(), 'resources', 'main.html');
     mainWindow.loadURL('file://' + p);
 
+    // No menus for now, thanks!
+    mainWindow.setMenu(null);
+
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
       // Dereference the window object, usually you would store windows

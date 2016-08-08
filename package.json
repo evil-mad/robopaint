@@ -3,17 +3,35 @@
   "version": "2.0.0-beta.2",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "resources/scripts/root/window-main.js",
-  "author": "techninja",
+  "author": {
+    "name": "James Todd",
+    "email": "james@tn42.com",
+    "url": "http://evilmadscience.com"
+  },
   "stage": "development",
   "license": "MIT",
   "electronVersion": "1.0.2",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "fix-serialport": "node resources/scripts/root/fix-serialport.js",
+    "postinstall": "npm run fix-serialport"
+  },
+  "releaseInfo": {
+    "description": "Software for drawing robots, and your friendly painting robot kit the WaterColorBot! See more about the WaterColorBot @ http://watercolorbot.com or Fork & improve the project @ https://github.com/evil-mad/robopaint",
+    "company": "Evil Mad Scientist LLC",
+    "appName": "RoboPaint",
+    "copyright": "RoboPaint, WaterColorBot & EggBot names copyright © Evil Mad Scientist LLC, all rights reserved. Code under MIT free and open source license.",
+    "categories": [
+      "Utility",
+      "Graphics",
+      "Education"
+    ]
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "cncserver": "2.6.0",
+    "cncserver": "2.6.1",
     "d3plus": "^1.9.3",
+    "fs-finder": "^1.8.1",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
     "i18next-client": "^1.10.2",
