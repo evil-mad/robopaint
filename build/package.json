@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/PancakeBot/PancakePainter.git"
+    "url": "https://github.com/evil-mad/robopaint.git"
   },
   "scripts": {
     "start": "node_modules/.bin/grunt build-current-os"
