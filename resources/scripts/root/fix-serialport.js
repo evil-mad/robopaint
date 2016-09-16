@@ -30,7 +30,7 @@ if (fs.existsSync(binFile)) {
   console.log('> npm install serialport');
 
   // Envrionment vars we need to set to make npm (, node-gyp, and node-pre-gyp)
-  // use the correct Electron to build native modules for
+  // build native modules for Electron
   var npmConfig = {
     npm_config_runtime: 'electron',
     npm_config_disturl: 'https://atom.io/download/atom-shell',
