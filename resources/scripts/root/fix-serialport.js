@@ -6,6 +6,7 @@
 var fs = require('fs-plus');
 var path = require('path');
 var finder = require('fs-finder');
+var spawn = require('child_process').spawn;
 
 var dir = process.platform + '-' + process.arch;
 var binFile = path.join('build', 'bin', 'serialport', dir, 'serialport.node');
@@ -23,5 +24,28 @@ if (fs.existsSync(binFile)) {
     console.error('Problem placing pre-compiled binary.', e);
   }
 } else {
-  console.log('Skipping placing pre-compiled serialport binary, unupported OS/architechture.');
+  console.log('Unable to place pre-compiled serialport binary, unupported OS/architechture.');
+  console.log('Using npm to build serialport for Electron locally.');
+  console.log('This will fail if you do not have the necessary build tools.');
+  console.log('> npm install serialport');
+
+  // Envrionment vars we need to set to make npm (, node-gyp, and node-pre-gyp)
+  // use the correct Electron to build native modules for
+  var npmConfig = {
+    npm_config_runtime: 'electron',
+    npm_config_disturl: 'https://atom.io/download/atom-shell',
+    npm_config_target: '1.0.2'
+  }
+
+  var npmCmd = spawn('npm', ['install', 'serialport'], {env: Object.assign({} , process.env, npmConfig)});
+
+  npmCmd.stdout.pipe(process.stdout);
+  npmCmd.stderr.pipe(process.stderr);
+
+  npmCmd.on('close', (code) => {
+    if (code !== 0) {
+      console.error(`Problem building serialport for Electron`);
+    }
+  });
+
 }
