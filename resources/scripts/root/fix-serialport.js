@@ -1,6 +1,8 @@
 /**
  * @file Helper program to assist in installing the correct OS specific compiled
  * binary for node-serialport.
+ * This will only be run by the postinstall trigger if `npm install` is run with
+ * no packages. `npm install` will run this, `npm install serialport` will not.
  */
 
 var fs = require('fs-plus');
