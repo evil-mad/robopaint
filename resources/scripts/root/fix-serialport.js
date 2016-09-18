@@ -24,20 +24,17 @@ if (fs.existsSync(binFile)) {
     console.error('Problem placing pre-compiled binary.', e);
   }
 } else {
+  var npmArgs = [
+    'install', '--runtime=electron',
+    '--disturl=https://atom.io/download/atom-shell', '--target=1.0.2',
+    'serialport'];
+
   console.log('Unable to place pre-compiled serialport binary, unupported OS/architechture.');
-  console.log('Using npm to build serialport for Electron locally.');
+  console.log(`Using npm to build serialport for Electron on ${dir}.`);
   console.log('This will fail if you do not have the necessary build tools.');
-  console.log('> npm install serialport');
+  console.log(`> npm ${npmArgs.join(' ')}`);
 
-  // Envrionment vars we need to set to make npm (, node-gyp, and node-pre-gyp)
-  // build native modules for Electron
-  var npmConfig = {
-    npm_config_runtime: 'electron',
-    npm_config_disturl: 'https://atom.io/download/atom-shell',
-    npm_config_target: '1.0.2'
-  }
-
-  var npmCmd = spawn('npm', ['install', 'serialport'], {env: Object.assign({} , process.env, npmConfig)});
+  var npmCmd = spawn('npm', npmArgs);
 
   npmCmd.stdout.pipe(process.stdout);
   npmCmd.stderr.pipe(process.stderr);
