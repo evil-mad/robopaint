@@ -4,6 +4,8 @@ exists here <https://github.com/evil-mad/robopaint/issues>
 ### Description
 
 For a bug: Describe the bug and list the steps you used when the issue occurred.
+include any files necessary to reproduce this by zipping them and attaching them
+to this issue.
 
 #### Steps to reproduce
   1.Click on this
