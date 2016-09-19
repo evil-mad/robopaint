@@ -29,7 +29,8 @@ if (fs.existsSync(binFile)) {
   var npmArgs = [
     'install', '--runtime=electron',
     '--disturl=https://atom.io/download/atom-shell', '--target=1.0.2',
-    'serialport'];
+    'serialport'
+  ];
 
   console.log('Unable to place pre-compiled serialport binary, unupported OS/architechture.');
   console.log(`Using npm to build serialport for Electron on ${dir}.`);
