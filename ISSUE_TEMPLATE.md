@@ -37,7 +37,7 @@ Copied files from zip
 
 #### What robot are you using?
 AxiDraw
-WaterColorBoat
+WaterColorBot
 Other (specify)
 
 #### Is the robot you want to control directly connected to RoboPaint?
