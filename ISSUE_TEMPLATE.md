@@ -17,7 +17,7 @@ For an enhancement or new feature: Describe your needs.
 This is only needed for a bug
 
 #### What operating system are you running?
-Windows XP, Vista, 7, 8, 10
+Windows 7, 8, 10
 OS X 10.?
 Linux what distribution?
 
