@@ -49,6 +49,8 @@ instead of this one.
 * **[Print Mode](https://github.com/evil-mad/robopaint-mode-print)**
   * An automatic paint mode meant to handle most SVG art easily and without much
   customization
+* **[Manual Mode](https://github.com/techninja/robopaint-mode-manual)**
+  * An experimental paint mode for advanced customization of prints.
 * **[Remote Print Mode](https://github.com/evil-mad/robopaint-mode-remote)**
   * Allow for high level sending of SVGs for printing directly with or without
   user interaction via an API.
