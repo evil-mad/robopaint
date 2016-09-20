@@ -1,3 +1,7 @@
+Each mode has its own issue tracker. If this is an issue with a mode please file
+the issue in the mode's repository. You can find a listing of the modes and their
+associated repositories here. <https://github.com/evil-mad/robopaint#projects>
+
 Before filling this issue, please check if the bug or feature request already
 exists here. <https://github.com/evil-mad/robopaint/issues>
 
