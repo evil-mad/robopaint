@@ -31,8 +31,7 @@ Linux: Distribution (Ubuntu, Debian, RedHat, Fedora) and version
 RoboPaint version:
 
 #### How did you install RoboPaint?
-I did not, running from source
-Manually
+Running from source
 System installer
 Copied files from zip
 
