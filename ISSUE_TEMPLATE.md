@@ -19,7 +19,7 @@ This is only needed for a bug
 #### What operating system are you running?
 Windows 7, 8, 10
 OS X 10.?
-Linux what distribution?
+Linux: Distribution (Ubuntu, Debian, RedHat, Fedora) and version
 
 #### What version of RoboPaint are you running?
   1.Go to the home screen of RoboPaint, this is the screen you see when you start
