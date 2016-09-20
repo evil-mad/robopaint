@@ -26,7 +26,7 @@ Linux what distribution?
   RoboPaint and can be accessed by clicking on the home icon in the top left
   corner of the window.
   2.Below RoboPaint text in the top middle of the home screen you should see text
-  in parenthesizes starting with `v` copy this and put it below.
+  in parenthesizes starting with `v`; type this in below.
 
 RoboPaint version:
 
