@@ -1,5 +1,5 @@
 Before filling this issue, please check if the bug or feature request already
-exists here <https://github.com/evil-mad/robopaint/issues>
+exists here. <https://github.com/evil-mad/robopaint/issues>
 
 ### Description
 
