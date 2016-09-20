@@ -40,6 +40,7 @@ AxiDraw
 WaterColorBoat
 Other (specify)
 
-#### Is the robot connected to RoboPaint
-Yes, the robot is connected to RoboPaint
+#### Is the robot you want to control directly connected to RoboPaint?
+Yes, the robot is plugged into the computer I am using.
+No, I am connecting with the external server option.
 No, I am using RoboPaint in simulation mode.
