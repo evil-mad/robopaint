@@ -4,14 +4,14 @@ Welcome, and thank you for helping us make this little project the best it can
 be!
 
 When contributing to this repository, please first discuss the change you wish
-to make via issue, or [Gitter chat](https://gitter.im/evil-mad/robopaint) before
+to make via an issue, or on [Gitter chat](https://gitter.im/evil-mad/robopaint) before
 jumping straight in to making a change that you wish to be part of the project.
 
 Please note we have a code of conduct (at the bottom of this document), please
 follow it in all your interactions with the project.
 
 ## Issues:
-RoboPaint in it's latest iteration is actually a tight grouping of smaller
+RoboPaint in its latest iteration is actually a tight grouping of smaller
 projects called "modes". Outside of modes, RoboPaint provides the shared APIs
 used by modes for automatic painting, settings management, robot selection,
 color management, and of course the management of the CNCServer API. If your
@@ -32,7 +32,7 @@ already exists in the central
 ### How to get version number:
 <div style="text-align: center;"><img src="https://cloud.githubusercontent.com/assets/320747/18774445/2742ce00-810e-11e6-85f4-d222da447309.png"></div>
 To the bottom right of the RoboPaint text in the top middle of the window you
-should see the version in parenthesizes starting with `v`. This will be hidden
+should see the version in parentheses starting with `v`. This will be hidden
 if your window size is too small.
 
 ## Pull Requests
@@ -61,7 +61,7 @@ Examples of unacceptable behavior by participants include:
 * Public or private harassment
 * Publishing other's private information, such as physical or electronic
 addresses, without explicit permission
-* Other unethical or unprofessional conduct.
+* Other unethical or unprofessional conduct
 
 Project maintainers have the right and responsibility to remove, edit, or reject
 comments, commits, code, wiki edits, issues, and other contributions that are

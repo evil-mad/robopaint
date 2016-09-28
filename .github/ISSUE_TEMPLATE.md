@@ -1,18 +1,18 @@
 ### Description
 
 For a bug: Describe the bug and list the steps you used when the issue occurred.
-include any files necessary to reproduce this by zipping them and attaching them
-to this issue. For features, describe what you'd like, how it might be used and
-why.
+Include any files necessary to reproduce this by zipping them and attaching the
+resulting zip file to this issue. For features, describe what you'd like, how it
+might be used, and why.
 
-#### Steps to reproduce | Feature Idea (Delete one)
+#### Steps to reproduce OR Feature idea (Delete one)
   1. Click on this
   2. Do that
   3. ...
 
 For an enhancement or new feature: Describe your needs or wants.
 
-### Version effected (if bug)
+### Version affected (if bug)
 See contributing documentation linked above if you can't find the version.
 
 #### What operating system are you running?
