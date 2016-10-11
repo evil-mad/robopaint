@@ -122,24 +122,20 @@ which will have the command line tools required for builds.
 as source to be built on the target machines, so you shouldn't have to install
 anything new for this at all.
 
-#### Building natively for Electron with `electron-rebuild`
- 0. Pull down/clone your fork of the RoboPaint repository with git (or just
+#### Building natively for Electron
+1. Pull down/clone your fork of the RoboPaint repository with git (or just
   download a zip of the files).
- 1. In your terminal/command line interface, go to that folder and run
- `npm install` to install dependencies, then `npm install electron-rebuild`
- to install electron-rebuild locally.
-   * This will have built the node-serialport for node, but we actually need
-the binary created with electron headers, so:
-   * First delete the compiled `serialport.node` file in
-`node_modules/cncserver/node_modules/serialport/build/Release/`, or whever `npm`
-happens to put the serialport module.
-   * Mac/Linux: run `node_modules/.bin/electron-rebuild`
-   * Windows: run `node_modules\.bin\electron-rebuild.cmd`
-   * You may see some errors, but it should re-compile everything that needs it.
-4. That's it! You should now be installed and ready to hack. To update CNC server
-just run `npm install cncserver` from the project root and it should pull from
-the latest master, and you'll likely need to re-run `electron-rebuild`, or the
-fix script via `npm run fix-serialport`.
+
+  2. In your terminal/command line interface, go to that folder and run
+  `npm install` to install dependencies, if there is not a prebuilt serialport
+  module for your architecture npm will try to build serialport for Electron.
+  You may see some errors, but it should re-compile everything that needs it.
+
+  3. That's it! You should now be installed and ready to hack. To update CNC server
+  just run `npm install cncserver` from the project root and it should pull from
+  the latest master, and you'll likely need to rebuild serialport for Electron
+  with `npm run fix-serialport`.
+
 
 ### Running RoboPaint from source
 * Assuming this is all working, get yourself to the root of the repo and simply
