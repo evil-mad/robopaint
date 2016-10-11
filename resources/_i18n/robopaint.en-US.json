@@ -265,8 +265,6 @@
     "output": {
       "skipwhite": "Skip White Paint",
       "skipwhiteinfo": "When your media settings (paint colors) contain white, ignore any paths that would be painted in that color. You may want to turn this off when painting on a background that is not white.",
-      "nativerunner": "Use Native CNCServer Runner",
-      "nativerunnerinfo": "If enabled, CNCServer will stream commands via a separate node.js process that will be immune to Electron's background limitations. **Change requires App restart, and node.js installed globally.**",
       "optimize": "Optimize path order",
       "optimizeinfo": "If enabled, all automatic painting paths (fill and stroke) will be reordered according to color and proximity to previous path end. Paths will even be reversed to ensure lowest distance between work, but can take a very strange path if working with multiple lines of text.",
       "generaltitle": "General",
