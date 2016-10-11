@@ -75,7 +75,7 @@ function loadSettings() {
     fillocclusionfills: 1,
 
     skipwhite: 1,
-    prefillbuffer: 1,
+    usenativerunner: 0,
     optimizepath: 1
   };
 
