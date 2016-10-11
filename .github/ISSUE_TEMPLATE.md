@@ -5,14 +5,14 @@ Include any files necessary to reproduce this by zipping them and attaching the
 resulting zip file to this issue. For features, describe what you'd like, how it
 might be used, and why.
 
-#### Steps to reproduce OR Feature idea (Delete one)
+#### Steps to reproduce OR Feature idea (Choose one)
   1. Click on this
   2. Do that
   3. ...
 
 For an enhancement or new feature: Describe your needs or wants.
 
-### Version affected (if bug)
+#### Version affected (if bug)
 See contributing documentation linked above if you can't find the version.
 
 #### What operating system are you running?
