@@ -7,7 +7,7 @@ Software for drawing robots, and your
 [friendly painting robot kit, the WaterColorBot](http://watercolorbot.com)!
 
 ## Downloads / Install
-[Click here](https://github.com/evil-mad/robopaint/releases/tag/v2.0.0-Beta.3.2016-10-11)
+[Click here](https://github.com/evil-mad/robopaint/releases/tag/v2.0.0-Beta.3.2016-10-12)
 to download the current beta release. This release has many changes that improve
 the functinality of RoboPaint. Since this a beta release you may expierence bugs.
 If you do please report it by creating an issue [here](https://github.com/evil-mad/robopaint/issues)
