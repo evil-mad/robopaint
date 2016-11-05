@@ -83,6 +83,9 @@ module.exports = function(paper) {
       try {
         if (p.children) {
           _.each(p.children, function(c, pathIndex) {
+            if (c.segments.length <= 1 && c.closed) {
+              c.closed = false;
+            }
             c.flatten(flattenResolution);
             paths[pathIndex] = [];
             _.each(c.segments, function(s){

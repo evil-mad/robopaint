@@ -2,7 +2,6 @@
  * @file Holds all initially loaded and Node.js specific initialization code,
  * central cncserver object to control low-level non-restful APIs, and general
  * "top-level" UI initialization for settings.
- *
  */
 
 // Must use require syntax for including these libs because of node duality.
@@ -12,34 +11,13 @@ $.qtip = require('qtip2');
 window.i18n = require('i18next-client');
 
 // Include global main node process connector objects.
-var remote = require('remote');
+var remote = require('electron').remote;
 var mainWindow = remote.getCurrentWindow();
-var app = remote.require('app');
+var app = remote.app;
 var path = require('path');
 var bytes = require('bytes');
 var appPath = path.join(app.getAppPath(), '/');
 var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
-
-// Setup and hide extraneous menu items for Mac Menu
-if (process.platform === "darwin") {
-  // TODO: Implement Menus!
-  // https://github.com/atom/electron/blob/master/docs/api/menu.md
-}
-
-// BugSnag NODE Initialization
-//
-// TODO: This needs lots more testing, near as I can tell, for node, this is
-// just dandy, but here in node-webkit, it simply throws the app on its ass
-// leaving the user wondering what the hell happened, and nothing to show for
-// it. Yes, we do get a report in the management system, but it's not nice to
-// people. Need to configure this to fail less deadly, or rely solely on the
-// clientside plugin :/
-/*var bugsnag = require("bugsnag");
-bugsnag.register("e3704afa045597498ab11c74f032f755",{
-  releaseStage: gui.App.manifest.stage,
-  appVersion: gui.App.manifest.version
-});*/
-
 
 // Global Keypress catch for debug
 $(document).keypress(function(e){
@@ -48,48 +26,58 @@ $(document).keypress(function(e){
   }
 });
 
+// Catch any errors in this intitial startup.
+// TODO: This is a bit of a mess. We need to rely on FAR fewer globals, and
+// initializing them so early means its harder to catch errors.
+try {
+  var currentLang = "";
+  var fs = require('fs-plus');
+  var cncserver = require('cncserver');
+  var isModal = false;
+  var initializing = false;
+  var appMode = 'home';
+  var homeVis = rpRequire('home');
+  var $subwindow = null; // Placeholder for mode subwindow webview
 
-var currentLang = "";
-var fs = require('fs-plus');
-var cncserver = require('cncserver');
-var isModal = false;
-var initializing = false;
-var appMode = 'home';
-var homeVis = rpRequire('home');
-var $subwindow = null; // Placeholder for mode subwindow webview
+  // Set the global scope object for any robopaint level details needed by other modes
+  var robopaint = {
+    settings: {}, // Holds the "permanent" app settings data
+    statedata: {}, // Holds per app session volitile settings
+    cncserver: cncserver, // Holds the reference to the real CNC server object with API wrappers
+    $: $, // Top level jQuery Object for non-shared object bindings
+    appPath: appPath, // Absolute App path to prefix relative dir locations
+    utils: rpRequire('utils'),
+    get currentMode() {
+      return appMode === "home" ? {robopaint: {}} : this.modes[appMode];
+    }
+  };
 
-// Set the global scope object for any robopaint level details needed by other modes
-var robopaint = {
-  settings: {}, // Holds the "permanent" app settings data
-  statedata: {}, // Holds per app session volitile settings
-  cncserver: cncserver, // Holds the reference to the real CNC server object with API wrappers
-  $: $, // Top level jQuery Object for non-shared object bindings
-  appPath: appPath, // Absolute App path to prefix relative dir locations
-  utils: rpRequire('utils'),
-  get currentMode() {
-    return appMode === "home" ? {robopaint: {}} : this.modes[appMode];
-  }
-};
+  // Add the Node CNCServer API wrapper
+  rpRequire('cnc_api')(cncserver, robopaint.utils.getAPIServer(robopaint.settings));
 
-// Add the Node CNCServer API wrapper
-rpRequire('cnc_api')(cncserver, robopaint.utils.getAPIServer(robopaint.settings));
+  // currentBot lies outside of settings as it actually controls what settings will be loaded
+  robopaint.currentBot = robopaint.utils.getCurrentBot();
 
-// currentBot lies outside of settings as it actually controls what settings will be loaded
-robopaint.currentBot = robopaint.utils.getCurrentBot();
+  // Option buttons for connections
+  // TODO: Redo this is as a message management window system.
+  // Needs approximately same look, obvious, modal, sub-buttons. jQuery UI may
+  // not be quite enough. Requires some research (and good understanding of
+  // what this is currently used for, and what/if the other modes may make use of it).
+  var $options;
+  var $stat;
 
-// Option buttons for connections
-// TODO: Redo this is as a message management window system.
-// Needs approximately same look, obvious, modal, sub-buttons. jQuery UI may
-// not be quite enough. Requires some research (and good understanding of
-// what this is currently used for, and what/if the other modes may make use of it).
-var $options;
-var $stat;
-
-rpRequire('manager'); // Manage state and messages
-rpRequire('cnc_utils'); // Canvas calculation utils
-rpRequire('commander'); // Simple command queuing
-rpRequire('wcb'); // WaterColorBot Specific group commands
-rpRequire('mediasets') // Colors and other media specific details.
+  rpRequire('manager'); // Manage state and messages
+  rpRequire('cnc_utils'); // Canvas calculation utils
+  rpRequire('commander'); // Simple command queuing
+  rpRequire('wcb'); // WaterColorBot Specific group commands
+  rpRequire('mediasets') // Colors and other media specific details.
+} catch(e) {
+  $(function(){
+    $('body.home h1').attr('class', 'error').text('Error During Pre-Initialization:')
+      .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
+    console.error(e.stack);
+  });
+}
 
 /**
  * Central home screen initialization (called after translations have loaded)
@@ -496,25 +484,22 @@ function startSerial(){
   setMessage('status.start', 'loading');
 
   try {
-    // Load the CNCServer serial runner in a webview if not using node native...
-    if (!robopaint.settings.usenativerunner) {
-      var $runner = $('<webview>').attr({
-        border: 0,
-        class: 'hide',
-        nodeintegration: 'true',
-        src: '../node_modules/cncserver/runner/runner.html',
-        disablewebsecurity: 'true',
-      }).appendTo('body');
+    // Load the CNCServer serial runner in a webview...
+    var $runner = $('<webview>').attr({
+      border: 0,
+      class: 'hide',
+      nodeintegration: 'true',
+      src: '../node_modules/cncserver/runner/runner.html',
+      disablewebsecurity: 'true',
+    }).appendTo('body');
 
-      // Report runner messages direct to the main console.
-      $runner[0].addEventListener('console-message', function(e) {
-        console.log('RUNNER:', e.message);
-      });
-    }
+    // Report runner messages direct to the main console.
+    $runner[0].addEventListener('console-message', function(e) {
+      console.log('RUNNER:', e.message);
+    });
 
     cncserver.start({
       botType: robopaint.currentBot.type,
-      localRunner: robopaint.settings.usenativerunner,
       success: function() {
         setMessage('status.found');
       },
@@ -743,6 +728,12 @@ function initHistoryload() {
     robopaint.setModeSVG($(this).data('file'));
     return false;
   });
+
+  var svgPath = robopaint.utils.getSVGCachePath();
+
+  if (!fs.existsSync(svgPath)) {
+    fs.mkdirSync(svgPath);
+  }
 
   robopaint.reloadHistory();
 }

@@ -55,6 +55,9 @@ function shapeFillPath(inPath) {
   if (p.children) {
     _.each(p.children, function(c, pathIndex) {
       if (!c.length) return false;
+      if (c.segments.length <= 1 && c.closed) {
+         c.closed = false;
+      }
       c.flatten(g.settings.flattenResolution);
       geometries[pathIndex] = [];
       _.each(c.segments, function(s){

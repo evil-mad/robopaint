@@ -13,8 +13,13 @@ results
 
 npm-debug.log
 
-/node_modules/*
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+# Builds directory
+/build/dist
+
 /nbproject/private
 nbproject/project.properties
-
 nbproject/project.xml

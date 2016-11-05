@@ -1,7 +1,8 @@
-var app = require('app');  // Module to control application life.
+var app = require('electron').app;  // Module to control application life.
 var path = require('path');
-var BrowserWindow = require('browser-window');  // Module to create native browser window.
-var dialog = require('dialog');
+// Module to create native browser window.
+var BrowserWindow = require('electron').BrowserWindow;
+var dialog = require('electron').dialog;
 
 // Report crashes to our server.
 //require('crash-reporter').start();
@@ -62,6 +63,9 @@ function windowInit() {
     // Load the main html of the app.
     var p = path.join(app.getAppPath(), 'resources', 'main.html');
     mainWindow.loadURL('file://' + p);
+
+    // No menus for now, thanks!
+    mainWindow.setMenu(null);
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {

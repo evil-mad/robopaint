@@ -520,10 +520,10 @@ body.home #bar span.right {
 body.home h1 {
   padding: 11px;
   position: absolute;
-  top: 67%;
+  top: 50%;
   width: 100%;
   min-height: 46px;
-  margin-top: -130px;
+  transform: translate(0, -50%);
   text-align: center;
   background-color: #fff;
   z-index: 13;
@@ -618,33 +618,6 @@ body.home #modalmask:before {
   transform: translateZ(0) translateX(-50%) translateY(-50%);
 }
 
-@-webkit-keyframes load4 {
-  0%,
-  100% {
-    box-shadow: 0 -3em 0 0.2em #ffffff, 2em -2em 0 0em #ffffff, 3em 0 0 -1em #ffffff, 2em 2em 0 -1em #ffffff, 0 3em 0 -1em #ffffff, -2em 2em 0 -1em #ffffff, -3em 0 0 -1em #ffffff, -2em -2em 0 0 #ffffff;
-  }
-  12.5% {
-    box-shadow: 0 -3em 0 0 #ffffff, 2em -2em 0 0.2em #ffffff, 3em 0 0 0 #ffffff, 2em 2em 0 -1em #ffffff, 0 3em 0 -1em #ffffff, -2em 2em 0 -1em #ffffff, -3em 0 0 -1em #ffffff, -2em -2em 0 -1em #ffffff;
-  }
-  25% {
-    box-shadow: 0 -3em 0 -0.5em #ffffff, 2em -2em 0 0 #ffffff, 3em 0 0 0.2em #ffffff, 2em 2em 0 0 #ffffff, 0 3em 0 -1em #ffffff, -2em 2em 0 -1em #ffffff, -3em 0 0 -1em #ffffff, -2em -2em 0 -1em #ffffff;
-  }
-  37.5% {
-    box-shadow: 0 -3em 0 -1em #ffffff, 2em -2em 0 -1em #ffffff, 3em 0em 0 0 #ffffff, 2em 2em 0 0.2em #ffffff, 0 3em 0 0em #ffffff, -2em 2em 0 -1em #ffffff, -3em 0em 0 -1em #ffffff, -2em -2em 0 -1em #ffffff;
-  }
-  50% {
-    box-shadow: 0 -3em 0 -1em #ffffff, 2em -2em 0 -1em #ffffff, 3em 0 0 -1em #ffffff, 2em 2em 0 0em #ffffff, 0 3em 0 0.2em #ffffff, -2em 2em 0 0 #ffffff, -3em 0em 0 -1em #ffffff, -2em -2em 0 -1em #ffffff;
-  }
-  62.5% {
-    box-shadow: 0 -3em 0 -1em #ffffff, 2em -2em 0 -1em #ffffff, 3em 0 0 -1em #ffffff, 2em 2em 0 -1em #ffffff, 0 3em 0 0 #ffffff, -2em 2em 0 0.2em #ffffff, -3em 0 0 0 #ffffff, -2em -2em 0 -1em #ffffff;
-  }
-  75% {
-    box-shadow: 0em -3em 0 -1em #ffffff, 2em -2em 0 -1em #ffffff, 3em 0em 0 -1em #ffffff, 2em 2em 0 -1em #ffffff, 0 3em 0 -1em #ffffff, -2em 2em 0 0 #ffffff, -3em 0em 0 0.2em #ffffff, -2em -2em 0 0 #ffffff;
-  }
-  87.5% {
-    box-shadow: 0em -3em 0 0 #ffffff, 2em -2em 0 -1em #ffffff, 3em 0 0 -1em #ffffff, 2em 2em 0 -1em #ffffff, 0 3em 0 -1em #ffffff, -2em 2em 0 0 #ffffff, -3em 0em 0 0 #ffffff, -2em -2em 0 0.2em #ffffff;
-  }
-}
 @keyframes load4 {
   0%,
   100% {
@@ -691,86 +664,6 @@ body.home #remoteprint-mask:before {
   content: ' ';
   background-color: #D8BFD8;
   opacity: 0.8;
-}
-
-/* Remote Paint/Print Window */
-#remoteprint-window {
-  border-radius: 7em;
-  padding: 4em;
-  overflow: hidden;
-  z-index: 15;
-  position: absolute;
-  top: 10%;
-  bottom: 10%;
-  left: 10%;
-  right: 10%;
-  text-align: center;
-  background-color: rgb(223, 147, 233);
-}
-
-#remoteprint-window h3 {
-  margin-bottom: 1.3em;
-  font-size: 2.3em;
-  margin-top: -1.5em;
-}
-
-#remoteprint-window div.icons {
-  font-size: 6em;
-  margin-top: -49px;
-}
-
-#remoteprint-window div.icons span {
-  margin: -30px;
-  text-indent: 22px;
-}
-
-#remoteprint-window button {
-  margin: 1em;
-}
-
-/* Remote Paint/Print Preview and Auto scale container */
-#remoteprint-window #preview-scale-container {
-  width: 2304px;
-  height: 864px;
-  left: 3em;
-  position: absolute;
-  -webkit-transform-origin: top left;
-}
-
-#remoteprint-window svg#preview {
-  background-color: white;
-  left: 0; /* Wacky requirements for double scaling container */
-  position: absolute;
-}
-
-#remoteprint-window #details {
-  -webkit-transform: scale(3.4);
-  -webkit-transform-origin: top left;
-  position: absolute;
-  left: 1210px;
-  width: 333px;
-}
-
-#remoteprint-window #details #statusmessage {
-  font-size: 19px;
-}
-
-#remoteprint-window #details legend {
-  text-align: left;
-  font-weight: bold;
-}
-
-#remoteprint-window #details button.cancel {
-  background: linear-gradient(to bottom, #C73030, #851C1C);
-  padding: 7px 10px;
-}
-
-#remoteprint-window #details button.cancel:hover {
-  background: linear-gradient(to bottom, #EC6D6D, #DD0000);
-}
-
-#remoteprint-window #details progress {
-  width: 100%;
 }
 
 /* qTip extra styles */
