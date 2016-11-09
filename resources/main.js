@@ -118,7 +118,7 @@ function startInitialization() {
 
   // Prep the connection status overlay
   $stat = $('#connection');
-  $options = $('.options', $stat);
+  $options = $('.options:first', $stat);
 
   // Actually try to init the connection and handle the various callbacks
   startSerial();
@@ -234,7 +234,7 @@ function destroySubwindow(callback) {
  */
 function bindMainControls() {
   // Bind the continue/simulation mode button functionality
-  $('#connection button.continue', $options).click(function(e){
+  $('#connection button.continue').click(function(e){
     $stat.fadeOut('slow');
     cncserver.continueSimulation();
     cncserver.serialReadyInit();
