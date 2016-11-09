@@ -235,7 +235,6 @@ function destroySubwindow(callback) {
 function bindMainControls() {
   // Bind the continue/simulation mode button functionality
   $('#connection button.continue').click(function(e){
-    $stat.fadeOut('slow');
     cncserver.continueSimulation();
     cncserver.serialReadyInit();
 
@@ -251,7 +250,7 @@ function bindMainControls() {
       initializing = false;
     }
 
-    setModal(false);
+    setModal(false, '#connection');
   });
 
   // Bind the reconnect button functionality
@@ -509,8 +508,7 @@ function startSerial(){
       },
       connect: function() {
         setMessage('status.success', 'success');
-        $stat.fadeOut('slow');
-        setModal(false);
+        setModal(false, '#connection');
 
         // If caught on startup...
         if (initializing) {
@@ -526,8 +524,7 @@ function startSerial(){
         initSocketIO();
       },
       disconnect: function() {
-        setModal(true);
-        $stat.show();
+        setModal(true, '#connection');
         setMessage('status.disconnect', 'error');
         $options.slideDown();
       }
@@ -1053,12 +1050,15 @@ function setMessage(transKey, mode, append){
  *
  * @param {Boolean} toggle
  *   True for modal overlay on, false for off.
+ * @param {string} selectors
+ *   Selectors to add to the fadeIn/Out.
  */
-function setModal(toggle){
+function setModal(toggle, selectors){
+  selectors = selectors ? [selectors, '#modalmask'] : ['#modalmask'];
   if (toggle) {
-    $('#modalmask').fadeIn('slow');
+    $(selectors.join(', ')).fadeIn('slow');
   } else {
-    $('#modalmask').fadeOut('slow');
+    $(selectors.join(', ')).fadeOut('fast');
   }
 
   isModal = toggle;
