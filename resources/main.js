@@ -3,6 +3,7 @@
  * central cncserver object to control low-level non-restful APIs, and general
  * "top-level" UI initialization for settings.
  */
+/* globals window, document, $*/
 
 // Must use require syntax for including these libs because of node duality.
 window.$ = window.jQuery = require('jquery');
@@ -292,6 +293,31 @@ function bindMainControls() {
         $('button.continue').click();
       }
     });
+  });
+
+  // Bind buttons for manual swap ==============================================
+  $('#manualswap button').click(function() {
+    var $this = $(this);
+    if ($this.is('.toggle')) {
+      $this.toggleClass('pen-down');
+      if ($this.is('.pen-down')) {
+        cncserver.cmd.run('down', true);
+      } else {
+        cncserver.cmd.run('up', true);
+      }
+      return;
+    }
+
+    // Switch between the other two button options that close the window.
+    if ($this.is('.cancel')) {
+      // Cancel the print... by cheating! Just go home.
+      robopaint.switchMode('home');
+    } else if ($this.is('.continue')) {
+      // Run resume immediately.
+      cncserver.cmd.run('resume', true);
+    }
+    // Hide the window.
+    setModal(false, '#manualswap');
   });
 
   window.onbeforeunload = onClose; // Catch close event

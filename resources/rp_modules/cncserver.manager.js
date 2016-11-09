@@ -2,7 +2,7 @@
  * @file Manage clientside state, messages, progress bar and status, and all
  * cncserver specific communication from modes to the one instance of the API.
  */
-/* globals $, _, robopaint, cncserver  */
+/* globals $, _, robopaint, cncserver, i18n, setModal  */
 var modeWindow = {};
 
 cncserver.state = {
@@ -79,6 +79,7 @@ $(robopaint).on('socketIOComplete', function(){
   }
   robopaint.socket.on('message update', messageUpdateEvent);
   robopaint.socket.on('callback update', callbackEvent);
+  robopaint.socket.on('manualswap trigger', manualSwapTrigger);
 });
 
 // CNCServer Buffer Change events (for pause, update, or resume)
@@ -134,6 +135,39 @@ function bufferUpdateEvent(b){
       });
     }
   }
+}
+
+/**
+ * Tool manual swap event trigger. When a queued tool change to a manual tool
+ * is reached, the queue will be paused and this will get called. We need to
+ * tell the use to get ready and actually do the manual swap. When done, we just
+ * resume the queue.
+ *
+ * @param  {object} data
+ *   Currently only supports one property: index, containing the originally sent
+ *   tool index (color) to be used to tell the user what they should change to.
+ */
+function manualSwapTrigger(data) {
+  // Alert user.
+  var shell = require('electron').shell;
+  shell.beep();
+
+  // Unlock immediately.
+  cncserver.cmd.run('unlock', true);
+
+  // Translate window text based on given implement.
+  var set = robopaint.media.currentSet;
+  var name = set.colors[data.index].name;
+  var type = set.media.toLowerCase();
+  $('#manualswap b').text(
+    i18n.t('libs.manual.notice', {color: name.toLowerCase(), type: type})
+  );
+  $('#manualswap button.continue').text(
+    i18n.t('libs.manual.options.continue.title', {color: name})
+  );
+
+  // Show window and overlay.
+  setModal(true, '#manualswap');
 }
 
 // Pen update event callback

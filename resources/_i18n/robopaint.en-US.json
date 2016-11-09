@@ -87,9 +87,24 @@
     "autostroke": "Stroking path __id__...",
     "autocomplete": "Automatic Paint Complete!",
     "manual": {
-      "status": "Waiting for manual implement change...",
-      "notice": "Please insert the __color__ color, calibrate the height, then click continue to resume drawing.",
-      "resume": "Now drawing with __color__"
+      "status": "Waiting for manual change...",
+      "notice": "Please insert the __color__ __type__ to continue",
+      "info": "Motors unlocked for calibration, use the toggle button find the correct draw height, ensure the pen is put back in park position, then click continue to resume drawing.",
+      "resume": "Now drawing with __color__",
+      "options": {
+        "cancel": {
+          "title": "Cancel Print",
+          "info": "Cancel the current print job, close the mode and return to the home screen."
+        },
+        "continue": {
+          "title": "Continue drawing with __color__",
+          "info": "Once you've finished changing to the correct drawing implement, click to continue drawing."
+        },
+        "toggle": {
+          "title": "Toggle height",
+          "info": "Toggle the raising/lowering of the pen to calibrate its height."
+        }
+      }
     },
     "spool": {
       "stroke": "Tracing stroke path __id__...",

@@ -175,7 +175,9 @@ function sendNext() {
       break;
 
     case "unlock":
-      api.motors.unlock(sendNext);
+      options = {};
+      if (cmd[1] === true) options.skipBuffer = true;
+      api.motors.unlock(sendNext, options);
       break;
 
     case "wash":

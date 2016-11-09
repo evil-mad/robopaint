@@ -56,6 +56,13 @@ button.normal:disabled, button.normal:disabled:hover {
   -webkit-animation: none;
 }
 
+button.normal.cancel {
+  background: linear-gradient(to bottom, #696969, #BB5A5A);
+}
+
+button.normal.cancel:hover {
+  background: linear-gradient(to bottom, #961A1A, #FF0000);
+}
 
 /* Animation Keyframes */
 @-webkit-keyframes hover-pulse {

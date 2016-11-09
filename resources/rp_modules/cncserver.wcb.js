@@ -103,12 +103,11 @@ cncserver.wcb = {
     cncserver.state.mediaTarget = toolName;
 
     if (toolName.indexOf('manualswap') !== -1) { // Manual Change
-      var swap = toolName.split('|');
       // Spool into the buffer pen specific statuses and manualswap start.
       cncserver.cmd.run([
         ['status', robopaint.t('libs.manual.status', {color: name})],
         'resetdistance',
-        ['tool', 'manualswap'], // Buffer will pause on this, till resume.
+        ['tool', toolName], // Buffer will pause on this, till resume.
         ['status', robopaint.t('libs.manual.resume', {color: name})]
       ], fromSendBuffer);
     } else {

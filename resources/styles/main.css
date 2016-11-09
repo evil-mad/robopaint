@@ -39,6 +39,14 @@ button.normal:focus {
   outline: none;
 }
 
+button.normal.cancel {
+  background: linear-gradient(to bottom, #696969, #BB5A5A);
+}
+
+button.normal.cancel:hover {
+  background: linear-gradient(to bottom, #961A1A, #FF0000);
+}
+
 img.logo {
   margin-left: -100px;
   height: 37px;
@@ -516,29 +524,45 @@ body.home #bar span.right {
   padding-left: 0.5em;
 }
 
-/* Semi-modal alert status message */
+/* Semi-modal alert status messages */
 body.home h1 {
-  padding: 11px;
+  box-sizing: border-box;
+  padding: 1em;
   position: absolute;
   top: 50%;
   width: 100%;
+  line-height: 0.8em;
   min-height: 46px;
   transform: translate(0, -50%);
   text-align: center;
-  background-color: #fff;
+  background: linear-gradient(to bottom, #b4e391 0%,#61c419 50%,#b4e391 100%);
   z-index: 13;
+}
+
+body.home h1 div.options {
+  margin-top: 0.5em;
+}
+
+body.home h1 aside {
+  font-size: 0.65em;
+  font-weight: 500;
+  margin-top: 0.6em;
+  line-height: 1em;
 }
 
 body.home h1.error {
   background-color: red;
+  background: linear-gradient(to bottom, #a90329 0%,#8f0222 44%,#6d0019 100%);
 }
 
 body.home h1.warning {
   background-color: orange;
+  background: linear-gradient(to bottom, #f0b7a1 0%,#bf6e4e 100%);
 }
 
 body.home h1.loading {
   background-color: #b1c9d6;
+  background: linear-gradient(to bottom, #7abcff 0%,#b7d6f6 44%,#86b6e7 100%);
 }
 
 body.home h1 span.message {
