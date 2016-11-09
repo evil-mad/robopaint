@@ -602,6 +602,9 @@ function initToolTips() {
         target: $this, // my target,
         viewport: $(window)
       },
+      hide: {
+          event: 'click mouseleave'
+      },
       events: {
         render: function(event, api) {
           if (!$this.data('i18n')) return;
