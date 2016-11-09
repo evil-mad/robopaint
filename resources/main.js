@@ -73,7 +73,7 @@ try {
   rpRequire('mediasets') // Colors and other media specific details.
 } catch(e) {
   $(function(){
-    $('body.home h1').attr('class', 'error').text('Error During Pre-Initialization:')
+    $('#connection').attr('class', 'error').text('Error During Pre-Initialization:')
       .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
     console.error(e.stack);
   });
@@ -117,7 +117,7 @@ function startInitialization() {
   initHistoryload();
 
   // Prep the connection status overlay
-  $stat = $('body.home h1');
+  $stat = $('#connection');
   $options = $('.options', $stat);
 
   // Actually try to init the connection and handle the various callbacks
@@ -125,7 +125,7 @@ function startInitialization() {
 
   bindMainControls(); // Bind all the controls for the main interface
  } catch(e) {
-   $('body.home h1').attr('class', 'error').text('Error During Initialization:')
+   $('#connection').attr('class', 'error').text('Error During Initialization:')
      .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
    console.error(e.stack);
  }
@@ -234,7 +234,7 @@ function destroySubwindow(callback) {
  */
 function bindMainControls() {
   // Bind the continue/simulation mode button functionality
-  $('button.continue', $options).click(function(e){
+  $('#connection button.continue', $options).click(function(e){
     $stat.fadeOut('slow');
     cncserver.continueSimulation();
     cncserver.serialReadyInit();
@@ -255,14 +255,14 @@ function bindMainControls() {
   });
 
   // Bind the reconnect button functionality
-  $('button.reconnect').click(function(e){
+  $('#connection button.reconnect').click(function() {
     // Reconnect! Resets status and tries to start again
     $options.hide();
     startSerial();
   });
 
   // Bind the external server connection button functionality
-  $('button.external').click(function(e){
+  $('#connection button.external').click(function() {
     if ($('div.external').is(':visible')){
       $('div.external').slideUp('slow');
     } else {
@@ -271,7 +271,7 @@ function bindMainControls() {
   });
 
   robopaint.statedata.external = false;
-  $('button#external-go').click(function(e){
+  $('#connection button#external-go').click(function() {
     var $stat = $('#external-status');
 
     $stat.text(robopaint.t('external.status.connect'));
@@ -533,7 +533,7 @@ function startSerial(){
       }
     });
   } catch(e) {
-   $('body.home h1').attr('class', 'error').text('Error During Serial Start:')
+   $('#connection').attr('class', 'error').text('Error During Serial Start:')
      .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
    console.log(e.stack);
  }
