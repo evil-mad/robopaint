@@ -62,7 +62,15 @@ cncserver.wcb = {
     if (toolName.indexOf('water') !== -1) {
       return robopaint.t('common.water');
     } else {
-      return robopaint.media.currentSet.colors[toolName.substr(-1)].name;
+      if (robopaint.media.currentSet.colors[toolName.substr(-1)]) {
+        return robopaint.media.currentSet.colors[toolName.substr(-1)].name;
+      } else {
+        console.error(
+          'Mode requested tool index [' +
+          toolName.substr(-1) + '] not available. Defaulting to 0.'
+        );
+        return robopaint.media.currentSet.colors[0].name;
+      }
     }
   },
 
