@@ -295,6 +295,11 @@ function bindMainControls() {
     });
   });
 
+  // Bind visible buttons to keystrokes ========================================
+  $(document).keydown(function(e) {
+    $('button[data-bind-keycode="' + e.keyCode + '"]:visible:not(:focus)').click();
+  });
+
   // Bind buttons for manual swap ==============================================
   $('#manualswap button').click(function() {
     var $this = $(this);
