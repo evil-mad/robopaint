@@ -310,7 +310,8 @@ function bindMainControls() {
 
     // Switch between the other two button options that close the window.
     if ($this.is('.cancel')) {
-      // Cancel the print... by cheating! Just go home.
+      // Cancel the print... then go home.
+      cncserver.fullCancel();
       robopaint.switchMode('home');
     } else if ($this.is('.continue')) {
       // Run resume immediately.

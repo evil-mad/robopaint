@@ -273,5 +273,20 @@ cncserver.progress = function(p) {
   popoutStatus();
 };
 
+/**
+ * Fully cancel anything that's going on.
+ */
+cncserver.fullCancel = function() {
+  cncserver.cmd.run([
+    'clear',
+    'resume',
+    'park',
+    ['progress', 0, 1],
+    'localclear'
+    // As a nice reminder, localclear MUST be last, otherwise the commands
+    // after it will be cleared before being sent :P
+  ], true); // As this is a forceful cancel, shove to the front of the queue
+};
+
 // TODO: Provide something for the parent script?
 module.exports = {};
