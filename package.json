@@ -52,6 +52,7 @@
     "url": "https://github.com/evil-mad/robopaint.git"
   },
   "devDependencies": {
+    "devtron": "^1.4.0",
     "electron": "1.6.10"
   }
 }
