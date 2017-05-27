@@ -546,7 +546,10 @@ function startSerial(){
 function onClose(e) {
   // Allow for quick refresh loads only with devtools opened.
   if (mainWindow.isDevToolsOpened()) {
-    if (!document.hasFocus()) return true;
+    if (!document.hasFocus()) {
+      app.relaunch();
+      app.exit();
+    }
   }
 
   checkModeClose(true);
