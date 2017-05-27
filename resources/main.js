@@ -152,7 +152,7 @@ function createSubwindow(callback) {
   // Log mode messages here if mode devtools isn't opened.
   $subwindow[0].addEventListener('console-message', function(e) {
     if (!$subwindow[0].isDevToolsOpened()){
-      console.log('MODE:', e.message);
+      console.log('MODE (' + appMode + '):', e.message);
     }
   });
 
