@@ -10,7 +10,7 @@
   },
   "stage": "development",
   "license": "MIT",
-  "electronVersion": "1.0.2",
+  "electronVersion": "1.6.10",
   "scripts": {
     "start": "electron .",
     "fix-serialport": "node resources/scripts/root/fix-serialport.js",
@@ -52,6 +52,6 @@
     "url": "https://github.com/evil-mad/robopaint.git"
   },
   "devDependencies": {
-    "electron-prebuilt": "1.0.2"
+    "electron": "1.6.10"
   }
 }
