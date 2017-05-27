@@ -21,7 +21,8 @@ var fs = require('fs-plus');
 var ipc = window.ipc = require('electron').ipcRenderer;
 var appPath = app.getAppPath();
 var i18n = window.i18n = require('i18next-client');
-var $ = require('jquery');
+var mainHasLoaded = false;
+var $; // Preload global placeholder for jQuery (initialized on window load).
 var _ = require('underscore');
 var rpRequire = window.rpRequire = require(
   appPath + '/resources/rp_modules/rp.require'
@@ -42,19 +43,73 @@ var modePath = path.parse(decodeURIComponent(location.hash.substr(1)));
 var mode = window.mode = require(path.join(modePath.dir, 'package.json'));
 mode.path = modePath;
 
-// Load jQuery early if the mode asks for it.
-if (mode.robopaint.dependencies) {
-  if (mode.robopaint.dependencies.includes('jquery-early')) {
-    window.$ = window.jQuery = $;
-  }
-}
-
 // Load the central RP settings
 var robopaint = window.robopaint = {
   utils: rpRequire('utils'),
   appPath: appPath + path.sep,
   t: i18n.t
 };
+
+// Load jQuery only when the window has passe "load" to allow DOM access.
+window.addEventListener('load', function() {
+  $ = require('jquery');
+
+  // Load jQuery early if the mode asks for it.
+  if (mode.robopaint.dependencies) {
+    if (mode.robopaint.dependencies.includes('jquery-early')) {
+      window.$ = window.jQuery = $;
+    }
+  }
+
+  // Catch full "document loaded" event via jQuery.
+  $(function(){
+    // Add the generic mode CSS for body drop shadow and basic button formatting.
+    $('<link>').attr({
+      href: robopaint.appPath + "resources/styles/modes.css",
+      rel: "stylesheet"
+    }).appendTo('head');
+
+    // Manage loading roboPaintDependencies from mode package config
+    if (mode.robopaint.dependencies) {
+      _.each(mode.robopaint.dependencies, function(modName){
+        switch (modName) {
+          case 'jquery-early':
+          case 'jquery':
+            window.$ = window.jQuery = $;
+            break;
+          case 'underscore':
+            window._ = _;
+            break;
+          case 'qtip':
+            $.qtip = require('qtip2');
+            break;
+          case 'paper':
+            console.log('Loading Paper');
+            preloadCompleteAsyncChecklist.paperLoaded = false;
+            rpRequire('paper', function(){
+              preloadCompleteAsyncChecklist.paperLoaded = true;
+              preloadComplete();
+            });
+            break;
+          default:
+            rpRequire(modName);
+        }
+      });
+    }
+
+    // Run the initial translation.
+    mode.translate();
+
+    // Load/Inject in the mode's custom main JS.
+    rpRequire({
+      path: path.join(mode.path.dir, mode.main),
+      type: 'dom'
+    }, function(){
+      preloadCompleteAsyncChecklist.mainLoaded = true;
+      preloadComplete();
+    });
+  });
+});
 
 robopaint.settings = robopaint.utils.getSettings();
 window.cncserver = {};
@@ -110,14 +165,6 @@ robopaint.svg = {
 robopaint.pauseTillEmpty = function(starting) {
   ipc.sendToHost('cncserver', 'pauseTillEmpty', starting);
 };
-
-// Add the generic mode CSS for body drop shadow and basic button formatting.
-$(function(){
-  $('<link>').attr({
-    href: robopaint.appPath + "resources/styles/modes.css",
-    rel: "stylesheet"
-  }).appendTo('head');
-});
 
 // Define the local settings getters/setters
 mode.settings = {
@@ -179,36 +226,6 @@ mode.settings = {
 };
 mode.settings.load();
 
-// Manage loading roboPaintDependencies from mode package config
-if (mode.robopaint.dependencies) {
-  $(function(){
-    _.each(mode.robopaint.dependencies, function(modName){
-      switch (modName) {
-        case 'jquery-early':
-        case 'jquery':
-          window.$ = window.jQuery = $;
-          break;
-        case 'underscore':
-          window._ = _;
-          break;
-        case 'qtip':
-          $.qtip = require('qtip2');
-          break;
-        case 'paper':
-          console.log('Loading Paper');
-          preloadCompleteAsyncChecklist.paperLoaded = false;
-          rpRequire('paper', function(){
-            preloadCompleteAsyncChecklist.paperLoaded = true;
-            preloadComplete();
-          });
-          break;
-        default:
-          rpRequire(modName);
-      }
-    });
-  });
-}
-
 /**
  * Load language resources for this mode and RP common
  */
@@ -264,11 +281,6 @@ function i18nInit() {
     ns: 'translation',
     fallbackLng: 'en-US',
     lng: localStorage['robopaint-lang']
-  });
-
-  // On jQuery load trigger, run the initial translation
-  $(function(){
-    translateMode();
   });
 }
 
@@ -401,18 +413,6 @@ function handleCNCServerMessages(name, data) {
       if (_.isFunction(mode.onMessage)) mode.onMessage(name, data);
   }
 }
-
-// Load in the modes custom main JS
-var mainHasLoaded = false;
-$(function(){
-  rpRequire({
-    path: path.join(mode.path.dir, mode.main),
-    type: 'dom'
-  }, function(){
-    preloadCompleteAsyncChecklist.mainLoaded = true;
-    preloadComplete();
-  });
-});
 
 function preloadComplete() {
   // Only continue if the async load checklist has been completed.
