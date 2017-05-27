@@ -288,7 +288,7 @@ function i18nInit() {
  * Translate a mode, in either native or DOM map format. Will also trigger
  * translateComplete() function on window.mode object if it exists.
  */
-function translateMode() {
+mode.translate = function() {
   i18n.setLng(localStorage['robopaint-lang']);
   // DOM Map or native parsing?
   if (mode.robopaint.i18n == 'dom') {
@@ -406,7 +406,7 @@ function handleCNCServerMessages(name, data) {
       if (_.isFunction(mode[funcName])) mode[funcName](data);
       break;
     case "langChange":
-      translateMode();
+      mode.translate();
       break;
     default:
       // Trigger Generic onMessage handler.
