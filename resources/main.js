@@ -369,7 +369,7 @@ function bindMainControls() {
 
   // Bind help click (it's special)
   $('#bar-help').click(function(e){
-    require('shell').openExternal(this.href);
+    require('electron').shell.openExternal(this.href);
     e.preventDefault();
   });
 }
