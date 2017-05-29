@@ -19,6 +19,9 @@ var bytes = require('bytes');
 var appPath = path.join(app.getAppPath(), '/');
 var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
 
+// Define which modes are enabled by default, no longer provided by modes.
+var coreModes = ['edit', 'print'];
+
 // Global Keypress catch for debug
 $(document).keypress(function(e){
   if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
@@ -929,7 +932,7 @@ function loadAllModes(){
 
     // This is the minimum enabled modes, other modes are enabled during
     // settings load/apply when it gets around to it.
-    robopaint.modes[name].enabled = !_.isUndefined(enabledModes[name]) ? enabledModes[name] : !!m.robopaint.core;
+    robopaint.modes[name].enabled = !_.isUndefined(enabledModes[name]) ? enabledModes[name] : (coreModes.indexOf(name) !== -1);
 
     // Add the toolbar link icon
 
