@@ -554,7 +554,7 @@ function onClose(e) {
 
   checkModeClose(true);
   e.preventDefault();
-  return false;
+  e.returnValue = false;
 }
 
 
