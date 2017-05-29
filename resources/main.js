@@ -76,7 +76,7 @@ try {
   rpRequire('mediasets') // Colors and other media specific details.
 } catch(e) {
   $(function(){
-    handleInitError(e, 'Pre-Initialization');
+    handleInitError('Pre-Initialization', e);
   });
 }
 
@@ -558,7 +558,7 @@ function startSerial(){
       }
     });
   } catch(e) {
-    handleInitError(e, 'Serial Start');
+    handleInitError('Serial Start', e);
   }
 }
 
