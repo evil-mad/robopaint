@@ -76,9 +76,7 @@ try {
   rpRequire('mediasets') // Colors and other media specific details.
 } catch(e) {
   $(function(){
-    $('body.home h1').attr('class', 'error').text('Error During Pre-Initialization:')
-      .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
-    console.error(e.stack);
+    handleInitError(e, 'Pre-Initialization');
   });
 }
 
@@ -128,10 +126,34 @@ function startInitialization() {
 
   bindMainControls(); // Bind all the controls for the main interface
  } catch(e) {
-   $('body.home h1').attr('class', 'error').text('Error During Initialization:')
-     .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
-   console.error(e.stack);
+   handleInitError('Initialization', e);
  }
+}
+
+/**
+ * Handle an initialization error, with message.
+ *
+ * @param  {String} from
+ *   From where did this happen?
+ * @param  {Error} e
+ *   Full error object.
+ *
+ * @return {Null}
+ */
+function handleInitError(from, e) {
+  var message = e.message + "\n\n" + e.stack;
+  $('body.home h1').attr('class', 'error').text('Error During ' + from + ':')
+    .append(
+      $('<span>')
+        .addClass('message')
+        .html("<pre>" + message + "</pre>"),
+      $('<button>')
+        .text('Copy Error')
+        .click(function() {
+          require('electron').clipboard.writeText(message);
+        })
+    );
+  console.log(e.stack);
 }
 
 function createSubwindow(callback) {
@@ -536,19 +558,7 @@ function startSerial(){
       }
     });
   } catch(e) {
-    var message = e.message + "\n\n" + e.stack;
-    $('body.home h1').attr('class', 'error').text('Error During Serial Start:')
-      .append(
-        $('<span>')
-          .addClass('message')
-          .html("<pre>" + message + "</pre>"),
-        $('<button>')
-          .text('Copy Error')
-          .click(function() {
-            require('electron').clipboard.writeText(message);
-          })
-      );
-    console.log(e.stack);
+    handleInitError(e, 'Serial Start');
   }
 }
 
