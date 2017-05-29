@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "cncserver": "2.6.1",
+    "cncserver": "2.7.0",
     "d3plus": "^1.9.3",
     "fs-finder": "^1.8.1",
     "fs-plus": "^2.8.1",
@@ -39,7 +39,7 @@
     "paper": "0.11.3",
     "qtip2": "^3.0.3",
     "request": "^2.65.0",
-    "robopaint-mode-edit": "1.3.2",
+    "robopaint-mode-edit": "1.4.0",
     "robopaint-mode-example": "0.9.0",
     "robopaint-mode-manual": "0.2.4",
     "robopaint-mode-print": "1.0.6",
