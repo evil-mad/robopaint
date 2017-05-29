@@ -16,6 +16,10 @@ body {
   -webkit-user-drag: none;
 }
 
+.selectable {
+  -webkit-user-select: all;
+}
+
 .hidden {
   display: none;
 }

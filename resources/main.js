@@ -537,7 +537,9 @@ function startSerial(){
     });
   } catch(e) {
    $('body.home h1').attr('class', 'error').text('Error During Serial Start:')
-     .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
+     .append($('<span>')
+     .addClass('message')
+     .html('<pre class="selectable">' + e.message + "\n\n" + e.stack + "</pre>"));
    console.log(e.stack);
  }
 }
