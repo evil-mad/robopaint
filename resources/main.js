@@ -536,12 +536,20 @@ function startSerial(){
       }
     });
   } catch(e) {
-   $('body.home h1').attr('class', 'error').text('Error During Serial Start:')
-     .append($('<span>')
-     .addClass('message')
-     .html('<pre class="selectable">' + e.message + "\n\n" + e.stack + "</pre>"));
-   console.log(e.stack);
- }
+    var message = e.message + "\n\n" + e.stack;
+    $('body.home h1').attr('class', 'error').text('Error During Serial Start:')
+      .append(
+        $('<span>')
+          .addClass('message')
+          .html("<pre>" + message + "</pre>"),
+        $('<button>')
+          .text('Copy Error')
+          .click(function() {
+            require('electron').clipboard.writeText(message);
+          })
+      );
+    console.log(e.stack);
+  }
 }
 
 /**
