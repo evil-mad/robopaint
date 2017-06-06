@@ -54,8 +54,6 @@ instead of this one.
 * **[Print Mode](https://github.com/evil-mad/robopaint-mode-print)**
   * An automatic paint mode meant to handle most SVG art easily and without much
   customization
-* **[Manual Mode](https://github.com/techninja/robopaint-mode-manual)**
-  * An experimental paint mode for advanced customization of prints.
 * **[Remote Print Mode](https://github.com/evil-mad/robopaint-mode-remote)**
   * Allow for high level sending of SVGs for printing directly with or without
   user interaction via an API.
@@ -109,9 +107,11 @@ different arch/OS, you're going to need to be able to build your own, so
 continue on.
 
 ##### Windows
-* You'll need the free download version of
-[Visual Studio Express 2013](http://www.microsoft.com/visualstudio/eng/2013-downloads#d-2013-express)
-which will have the command line tools required for builds.
+* Follow [the Windows build installation here for node-gyp](https://github.com/nodejs/node-gyp#installation)
+(the tool used to automate node module builds).
+* I've personally found their suggestion of using the Microsoft provided global
+install via npm to work perfectly! Just paste this into an elevated/administrator level powershell or command prompt and go!
+  *  `npm install --global --production windows-build-tools`
 
 ##### OSX
 * Install Xcode and the CLI Developer tools.
