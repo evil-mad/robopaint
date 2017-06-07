@@ -6,34 +6,35 @@
 
 // Must use require syntax for including these libs because of node duality.
 window.$ = window.jQuery = require('jquery');
-require('jquery-migrate');
-window._ = require('underscore');
-$.qtip = require('qtip2');
-window.i18n = require('i18next-client');
-
-// Include global main node process connector objects.
-var remote = require('electron').remote;
-var mainWindow = remote.getCurrentWindow();
-var app = remote.app;
-var path = require('path');
-var bytes = require('bytes');
-var appPath = path.join(app.getAppPath(), '/');
-var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
-
-// Define which modes are enabled by default, no longer provided by modes.
-var coreModes = ['edit', 'print'];
-
-// Global Keypress catch for debug
-$(document).keypress(function(e){
-  if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
-    mainWindow.openDevTools();
-  }
-});
 
 // Catch any errors in this intitial startup.
 // TODO: This is a bit of a mess. We need to rely on FAR fewer globals, and
 // initializing them so early means its harder to catch errors.
 try {
+  require('jquery-migrate');
+  window._ = require('underscore');
+  $.qtip = require('qtip2');
+  window.i18n = require('i18next-client');
+
+  // Include global main node process connector objects.
+  var remote = require('electron').remote;
+  var mainWindow = remote.getCurrentWindow();
+  var app = remote.app;
+  var path = require('path');
+  var bytes = require('bytes');
+  var appPath = path.join(app.getAppPath(), '/');
+  var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
+
+  // Define which modes are enabled by default, no longer provided by modes.
+  var coreModes = ['edit', 'print'];
+
+  // Global Keypress catch for debug
+  $(document).keypress(function(e){
+    if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
+      mainWindow.openDevTools();
+    }
+  });
+
   var currentLang = "";
   var fs = require('fs-plus');
   var cncserver = require('cncserver');
