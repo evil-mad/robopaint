@@ -81,6 +81,12 @@ module.exports = function(paper) {
             if (c.segments.length <= 1 && c.closed) {
               c.closed = false;
             }
+
+            // Workaround for unflattenable 1 seg paths: paperjs/paper.js#1338
+            if (c.segments.length === 1) {
+              c.divideAt(c.length / 2);
+            }
+
             c.flatten(flattenResolution);
             paths[pathIndex] = [];
             _.each(c.segments, function(s){
@@ -92,6 +98,12 @@ module.exports = function(paper) {
           });
         } else { // Single path
           paths[0] = [];
+
+          // Workaround for unflattenable 1 seg paths: paperjs/paper.js#1338
+          if (p.segments.length === 1) {
+            p.divideAt(p.length / 2);
+          }
+
           p.flatten(flattenResolution);
           _.each(p.segments, function(s){
             paths[0].push({
