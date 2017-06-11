@@ -37,7 +37,7 @@
     "i18next-client": "^1.10.2",
     "jquery": "^3.2.1",
     "jquery-migrate": "^3.0.0",
-    "paper": "0.11.3",
+    "paper": "0.11.4",
     "qtip2": "^3.0.3",
     "request": "^2.65.0",
     "robopaint-mode-edit": "1.4.0",
