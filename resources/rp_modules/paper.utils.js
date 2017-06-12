@@ -294,6 +294,10 @@ module.exports = function(paper) {
     // Snap the given color to the nearest tool ID
     // TODO: When refactoring media sets, pull tool names from definition.
     snapColorID: function (color, opacity) {
+      // Default if no valid color object given.
+      // TODO: Fix when redoing mediasets.
+      if (!color) return 'color8';
+
       if ((typeof opacity !== 'undefined' && opacity < 1) ||
           (color.alpha < 1 && color.alpha > 0)) {
         return 'water2';
@@ -311,6 +315,7 @@ module.exports = function(paper) {
       // Skip white paint if selected and setting is enabled.
       if (robopaint.media.currentSet.colors[closestColorID].key === 'white') {
         if (robopaint.settings.skipwhite) {
+          // TODO: Fix when redoing mediasets.
           // Change ID to "skipped" id 8
           closestColorID = 8;
         }
