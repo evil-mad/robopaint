@@ -103,19 +103,21 @@ function initializeTranslation() {
       // Only allow dirs that don't start with a period (hidden).
       if (isDir(folder, readPath) && folder[0] !== '.') {
         var fullPath = path.join(readPath, folder);
-        var p = require(path.join(fullPath, 'package.json'));
-
-        //  Iterate over language files in mode's i18n folder
-        if (p['robopaint-type'] === 'mode') {
-          fs.readdirSync(path.join(fullPath, '_i18n')).forEach(function(file) {
-            if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
+        var packageFile = path.join(fullPath, 'package.json');
+        if (fs.existsSync(packageFile)) {
+          var p = require(packageFile);
+          //  Iterate over language files in mode's i18n folder
+          if (p['robopaint-type'] === 'mode') {
+            fs.readdirSync(path.join(fullPath, '_i18n')).forEach(function(file) {
+              if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
               //  Add the data to the global i18n translation array
               var data = require(path.join(fullPath, '_i18n', file));
               resources[data._meta.target].translation['modes'][p.robopaint.name] = data;
             }
           });
         }
-       }
+      }
+    }
   } catch(e) {
     // Catch and report errors to the console
     console.error('Bad or missing Mode translation file for: ' + folder, e); }
