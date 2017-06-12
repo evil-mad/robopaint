@@ -47,11 +47,11 @@ function loadSettings() {
 
 
     autostrokeenabled: 1,
-    strokeprecision: 6,
+    strokeprecision: 4,
     strokeovershoot: 5,
     strokefills: 1,
     strokeinvisible: 0,
-    autostrokeiteration: 2,
+    autostrokeiteration: 4,
     autostrokeocclusion: 1,
     strokeocclusionfills: 1,
     strokeocclusionstoke: 1,
@@ -140,7 +140,10 @@ function settingsDefaultAlter(settings) {
       settings.penmode = 3;
       settings.strokeovershoot = 0;
       settings.fillspacing = 1;
-      settings.strokeprecision = 6;
+      settings.strokeprecision = 2;
+      settings.fillprecision = 3;
+      settings.autostrokeiteration = 10;
+      settings.autofilliteration = 10;
 
       // Force the hand of settings to disable WCB specific options
       // (colorset is handled in verifyColorsetAbilities func)
