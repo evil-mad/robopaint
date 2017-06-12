@@ -17,9 +17,23 @@ paper.canvas.mainLayer.opacity = 0.1;
 paper.canvas.tempLayer.opacity = 0.3;
 
 
+// Refresh/re-simulate the build.
+paper.refreshPreview = function() {
+  if (!robopaint.media.sets) return; // Don't run too early
+
+  paper.canvas.tempLayer.removeChildren();
+  paper.canvas.actionLayer.removeChildren();
+
+  paper.fill.shutdown();
+  paper.stroke.shutdown();
+
+  paper.stroke.setup(paper.fill.setup);
+};
+
+
 // Go get the preview image
 paper.canvas.mainLayer.activate();
-project.importSVG('images/settings_preview.svg', {
+project.importSVG(fs.readFileSync('resources/images/settings_preview.svg', 'utf-8').toString(), {
   applyMatrix: true,
   expandShapes: true,
   onLoad: function(){
@@ -28,8 +42,6 @@ project.importSVG('images/settings_preview.svg', {
     view.zoom = 0.5; // Zoom to 50%
     group.fitBounds(view.bounds);
     group.scale(0.95); // Make it a little smaller
-
-    paper.refreshPreview(); // Intial preview run.
   }
 });
 
@@ -54,13 +66,3 @@ function onMouseMove(event)  {
     event.item.selected = true;
   }
 }
-
-paper.refreshPreview = function() {
-  paper.canvas.tempLayer.removeChildren();
-  paper.canvas.actionLayer.removeChildren();
-
-  paper.fill.shutdown();
-  paper.stroke.shutdown();
-
-  paper.stroke.setup(paper.fill.setup);
-};

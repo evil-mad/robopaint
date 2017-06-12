@@ -15,6 +15,14 @@ module.exports = function(paper) {
 
   paper.utils = {
 
+    // Initialize node required paper file and canvas, same format as loadDOM.
+    initFile: function(file, canvas) {
+      if (canvas) paper.setup($('#' + canvas)[0]);
+      var absFile = path.join(appPath, 'resources', file);
+      var code = fs.readFileSync(absFile, 'utf-8').toString();
+      paper.execute(code, {url: file});
+    },
+
     // Load a paperscript file into the paperscope via DOM insertion & jQuery
     loadDOM: function(file, canvas) {
       paper.PaperScript.load($('<script>').attr({

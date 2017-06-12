@@ -603,9 +603,8 @@ function loadPaperJS() {
   if (paperLoaded) return;
 
   paperLoaded = true;
-  rpRequire('paper', function(){
-    rpRequire('paper_utils')(paper);
-    paper.utils.loadDOM('scripts/settings.ps.js', 'settings-preview');
-    $('#render .renderpreview').change(paper.refreshPreview);
-  });
+  window.paper = require('paper');
+  rpRequire('paper_utils')(paper);
+  paper.utils.initFile('scripts/settings.ps.js', 'settings-preview');
+  $('#render .renderpreview').change(paper.refreshPreview);
 }
