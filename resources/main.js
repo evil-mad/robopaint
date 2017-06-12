@@ -6,6 +6,7 @@
 
 // Must use require syntax for including these libs because of node duality.
 window.$ = window.jQuery = require('jquery');
+jQuery.migrateMute = true; // Disable to allow jqMigrate debug.
 
 // Catch any errors in this intitial startup.
 // TODO: This is a bit of a mess. We need to rely on FAR fewer globals, and
