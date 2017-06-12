@@ -62,7 +62,7 @@ function onMouseDown() {
 function onMouseMove(event)  {
   project.deselectAll();
 
-  if (event.item) {
+  if (event.item && !event.item.children) {
     event.item.selected = true;
   }
 }
