@@ -40,7 +40,7 @@
     "paper": "0.11.4",
     "qtip2": "^3.0.3",
     "request": "^2.65.0",
-    "robopaint-mode-edit": "1.4.0",
+    "robopaint-mode-edit": "1.4.1",
     "robopaint-mode-example": "0.9.0",
     "robopaint-mode-manual": "0.2.4",
     "robopaint-mode-print": "1.0.6",
