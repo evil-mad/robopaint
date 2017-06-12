@@ -57,7 +57,7 @@ function loadSettings() {
     strokeocclusionstoke: 1,
     strokeocclusioncolor: 0,
     strokeocclusionwater: 1,
-    autostrokewidth: 10,
+    autostrokewidth: -1,
     strokeclosefilled: 1,
 
     autofillenabled: 1,
@@ -71,7 +71,7 @@ function loadSettings() {
     fillspiralalign: 1,
     fillinset: 0,
     autofilliteration: 2,
-    autofillwidth: 10,
+    autofillwidth: -1,
     fillocclusionfills: 1,
 
     skipwhite: 1,

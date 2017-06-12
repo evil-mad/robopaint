@@ -32,6 +32,22 @@ module.exports = function(paper) {
       })[0]);
     },
 
+    // Convert a given settings line width into an appropriate line width.
+    getLineWidth: function(width, useStoke) {
+      width = parseInt(width);
+
+      if (width === -1) {
+        if (useStoke) {
+          return robopaint.settings.penmode === 1 ? 1 : 10;
+        } else {
+          return parseInt(robopaint.settings.fillspacing);
+        }
+      } else {
+        return width;
+      }
+    },
+
+
     // Setup the 4 default useful layers used all over the place. Assumes the
     // current layer is intended to be the main layer.
     setupLayers: function() {

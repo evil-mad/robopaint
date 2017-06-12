@@ -70,7 +70,7 @@ module.exports = function(paper) {
 
       var setMap = { // Map global settings to local stroke module settings.
         traceIterationMultiplier: parseInt(set.autofilliteration),
-        lineWidth: parseInt(set.autofillwidth),
+        lineWidth: paper.utils.getLineWidth(set.autofillwidth),
         flattenResolution: parseInt(set.fillprecision),
         fillType: set.filltype,
         overlayFillAlignPath: set.fillspiralalign == true, // jshint ignore:line
