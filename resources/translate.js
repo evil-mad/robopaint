@@ -8,19 +8,36 @@
  * strings.
  */
 function initializeTranslation() {
+
+  // Is the path a folder?
+  var isDir = function(folder, prefix) {
+    try {
+      return fs.lstatSync(path.join(prefix, folder)).isDirectory();
+    } catch(e) {
+      return false;
+    }
+  }
+
   // Shoehorn settings HTML into page first...
   // Node Blocking load to get the settings HTML content in
-  $('#settings').html(fs.readFileSync(appPath + 'resources/main.settings.inc.html', 'utf-8').toString());
+  var resourcePath = path.join(appPath, 'resources');
+  $('#settings').html(
+    fs.readFileSync(
+      path.join(resourcePath, 'main.settings.inc.html'),
+      'utf-8'
+    ).toString()
+  );
+
   var resources = {};
 
   // Get all available language JSON files from folders, add to the dropdown
   // list, and add to the rescources available.
   var i = 0;
-  var i18nPath = appPath + 'resources/_i18n/';
-  fs.readdirSync(i18nPath).forEach(function(file) {
+  var readPath = path.join(resourcePath, '_i18n');
+  fs.readdirSync(readPath).forEach(function(file) {
     // Get contents of the language file.
     try {
-      var data = require(i18nPath + file);
+      var data = require(path.join(readPath, file));
 
       // Create new option in the pulldown language list, with the text being
       // the language's name value is the two letter language code.
@@ -45,11 +62,12 @@ function initializeTranslation() {
   console.debug("Found a total of " + i + " language files.");
 
   // Parsing for colorset translation strings.
+  readPath = path.join(resourcePath, 'colorsets', '_i18n');
   try {
     // Iterate over global colorset i18n directory.
-    fs.readdirSync(appPath + 'resources/colorsets/_i18n').forEach(function(file) {
+    fs.readdirSync(readPath).forEach(function(file) {
       // Add each translation file to the global translate array.
-      var data = require(appPath + 'resources/colorsets/_i18n/' + file);
+      var data = require(path.join(readPath, file));
       resources[data._meta.target].translation['colorsets'] = data;
     });
   }catch(e) {
@@ -58,19 +76,18 @@ function initializeTranslation() {
 
   // Iterate over colorset folder, picking out colorset i18n files and adding
   // them to the translate array.
-  fs.readdirSync(appPath + 'resources/colorsets/').forEach(function(folder) {
+  readPath = path.join(resourcePath, 'colorsets');
+  fs.readdirSync(readPath).forEach(function(folder) {
     try {
-      // Ignore files that have extentions (we only want directories).
-      // Ignore the 'i18n' directory (it is not a colorset!).
-      if (folder.indexOf(".") == -1 && folder !== "_i18n") {
-       // Create a full path to the directory containing this colorset's i18n
-       // files.
-        var fullPath = appPath + 'resources/colorsets/' + folder + '/_i18n/';
+      // Ignore non-directories, & 'i18n' directory (it is not a colorset!).
+      if (isDir(folder, readPath) && folder !== "_i18n") {
+       // Full path to the directory containing this colorset's i18n files.
+        var fullPath = path.join(readPath, folder, '_i18n');
 
         //  Iterate over language files in colorset's i18n folder
         fs.readdirSync(fullPath).forEach(function(file) {
           //  Add the data to the global i18n translation array
-          var data = require(fullPath + file);
+          var data = require(path.join(fullPath, file));
           resources[data._meta.target].translation['colorsets'][folder] = data;
         });
        }
@@ -80,19 +97,20 @@ function initializeTranslation() {
   });
 
   // Load all mode translation files
-  fs.readdirSync(appPath + 'node_modules/').forEach(function(folder) {
+  readPath = path.join(appPath, 'node_modules');
+  fs.readdirSync(readPath).forEach(function(folder) {
     try {
-      // Ignore files that have extentions (we only want directories).
-      if (folder.indexOf(".") == -1) {
-        var fullPath = appPath + 'node_modules/' + folder + '/';
-        var p = require(fullPath + 'package.json');
+      // Only allow dirs that don't start with a period (hidden).
+      if (isDir(folder, readPath) && folder[0] !== '.') {
+        var fullPath = path.join(readPath, folder);
+        var p = require(path.join(fullPath, 'package.json'));
 
         //  Iterate over language files in mode's i18n folder
         if (p['robopaint-type'] === 'mode') {
-          fs.readdirSync(fullPath + '_i18n/').forEach(function(file) {
+          fs.readdirSync(path.join(fullPath, '_i18n')).forEach(function(file) {
             if (file.indexOf('.map.json') === -1) { // Don't use translation maps.
               //  Add the data to the global i18n translation array
-              var data = require(fullPath + '_i18n/' + file);
+              var data = require(path.join(fullPath, '_i18n', file));
               resources[data._meta.target].translation['modes'][p.robopaint.name] = data;
             }
           });
