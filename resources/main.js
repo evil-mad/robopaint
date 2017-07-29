@@ -532,7 +532,7 @@ function startSerial(){
         setMessage('status.found');
       },
       error: function(err) {
-        setMessage('status.error', 'warning', ' - ' + err);
+        setMessage('status.error', 'warning', ' - ' + err.message);
         $options.slideDown('slow');
       },
       connect: function() {
