@@ -13,6 +13,7 @@
   "electronVersion": "1.6.10",
   "scripts": {
     "start": "electron .",
+    "rebuild": "electron-rebuild -v 1.6.10 -f -w serialport",
     "fix-serialport": "node resources/scripts/root/fix-serialport.js",
     "postinstall": "npm run fix-serialport"
   },
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "1.6.10"
+    "electron": "1.6.10",
+    "electron-rebuild": "^1.6.0"
   }
 }
