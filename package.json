@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "cncserver": "2.7.4",
+    "cncserver": "2.7.5",
     "d3plus": "^1.9.3",
     "fs-finder": "^1.8.1",
     "fs-plus": "^2.8.1",
