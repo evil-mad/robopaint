@@ -78,7 +78,7 @@ Scientist and we should be able to help you a lot more directly.
 **Log data locations:**
 * **Windows:** `%APPDATA%/robopaint`
 * **Linux:** `$XDG_CONFIG_HOME/robopaint/logs` or `~/.config/robopaint/logs`
-* **macOS:** ``~/Library/Application Support/robopaint/logs`
+* **macOS:** `~/Library/Application Support/robopaint/logs`
 
 ***Know how to fix a problem? Or want to add a new feature??*** Submit a pull
 request! Just fork the repo using the button on the
