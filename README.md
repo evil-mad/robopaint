@@ -70,6 +70,16 @@ instead of this one.
 is covering your question or problem, if not, ask away! Someone will be around
 to help soon.
 
+### Logging
+RoboPaint 2.1.0 introduces full application logging. If you have a problem
+starting or running the app, submit your logs with your issue or to Evil Mad
+Scientist and we should be able to help you a lot more directly.
+
+**Log data locations:**
+* **Windows:** `%APPDATA%/robopaint`
+* **Linux:** `$XDG_CONFIG_HOME/robopaint/logs` or `~/.config/robopaint/logs`
+* **macOS:** ``~/Library/Application Support/robopaint/logs`
+
 ***Know how to fix a problem? Or want to add a new feature??*** Submit a pull
 request! Just fork the repo using the button on the
 [RoboPaint github homepage](https://github.com/evil-mad/robopaint), and
@@ -130,6 +140,8 @@ anything new for this at all.
   `npm install` to install dependencies, if there is not a prebuilt serialport
   module for your architecture npm will try to build serialport for Electron.
   You may see some errors, but it should re-compile everything that needs it.
+  run `npm run rebuild` to attempt to rebuild for electron for experimental
+  builds of serialport.
 
   3. That's it! You should now be installed and ready to hack. To update CNC server
   just run `npm install cncserver` from the project root and it should pull from
