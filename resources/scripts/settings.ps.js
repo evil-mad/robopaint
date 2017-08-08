@@ -33,7 +33,8 @@ paper.refreshPreview = function() {
 
 // Go get the preview image
 paper.canvas.mainLayer.activate();
-project.importSVG(fs.readFileSync('resources/images/settings_preview.svg', 'utf-8').toString(), {
+var previewPath = path.join(app.getAppPath(), 'resources', 'images', 'settings_preview.svg');
+project.importSVG(fs.readFileSync(previewPath, 'utf-8').toString(), {
   applyMatrix: true,
   expandShapes: true,
   onLoad: function(){
