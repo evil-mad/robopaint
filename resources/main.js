@@ -3,12 +3,22 @@
  * central cncserver object to control low-level non-restful APIs, and general
  * "top-level" UI initialization for settings.
  */
+require('./logging')('robopaint', console);
 
 // Must use require syntax for including these libs because of node duality.
 window.$ = window.jQuery = require('jquery');
 jQuery.migrateMute = true; // Disable to allow jqMigrate debug.
 
 // Catch any errors in this intitial startup.
+window.onerror = function(e) {
+  handleInitError('WindowErr', e);
+};
+
+process.on('uncaughtException', function(e) {
+  handleInitError('GeneralUncaught', e);
+});
+
+
 // TODO: This is a bit of a mess. We need to rely on FAR fewer globals, and
 // initializing them so early means its harder to catch errors.
 try {

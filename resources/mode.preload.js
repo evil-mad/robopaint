@@ -43,6 +43,9 @@ var modePath = path.parse(decodeURIComponent(location.hash.substr(1)));
 var mode = window.mode = require(path.join(modePath.dir, 'package.json'));
 mode.path = modePath;
 
+// Include per mode logging.
+require('./logging')('robopaint.' + mode.robopaint.name, console);
+
 // Load the central RP settings
 var robopaint = window.robopaint = {
   utils: rpRequire('utils'),
