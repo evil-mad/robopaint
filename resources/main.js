@@ -154,7 +154,7 @@ function startInitialization() {
  * @return {Null}
  */
 function handleInitError(from, e) {
-  var message = e.message + "\n\n" + e.stack;
+  var message = e.message !== undefined ? e.message + "\n\n" + e.stack : e;
   $('body.home h1').attr('class', 'error').text('Error During ' + from + ':')
     .append(
       $('<span>')
