@@ -47,17 +47,17 @@ function loadSettings() {
 
 
     autostrokeenabled: 1,
-    strokeprecision: 6,
+    strokeprecision: 4,
     strokeovershoot: 5,
     strokefills: 1,
     strokeinvisible: 0,
-    autostrokeiteration: 2,
+    autostrokeiteration: 4,
     autostrokeocclusion: 1,
     strokeocclusionfills: 1,
     strokeocclusionstoke: 1,
     strokeocclusioncolor: 0,
     strokeocclusionwater: 1,
-    autostrokewidth: 10,
+    autostrokewidth: -1,
     strokeclosefilled: 1,
 
     autofillenabled: 1,
@@ -71,7 +71,7 @@ function loadSettings() {
     fillspiralalign: 1,
     fillinset: 0,
     autofilliteration: 2,
-    autofillwidth: 10,
+    autofillwidth: -1,
     fillocclusionfills: 1,
 
     skipwhite: 1,
@@ -140,7 +140,10 @@ function settingsDefaultAlter(settings) {
       settings.penmode = 3;
       settings.strokeovershoot = 0;
       settings.fillspacing = 1;
-      settings.strokeprecision = 6;
+      settings.strokeprecision = 2;
+      settings.fillprecision = 3;
+      settings.autostrokeiteration = 10;
+      settings.autofilliteration = 10;
 
       // Force the hand of settings to disable WCB specific options
       // (colorset is handled in verifyColorsetAbilities func)
@@ -603,9 +606,8 @@ function loadPaperJS() {
   if (paperLoaded) return;
 
   paperLoaded = true;
-  rpRequire('paper', function(){
-    rpRequire('paper_utils')(paper);
-    paper.utils.loadDOM('scripts/settings.ps.js', 'settings-preview');
-    $('#render .renderpreview').change(paper.refreshPreview);
-  });
+  window.paper = require('paper');
+  rpRequire('paper_utils')(paper);
+  paper.utils.initFile('scripts/settings.ps.js', 'settings-preview');
+  $('#render .renderpreview').change(paper.refreshPreview);
 }

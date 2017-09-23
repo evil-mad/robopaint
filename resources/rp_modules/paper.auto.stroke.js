@@ -64,7 +64,7 @@ module.exports = function(paper) {
 
       var setMap = { // Map global settings to local stroke module settings.
         traceIterationMultiplier: parseInt(set.autostrokeiteration),
-        lineWidth: parseInt(set.autostrokewidth),
+        lineWidth: paper.utils.getLineWidth(set.autostrokewidth, true),
         flattenResolution: set.strokeprecision * 4,
         noStroke: set.autostrokeenabled == false,
         strokeAllFilledPaths: set.strokefills == true,

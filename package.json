@@ -1,6 +1,6 @@
 {
   "name": "robopaint",
-  "version": "2.0.0-beta.3",
+  "version": "2.1.0",
   "description": "A full featured SVG editor and output controller to drive @MakerSylvia's WaterColorBot",
   "main": "resources/scripts/root/window-main.js",
   "author": {
@@ -10,9 +10,10 @@
   },
   "stage": "development",
   "license": "MIT",
-  "electronVersion": "1.0.2",
+  "electronVersion": "1.6.10",
   "scripts": {
     "start": "electron .",
+    "rebuild": "electron-rebuild -v 1.6.10 -f -w serialport",
     "fix-serialport": "node resources/scripts/root/fix-serialport.js",
     "postinstall": "npm run fix-serialport"
   },
@@ -29,29 +30,33 @@
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "cncserver": "2.6.1",
+    "cncserver": "2.7.6",
     "d3plus": "^1.9.3",
     "fs-finder": "^1.8.1",
     "fs-plus": "^2.8.1",
     "hersheytext": "^0.5.1",
     "i18next-client": "^1.10.2",
-    "jquery": "^2.2.3",
-    "paper": "^0.9.25",
-    "qtip2": "^2.2.0",
+    "jquery": "^3.2.1",
+    "jquery-migrate": "^3.0.0",
+    "paper": "0.11.4",
+    "qtip2": "^3.0.3",
     "request": "^2.65.0",
-    "robopaint-mode-edit": "1.3.2",
+    "robopaint-mode-edit": "1.4.2",
     "robopaint-mode-example": "0.9.0",
     "robopaint-mode-manual": "0.2.4",
     "robopaint-mode-print": "1.0.6",
     "robopaint-mode-remote": "1.1.1",
     "robopaint-mode-spiral": "0.3.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "winston": "^2.3.1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/evil-mad/robopaint.git"
   },
   "devDependencies": {
-    "electron-prebuilt": "1.0.2"
+    "devtron": "^1.4.0",
+    "electron": "1.6.10",
+    "electron-rebuild": "^1.6.0"
   }
 }

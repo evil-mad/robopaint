@@ -3,7 +3,8 @@
 For a bug: Describe the bug and list the steps you used when the issue occurred.
 Include any files necessary to reproduce this by zipping them and attaching the
 resulting zip file to this issue. For features, describe what you'd like, how it
-might be used, and why.
+might be used, and why. If using RoboPaint v2.1.0 or later, please attach your
+[log files as described in the readme](https://github.com/evil-mad/robopaint/#logging).
 
 #### Steps to reproduce OR Feature idea (Choose one)
   1. Click on this

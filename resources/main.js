@@ -3,33 +3,49 @@
  * central cncserver object to control low-level non-restful APIs, and general
  * "top-level" UI initialization for settings.
  */
+require('./logging')('robopaint', console);
 
 // Must use require syntax for including these libs because of node duality.
 window.$ = window.jQuery = require('jquery');
-window._ = require('underscore');
-$.qtip = require('qtip2');
-window.i18n = require('i18next-client');
-
-// Include global main node process connector objects.
-var remote = require('electron').remote;
-var mainWindow = remote.getCurrentWindow();
-var app = remote.app;
-var path = require('path');
-var bytes = require('bytes');
-var appPath = path.join(app.getAppPath(), '/');
-var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
-
-// Global Keypress catch for debug
-$(document).keypress(function(e){
-  if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
-    mainWindow.openDevTools();
-  }
-});
+jQuery.migrateMute = true; // Disable to allow jqMigrate debug.
 
 // Catch any errors in this intitial startup.
+window.onerror = function(e) {
+  handleInitError('WindowErr', e);
+};
+
+process.on('uncaughtException', function(e) {
+  handleInitError('GeneralUncaught', e);
+});
+
+
 // TODO: This is a bit of a mess. We need to rely on FAR fewer globals, and
 // initializing them so early means its harder to catch errors.
 try {
+  require('jquery-migrate');
+  window._ = require('underscore');
+  $.qtip = require('qtip2');
+  window.i18n = require('i18next-client');
+
+  // Include global main node process connector objects.
+  var remote = require('electron').remote;
+  var mainWindow = remote.getCurrentWindow();
+  var app = remote.app;
+  var path = require('path');
+  var bytes = require('bytes');
+  var appPath = path.join(app.getAppPath(), '/');
+  var rpRequire = require(appPath + 'resources/rp_modules/rp.require');
+
+  // Define which modes are enabled by default, no longer provided by modes.
+  var coreModes = ['edit', 'print'];
+
+  // Global Keypress catch for debug
+  $(document).keypress(function(e){
+    if (e.keyCode == 4 && e.ctrlKey && e.shiftKey){
+      mainWindow.openDevTools();
+    }
+  });
+
   var currentLang = "";
   var fs = require('fs-plus');
   var cncserver = require('cncserver');
@@ -73,9 +89,7 @@ try {
   rpRequire('mediasets') // Colors and other media specific details.
 } catch(e) {
   $(function(){
-    $('body.home h1').attr('class', 'error').text('Error During Pre-Initialization:')
-      .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
-    console.error(e.stack);
+    handleInitError('Pre-Initialization', e);
   });
 }
 
@@ -125,10 +139,34 @@ function startInitialization() {
 
   bindMainControls(); // Bind all the controls for the main interface
  } catch(e) {
-   $('body.home h1').attr('class', 'error').text('Error During Initialization:')
-     .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
-   console.error(e.stack);
+   handleInitError('Initialization', e);
  }
+}
+
+/**
+ * Handle an initialization error, with message.
+ *
+ * @param  {String} from
+ *   From where did this happen?
+ * @param  {Error} e
+ *   Full error object.
+ *
+ * @return {Null}
+ */
+function handleInitError(from, e) {
+  var message = e.message !== undefined ? e.message + "\n\n" + e.stack : e;
+  $('body.home h1').attr('class', 'error').text('Error During ' + from + ':')
+    .append(
+      $('<span>')
+        .addClass('message')
+        .html("<pre>" + message + "</pre>"),
+      $('<button>')
+        .text('Copy Error')
+        .click(function() {
+          require('electron').clipboard.writeText(message);
+        })
+    );
+  console.log(e.stack);
 }
 
 function createSubwindow(callback) {
@@ -152,7 +190,7 @@ function createSubwindow(callback) {
   // Log mode messages here if mode devtools isn't opened.
   $subwindow[0].addEventListener('console-message', function(e) {
     if (!$subwindow[0].isDevToolsOpened()){
-      console.log('MODE:', e.message);
+      console.log('MODE (' + appMode + '):', e.message);
     }
   });
 
@@ -369,7 +407,7 @@ function bindMainControls() {
 
   // Bind help click (it's special)
   $('#bar-help').click(function(e){
-    require('shell').openExternal(this.href);
+    require('electron').shell.openExternal(this.href);
     e.preventDefault();
   });
 }
@@ -504,7 +542,7 @@ function startSerial(){
         setMessage('status.found');
       },
       error: function(err) {
-        setMessage('status.error', 'warning', ' - ' + err);
+        setMessage('status.error', 'warning', ' - ' + err.message);
         $options.slideDown('slow');
       },
       connect: function() {
@@ -533,10 +571,8 @@ function startSerial(){
       }
     });
   } catch(e) {
-   $('body.home h1').attr('class', 'error').text('Error During Serial Start:')
-     .append($('<span>').addClass('message').html("<pre>" + e.message + "\n\n" + e.stack + "</pre>"));
-   console.log(e.stack);
- }
+    handleInitError('Serial Start', e);
+  }
 }
 
 /**
@@ -546,12 +582,15 @@ function startSerial(){
 function onClose(e) {
   // Allow for quick refresh loads only with devtools opened.
   if (mainWindow.isDevToolsOpened()) {
-    if (!document.hasFocus()) return true;
+    if (!document.hasFocus()) {
+      app.relaunch();
+      app.exit();
+    }
   }
 
   checkModeClose(true);
   e.preventDefault();
-  return false;
+  e.returnValue = false;
 }
 
 
@@ -926,7 +965,7 @@ function loadAllModes(){
 
     // This is the minimum enabled modes, other modes are enabled during
     // settings load/apply when it gets around to it.
-    robopaint.modes[name].enabled = !_.isUndefined(enabledModes[name]) ? enabledModes[name] : !!m.robopaint.core;
+    robopaint.modes[name].enabled = !_.isUndefined(enabledModes[name]) ? enabledModes[name] : (coreModes.indexOf(name) !== -1);
 
     // Add the toolbar link icon
 

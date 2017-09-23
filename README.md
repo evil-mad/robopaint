@@ -54,8 +54,6 @@ instead of this one.
 * **[Print Mode](https://github.com/evil-mad/robopaint-mode-print)**
   * An automatic paint mode meant to handle most SVG art easily and without much
   customization
-* **[Manual Mode](https://github.com/techninja/robopaint-mode-manual)**
-  * An experimental paint mode for advanced customization of prints.
 * **[Remote Print Mode](https://github.com/evil-mad/robopaint-mode-remote)**
   * Allow for high level sending of SVGs for printing directly with or without
   user interaction via an API.
@@ -71,6 +69,16 @@ instead of this one.
 [issues tab](https://github.com/evil-mad/robopaint/issues) and see if someone
 is covering your question or problem, if not, ask away! Someone will be around
 to help soon.
+
+### Logging
+RoboPaint 2.1.0 introduces full application logging. If you have a problem
+starting or running the app, submit your logs with your issue or to Evil Mad
+Scientist and we should be able to help you a lot more directly.
+
+**Log data locations:**
+* **Windows:** `%APPDATA%/robopaint`
+* **Linux:** `$XDG_CONFIG_HOME/robopaint/logs` or `~/.config/robopaint/logs`
+* **macOS:** `~/Library/Application Support/robopaint/logs`
 
 ***Know how to fix a problem? Or want to add a new feature??*** Submit a pull
 request! Just fork the repo using the button on the
@@ -109,9 +117,11 @@ different arch/OS, you're going to need to be able to build your own, so
 continue on.
 
 ##### Windows
-* You'll need the free download version of
-[Visual Studio Express 2013](http://www.microsoft.com/visualstudio/eng/2013-downloads#d-2013-express)
-which will have the command line tools required for builds.
+* Follow [the Windows build installation here for node-gyp](https://github.com/nodejs/node-gyp#installation)
+(the tool used to automate node module builds).
+* I've personally found their suggestion of using the Microsoft provided global
+install via npm to work perfectly! Just paste this into an elevated/administrator level powershell or command prompt and go!
+  *  `npm install --global --production windows-build-tools`
 
 ##### OSX
 * Install Xcode and the CLI Developer tools.
@@ -130,6 +140,8 @@ anything new for this at all.
   `npm install` to install dependencies, if there is not a prebuilt serialport
   module for your architecture npm will try to build serialport for Electron.
   You may see some errors, but it should re-compile everything that needs it.
+  run `npm run rebuild` to attempt to rebuild for electron for experimental
+  builds of serialport.
 
   3. That's it! You should now be installed and ready to hack. To update CNC server
   just run `npm install cncserver` from the project root and it should pull from

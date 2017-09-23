@@ -181,6 +181,8 @@ globally available makes custom comms possible.
     supported shortcut commands and their arguments.
     * `mode.settings`: An object with setters/getters to manage storing this
     modes specific settings. Automatically stores in `localStorage` per botType.
+    * `mode.translate()`: Trigger re-translation  of the mode given current
+    language settings and markup.
     * `mode.settings.$manage(selectors)`: A full settings management system for
     form elements. List the selectors for each input element you want to
     track, and from one call this will load, track changes & save all

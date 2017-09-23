@@ -15,6 +15,14 @@ module.exports = function(paper) {
 
   paper.utils = {
 
+    // Initialize node required paper file and canvas, same format as loadDOM.
+    initFile: function(file, canvas) {
+      if (canvas) paper.setup($('#' + canvas)[0]);
+      var absFile = path.join(appPath, 'resources', file);
+      var code = fs.readFileSync(absFile, 'utf-8').toString();
+      paper.execute(code, {url: file});
+    },
+
     // Load a paperscript file into the paperscope via DOM insertion & jQuery
     loadDOM: function(file, canvas) {
       paper.PaperScript.load($('<script>').attr({
@@ -23,6 +31,22 @@ module.exports = function(paper) {
         canvas: canvas
       })[0]);
     },
+
+    // Convert a given settings line width into an appropriate line width.
+    getLineWidth: function(width, useStoke) {
+      width = parseInt(width);
+
+      if (width === -1) {
+        if (useStoke) {
+          return robopaint.settings.penmode === 1 ? 1 : 10;
+        } else {
+          return parseInt(robopaint.settings.fillspacing);
+        }
+      } else {
+        return width;
+      }
+    },
+
 
     // Setup the 4 default useful layers used all over the place. Assumes the
     // current layer is intended to be the main layer.
@@ -81,6 +105,12 @@ module.exports = function(paper) {
             if (c.segments.length <= 1 && c.closed) {
               c.closed = false;
             }
+
+            // Workaround for unflattenable 1 seg paths: paperjs/paper.js#1338
+            if (c.segments.length === 1) {
+              c.divideAt(c.length / 2);
+            }
+
             c.flatten(flattenResolution);
             paths[pathIndex] = [];
             _.each(c.segments, function(s){
@@ -92,6 +122,12 @@ module.exports = function(paper) {
           });
         } else { // Single path
           paths[0] = [];
+
+          // Workaround for unflattenable 1 seg paths: paperjs/paper.js#1338
+          if (p.segments.length === 1) {
+            p.divideAt(p.length / 2);
+          }
+
           p.flatten(flattenResolution);
           _.each(p.segments, function(s){
             paths[0].push({
@@ -274,6 +310,10 @@ module.exports = function(paper) {
     // Snap the given color to the nearest tool ID
     // TODO: When refactoring media sets, pull tool names from definition.
     snapColorID: function (color, opacity) {
+      // Default if no valid color object given.
+      // TODO: Fix when redoing mediasets.
+      if (!color) return 'color8';
+
       if ((typeof opacity !== 'undefined' && opacity < 1) ||
           (color.alpha < 1 && color.alpha > 0)) {
         return 'water2';
@@ -291,6 +331,7 @@ module.exports = function(paper) {
       // Skip white paint if selected and setting is enabled.
       if (robopaint.media.currentSet.colors[closestColorID].key === 'white') {
         if (robopaint.settings.skipwhite) {
+          // TODO: Fix when redoing mediasets.
           // Change ID to "skipped" id 8
           closestColorID = 8;
         }
