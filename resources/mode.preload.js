@@ -53,7 +53,7 @@ var robopaint = window.robopaint = {
   t: i18n.t
 };
 
-// Load jQuery only when the window has passe "load" to allow DOM access.
+// Load jQuery only when the window has passed "load" to allow DOM access.
 window.addEventListener('load', function() {
   $ = require('jquery');
 
