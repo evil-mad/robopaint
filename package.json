@@ -10,10 +10,10 @@
   },
   "stage": "development",
   "license": "MIT",
-  "electronVersion": "1.6.10",
+  "electronVersion": "1.7.10",
   "scripts": {
     "start": "electron .",
-    "rebuild": "electron-rebuild -v 1.6.10 -f -w serialport",
+    "rebuild": "electron-rebuild -v 1.7.10 -f -w serialport",
     "fix-serialport": "node resources/scripts/root/fix-serialport.js",
     "postinstall": "npm run fix-serialport"
   },
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "cncserver": "2.7.6",
+    "cncserver": "2.8.0",
     "d3plus": "^1.9.3",
     "fs-finder": "^1.8.1",
     "fs-plus": "^2.8.1",
@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "1.6.10",
+    "electron": "1.7.10",
     "electron-rebuild": "^1.6.0"
   }
 }
